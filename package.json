@@ -1,0 +1,38 @@
+{
+  "name": "ying-starter",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "prepare": "husky install",
+    "format": "prettier --config .prettierrc . --write",
+    "lint": "pnpm -F ./apps/* lint",
+    "dev": "pnpm --reporter append-only -F ./apps/* dev",
+    "build:pkg": "pnpm --reporter append-only -F ./packages/* build",
+    "build:hooks": "pnpm --reporter append-only -F ./packages/hooks build",
+    "build:utils": "pnpm --reporter append-only -F ./packages/utils build",
+    "start:prod": "pnpm -F ./apps/server start:prod"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.4",
+    "@commitlint/config-conventional": "^18.4.4",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "dayjs": "^1.11.10",
+    "nanoid": "^3.3.7"
+  }
+}

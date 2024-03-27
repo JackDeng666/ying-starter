@@ -1,0 +1,14 @@
+.git
+.gitignore
+.commitlintrc.json
+db-init.sql
+db.sql
+*.md
+**/node_modules
+**/dist
+**/.next
+**/static
+.vscode
+.husky
+.dockerignore
+Dockerfile
