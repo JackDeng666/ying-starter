@@ -1,11 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ms } from '@ying/utils'
+import { getLocale } from '@/i18n/server'
 import { DefaultLoginRedirect, AuthRoutes, LoginPage } from '@/routes'
 import { AppKey } from './enum'
 
 export function middleware(request: NextRequest) {
   const { nextUrl, cookies, url } = request
   const { pathname, searchParams } = nextUrl
+
+  const currentLng = searchParams.get('lng')
+  const locale = getLocale()
+  if (!currentLng || currentLng !== locale) {
+    const newUrl = new URL(url)
+    newUrl.searchParams.set('lng', locale)
+    return NextResponse.redirect(newUrl)
+  }
 
   const cookieToken = cookies.get(AppKey.CookieTokenKey)
 

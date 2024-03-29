@@ -8,8 +8,10 @@ import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
 import { authApi } from '@/api/client'
+import { useTranslate } from '@/i18n/client'
 
 const NewVerificationPage = () => {
+  const { t } = useTranslate()
   const [error, setError] = useState<string | undefined>()
   const [success, setSuccess] = useState<string | undefined>()
 
@@ -21,27 +23,28 @@ const NewVerificationPage = () => {
   const onSubmit = useCallback(() => {
     if (success || error) return
 
-    if (!token) {
-      setError('Missing token!')
-      return
-    }
-
     authApi
       .newVerification({ token, email })
-      .then(res => {
-        setSuccess(res)
+      .then(() => {
+        setSuccess(t('Email verified successfully!'))
       })
       .catch(error => {
-        setError(error.message)
+        setError(t(error.message, { ns: 'backend' }))
       })
-  }, [token, email, success, error])
+  }, [token, email, success, error, t])
 
   useEffect(() => {
     onSubmit()
   }, [onSubmit])
 
+  if (!token) return null
+
   return (
-    <CardWrapper headerLabel="确认您的验证" backButtonLabel="回到登录" backButtonHref="/auth/login">
+    <CardWrapper
+      headerLabel={t('Confirm your verification')}
+      backButtonLabel={t('Back to login')}
+      backButtonHref="/auth/login"
+    >
       <div className="flex items-center w-full justify-center">
         {!success && !error && <BeatLoader />}
         <FormSuccess message={success} />

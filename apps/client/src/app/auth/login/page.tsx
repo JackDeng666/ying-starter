@@ -7,20 +7,25 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 
+import { ClientLoginDto } from '@shared'
+
 import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormErrorMessage, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
-import { ClientLoginDto } from '@shared'
 import { authApi } from '@/api/client'
 import { AppKey } from '@/enum'
+import { useAuthStore } from '@/store/auth-store'
+import { useTranslate } from '@/i18n/client'
 
 const LoginPage = () => {
+  const { t } = useTranslate()
   const router = useRouter()
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
+  const setUserToken = useAuthStore(state => state.setUserToken)
 
   const form = useForm<ClientLoginDto>({
     resolver: classValidatorResolver(ClientLoginDto),
@@ -37,16 +42,17 @@ const LoginPage = () => {
     try {
       const res = await authApi.login(values)
       Cookies.set(AppKey.CookieTokenKey, res)
+      setUserToken(res)
       router.replace('/')
     } catch (error: any) {
-      setError(error.message)
+      setError(t(error.message, { ns: 'backend' }))
     }
   }
 
   return (
     <CardWrapper
-      headerLabel="欢迎来到 Ying Auth"
-      backButtonLabel="没有账号?"
+      headerLabel={t('Welcome to')}
+      backButtonLabel={t('No account?')}
       backButtonHref="/auth/register"
       showSocial
     >
@@ -58,11 +64,16 @@ const LoginPage = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>邮箱</FormLabel>
+                  <FormLabel color="red">{t('Email')}</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={form.formState.isSubmitting} placeholder="请输入邮箱" type="email" />
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      placeholder={t('Please enter email')}
+                      type="email"
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormErrorMessage>{t(form.formState.errors.email?.message, { ns: 'validation' })}</FormErrorMessage>
                 </FormItem>
               )}
             />
@@ -71,14 +82,21 @@ const LoginPage = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>密码</FormLabel>
+                  <FormLabel>{t('Password')}</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={form.formState.isSubmitting} placeholder="请输入密码" type="password" />
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      placeholder={t('Please enter password')}
+                      type="password"
+                    />
                   </FormControl>
+                  <FormErrorMessage>
+                    {t(form.formState.errors.password?.message, { ns: 'validation' })}
+                  </FormErrorMessage>
                   <Button size="sm" variant="link" asChild className="px-0 font-normal">
-                    <Link href="/auth/forgot-password">忘记密码?</Link>
+                    <Link href="/auth/forgot-password">{t('Forgot password?')}</Link>
                   </Button>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -86,7 +104,7 @@ const LoginPage = () => {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button disabled={form.formState.isSubmitting} type="submit" className="w-full">
-            登录
+            {t('Login')}
           </Button>
         </form>
       </Form>

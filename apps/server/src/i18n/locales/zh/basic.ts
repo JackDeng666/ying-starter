@@ -1,0 +1,8 @@
+const basic = {
+  confirmEmail: '确认您的电子邮件',
+  confirmEmailContent: '<p>点击 <a href="{{link}}">确认链接</a> 确认电子邮件，1天内有效。</p>',
+  resetPassword: '重置您的密码',
+  resetContent: '<p>点击 <a href="{{link}}">重置链接</a> 重置您的密码，5分钟内有效。</p>'
+}
+
+export default basic

@@ -1,58 +1,90 @@
 import { IsEmail, IsNotEmpty, Matches } from 'class-validator'
 
 export class ClientLoginDto {
-  @IsNotEmpty()
-  @IsEmail()
+  @IsEmail(undefined, {
+    message: 'Incorrect email format'
+  })
+  @IsNotEmpty({
+    message: 'Email should not be empty'
+  })
   email: string
 
   @Matches(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*;',.])/, {
-    message: `password must contain digits, lowercase letters, uppercase letters, and special symbols[!@#$%^&*;',.]`
+    message: 'Incorrect password format'
   })
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Password should not be empty'
+  })
   password: string
 }
 
 export class ClientRegisterDto {
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Nickname should not be empty'
+  })
   name: string
 
-  @IsNotEmpty()
-  @IsEmail()
+  @IsEmail(undefined, {
+    message: 'Incorrect email format'
+  })
+  @IsNotEmpty({
+    message: 'Email should not be empty'
+  })
   email: string
 
   @Matches(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*;',.])/, {
-    message: `password must contain digits, lowercase letters, uppercase letters, and special symbols[!@#$%^&*;',.]`
+    message: 'Incorrect password format'
   })
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Password should not be empty'
+  })
   password: string
 }
 
 export class NewVerificationDto {
-  @IsNotEmpty()
-  @IsEmail()
+  @IsNotEmpty({
+    message: 'Email should not be empty'
+  })
+  @IsEmail(undefined, {
+    message: 'Incorrect email format'
+  })
   email: string
 
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Token should not be empty'
+  })
   token: string
 }
 
 export class ForgotPasswordDto {
-  @IsNotEmpty()
-  @IsEmail()
+  @IsNotEmpty({
+    message: 'Email should not be empty'
+  })
+  @IsEmail(undefined, {
+    message: 'Incorrect email format'
+  })
   email: string
 }
 
 export class NewPasswordDto {
-  @IsNotEmpty()
-  @IsEmail()
+  @IsNotEmpty({
+    message: 'Email should not be empty'
+  })
+  @IsEmail(undefined, {
+    message: 'Incorrect email format'
+  })
   email: string
 
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Token should not be empty'
+  })
   token: string
 
   @Matches(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*;',.])/, {
-    message: `password must contain digits, lowercase letters, uppercase letters, and special symbols[!@#$%^&*;',.]`
+    message: 'Incorrect password format'
   })
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Password should not be empty'
+  })
   password: string
 }

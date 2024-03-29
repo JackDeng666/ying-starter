@@ -126,4 +126,29 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
 )
 FormMessage.displayName = 'FormMessage'
 
-export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField }
+const FormErrorMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, children, ...props }, ref) => {
+    if (!children) {
+      return null
+    }
+
+    return (
+      <p ref={ref} className={cn('text-sm font-medium text-destructive', className)} {...props}>
+        {children}
+      </p>
+    )
+  }
+)
+FormErrorMessage.displayName = 'FormErrorMessage'
+
+export {
+  useFormField,
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormErrorMessage,
+  FormField
+}

@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport'
 import { RedisClientType } from 'redis'
 import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
+import { getLocale } from '@/i18n'
 import { CLIENT_SCOPE } from '@/common/decorator'
 import { RedisKey, RedisToken } from '@/modules/redis/constant'
 import { IS_PUBLIC_KEY } from '@/common/decorator/public.decorator'
@@ -20,6 +21,9 @@ export class ClientAuthGuard extends AuthGuard(JWT_STRATEGY) {
   }
 
   async canActivate(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest<Request>()
+    request.locale = getLocale(request.headers)
+
     const handler = context.getHandler()
     const classContext = context.getClass()
 
@@ -35,7 +39,6 @@ export class ClientAuthGuard extends AuthGuard(JWT_STRATEGY) {
 
     const canActive = await super.canActivate(context)
     if (canActive) {
-      const request = context.switchToHttp().getRequest<Request>()
       const token = ExtractJwt.fromAuthHeaderAsBearerToken()(request)
       const existsToken = await this.redisClient.get(`${RedisKey.ClientToken}:${request.user?.id}:${token}`)
       if (!existsToken) throw new UnauthorizedException()

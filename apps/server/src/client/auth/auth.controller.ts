@@ -1,6 +1,6 @@
 import { Controller, Post, UseGuards, Get, Req, Res, Inject, Body, UseFilters } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { ConfigType } from '@nestjs/config'
 import { authConfig } from '@/config'
 import { ClientRegisterDto, ForgotPasswordDto, NewPasswordDto, NewVerificationDto } from '@/shared'
@@ -25,8 +25,8 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() dto: ClientRegisterDto) {
-    return this.authService.register(dto)
+  async register(@Body() dto: ClientRegisterDto, @Req() req: Request) {
+    return this.authService.register(dto, req.locale)
   }
 
   @Post('new-verification')
@@ -35,8 +35,8 @@ export class AuthController {
   }
 
   @Post('forgot-password')
-  async forgotPassword(@Body() dto: ForgotPasswordDto) {
-    return this.authService.forgotPassword(dto)
+  async forgotPassword(@Body() dto: ForgotPasswordDto, @Req() req: Request) {
+    return this.authService.forgotPassword(dto, req.locale)
   }
 
   @Post('new-password')

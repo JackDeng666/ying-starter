@@ -8,12 +8,14 @@ import { ResetPasswordDto } from '@shared'
 
 import { userApi } from '@/api/client'
 import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormErrorMessage, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { logout, useAuthStore } from '@/store/auth-store'
 import { useRouter } from 'next/navigation'
+import { useTranslate } from '@/i18n/client'
 
 const ResetPasswordPage = () => {
+  const { t } = useTranslate()
   const router = useRouter()
   const userInfo = useAuthStore(state => state.userInfo)
 
@@ -25,14 +27,16 @@ const ResetPasswordPage = () => {
     }
   })
 
+  const { errors, isSubmitting } = form.formState
+
   const onSubmit = async (values: ResetPasswordDto) => {
     try {
       await userApi.resetPassword(values)
-      toast.success('修改密码成功')
+      toast.success(t('Password changed successfully!'))
       await logout()
       router.replace('/')
     } catch (error: any) {
-      toast.error(error?.message)
+      toast.error(t(error?.message, { ns: 'backend' }))
     }
   }
 
@@ -46,17 +50,17 @@ const ResetPasswordPage = () => {
               name="oldPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>旧密码</FormLabel>
+                  <FormLabel>{t('Old password')}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={form.formState.isSubmitting}
-                      placeholder="请输入旧密码"
+                      disabled={isSubmitting}
+                      placeholder={t('Please enter old password')}
                       type="password"
                       autoComplete="old-password"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormErrorMessage>{t(errors.oldPassword?.message, { ns: 'validation' })}</FormErrorMessage>
                 </FormItem>
               )}
             />
@@ -66,22 +70,22 @@ const ResetPasswordPage = () => {
             name="newPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>新密码</FormLabel>
+                <FormLabel>{t('New password')}</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    disabled={form.formState.isSubmitting}
-                    placeholder="请输入新密码"
+                    disabled={isSubmitting}
+                    placeholder={t('Please enter new password')}
                     type="password"
                     autoComplete="new-password"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormErrorMessage>{t(errors.newPassword?.message, { ns: 'validation' })}</FormErrorMessage>
               </FormItem>
             )}
           />
-          <Button disabled={form.formState.isSubmitting} type="submit" className="w-full">
-            {userInfo?.hasPassword ? '确认重置' : '设置密码'}
+          <Button disabled={isSubmitting} type="submit" className="w-full">
+            {userInfo?.hasPassword ? t('Confirm reset') : t('Set password')}
           </Button>
         </form>
       </Form>

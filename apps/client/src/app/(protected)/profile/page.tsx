@@ -9,12 +9,14 @@ import { UpdateUserInfoDto } from '@shared'
 
 import { fileApi, userApi } from '@/api/client'
 import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormErrorMessage, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { UploadImage } from '@/components/upload-image'
 import { getProfile, useAuthStore } from '@/store/auth-store'
+import { useTranslate } from '@/i18n/client'
 
 const ProfilePage = () => {
+  const { t } = useTranslate()
   const userInfo = useAuthStore(state => state.userInfo)
 
   const form = useForm<UpdateUserInfoDto>({
@@ -25,10 +27,12 @@ const ProfilePage = () => {
     }
   })
 
+  const { errors, isSubmitting } = form.formState
+
   const onSubmit = async (values: UpdateUserInfoDto) => {
     try {
       await userApi.updateUserInfo(values)
-      toast.success('修改用户信息成功!')
+      toast.success(t('Successfully modified user information!'))
       getProfile()
     } catch (error) {
       console.log(error)
@@ -50,11 +54,10 @@ const ProfilePage = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormItem>
-              <FormLabel>邮箱</FormLabel>
+              <FormLabel>{t('Email')}</FormLabel>
               <FormControl>
                 <Input value={userInfo.email} disabled={true} />
               </FormControl>
-              <FormMessage />
             </FormItem>
 
             <FormField
@@ -62,11 +65,11 @@ const ProfilePage = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>昵称</FormLabel>
+                  <FormLabel>{t('Nickname')}</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={form.formState.isSubmitting} placeholder="请输入昵称" />
+                    <Input {...field} disabled={isSubmitting} placeholder={t('Please enter nickname')} />
                   </FormControl>
-                  <FormMessage />
+                  <FormErrorMessage>{t(errors.name?.message, { ns: 'validation' })}</FormErrorMessage>
                 </FormItem>
               )}
             />
@@ -75,26 +78,25 @@ const ProfilePage = () => {
               name="avatarId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>头像</FormLabel>
+                  <FormLabel>{t('Avatar')}</FormLabel>
                   <FormControl>
                     <div className="flex justify-center">
                       <UploadImage
                         defaultUrl={userInfo.avatar?.url}
-                        disabled={form.formState.isSubmitting}
+                        disabled={isSubmitting}
                         handleUpload={file => fileApi.upload(file)}
                         onSuccess={fileEntity => {
                           field.onChange(fileEntity.id)
-                          toast.success('图片上传成功!')
+                          toast.success(t('Image uploaded successfully!'))
                         }}
                       />
                     </div>
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
-            <Button disabled={form.formState.isSubmitting} type="submit" className="w-full">
-              确认修改
+            <Button disabled={isSubmitting} type="submit" className="w-full">
+              {t('Confirm modifications')}
             </Button>
           </form>
         </Form>

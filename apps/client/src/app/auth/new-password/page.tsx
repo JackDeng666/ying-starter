@@ -8,14 +8,16 @@ import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { NewPasswordDto } from '@shared'
 
 import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormErrorMessage, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
 import { authApi } from '@/api/client'
+import { useTranslate } from '@/i18n/client'
 
 const NewPasswordPage = () => {
+  const { t } = useTranslate()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
   const email = searchParams.get('email')
@@ -32,20 +34,22 @@ const NewPasswordPage = () => {
     }
   })
 
+  const { errors, isSubmitting } = form.formState
+
   const onSubmit = async (values: NewPasswordDto) => {
     setError('')
     setSuccess('')
 
     try {
-      const res = await authApi.newPassword(values)
-      setSuccess(res)
+      await authApi.newPassword(values)
+      setSuccess(t('Password changed successfully!'))
     } catch (error: any) {
-      setError(error.message)
+      setError(t(error.message, { ns: 'backend' }))
     }
   }
 
   return (
-    <CardWrapper headerLabel="重置密码" backButtonLabel="回到登录" backButtonHref="/auth/login">
+    <CardWrapper headerLabel={t('Reset password')} backButtonLabel={t('Back to login')} backButtonHref="/auth/login">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
@@ -54,24 +58,24 @@ const NewPasswordPage = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>新密码</FormLabel>
+                  <FormLabel>{t('New password')}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={form.formState.isSubmitting}
-                      placeholder="请输入您的新密码"
+                      disabled={isSubmitting}
+                      placeholder={t('Please enter new password')}
                       type="password"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormErrorMessage>{t(errors.password?.message, { ns: 'validation' })}</FormErrorMessage>
                 </FormItem>
               )}
             />
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={form.formState.isSubmitting} type="submit" className="w-full">
-            重置密码
+          <Button disabled={isSubmitting} type="submit" className="w-full">
+            {t('Reset password')}
           </Button>
         </form>
       </Form>

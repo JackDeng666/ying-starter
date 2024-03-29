@@ -8,8 +8,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { useAuthStore } from '@/store/auth-store'
 import { LogoutButton } from './logout-button'
+import { useTranslate } from '@/i18n/client'
 
 export const UserButton = () => {
+  const { t } = useTranslate()
   const userInfo = useAuthStore(state => state.userInfo)
 
   return (
@@ -34,7 +36,7 @@ export const UserButton = () => {
         <LogoutButton>
           <DropdownMenuItem className="cursor-pointer">
             <ExitIcon className="h-4 w-4 mr-2" />
-            退出
+            {t('Logout')}
           </DropdownMenuItem>
         </LogoutButton>
       </DropdownMenuContent>

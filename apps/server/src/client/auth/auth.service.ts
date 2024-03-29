@@ -20,6 +20,7 @@ import { MailService } from '@/modules/mail/mail.service'
 import { generatePass } from '@/common/utils'
 import { AccountEntity, FileEntity, UserEntity } from '@/shared/entities'
 import { TClientPayload } from './strategy/jwt.strategy'
+import { i18n } from '@/i18n'
 
 @Injectable()
 export class AuthService {
@@ -49,7 +50,7 @@ export class AuthService {
       where: { email }
     })
 
-    if (!existAccount && existUser) throw new InternalServerErrorException('邮箱已被注册!')
+    if (!existAccount && existUser) throw new InternalServerErrorException('The email has been registered!')
 
     if (existAccount && existAccount.user) {
       return existAccount.user
@@ -104,36 +105,40 @@ export class AuthService {
     return accessToken
   }
 
-  async register(dto: ClientRegisterDto) {
+  async register(dto: ClientRegisterDto, lng: string) {
     await this.dataSource.transaction(async transaction => {
       const existingUser = await transaction.findOne(UserEntity, {
         where: { email: dto.email }
       })
 
-      if (existingUser) {
-        throw new InternalServerErrorException('邮箱已经被注册!')
+      if (existingUser && existingUser.emailVerified) {
+        throw new InternalServerErrorException('The email has been registered!')
       }
 
-      const newUser = transaction.create(UserEntity, {
-        ...dto,
-        emailVerified: false,
-        password: generatePass(dto.password)
-      })
+      if (existingUser) {
+        existingUser.password = generatePass(dto.password)
+        existingUser.name = dto.name
+        existingUser.emailVerified = false
 
-      await transaction.save(newUser)
+        await transaction.save(existingUser)
+      } else {
+        const newUser = transaction.create(UserEntity, {
+          ...dto,
+          emailVerified: false,
+          password: generatePass(dto.password)
+        })
+
+        await transaction.save(newUser)
+      }
 
       const token = await this.generateVerificationToken(dto.email)
 
-      const confirmLink = `${this.authConf.redirectUrl}/auth/new-verification?token=${token}&email=${dto.email}`
+      const link = `${this.authConf.redirectUrl}/auth/new-verification?token=${token}&email=${dto.email}`
 
-      await this.mailService.sendMail(
-        dto.email,
-        '确认您的电子邮件',
-        `<p>点击这里 <a href="${confirmLink}">here</a> 确认电子邮件，1天内有效.</p>`
-      )
+      const t = i18n.getFixedT(lng)
+
+      await this.mailService.sendMail(dto.email, t('confirmEmail'), t('confirmEmailContent', { link }))
     })
-
-    return '确认电子邮件已发送！'
   }
 
   async generateVerificationToken(email: string) {
@@ -158,43 +163,37 @@ export class AuthService {
     const token = await this.redisClient.get(`${RedisKey.VerificationToken}:${dto.email}:${dto.token}`)
 
     if (!token) {
-      throw new InternalServerErrorException('Token 无效!')
+      throw new InternalServerErrorException('Token is invalid!')
     }
 
     await this.dataSource.getRepository(UserEntity).update({ email: dto.email }, { emailVerified: true })
 
     await this.redisClient.del(`${RedisKey.VerificationToken}:${dto.email}:${dto.token}`)
-
-    return '邮箱已验证成功!'
   }
 
-  async forgotPassword(dto: ForgotPasswordDto) {
+  async forgotPassword(dto: ForgotPasswordDto, lng: string) {
     const existingUser = await this.dataSource.getRepository(UserEntity).findOne({
       where: { email: dto.email }
     })
 
     if (!existingUser) {
-      throw new InternalServerErrorException('邮箱不存在!')
+      throw new InternalServerErrorException('Email does not exist!')
     }
 
     const token = await this.generatePasswordResetToken(dto.email)
 
     const link = `${this.authConf.redirectUrl}/auth/new-password?token=${token}&email=${dto.email}`
 
-    await this.mailService.sendMail(
-      dto.email,
-      '重置您的密码',
-      `<p>点击这里 <a href="${link}">here</a> 重置您的密码，5分钟内有效.</p>`
-    )
+    const t = i18n.getFixedT(lng)
 
-    return '重置密码邮件发送成功!'
+    await this.mailService.sendMail(dto.email, t('resetPassword'), t('resetContent', { link }))
   }
 
   async newPasswordDto(dto: NewPasswordDto) {
     const token = await this.redisClient.get(`${RedisKey.PasswordResetToken}:${dto.email}:${dto.token}`)
 
     if (!token) {
-      throw new InternalServerErrorException('Token 无效!')
+      throw new InternalServerErrorException('Token is invalid!')
     }
 
     await this.dataSource
@@ -202,8 +201,6 @@ export class AuthService {
       .update({ email: dto.email }, { password: generatePass(dto.password) })
 
     await this.redisClient.del(`${RedisKey.PasswordResetToken}:${dto.email}:${dto.token}`)
-
-    return '密码修改成功!'
   }
 
   async generatePasswordResetToken(email: string) {

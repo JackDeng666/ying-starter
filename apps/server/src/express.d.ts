@@ -5,5 +5,6 @@ declare module 'express' {
   interface Request {
     token?: string
     user?: TClientPayload | TAdminPayload
+    locale?: string
   }
 }
