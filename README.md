@@ -1,13 +1,47 @@
 <h1 align="center">Ying Starter</h1>
 
-## 开发环境版本参考
+- [简体中文](README.zh_CN.md)
+
+## 简介
+
+This is a full stack project using the Monorepo architecture of PNPM. Based on React and NestJS, it implements the basic role permission control logic of the backend management system, including a NextJS client that integrates basic registration and login logic with oauth login for Google, Github, and Facebook.
+
+Admin side
+
+- Vite
+- React
+- Ant Design UI
+- zustand
+- react-hook-form
+
+Client side
+
+- Vite
+- React
+- shadcn-ui
+- zustand
+- react-hook-form
+
+Server side
+
+- Nestjs
+- TypeORM
+- MySQL
+- Redis
+- MinIO
+
+Role permissions are controlled in the `apps\server\src\common\permission\modules` directory, and each update will overwrite the database.
+
+There is a special directory on the server side `apps\server\src\shared`, this directory is used to store `DTO` , `VO`, and the `Entity` objects of the database, Both sets of front-end code are configured with a special prefix pointing to this directory in the corresponding `tsconfig. json` file, this way, the front-end code can easily obtain the data types already written by the server，By combining the `react-hook-form` and `@hookform/resolvers/class-validator`, the corresponding `DTO` can be passed in, allowing the front-end and back-end to share the same set of data validation logic.
+
+## Development environment version reference
 
 - node v18.18.2
 - pnpm v8.15.3
 
-## 1. 开发环境启动
+## Development environment startup
 
-修改 `apps\server\.env` 文件的配置。
+Modify the configuration of the `apps\server\.env` file.
 
 ```shell
 pnpm i
@@ -15,15 +49,15 @@ pnpm build-pkg
 pnpm dev
 ```
 
-## 2. 部署
+## docker deploy
 
-项目根目录写了 Dockerfile 文件，直接使用 docker 的打包命令打包一个镜像。
+The root directory of the project has written a Dockerfile file, and you can directly use Docker's packaging command to package an image.
 
 ```shell
 docker build -t ying-starter:test .
 ```
 
-然后启动容器本地部署。
+Start container reference.
 
 ```shell
 docker run --name ying-starter -d \
