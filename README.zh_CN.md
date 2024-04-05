@@ -63,6 +63,9 @@ docker build -t ying-starter:test .
 docker run --name ying-starter -d \
   -p 3000:3000 \
   -p 3256:3256 \
+  -e API_URL=http://localhost:3000/api/client \
+  -e DOMAIN=localhost \
+  -e SERVER_URL=http://localhost:3000 \
   -e REDIS_HOST=kubernetes.docker.internal \
   -e REDIS_PORT=6379 \
   -e REDIS_PASSWORD=ying123456 \
