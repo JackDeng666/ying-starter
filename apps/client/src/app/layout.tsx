@@ -4,6 +4,7 @@ import { Toaster } from 'sonner'
 import { ImageProvider } from '@/components/image-provider'
 import './globals.css'
 import { getLocale, getFixedT } from '@/i18n/server'
+import { AppProvider } from '@/components/app-provider'
 
 export async function generateMetadata(): Promise<Metadata> {
   const lng = getLocale()
@@ -24,8 +25,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="h-screen bg-background font-sans antialiased">
-        <Toaster position="top-center" richColors />
-        <ImageProvider>{children}</ImageProvider>
+        <AppProvider value={{ apiUrl: process.env.API_URL }}>
+          <ImageProvider>
+            <Toaster position="top-center" richColors />
+            {children}
+          </ImageProvider>
+        </AppProvider>
       </body>
     </html>
   )

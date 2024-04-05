@@ -1,21 +1,21 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { toast } from 'sonner'
+import { Button, Input } from '@nextui-org/react'
 
 import { UpdateUserInfoDto } from '@shared'
 
-import { fileApi, userApi } from '@/api/client'
-import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormErrorMessage, FormField, FormItem, FormLabel } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
 import { UploadImage } from '@/components/upload-image'
-import { getProfile, useAuthStore } from '@/store/auth-store'
+import { useAuth, useAuthStore } from '@/store/auth-store'
 import { useTranslate } from '@/i18n/client'
+import { useApi } from '@/store/api-store'
 
 const ProfilePage = () => {
+  const { getProfile } = useAuth()
+  const { fileApi, userApi } = useApi()
   const { t } = useTranslate()
   const userInfo = useAuthStore(state => state.userInfo)
 
@@ -26,8 +26,11 @@ const ProfilePage = () => {
       avatarId: 0
     }
   })
-
-  const { errors, isSubmitting } = form.formState
+  const {
+    register,
+    control,
+    formState: { errors, isSubmitting }
+  } = form
 
   const onSubmit = async (values: UpdateUserInfoDto) => {
     try {
@@ -51,55 +54,53 @@ const ProfilePage = () => {
   return (
     <div className="w-full h-full p-4">
       {userInfo && (
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormItem>
-              <FormLabel>{t('Email')}</FormLabel>
-              <FormControl>
-                <Input value={userInfo.email} disabled={true} />
-              </FormControl>
-            </FormItem>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
+          <Input
+            className="mb-4"
+            variant="bordered"
+            labelPlacement="outside"
+            label={t('Email')}
+            value={userInfo.email}
+            isDisabled
+          />
+          <Input
+            className="mb-4"
+            variant="bordered"
+            labelPlacement="outside"
+            label={t('Nickname')}
+            isDisabled={isSubmitting}
+            placeholder={t('Please enter nickname')}
+            isInvalid={Boolean(errors.name)}
+            errorMessage={t(errors.name?.message, { ns: 'validation' })}
+            defaultValue={userInfo?.name}
+            {...register('name')}
+          />
 
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('Nickname')}</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isSubmitting} placeholder={t('Please enter nickname')} />
-                  </FormControl>
-                  <FormErrorMessage>{t(errors.name?.message, { ns: 'validation' })}</FormErrorMessage>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="avatarId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('Avatar')}</FormLabel>
-                  <FormControl>
-                    <div className="flex justify-center">
-                      <UploadImage
-                        defaultUrl={userInfo.avatar?.url}
-                        disabled={isSubmitting}
-                        handleUpload={file => fileApi.upload(file)}
-                        onSuccess={fileEntity => {
-                          field.onChange(fileEntity.id)
-                          toast.success(t('Image uploaded successfully!'))
-                        }}
-                      />
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <Button disabled={isSubmitting} type="submit" className="w-full">
-              {t('Confirm modifications')}
-            </Button>
-          </form>
-        </Form>
+          <Controller
+            control={control}
+            name="avatarId"
+            render={({ field }) => (
+              <div className="mb-6">
+                <p className="text-sm">{t('Avatar')}</p>
+                <div className="w-full flex justify-center">
+                  <UploadImage
+                    defaultUrl={userInfo.avatar?.url}
+                    disabled={isSubmitting}
+                    handleUpload={file => fileApi.upload(file)}
+                    onSuccess={fileEntity => {
+                      field.onChange(fileEntity.id)
+                      toast.success(t('Image uploaded successfully!'))
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          />
+
+          <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
+            {t('Confirm modifications')}
+          </Button>
+        </form>
       )}
     </div>
   )

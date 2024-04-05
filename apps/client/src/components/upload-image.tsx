@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { ScaleLoader } from 'react-spinners'
-import { PlusIcon } from '@radix-ui/react-icons'
+import { Image } from '@nextui-org/react'
 import { SelectFileType, useUpload } from '@ying/hooks/use-upload'
 import { FileEntity } from '@shared/entities'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
+import { PlusIcon } from './icons'
 
 type UploadProps = {
   className?: string
@@ -32,7 +32,7 @@ export const UploadImage = ({ className, disabled, defaultUrl, onSuccess, handle
   return (
     <div
       className={cn(
-        'inline-block w-32 h-32 cursor-pointer overflow-hidden rounded-sm shadow-md',
+        'inline-block w-32 h-32 cursor-pointer overflow-hidden rounded-xl shadow-md',
         className,
         disabled && 'grayscale'
       )}
@@ -46,9 +46,9 @@ export const UploadImage = ({ className, disabled, defaultUrl, onSuccess, handle
           {loading ? (
             <ScaleLoader />
           ) : url ? (
-            <Image className="w-full h-full object-cover" width={128} height={128} src={url} alt="image" />
+            <Image className="w-full h-full object-cover" removeWrapper src={url} alt="image" />
           ) : (
-            <PlusIcon className="w-8 h-8" />
+            <PlusIcon className="text-5xl" />
           )}
         </div>
       }

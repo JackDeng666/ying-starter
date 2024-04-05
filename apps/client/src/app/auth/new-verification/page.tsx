@@ -7,10 +7,11 @@ import { useSearchParams } from 'next/navigation'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
-import { authApi } from '@/api/client'
 import { useTranslate } from '@/i18n/client'
+import { useApi } from '@/store/api-store'
 
 const NewVerificationPage = () => {
+  const { authApi } = useApi()
   const { t } = useTranslate()
   const [error, setError] = useState<string | undefined>()
   const [success, setSuccess] = useState<string | undefined>()
@@ -31,7 +32,7 @@ const NewVerificationPage = () => {
       .catch(error => {
         setError(t(error.message, { ns: 'backend' }))
       })
-  }, [token, email, success, error, t])
+  }, [token, email, success, error, t, authApi])
 
   useEffect(() => {
     onSubmit()

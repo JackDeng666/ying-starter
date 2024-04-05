@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
   if (ssoCallback) {
     let queryStr = ''
     // 如果需要回调的地址不是子域，则需要回传token。
-    if (process.env.NEXT_PUBLIC_DOMAIN && !new URL(ssoCallback).hostname.includes(process.env.NEXT_PUBLIC_DOMAIN)) {
+    if (process.env.DOMAIN && !new URL(ssoCallback).hostname.includes(process.env.DOMAIN)) {
       queryStr = `?${AppKey.QueryTokenKey}=${cookieToken.value}`
     }
     if (cookieToken) {
@@ -45,10 +45,7 @@ export function middleware(request: NextRequest) {
   if (cookieSSOCallback && cookieToken) {
     let queryStr = ''
     // 如果需要回调的地址不是子域，则需要回传token。
-    if (
-      process.env.NEXT_PUBLIC_DOMAIN &&
-      !new URL(cookieSSOCallback.value).hostname.includes(process.env.NEXT_PUBLIC_DOMAIN)
-    ) {
+    if (process.env.DOMAIN && !new URL(cookieSSOCallback.value).hostname.includes(process.env.DOMAIN)) {
       queryStr = `?${AppKey.QueryTokenKey}=${cookieToken.value}`
     }
     const res = NextResponse.redirect(`${cookieSSOCallback.value}${queryStr}`)
@@ -63,9 +60,9 @@ export function middleware(request: NextRequest) {
     response.cookies.set({
       name: AppKey.CookieTokenKey,
       value: callbackToken,
-      domain: process.env.NEXT_PUBLIC_DOMAIN,
+      domain: process.env.DOMAIN,
       sameSite: 'strict',
-      maxAge: ms(process.env.NEXT_PUBLIC_AUTH_EXPIRES_IN!) / 1000
+      maxAge: ms(process.env.AUTH_EXPIRES_IN!) / 1000
     })
     return response
   }

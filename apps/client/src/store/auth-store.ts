@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import Cookies from 'js-cookie'
 import { ClientUserVo } from '@shared'
-import { authApi, userApi } from '@/api/client'
 import { AppKey } from '@/enum'
+import { useApi } from './api-store'
 
 interface AuthStore {
   userInfo?: ClientUserVo
@@ -23,12 +23,21 @@ export const clearUserInfoAndToken = () => {
   Cookies.remove(AppKey.CookieTokenKey)
 }
 
-export const logout = async () => {
-  await authApi.logout()
-  clearUserInfoAndToken()
-}
+export const useAuth = () => {
+  const { authApi, userApi } = useApi()
 
-export const getProfile = async () => {
-  const userInfo = await userApi.getProfile()
-  useAuthStore.setState({ userInfo })
+  const logout = async () => {
+    await authApi.logout()
+    clearUserInfoAndToken()
+  }
+
+  const getProfile = async () => {
+    const userInfo = await userApi.getProfile()
+    useAuthStore.setState({ userInfo })
+  }
+
+  return {
+    logout,
+    getProfile
+  }
 }

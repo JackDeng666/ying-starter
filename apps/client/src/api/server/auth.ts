@@ -6,7 +6,7 @@ export const getProfile = async (): Promise<UserEntity> => {
   const cookie = cookies()
   const token = cookie.get(AppKey.CookieTokenKey)
 
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/user/profile', {
+  const res = await fetch(process.env.API_URL + '/user/profile', {
     headers: {
       authorization: `Bearer ${token?.value}`
     }

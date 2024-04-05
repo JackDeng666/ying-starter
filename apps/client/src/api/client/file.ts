@@ -1,8 +1,10 @@
 import { FileEntity } from '@shared/entities'
-import { request } from './request'
+import { BaseApi } from './request'
 
-export function upload(file: File): Promise<FileEntity> {
-  const form = new FormData()
-  form.append('file', file)
-  return request.post('/file', form)
+export class FileApi extends BaseApi {
+  upload(file: File): Promise<FileEntity> {
+    const form = new FormData()
+    form.append('file', file)
+    return this.request.post('/file', form)
+  }
 }

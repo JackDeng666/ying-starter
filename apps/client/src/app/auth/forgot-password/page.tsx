@@ -3,18 +3,17 @@
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
+import { Button, Input } from '@nextui-org/react'
 
-import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormErrorMessage, FormField, FormItem, FormLabel } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
+import { ForgotPasswordDto } from '@shared'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
-import { authApi } from '@/api/client'
-import { ForgotPasswordDto } from '@shared'
 import { useTranslate } from '@/i18n/client'
+import { useApi } from '@/store/api-store'
 
 const ForgotPasswordPage = () => {
+  const { authApi } = useApi()
   const { t } = useTranslate()
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
@@ -25,7 +24,10 @@ const ForgotPasswordPage = () => {
       email: ''
     }
   })
-  const { errors, isSubmitting } = form.formState
+  const {
+    register,
+    formState: { errors, isSubmitting }
+  } = form
 
   const onSubmit = async (values: ForgotPasswordDto) => {
     setError('')
@@ -41,30 +43,29 @@ const ForgotPasswordPage = () => {
 
   return (
     <CardWrapper headerLabel={t('Forgot password?')} backButtonLabel={t('Back to login')} backButtonHref="/auth/login">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('Email')}</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isSubmitting} placeholder={t('Please enter email')} type="email" />
-                  </FormControl>
-                  <FormErrorMessage>{t(errors.email?.message, { ns: 'validation' })}</FormErrorMessage>
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormError message={error} />
-          <FormSuccess message={success} />
-          <Button disabled={isSubmitting} type="submit" className="w-full">
-            {t('Send reset email')}
-          </Button>
-        </form>
-      </Form>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <Input
+          variant="flat"
+          label={t('Email')}
+          disabled={isSubmitting}
+          placeholder={t('Please enter email')}
+          isClearable
+          type="email"
+          isInvalid={Boolean(errors.email)}
+          errorMessage={t(errors.email?.message, { ns: 'validation' })}
+          classNames={{
+            innerWrapper: 'h-16',
+            inputWrapper: 'h-16',
+            label: 'text-base'
+          }}
+          {...register('email')}
+        />
+        <FormError message={error} />
+        <FormSuccess message={success} />
+        <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
+          {t('Send reset email')}
+        </Button>
+      </form>
     </CardWrapper>
   )
 }

@@ -3,18 +3,18 @@
 import { useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { toast } from 'sonner'
+import { Button, Input } from '@nextui-org/react'
 
 import { ResetPasswordDto } from '@shared'
 
-import { userApi } from '@/api/client'
-import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormErrorMessage, FormField, FormItem, FormLabel } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
-import { logout, useAuthStore } from '@/store/auth-store'
+import { useAuth, useAuthStore } from '@/store/auth-store'
 import { useRouter } from 'next/navigation'
 import { useTranslate } from '@/i18n/client'
+import { useApi } from '@/store/api-store'
 
 const ResetPasswordPage = () => {
+  const { userApi } = useApi()
+  const { logout } = useAuth()
   const { t } = useTranslate()
   const router = useRouter()
   const userInfo = useAuthStore(state => state.userInfo)
@@ -27,7 +27,10 @@ const ResetPasswordPage = () => {
     }
   })
 
-  const { errors, isSubmitting } = form.formState
+  const {
+    register,
+    formState: { errors, isSubmitting }
+  } = form
 
   const onSubmit = async (values: ResetPasswordDto) => {
     try {
@@ -42,53 +45,39 @@ const ResetPasswordPage = () => {
 
   return (
     <div className="w-full h-full p-4">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {userInfo?.hasPassword && (
-            <FormField
-              control={form.control}
-              name="oldPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('Old password')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isSubmitting}
-                      placeholder={t('Please enter old password')}
-                      type="password"
-                      autoComplete="old-password"
-                    />
-                  </FormControl>
-                  <FormErrorMessage>{t(errors.oldPassword?.message, { ns: 'validation' })}</FormErrorMessage>
-                </FormItem>
-              )}
-            />
-          )}
-          <FormField
-            control={form.control}
-            name="newPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('New password')}</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    disabled={isSubmitting}
-                    placeholder={t('Please enter new password')}
-                    type="password"
-                    autoComplete="new-password"
-                  />
-                </FormControl>
-                <FormErrorMessage>{t(errors.newPassword?.message, { ns: 'validation' })}</FormErrorMessage>
-              </FormItem>
-            )}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
+        {userInfo?.hasPassword && (
+          <Input
+            className="mb-4"
+            variant="bordered"
+            labelPlacement="outside"
+            label={t('Old password')}
+            isDisabled={isSubmitting}
+            placeholder={t('Please enter old password')}
+            type="password"
+            autoComplete="old-password"
+            isInvalid={Boolean(errors.oldPassword)}
+            errorMessage={t(errors.oldPassword?.message, { ns: 'validation' })}
+            {...register('oldPassword')}
           />
-          <Button disabled={isSubmitting} type="submit" className="w-full">
-            {userInfo?.hasPassword ? t('Confirm reset') : t('Set password')}
-          </Button>
-        </form>
-      </Form>
+        )}
+        <Input
+          className="mb-4"
+          variant="bordered"
+          labelPlacement="outside"
+          label={t('New password')}
+          isDisabled={isSubmitting}
+          placeholder={t('Please enter new password')}
+          type="password"
+          autoComplete="new-password"
+          isInvalid={Boolean(errors.newPassword)}
+          errorMessage={t(errors.newPassword?.message, { ns: 'validation' })}
+          {...register('newPassword')}
+        />
+        <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
+          {userInfo?.hasPassword ? t('Confirm reset') : t('Set password')}
+        </Button>
+      </form>
     </div>
   )
 }

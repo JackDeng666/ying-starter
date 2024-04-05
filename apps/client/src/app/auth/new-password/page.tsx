@@ -4,19 +4,18 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
+import { Button, Input } from '@nextui-org/react'
 
 import { NewPasswordDto } from '@shared'
 
-import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormErrorMessage, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
-import { authApi } from '@/api/client'
 import { useTranslate } from '@/i18n/client'
+import { useApi } from '@/store/api-store'
 
 const NewPasswordPage = () => {
+  const { authApi } = useApi()
   const { t } = useTranslate()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
@@ -34,7 +33,10 @@ const NewPasswordPage = () => {
     }
   })
 
-  const { errors, isSubmitting } = form.formState
+  const {
+    register,
+    formState: { errors, isSubmitting }
+  } = form
 
   const onSubmit = async (values: NewPasswordDto) => {
     setError('')
@@ -50,35 +52,31 @@ const NewPasswordPage = () => {
 
   return (
     <CardWrapper headerLabel={t('Reset password')} backButtonLabel={t('Back to login')} backButtonHref="/auth/login">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('New password')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isSubmitting}
-                      placeholder={t('Please enter new password')}
-                      type="password"
-                    />
-                  </FormControl>
-                  <FormErrorMessage>{t(errors.password?.message, { ns: 'validation' })}</FormErrorMessage>
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormError message={error} />
-          <FormSuccess message={success} />
-          <Button disabled={isSubmitting} type="submit" className="w-full">
-            {t('Reset password')}
-          </Button>
-        </form>
-      </Form>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="space-y-4">
+          <Input
+            variant="flat"
+            label={t('New password')}
+            disabled={isSubmitting}
+            placeholder={t('Please enter new password')}
+            isClearable
+            type="password"
+            isInvalid={Boolean(errors.password)}
+            errorMessage={t(errors.password?.message, { ns: 'validation' })}
+            classNames={{
+              innerWrapper: 'h-16',
+              inputWrapper: 'h-16',
+              label: 'text-base'
+            }}
+            {...register('password')}
+          />
+        </div>
+        <FormError message={error} />
+        <FormSuccess message={success} />
+        <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
+          {t('Reset password')}
+        </Button>
+      </form>
     </CardWrapper>
   )
 }

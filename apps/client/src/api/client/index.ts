@@ -1,3 +1,20 @@
-export * as authApi from './auth'
-export * as userApi from './user'
-export * as fileApi from './file'
+import { initRequest } from './request'
+import { AuthApi } from './auth'
+import { FileApi } from './file'
+import { UserApi } from './user'
+
+export { AuthApi, FileApi, UserApi }
+
+export const initApi = (baseURL: string) => {
+  const request = initRequest(baseURL)
+
+  const authApi = new AuthApi(request)
+  const fileApi = new FileApi(request)
+  const userApi = new UserApi(request)
+
+  return {
+    authApi,
+    fileApi,
+    userApi
+  }
+}
