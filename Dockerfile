@@ -40,12 +40,11 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/hooks/package.json packages/hooks/package.json
 COPY packages/utils/package.json packages/utils/package.json
 COPY apps/client/package.json apps/client/package.json
-COPY apps/server/package.json apps/server/package.json
 
 RUN pnpm i
 
 COPY ./apps/client ./apps/client
-COPY ./apps/server ./apps/server
+COPY ./apps/server/src/shared ./apps/server/src/shared
 COPY ./packages ./packages
 COPY .prettierrc .prettierrc
 COPY .prettierignore .prettierignore

@@ -16,7 +16,7 @@ export const CardWrapper = ({ children }: LayoutProps) => {
   }, [userToken, router])
 
   useEffect(() => {
-    getProfile()
+    getProfile && getProfile()
   }, [getProfile])
 
   return (

@@ -22,7 +22,7 @@ const NewVerificationPage = () => {
   const email = searchParams.get('email')
 
   const onSubmit = useCallback(() => {
-    if (success || error) return
+    if (success || error || !authApi) return
 
     authApi
       .newVerification({ token, email })

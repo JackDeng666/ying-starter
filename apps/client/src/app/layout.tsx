@@ -25,7 +25,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="h-screen bg-background font-sans antialiased">
-        <AppProvider value={{ apiUrl: process.env.API_URL }}>
+        <AppProvider
+          value={{
+            apiUrl: process.env.API_URL,
+            domain: process.env.DOMAIN,
+            authExpiresIn: process.env.AUTH_EXPIRES_IN
+          }}
+        >
           <ImageProvider>
             <Toaster position="top-center" richColors />
             {children}

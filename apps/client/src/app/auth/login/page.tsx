@@ -8,6 +8,8 @@ import Cookies from 'js-cookie'
 import { Button, Input } from '@nextui-org/react'
 import Link from 'next/link'
 
+import { ms } from '@ying/utils'
+
 import { ClientLoginDto } from '@shared'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
@@ -16,8 +18,10 @@ import { AppKey } from '@/enum'
 import { useAuthStore } from '@/store/auth-store'
 import { useTranslate } from '@/i18n/client'
 import { useApi } from '@/store/api-store'
+import { useAppContext } from '@/components/app-provider'
 
 const LoginPage = () => {
+  const { domain, authExpiresIn } = useAppContext()
   const { authApi } = useApi()
   const { t } = useTranslate()
   const router = useRouter()
@@ -44,7 +48,11 @@ const LoginPage = () => {
 
     try {
       const res = await authApi.login(values)
-      Cookies.set(AppKey.CookieTokenKey, res)
+      Cookies.set(AppKey.CookieTokenKey, res, {
+        domain,
+        sameSite: 'strict',
+        expires: new Date(Date.now() + ms(authExpiresIn))
+      })
       setUserToken(res)
       router.replace('/')
     } catch (error: any) {

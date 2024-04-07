@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import { ClientUserVo } from '@shared'
 import { AppKey } from '@/enum'
 import { useApi } from './api-store'
+import { useAppContext } from '@/components/app-provider'
 
 interface AuthStore {
   userInfo?: ClientUserVo
@@ -18,17 +19,18 @@ export const useAuthStore = create<AuthStore>(set => ({
   setUserToken: userToken => set({ userToken })
 }))
 
-export const clearUserInfoAndToken = () => {
+export const clearUserInfoAndToken = (domain: string) => {
   useAuthStore.setState({ userInfo: undefined, userToken: undefined })
-  Cookies.remove(AppKey.CookieTokenKey)
+  Cookies.remove(AppKey.CookieTokenKey, { domain })
 }
 
 export const useAuth = () => {
+  const { domain } = useAppContext()
   const { authApi, userApi } = useApi()
 
   const logout = async () => {
     await authApi.logout()
-    clearUserInfoAndToken()
+    clearUserInfoAndToken(domain)
   }
 
   const getProfile = async () => {

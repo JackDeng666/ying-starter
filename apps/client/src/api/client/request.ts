@@ -11,9 +11,9 @@ export type ErrorRes = {
   [key: string]: unknown
 }
 
-export const initRequest = (baseURL: string) => {
+export const initRequest = (baseURL: string, domain: string) => {
   const request = axios.create({
-    baseURL: baseURL
+    baseURL
   })
   request.interceptors.request.use(config => {
     const token = Cookies.get(AppKey.CookieTokenKey)
@@ -33,7 +33,7 @@ export const initRequest = (baseURL: string) => {
       const res = error.response
       if (res) {
         if (res.status === 401) {
-          clearUserInfoAndToken()
+          clearUserInfoAndToken(domain)
         }
         const msg = res.data.message
         if (Array.isArray(msg)) {
