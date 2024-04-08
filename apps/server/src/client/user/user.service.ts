@@ -13,7 +13,7 @@ export class UserService {
   findById(id: number) {
     return this.userRepository.findOne({
       where: { id },
-      relations: ['avatar']
+      relations: ['avatar', 'account']
     })
   }
 

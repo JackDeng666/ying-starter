@@ -53,8 +53,13 @@ const LoginPage = () => {
         sameSite: 'strict',
         expires: new Date(Date.now() + ms(authExpiresIn))
       })
+      const ssoCallbackUrl = Cookies.get(AppKey.CookieSSOCallbackKey)
+      if (ssoCallbackUrl) {
+        Cookies.remove(AppKey.CookieSSOCallbackKey)
+        window.location.href = ssoCallbackUrl
+      }
       setUserToken(res)
-      router.replace('/')
+      router.refresh()
     } catch (error: any) {
       setError(t(error.message, { ns: 'backend' }))
     }
