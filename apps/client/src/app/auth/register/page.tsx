@@ -73,7 +73,6 @@ const LoginPage = () => {
           disabled={isSubmitting}
           placeholder={t('Please enter email')}
           isClearable
-          type="email"
           isInvalid={Boolean(errors.email)}
           errorMessage={t(errors.email?.message, { ns: 'validation' })}
           classNames={{
