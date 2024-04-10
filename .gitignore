@@ -3,3 +3,4 @@ dist
 static
 .env.local
 local.README.md
+pnpm-lock.yaml
