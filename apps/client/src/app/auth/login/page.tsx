@@ -59,7 +59,7 @@ const LoginPage = () => {
         window.location.href = ssoCallbackUrl
       }
       setUserToken(res)
-      router.refresh()
+      router.replace('/')
     } catch (error: any) {
       setError(t(error.message, { ns: 'backend' }))
     }
