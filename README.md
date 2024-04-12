@@ -18,7 +18,7 @@ Client side
 
 - Vite
 - React
-- shadcn-ui
+- Next UI
 - zustand
 - react-hook-form
 
@@ -34,7 +34,7 @@ Role permissions are controlled in the `apps\server\src\common\permission\module
 
 There is a special directory on the server side `apps\server\src\shared`, this directory is used to store `DTO` , `VO`, and the `Entity` objects of the database, Both sets of front-end code are configured with a special prefix pointing to this directory in the corresponding `tsconfig. json` file, this way, the front-end code can easily obtain the data types already written by the server，By combining the `react-hook-form` and `@hookform/resolvers/class-validator`, the corresponding `DTO` can be passed in, allowing the front-end and back-end to share the same set of data validation logic.
 
-## Development environment version reference
+## Development environment version
 
 - node v18.18.2
 - pnpm v8.15.3
@@ -57,7 +57,7 @@ The root directory of the project has written a Dockerfile file, and you can dir
 docker build -t ying-starter:test .
 ```
 
-Start container reference.
+Start container.
 
 ```shell
 docker run --name ying-starter -d \

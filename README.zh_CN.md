@@ -18,7 +18,7 @@
 
 - Vite
 - React
-- shadcn-ui
+- Next UI
 - zustand
 - react-hook-form
 
@@ -34,7 +34,7 @@
 
 在服务端有个特殊的目录 `apps\server\src\shared`，这个目录用来存放 `DTO` , `VO` 和数据库的 `Entity` 对象，两套前端代码都在对应的 `tsconfig.json` 文件中配置了特殊前缀指向这个目录，这样前端代码可以轻松获取服务端已经写好的数据类型，同时配合 `react-hook-form` 和 `@hookform/resolvers/class-validator`，传入对应的 `DTO` 后， 可以让前后端公用同一套数据校验逻辑。
 
-## 开发环境版本参考
+## 开发环境版本
 
 - node v18.18.2
 - pnpm v8.15.3
