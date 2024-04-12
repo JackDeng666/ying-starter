@@ -23,8 +23,8 @@
     "noImplicitAny": false,
     "paths": {
       "@/*": ["./src/*"],
-      "@shared": ["../server/src/shared"],
-      "@shared/*": ["../server/src/shared/*"]
+      "@ying/shared": ["../server/src/shared"],
+      "@ying/shared/*": ["../server/src/shared/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { RedisToken, RedisKey } from '@/modules/redis/constant'
-import { SysUserEntity, UserEntity } from '@/shared/entities'
+import { SysUserEntity, UserEntity } from '@ying/shared/entities'
 import { FileService } from '@/modules/file/file.service'
 
 @Injectable()

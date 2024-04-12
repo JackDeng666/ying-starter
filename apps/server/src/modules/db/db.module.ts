@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigType } from '@nestjs/config'
 import { dbConfig } from '@/config'
 import { DbSeeder } from './db.seeder'
-import { SysPermissionEntity, SysRoleEntity, SysUserEntity } from '@/shared/entities'
+import { SysPermissionEntity, SysRoleEntity, SysUserEntity } from '@ying/shared/entities'
 
 @Global()
 @Module({

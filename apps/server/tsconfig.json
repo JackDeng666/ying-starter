@@ -18,7 +18,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@ying/shared": ["./src/shared"],
+      "@ying/shared/*": ["./src/shared/*"]
     }
   },
   "include": ["./src"]

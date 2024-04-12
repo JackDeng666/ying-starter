@@ -8,7 +8,7 @@ import {
   UpdateSysUserPasswordDto,
   UpdateSysUserSelfPasswordDto,
   UpdateSysUserSelfUserInfoDto
-} from '@/shared'
+} from '@ying/shared'
 import { AdminScope, PermissionDecorator, UID } from '@/common/decorator'
 import { pms } from '@/common/permission'
 

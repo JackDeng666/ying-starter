@@ -6,9 +6,7 @@
   "author": "Jack Ying",
   "license": "MIT",
   "type": "module",
-  "exports": {
-    "./*": "./dist/*.js"
-  },
+  "main": "./dist/index.js",
   "scripts": {
     "dev": "tsc -b -w tsconfig.json --preserveWatchOutput",
     "build": "rm -rf dist && tsc -b tsconfig.json"

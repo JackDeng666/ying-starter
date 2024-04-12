@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common'
 import { Between, FindOptionsWhere, Like, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RedisClientType } from 'redis'
-import { SysPermissionEntity, SysRoleEntity } from '@/shared/entities'
-import { CreateRoleDto, ListRoleDto, UpdateRoleDto } from '@/shared'
+import { SysPermissionEntity, SysRoleEntity } from '@ying/shared/entities'
+import { CreateRoleDto, ListRoleDto, UpdateRoleDto } from '@ying/shared'
 import { RedisKey, RedisToken } from '@/modules/redis/constant'
 
 @Injectable()

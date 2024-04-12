@@ -1,4 +1,4 @@
-import { ClientLoginDto, ClientRegisterDto, NewVerificationDto, ForgotPasswordDto, NewPasswordDto } from '@shared'
+import { ClientLoginDto, ClientRegisterDto, NewVerificationDto, ForgotPasswordDto, NewPasswordDto } from '@ying/shared'
 import { BaseApi } from './request'
 
 export class AuthApi extends BaseApi {

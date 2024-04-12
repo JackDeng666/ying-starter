@@ -27,9 +27,8 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "#/*": ["./types/*"],
-      "@shared": ["../server/src/shared"],
-      "@shared/*": ["../server/src/shared/*"]
+      "@ying/shared": ["../server/src/shared"],
+      "@ying/shared/*": ["../server/src/shared/*"]
     }
   },
   "include": ["src"],

@@ -13,12 +13,12 @@ import {
   ForgotPasswordDto,
   NewPasswordDto,
   NewVerificationDto
-} from '@/shared'
+} from '@ying/shared'
 import { authConfig } from '@/config'
 import { RedisKey, RedisToken } from '@/modules/redis/constant'
 import { MailService } from '@/modules/mail/mail.service'
 import { generatePass } from '@/common/utils'
-import { AccountEntity, FileEntity, UserEntity } from '@/shared/entities'
+import { AccountEntity, FileEntity, UserEntity } from '@ying/shared/entities'
 import { TClientPayload } from './strategy/jwt.strategy'
 import { i18n } from '@/i18n'
 

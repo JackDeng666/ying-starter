@@ -3,7 +3,7 @@ import { Form, Modal, Input, message, Segmented, Button } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
-import { UpdateSysUserSelfUserInfoDto, UpdateSysUserSelfPasswordDto } from '@shared'
+import { UpdateSysUserSelfUserInfoDto, UpdateSysUserSelfPasswordDto } from '@ying/shared'
 import { fileApi, sysUserApi } from '@/api'
 import { UploadImage } from '@/components/upload-image'
 import { getUserInfo, logout, useUserInfo } from '@/store'

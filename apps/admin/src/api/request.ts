@@ -2,8 +2,8 @@ import axios, { AxiosError } from 'axios'
 import { message as Message } from 'antd'
 import { storage } from '@ying/utils'
 import { clearUserInfoAndToken } from '@/store'
-import { StorageEnum } from '#/enum'
-import { UserTokenVo } from '@shared'
+import { StorageEnum } from '@/types/enum'
+import { UserTokenVo } from '@ying/shared'
 
 export const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API

@@ -1,6 +1,6 @@
 import { request } from './request'
-import { AdminLoginDto, UserTokenVo } from '@shared'
-import { SysUserEntity } from '@shared/entities'
+import { AdminLoginDto, UserTokenVo } from '@ying/shared'
+import { SysUserEntity } from '@ying/shared/entities'
 
 export function login(data: AdminLoginDto): Promise<UserTokenVo> {
   return request.post('/sys/auth/login', data)

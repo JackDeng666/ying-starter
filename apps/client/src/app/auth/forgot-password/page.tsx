@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { Button, Input } from '@nextui-org/react'
 
-import { ForgotPasswordDto } from '@shared'
+import { ForgotPasswordDto } from '@ying/shared'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'

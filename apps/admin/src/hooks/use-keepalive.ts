@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useMatchRouteMeta, useRouter } from '@/router/hooks'
 
-import { RouteMeta } from '#/router'
+import { RouteMeta } from '@/types/router'
 
 export type KeepAliveTab = RouteMeta & {
   children: any

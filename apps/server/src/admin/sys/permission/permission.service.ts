@@ -3,8 +3,8 @@ import { TreeRepository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RedisClientType } from 'redis'
 import { createTreeFns } from '@ying/utils'
-import { SysPermissionEntity } from '@/shared/entities'
-import { CreateOrUpdatePermissionDto } from '@/shared'
+import { SysPermissionEntity } from '@ying/shared/entities'
+import { CreateOrUpdatePermissionDto } from '@ying/shared'
 import { RedisKey, RedisToken } from '@/modules/redis/constant'
 
 @Injectable()

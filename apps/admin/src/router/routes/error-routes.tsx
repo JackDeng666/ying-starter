@@ -9,7 +9,7 @@ import Page500 from '@/pages/error/Page500'
 
 import AuthGuard from '../components/auth-guard'
 
-import { AppRouteObject } from '#/router'
+import { AppRouteObject } from '@/types/router'
 
 /**
  * error routes

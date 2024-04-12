@@ -1,4 +1,4 @@
-import { PermissionType } from '@/shared'
+import { PermissionType } from '@ying/shared'
 import { TMeta } from '../type'
 
 export class dashboard {

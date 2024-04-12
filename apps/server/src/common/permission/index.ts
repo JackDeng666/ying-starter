@@ -1,4 +1,4 @@
-import { SysPermissionEntity } from '@/shared/entities'
+import { SysPermissionEntity } from '@ying/shared/entities'
 import { dashboard } from './modules/dashboard'
 import { sys } from './modules/sys'
 import { user } from './modules/user'

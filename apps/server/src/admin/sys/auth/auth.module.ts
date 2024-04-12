@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { JwtModule } from '@nestjs/jwt'
-import { SysPermissionEntity, SysRoleEntity, SysUserEntity } from '@/shared/entities'
+import { SysPermissionEntity, SysRoleEntity, SysUserEntity } from '@ying/shared/entities'
 import { SysAuthController } from './auth.controller'
 import { SysAuthService } from './auth.service'
 

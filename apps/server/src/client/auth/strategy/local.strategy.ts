@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { Strategy } from 'passport-local'
 import { PassportStrategy } from '@nestjs/passport'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UserEntity } from '@/shared/entities'
+import { UserEntity } from '@ying/shared/entities'
 import { Repository } from 'typeorm'
 import { generatePass } from '@/common/utils'
 

@@ -15,11 +15,10 @@ import {
 } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
-import { useUpdate } from '@ying/hooks/use-update'
-import { BasicStatus, PermissionType, CreateOrUpdatePermissionDto } from '@shared'
+import { useApi, useUpdate } from '@ying/hooks'
+import { BasicStatus, PermissionType, CreateOrUpdatePermissionDto } from '@ying/shared'
 import { permissionApi } from '@/api'
-import { useApi } from '@/hooks/use-api'
-import { SysPermissionEntity } from '@shared/entities'
+import { SysPermissionEntity } from '@ying/shared/entities'
 import { ExternalLink, IframeLink } from '@/constant'
 
 export type PermissionDrawerProps = {

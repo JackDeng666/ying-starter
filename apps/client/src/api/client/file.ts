@@ -1,4 +1,4 @@
-import { FileEntity } from '@shared/entities'
+import { FileEntity } from '@ying/shared/entities'
 import { BaseApi } from './request'
 
 export class FileApi extends BaseApi {

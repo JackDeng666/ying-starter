@@ -5,7 +5,7 @@ import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { toast } from 'sonner'
 import { Button, Input } from '@nextui-org/react'
 
-import { ResetPasswordDto } from '@shared'
+import { ResetPasswordDto } from '@ying/shared'
 
 import { useAuth, useAuthStore } from '@/store/auth-store'
 import { useRouter } from 'next/navigation'

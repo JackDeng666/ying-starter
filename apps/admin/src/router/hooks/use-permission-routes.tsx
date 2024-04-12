@@ -3,12 +3,12 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 import { createTreeFns } from '@ying/utils'
 
-import { BasicStatus, PermissionType } from '@shared'
-import { SysPermissionEntity } from '@shared/entities'
+import { BasicStatus, PermissionType } from '@ying/shared'
+import { SysPermissionEntity } from '@ying/shared/entities'
 
 import { CircleLoading } from '@/components/loading'
 import { useUserPermission } from '@/store/userStore'
-import { AppRouteObject } from '#/router'
+import { AppRouteObject } from '@/types/router'
 import IframePage from '@/pages/iframe'
 import { flattenMenuRoutes, menuFilter } from '../utils'
 

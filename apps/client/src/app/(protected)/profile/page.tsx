@@ -6,7 +6,7 @@ import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { toast } from 'sonner'
 import { Button, Input } from '@nextui-org/react'
 
-import { UpdateUserInfoDto } from '@shared'
+import { UpdateUserInfoDto } from '@ying/shared'
 
 import { UploadImage } from '@/components/upload-image'
 import { useAuth, useAuthStore } from '@/store/auth-store'

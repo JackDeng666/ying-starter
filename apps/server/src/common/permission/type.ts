@@ -1,4 +1,4 @@
-import { SysPermissionEntity } from '@/shared/entities'
+import { SysPermissionEntity } from '@ying/shared/entities'
 
 export type TMeta = Partial<SysPermissionEntity>
 

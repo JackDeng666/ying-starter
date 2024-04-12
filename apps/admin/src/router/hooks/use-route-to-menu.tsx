@@ -4,8 +4,8 @@ import { useCallback } from 'react'
 import { Iconify, SvgIcon } from '@/components/icon'
 import { useSettings } from '@/store/settingStore'
 
-import { ThemeLayout } from '#/enum'
-import { AppRouteObject } from '#/router'
+import { ThemeLayout } from '@/types/enum'
+import { AppRouteObject } from '@/types/router'
 
 /**
  *   routes -> menus

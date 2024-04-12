@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import Cookies from 'js-cookie'
-import { ClientUserVo } from '@shared'
+import { ClientUserVo } from '@ying/shared'
 import { AppKey } from '@/enum'
 import { useApi } from './api-store'
 import { useAppContext } from '@/components/app-provider'

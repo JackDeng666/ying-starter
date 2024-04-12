@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Control, Controller } from 'react-hook-form'
 import { Button, Form, Input, DatePicker } from 'antd'
 import dayjs from 'dayjs'
-import { ListUserDto } from '@shared'
+import { ListUserDto } from '@ying/shared'
 
 const { RangePicker } = DatePicker
 

@@ -5,8 +5,8 @@ import {
   UpdateSysUserPasswordDto,
   UpdateSysUserSelfUserInfoDto,
   UpdateSysUserSelfPasswordDto
-} from '@shared'
-import { SysUserEntity } from '@shared/entities'
+} from '@ying/shared'
+import { SysUserEntity } from '@ying/shared/entities'
 import { request } from './request'
 
 export function list(params: ListSysUserDto): Promise<SysUserEntity[]> {

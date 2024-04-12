@@ -2,10 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Form, Drawer, Input, InputNumber, Button, App, Radio, TreeSelect } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
-import { BasicStatus, CreateRoleDto, UpdateRoleDto } from '@shared'
+import { BasicStatus, CreateRoleDto, UpdateRoleDto } from '@ying/shared'
 import { permissionApi, roleApi } from '@/api'
-import { useApi } from '@/hooks/use-api'
-import { SysPermissionEntity } from '@shared/entities'
+import { useApi } from '@ying/hooks'
+import { SysPermissionEntity } from '@ying/shared/entities'
 
 const createResolver = classValidatorResolver(CreateRoleDto)
 const updateResolver = classValidatorResolver(UpdateRoleDto)

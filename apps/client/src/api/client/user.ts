@@ -1,4 +1,4 @@
-import { ClientUserVo, ResetPasswordDto, UpdateUserInfoDto } from '@shared'
+import { ClientUserVo, ResetPasswordDto, UpdateUserInfoDto } from '@ying/shared'
 import { BaseApi } from './request'
 
 export class UserApi extends BaseApi {

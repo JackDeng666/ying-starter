@@ -6,7 +6,7 @@ import { useMatches } from 'react-router-dom'
 import { usePermissionRoutes, useRouter } from '@/router/hooks'
 import { menuFilter } from '@/router/utils'
 
-import { AppRouteObject } from '#/router'
+import { AppRouteObject } from '@/types/router'
 import { IframeLink } from '@/constant'
 
 /**

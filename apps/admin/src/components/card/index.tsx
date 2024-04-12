@@ -3,7 +3,7 @@ import { CSSProperties, ReactNode } from 'react'
 import { useSettings } from '@/store/settingStore'
 import { useThemeToken } from '@/theme/hooks'
 
-import { ThemeMode } from '#/enum'
+import { ThemeMode } from '@/types/enum'
 
 type Props = {
   children?: ReactNode

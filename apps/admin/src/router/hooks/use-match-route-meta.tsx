@@ -4,7 +4,7 @@ import { useMatches, useOutlet } from 'react-router-dom'
 import { usePermissionRoutes } from './use-permission-routes'
 import { useRouter } from './use-router'
 
-import { RouteMeta } from '#/router'
+import { RouteMeta } from '@/types/router'
 
 /**
  * 返回当前路由Meta信息

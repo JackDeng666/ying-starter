@@ -20,7 +20,7 @@ import {
   NAV_HORIZONTAL_HEIGHT
 } from './config'
 
-import { MultiTabOperation, ThemeLayout } from '#/enum'
+import { MultiTabOperation, ThemeLayout } from '@/types/enum'
 
 type Props = {
   offsetTop?: boolean

@@ -2,7 +2,7 @@ import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common
 import { Between, FindOptionsWhere, Like, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RedisClientType } from 'redis'
-import { SysRoleEntity, SysUserEntity } from '@/shared/entities'
+import { SysRoleEntity, SysUserEntity } from '@ying/shared/entities'
 import {
   CreateSysUserDto,
   ListSysUserDto,
@@ -10,7 +10,7 @@ import {
   UpdateSysUserPasswordDto,
   UpdateSysUserSelfPasswordDto,
   UpdateSysUserSelfUserInfoDto
-} from '@/shared'
+} from '@ying/shared'
 import { comparePass, generatePass } from '@/common/utils'
 import { RedisKey, RedisToken } from '@/modules/redis/constant'
 

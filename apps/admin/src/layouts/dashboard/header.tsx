@@ -15,7 +15,7 @@ import SettingButton from '../_common/setting-button'
 import { NAV_COLLAPSED_WIDTH, NAV_WIDTH, HEADER_HEIGHT, OFFSET_HEADER_HEIGHT } from './config'
 import Nav from './nav'
 
-import { ThemeLayout } from '#/enum'
+import { ThemeLayout } from '@/types/enum'
 
 type Props = {
   className?: string

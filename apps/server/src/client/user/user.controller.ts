@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { ClientScope } from '@/common/decorator'
 import { AuthRequest } from '@/client/auth/types'
 import { UserService } from './user.service'
-import { ClientUserVo, ResetPasswordDto, UpdateUserInfoDto } from '@/shared'
+import { ClientUserVo, ResetPasswordDto, UpdateUserInfoDto } from '@ying/shared'
 
 @ApiTags('clien user')
 @Controller('user')

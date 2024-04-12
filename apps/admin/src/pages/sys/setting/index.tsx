@@ -1,5 +1,5 @@
 import { Button, Card, App, Space } from 'antd'
-import { useSubmit } from '@ying/hooks/use-submit'
+import { useSubmit } from '@ying/hooks'
 import { sysSettingApi } from '@/api'
 
 export default function SettingPage() {

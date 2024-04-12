@@ -1,5 +1,5 @@
-import { ListUserDto } from '@shared'
-import { UserEntity } from '@shared/entities'
+import { ListUserDto } from '@ying/shared'
+import { UserEntity } from '@ying/shared/entities'
 import { request } from './request'
 
 export function list(data: ListUserDto): Promise<UserEntity[]> {

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 
 import { IconButton, Iconify } from '@/components/icon'
 import ProTag from '@/theme/antd/components/tag'
-import { BasicStatus, ListRoleDto, UpdateRoleDto } from '@shared'
+import { BasicStatus, ListRoleDto, UpdateRoleDto } from '@ying/shared'
 
 import { RoleDrawer, RoleDrawerProps } from './role-drawer'
 
@@ -14,7 +14,7 @@ import { BasicStatusOptions, BasicStatusOptionsType } from '@/constant'
 import { usePage } from '@/hooks/use-page'
 import { roleApi } from '@/api'
 import { PageQuery } from './page-query'
-import { SysRoleEntity } from '@shared/entities'
+import { SysRoleEntity } from '@ying/shared/entities'
 
 const DEFAULE_ROLE_VALUE: Partial<UpdateRoleDto> = {
   id: undefined,

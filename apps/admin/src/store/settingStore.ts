@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 import { storage } from '@ying/utils'
 
-import { StorageEnum, ThemeColorPresets, ThemeLayout, ThemeMode } from '#/enum'
+import { StorageEnum, ThemeColorPresets, ThemeLayout, ThemeMode } from '@/types/enum'
 
 type SettingsType = {
   themeColorPresets: ThemeColorPresets

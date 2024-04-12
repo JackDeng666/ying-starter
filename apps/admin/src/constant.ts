@@ -1,5 +1,5 @@
 import { BaseType } from 'antd/es/typography/Base'
-import { BasicStatus, PermissionType } from '@shared'
+import { BasicStatus, PermissionType } from '@ying/shared'
 import { PresetStatusColorType } from 'antd/es/_util/colors'
 
 export type TypeOption = {

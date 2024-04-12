@@ -11,7 +11,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { ClientScope, UID } from '@/common/decorator'
 import { FileService } from '@/modules/file/file.service'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { FileSourceType, FileType } from '@/shared'
+import { FileSourceType, FileType } from '@ying/shared'
 
 @ApiTags('client file')
 @Controller('client')

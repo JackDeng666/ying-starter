@@ -1,4 +1,4 @@
-import { FileEntity } from '@shared/entities'
+import { FileEntity } from '@ying/shared/entities'
 import { request } from './request'
 
 export function upload(file: File): Promise<FileEntity> {

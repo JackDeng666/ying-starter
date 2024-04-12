@@ -1,6 +1,6 @@
-import { CreateOrUpdatePermissionDto } from '@shared'
+import { CreateOrUpdatePermissionDto } from '@ying/shared'
 import { request } from './request'
-import { SysPermissionEntity } from '@shared/entities'
+import { SysPermissionEntity } from '@ying/shared/entities'
 
 export async function list(): Promise<SysPermissionEntity[]> {
   return request.get('/sys/permission/list')

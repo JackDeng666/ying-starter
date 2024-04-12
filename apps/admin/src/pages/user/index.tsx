@@ -6,8 +6,8 @@ import dayjs from 'dayjs'
 
 import { debounce } from '@ying/utils'
 
-import { ListUserDto } from '@shared'
-import { UserEntity } from '@shared/entities'
+import { ListUserDto } from '@ying/shared'
+import { UserEntity } from '@ying/shared/entities'
 
 import ProTag from '@/theme/antd/components/tag'
 // import { useThemeToken } from '@/theme/hooks'

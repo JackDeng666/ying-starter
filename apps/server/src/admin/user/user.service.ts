@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Between, FindOptionsWhere, Like, Repository } from 'typeorm'
-import { UserEntity } from '@/shared/entities'
-import { ListUserDto } from '@/shared'
+import { UserEntity } from '@ying/shared/entities'
+import { ListUserDto } from '@ying/shared'
 
 @Injectable()
 export class UserService {

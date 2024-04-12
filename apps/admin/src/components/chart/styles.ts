@@ -2,7 +2,7 @@ import { GlobalToken } from 'antd'
 import Color from 'color'
 import styled from 'styled-components'
 
-import { ThemeMode } from '#/enum'
+import { ThemeMode } from '@/types/enum'
 
 export const StyledApexChart = styled.div<{
   $thememode: ThemeMode

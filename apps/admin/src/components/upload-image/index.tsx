@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { PlusOutlined, Loading3QuartersOutlined } from '@ant-design/icons'
-import { FileEntity } from '@shared/entities'
-import { SelectFileType, useUpload } from '@ying/hooks/use-upload'
+import { FileEntity } from '@ying/shared/entities'
+import { SelectFileType, useUpload } from '@ying/hooks'
 import { cn } from '@/utils/lib'
 
 type MinioUploadProps = {

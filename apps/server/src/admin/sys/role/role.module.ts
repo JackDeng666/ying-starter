@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { SysRoleEntity, SysUserEntity } from '@/shared/entities'
+import { SysRoleEntity, SysUserEntity } from '@ying/shared/entities'
 import { SysRoleService } from './role.service'
 import { SysRoleController } from './role.controller'
 

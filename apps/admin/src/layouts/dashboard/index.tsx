@@ -12,7 +12,7 @@ import Main from './main'
 import Nav from './nav'
 import NavHorizontal from './nav-horizontal'
 
-import { ThemeLayout, ThemeMode } from '#/enum'
+import { ThemeLayout, ThemeMode } from '@/types/enum'
 
 function DashboardLayout() {
   const { colorBgElevated, colorTextBase } = useThemeToken()

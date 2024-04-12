@@ -3,7 +3,7 @@ import { Form, Modal, Input, message } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
-import { UpdateSysUserPasswordDto } from '@shared'
+import { UpdateSysUserPasswordDto } from '@ying/shared'
 import { sysUserApi } from '@/api'
 
 const updateResolver = classValidatorResolver(UpdateSysUserPasswordDto)

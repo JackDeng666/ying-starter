@@ -7,14 +7,14 @@ import ProTag from '@/theme/antd/components/tag'
 
 import { getOption } from '@ying/utils'
 
-import { BasicStatus, PermissionType, CreateOrUpdatePermissionDto } from '@shared'
+import { BasicStatus, PermissionType, CreateOrUpdatePermissionDto } from '@ying/shared'
 import { BasicStatusOptions, BasicStatusOptionsType, PermissionOptions, PermissionOptionsType } from '@/constant'
 
 import { permissionApi } from '@/api'
-import { useApi } from '@/hooks/use-api'
+import { useApi } from '@ying/hooks'
 
 import { PermissionDrawer, PermissionDrawerProps } from './permission-drawer'
-import { SysPermissionEntity } from '@shared/entities'
+import { SysPermissionEntity } from '@ying/shared/entities'
 
 const defaultPermissionValue: Partial<CreateOrUpdatePermissionDto> = {
   code: undefined,

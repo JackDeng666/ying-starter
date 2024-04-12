@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { Button, Input } from '@nextui-org/react'
 
-import { NewPasswordDto } from '@shared'
+import { NewPasswordDto } from '@ying/shared'
 
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'

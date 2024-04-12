@@ -10,7 +10,7 @@ import Link from 'next/link'
 
 import { ms } from '@ying/utils'
 
-import { ClientLoginDto } from '@shared'
+import { ClientLoginDto } from '@ying/shared'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'

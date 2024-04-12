@@ -5,7 +5,7 @@ import DashboardLayout from '@/layouts/dashboard'
 import AuthGuard from '../components/auth-guard'
 import { getMenuModules } from '../utils'
 
-import { AppRouteObject } from '#/router'
+import { AppRouteObject } from '@/types/router'
 
 const menuModuleRoutes = getMenuModules()
 

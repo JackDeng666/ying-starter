@@ -6,7 +6,7 @@ import { PERMISSION_SIGN } from '@/common/decorator'
 import { TPermission } from '@/common/permission/type'
 import { RedisKey, RedisToken } from '@/modules/redis/constant'
 import { SysAuthService } from '@/admin/sys/auth/auth.service'
-import { BasicStatus } from '@/shared'
+import { BasicStatus } from '@ying/shared'
 
 @Injectable()
 export class AdminPermissionGuard implements CanActivate {
