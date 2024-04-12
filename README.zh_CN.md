@@ -14,6 +14,8 @@
 - zustand
 - react-hook-form
 
+修改自另一个开源项目 [slash-admin](https://github.com/d3george/slash-admin)。
+
 客户端
 
 - Vite

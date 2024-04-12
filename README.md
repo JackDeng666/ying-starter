@@ -14,6 +14,8 @@ Admin side
 - zustand
 - react-hook-form
 
+Modified from another open-source project [slash-admin](https://github.com/d3george/slash-admin).
+
 Client side
 
 - Vite
