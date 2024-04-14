@@ -5,17 +5,17 @@ import Color from 'color'
 import { CSSProperties, useEffect, useState } from 'react'
 import { useLocation, useMatches } from 'react-router-dom'
 
-import Logo from '@/components/logo'
-import Scrollbar from '@/components/scrollbar'
-import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/router/hooks'
-import { menuFilter } from '@/router/utils'
-import { useSettingActions, useSettings } from '@/store/settingStore'
-import { useThemeToken } from '@/theme/hooks'
+import Logo from '@/admin/components/logo'
+import Scrollbar from '@/admin/components/scrollbar'
+import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/admin/router/hooks'
+import { menuFilter } from '@/admin/router/utils'
+import { useSettingActions, useSettings } from '@/admin/store/settingStore'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 import { NAV_COLLAPSED_WIDTH, NAV_WIDTH } from './config'
 
-import { ThemeLayout } from '@/types/enum'
-import { IframeLink } from '@/constant'
+import { ThemeLayout } from '@/admin/types/enum'
+import { IframeLink } from '@/admin/constant'
 
 type Props = {
   closeSideBarDrawer?: () => void

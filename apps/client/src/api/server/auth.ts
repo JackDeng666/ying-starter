@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import { AppKey } from '@/enum'
+import { AppKey } from '@/client/enum'
 import { UserEntity } from '@ying/shared/entities'
 
 export const getProfile = async (): Promise<UserEntity> => {

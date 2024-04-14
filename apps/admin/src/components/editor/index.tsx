@@ -1,8 +1,8 @@
-import '@/utils/highlight'
+import '@/admin/utils/highlight'
 import ReactQuill, { ReactQuillProps } from 'react-quill'
 import Toolbar, { formats } from './toolbar'
-import { useSettings } from '@/store/settingStore'
-import { useThemeToken } from '@/theme/hooks'
+import { useSettings } from '@/admin/store/settingStore'
+import { useThemeToken } from '@/admin/theme/hooks'
 import { StyledEditor } from './styles'
 
 interface Props extends ReactQuillProps {

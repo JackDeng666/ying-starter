@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Inject } from '@nestjs/common'
 import { Response } from 'express'
 import { ConfigType } from '@nestjs/config'
-import { authConfig } from '@/config'
+import { authConfig } from '@/server/config'
 
 @Catch()
 export class AuthLoginExceptionFilter implements ExceptionFilter {

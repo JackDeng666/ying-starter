@@ -1,11 +1,11 @@
 import { ItemType } from 'antd/es/menu/hooks/useItems'
 import { useCallback } from 'react'
 
-import { Iconify, SvgIcon } from '@/components/icon'
-import { useSettings } from '@/store/settingStore'
+import { Iconify, SvgIcon } from '@/admin/components/icon'
+import { useSettings } from '@/admin/store/settingStore'
 
-import { ThemeLayout } from '@/types/enum'
-import { AppRouteObject } from '@/types/router'
+import { ThemeLayout } from '@/admin/types/enum'
+import { AppRouteObject } from '@/admin/types/router'
 
 /**
  *   routes -> menus

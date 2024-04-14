@@ -2,8 +2,8 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth, useAuthStore } from '@/store/auth-store'
-import { LayoutProps } from '@/types'
+import { useAuth, useAuthStore } from '@/client/store/auth-store'
+import { LayoutProps } from '@/client/types'
 import { Navbar } from './navbar'
 
 export const CardWrapper = ({ children }: LayoutProps) => {

@@ -3,9 +3,9 @@ import { NestFactory } from '@nestjs/core'
 import { ConfigType } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { NestExpressApplication } from '@nestjs/platform-express'
-import { apiConfig } from '@/config'
-import { ProcessTimeInterceptor, ResponseWrapInterceptor } from '@/common/interceptor'
-import { OtherExceptionFilter, HttpExceptionFilter } from '@/common/filter'
+import { apiConfig } from '@/server/config'
+import { ProcessTimeInterceptor, ResponseWrapInterceptor } from '@/server/common/interceptor'
+import { OtherExceptionFilter, HttpExceptionFilter } from '@/server/common/filter'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
@@ -23,7 +23,7 @@ async function bootstrap() {
       forbidUnknownValues: true
     })
   )
-  app.useStaticAssets('static')
+  app.useStaticAssets('assets')
 
   const config = new DocumentBuilder().setTitle('ying app').setDescription('ying app').setVersion('1.0').build()
   const document = SwaggerModule.createDocument(app, config, {

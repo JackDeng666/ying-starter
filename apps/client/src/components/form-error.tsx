@@ -1,7 +1,7 @@
 import { ErrorIcon } from './icons'
 
 interface FormErrorProps {
-  message?: string
+  message?: string | null
 }
 
 export const FormError = ({ message }: FormErrorProps) => {

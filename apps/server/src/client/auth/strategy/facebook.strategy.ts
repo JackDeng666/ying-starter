@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { ConfigType } from '@nestjs/config'
 import { Strategy } from 'passport-facebook'
-import { apiConfig, authConfig } from '@/config'
+import { apiConfig, authConfig } from '@/server/config'
 import { AuthService } from '../auth.service'
 
 export const FACEBOOK_STRATEGY = 'facebook'

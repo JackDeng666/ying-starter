@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common'
 import { ApiTags, ApiOperation } from '@nestjs/swagger'
 import { AdminLoginDto } from '@ying/shared'
-import { AdminScope, Public, Token, UID } from '@/common/decorator'
+import { AdminScope, Public, Token, UID } from '@/server/common/decorator'
 import { SysAuthService } from './auth.service'
 
 @ApiTags('admin auth')

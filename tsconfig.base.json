@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false,
+    "importHelpers": true,
+    "target": "ES2015",
+    "module": "esnext",
+    "lib": ["ES2023", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/admin/*": ["apps/admin/src/*"],
+      "@/client/*": ["apps/client/src/*"],
+      "@/server/*": ["apps/server/src/*"],
+      "@ying/hooks": ["libs/hooks/src/index.ts"],
+      "@ying/shared": ["libs/shared/src/index.ts"],
+      "@ying/shared/*": ["libs/shared/src/*"],
+      "@ying/utils": ["libs/utils/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

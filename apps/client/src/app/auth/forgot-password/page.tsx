@@ -6,11 +6,11 @@ import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { Button, Input } from '@nextui-org/react'
 
 import { ForgotPasswordDto } from '@ying/shared'
-import { FormError } from '@/components/form-error'
-import { FormSuccess } from '@/components/form-success'
+import { FormError } from '@/client/components/form-error'
+import { FormSuccess } from '@/client/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
-import { useTranslate } from '@/i18n/client'
-import { useApi } from '@/store/api-store'
+import { useTranslate } from '@/client/i18n/client'
+import { useApi } from '@/client/store/api-store'
 
 const ForgotPasswordPage = () => {
   const { authApi } = useApi()
@@ -30,6 +30,7 @@ const ForgotPasswordPage = () => {
   } = form
 
   const onSubmit = async (values: ForgotPasswordDto) => {
+    if (!authApi) return
     setError('')
     setSuccess('')
 
@@ -52,7 +53,7 @@ const ForgotPasswordPage = () => {
           isClearable
           type="email"
           isInvalid={Boolean(errors.email)}
-          errorMessage={t(errors.email?.message, { ns: 'validation' })}
+          errorMessage={t(errors.email?.message || '', { ns: 'validation' })}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',

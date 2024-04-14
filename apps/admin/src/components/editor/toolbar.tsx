@@ -1,5 +1,5 @@
-import { useSettings } from '@/store/settingStore'
-import { useThemeToken } from '@/theme/hooks'
+import { useSettings } from '@/admin/store/settingStore'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 import { StyledToolbar } from './styles'
 

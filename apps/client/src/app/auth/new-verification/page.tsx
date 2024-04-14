@@ -4,11 +4,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { BeatLoader } from 'react-spinners'
 import { useSearchParams } from 'next/navigation'
 
-import { FormError } from '@/components/form-error'
-import { FormSuccess } from '@/components/form-success'
+import { FormError } from '@/client/components/form-error'
+import { FormSuccess } from '@/client/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
-import { useTranslate } from '@/i18n/client'
-import { useApi } from '@/store/api-store'
+import { useTranslate } from '@/client/i18n/client'
+import { useApi } from '@/client/store/api-store'
 
 const NewVerificationPage = () => {
   const { authApi } = useApi()
@@ -18,8 +18,8 @@ const NewVerificationPage = () => {
 
   const searchParams = useSearchParams()
 
-  const token = searchParams.get('token')
-  const email = searchParams.get('email')
+  const token = searchParams.get('token') || ''
+  const email = searchParams.get('email') || ''
 
   const onSubmit = useCallback(() => {
     if (success || error || !authApi) return

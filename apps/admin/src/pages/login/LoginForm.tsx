@@ -2,8 +2,8 @@ import { App, Button, Form, Input } from 'antd'
 import { useCallback, useState } from 'react'
 import { AdminLoginDto } from '@ying/shared'
 
-import { getUserInfo, setUserToken } from '@/store'
-import { authApi } from '@/api'
+import { getUserInfo, setUserToken } from '@/admin/store'
+import { authApi } from '@/admin/api'
 
 import { LoginStateEnum, useLoginStateContext } from './providers/LoginStateProvider'
 

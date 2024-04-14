@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 import HeaderSimple from '../_common/header-simple'
 

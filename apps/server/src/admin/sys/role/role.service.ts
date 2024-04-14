@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { RedisClientType } from 'redis'
 import { SysPermissionEntity, SysRoleEntity } from '@ying/shared/entities'
 import { CreateRoleDto, ListRoleDto, UpdateRoleDto } from '@ying/shared'
-import { RedisKey, RedisToken } from '@/modules/redis/constant'
+import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
 
 @Injectable()
 export class SysRoleService {

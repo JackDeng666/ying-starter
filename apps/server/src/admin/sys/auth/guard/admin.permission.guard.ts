@@ -2,10 +2,10 @@ import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/commo
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 import { RedisClientType } from 'redis'
-import { PERMISSION_SIGN } from '@/common/decorator'
-import { TPermission } from '@/common/permission/type'
-import { RedisKey, RedisToken } from '@/modules/redis/constant'
-import { SysAuthService } from '@/admin/sys/auth/auth.service'
+import { PERMISSION_SIGN } from '@/server/common/decorator'
+import { TPermission } from '@/server/common/permission/type'
+import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
+import { SysAuthService } from '@/server/admin/sys/auth/auth.service'
 import { BasicStatus } from '@ying/shared'
 
 @Injectable()

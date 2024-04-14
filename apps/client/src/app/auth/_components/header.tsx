@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslate } from '@/i18n/client'
+import { useTranslate } from '@/client/i18n/client'
 
 interface HeaderProps {
   label: string

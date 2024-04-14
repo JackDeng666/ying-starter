@@ -3,11 +3,11 @@ import { ConfigProvider, theme } from 'antd'
 import locale from 'antd/es/locale/zh_CN'
 import 'antd/dist/reset.css'
 
-import { useSettings } from '@/store/settingStore'
+import { useSettings } from '@/admin/store/settingStore'
 
 import { customThemeTokenConfig, themeModeToken, colorPrimarys, customComponentConfig } from './theme'
 
-import { ThemeMode } from '@/types/enum'
+import { ThemeMode } from '@/admin/types/enum'
 
 type Props = {
   children: React.ReactNode

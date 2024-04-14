@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Put, Request, UnauthorizedException } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { ClientScope } from '@/common/decorator'
-import { AuthRequest } from '@/client/auth/types'
+import { ClientScope } from '@/server/common/decorator'
+import { AuthRequest } from '@/server/client/auth/types'
 import { UserService } from './user.service'
 import { ClientUserVo, ResetPasswordDto, UpdateUserInfoDto } from '@ying/shared'
 

@@ -2,8 +2,8 @@
 
 import { Button } from '@nextui-org/react'
 import { FaGoogle, FaGithub, FaFacebook } from 'react-icons/fa'
-import { useTranslate } from '@/i18n/client'
-import { AuthProvider, useSignIn } from '@/hooks/use-sign-in'
+import { useTranslate } from '@/client/i18n/client'
+import { AuthProvider, useSignIn } from '@/client/hooks/use-sign-in'
 
 export const Social = () => {
   const { t } = useTranslate()

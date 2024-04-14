@@ -2,9 +2,9 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { SysPermissionService } from './permission.service'
 import { CreateOrUpdatePermissionDto } from '@ying/shared'
-import { AdminScope } from '@/common/decorator'
-import { PermissionDecorator } from '@/common/decorator'
-import { pms } from '@/common/permission'
+import { AdminScope } from '@/server/common/decorator'
+import { PermissionDecorator } from '@/server/common/decorator'
+import { pms } from '@/server/common/permission'
 
 @ApiTags('admin system permission')
 @Controller('permission')

@@ -4,7 +4,7 @@ import { PassportStrategy } from '@nestjs/passport'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserEntity } from '@ying/shared/entities'
 import { Repository } from 'typeorm'
-import { generatePass } from '@/common/utils'
+import { generatePass } from '@/server/common/utils'
 
 export const LOCAL_STRATEGY = 'local'
 

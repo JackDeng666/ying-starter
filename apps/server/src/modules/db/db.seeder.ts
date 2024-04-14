@@ -3,12 +3,12 @@ import { Repository, TreeRepository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ConfigType } from '@nestjs/config'
 import { faker } from '@faker-js/faker'
-import { authConfig } from '@/config'
+import { authConfig } from '@/server/config'
 import { SysPermissionEntity, SysRoleEntity, SysUserEntity } from '@ying/shared/entities'
+import { FileService } from '@/server/modules/file/file.service'
+import { generatePass } from '@/server/common/utils'
+import { getPermissionTree } from '@/server/common/permission'
 import { FileSourceType, FileType } from '@ying/shared'
-import { FileService } from '@/modules/file/file.service'
-import { generatePass } from '@/common/utils'
-import { getPermissionTree } from '@/common/permission'
 
 @Injectable()
 export class DbSeeder {

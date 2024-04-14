@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { TablePaginationConfig } from 'antd/es/table'
 import { ListDto } from '@ying/shared'
-import { useApi } from '@ying/hooks'
+import { useApi } from '@/admin/hooks/use-api'
 
 type UsePageOptions<T> = {
   listApi: (pageOptions: ListDto) => Promise<T>

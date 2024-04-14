@@ -1,6 +1,6 @@
 import { ThemeConfig } from 'antd'
 
-import { ThemeColorPresets } from '@/types/enum'
+import { ThemeColorPresets } from '@/admin/types/enum'
 /**
  * Antd theme editor: https://ant.design/theme-editor-cn
  */

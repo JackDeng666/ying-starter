@@ -2,10 +2,10 @@ import { Drawer } from 'antd'
 import Color from 'color'
 import { CSSProperties, useState } from 'react'
 
-import { IconButton, SvgIcon } from '@/components/icon'
-import Logo from '@/components/logo'
-import { useSettings } from '@/store/settingStore'
-import { useResponsive, useThemeToken } from '@/theme/hooks'
+import { IconButton, SvgIcon } from '@/admin/components/icon'
+import Logo from '@/admin/components/logo'
+import { useSettings } from '@/admin/store/settingStore'
+import { useResponsive, useThemeToken } from '@/admin/theme/hooks'
 
 import AccountDropdown from '../_common/account-dropdown'
 import BreadCrumb from '../_common/bread-crumb'
@@ -15,7 +15,7 @@ import SettingButton from '../_common/setting-button'
 import { NAV_COLLAPSED_WIDTH, NAV_WIDTH, HEADER_HEIGHT, OFFSET_HEADER_HEIGHT } from './config'
 import Nav from './nav'
 
-import { ThemeLayout } from '@/types/enum'
+import { ThemeLayout } from '@/admin/types/enum'
 
 type Props = {
   className?: string

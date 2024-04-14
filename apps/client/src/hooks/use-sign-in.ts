@@ -1,4 +1,4 @@
-import { useAppContext } from '@/components/app-provider'
+import { useAppContext } from '@/client/components/app-provider'
 
 export type AuthProvider = 'google' | 'github' | 'facebook'
 

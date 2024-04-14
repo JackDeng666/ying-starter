@@ -14,13 +14,13 @@ import {
   NewPasswordDto,
   NewVerificationDto
 } from '@ying/shared'
-import { authConfig } from '@/config'
-import { RedisKey, RedisToken } from '@/modules/redis/constant'
-import { MailService } from '@/modules/mail/mail.service'
-import { generatePass } from '@/common/utils'
+import { authConfig } from '@/server/config'
+import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
+import { MailService } from '@/server/modules/mail/mail.service'
+import { generatePass } from '@/server/common/utils'
 import { AccountEntity, FileEntity, UserEntity } from '@ying/shared/entities'
 import { TClientPayload } from './strategy/jwt.strategy'
-import { i18n } from '@/i18n'
+import { i18n } from '@/server/i18n'
 
 @Injectable()
 export class AuthService {

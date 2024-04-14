@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { Strategy } from 'passport-github2'
 import { PassportStrategy } from '@nestjs/passport'
 import { ConfigType } from '@nestjs/config'
-import { apiConfig, authConfig } from '@/config'
+import { apiConfig, authConfig } from '@/server/config'
 import { AuthService } from '../auth.service'
 
 export const GITHUB_STRATEGY = 'github'

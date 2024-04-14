@@ -3,8 +3,8 @@ import { Form, Drawer, Input, InputNumber, Button, App, Radio, TreeSelect } from
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { BasicStatus, CreateRoleDto, UpdateRoleDto } from '@ying/shared'
-import { permissionApi, roleApi } from '@/api'
-import { useApi } from '@ying/hooks'
+import { permissionApi, roleApi } from '@/admin/api'
+import { useApi } from '@/admin/hooks/use-api'
 import { SysPermissionEntity } from '@ying/shared/entities'
 
 const createResolver = classValidatorResolver(CreateRoleDto)

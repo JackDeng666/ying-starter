@@ -1,6 +1,6 @@
 import { Button, Card, App, Space } from 'antd'
 import { useSubmit } from '@ying/hooks'
-import { sysSettingApi } from '@/api'
+import { sysSettingApi } from '@/admin/api'
 
 export default function SettingPage() {
   const { message } = App.useApp()

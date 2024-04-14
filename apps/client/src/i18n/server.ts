@@ -16,13 +16,15 @@ i18n.init({
 
 export function getFixedT(lng?: string, ns?: string) {
   return {
-    t: i18n.getFixedT(lng, ns),
+    t: i18n.getFixedT(lng || '', ns),
     i18n
   }
 }
 
 export function getLocale() {
-  const languages = new Negotiator({ headers: { ['accept-language']: headers().get('accept-language') } }).languages()
+  const languages = new Negotiator({
+    headers: { 'accept-language': headers().get('accept-language') || undefined }
+  }).languages()
 
   return match(languages, locales, defaultLocale)
 }

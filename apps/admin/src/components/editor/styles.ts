@@ -1,7 +1,7 @@
 import { GlobalToken } from 'antd'
 import styled from 'styled-components'
 
-import { ThemeMode } from '@/types/enum'
+import { ThemeMode } from '@/admin/types/enum'
 
 type KeyofToken = keyof GlobalToken
 const getHeadingStyle = (level: 1 | 2 | 3 | 4 | 5, token: GlobalToken) => {

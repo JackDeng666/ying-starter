@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { initApi, AuthApi, FileApi, UserApi } from '@/api/client'
-import { useAppContext } from '@/components/app-provider'
+import { initApi, AuthApi, FileApi, UserApi } from '@/client/api/client'
+import { useAppContext } from '@/client/components/app-provider'
 
 type API = {
   authApi?: AuthApi

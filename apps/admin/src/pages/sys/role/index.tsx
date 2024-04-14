@@ -3,16 +3,16 @@ import Table, { ColumnsType } from 'antd/es/table'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { IconButton, Iconify } from '@/components/icon'
-import ProTag from '@/theme/antd/components/tag'
+import { IconButton, Iconify } from '@/admin/components/icon'
+import ProTag from '@/admin/theme/antd/components/tag'
 import { BasicStatus, ListRoleDto, UpdateRoleDto } from '@ying/shared'
 
 import { RoleDrawer, RoleDrawerProps } from './role-drawer'
 
 import { debounce, getOption } from '@ying/utils'
-import { BasicStatusOptions, BasicStatusOptionsType } from '@/constant'
-import { usePage } from '@/hooks/use-page'
-import { roleApi } from '@/api'
+import { BasicStatusOptions, BasicStatusOptionsType } from '@/admin/constant'
+import { usePage } from '@/admin/hooks/use-page'
+import { roleApi } from '@/admin/api'
 import { PageQuery } from './page-query'
 import { SysRoleEntity } from '@ying/shared/entities'
 

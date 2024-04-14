@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy, VerifyCallback } from 'passport-google-oauth20'
 import { ConfigType } from '@nestjs/config'
-import { apiConfig, authConfig } from '@/config'
+import { apiConfig, authConfig } from '@/server/config'
 import { AuthService } from '../auth.service'
 
 export const GOOGLE_STRATEGY = 'google'

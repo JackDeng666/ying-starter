@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 
-import { authApi } from '@/api'
+import { authApi } from '@/admin/api'
 import { storage } from '@ying/utils'
 
-import { StorageEnum } from '@/types/enum'
+import { StorageEnum } from '@/admin/types/enum'
 import { UserTokenVo } from '@ying/shared'
 import { SysUserEntity } from '@ying/shared/entities'
 

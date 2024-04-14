@@ -1,8 +1,8 @@
 import { Card, Select } from 'antd'
 import { useState } from 'react'
 
-import Chart from '@/components/chart/chart'
-import useChart from '@/components/chart/useChart'
+import Chart from '@/admin/components/chart/chart'
+import useChart from '@/admin/components/chart/useChart'
 
 export default function AreaDownload() {
   const [year, setYear] = useState('2023')

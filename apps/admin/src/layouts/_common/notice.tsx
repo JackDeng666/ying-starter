@@ -3,11 +3,11 @@ import { Badge, Button, Drawer, Space, Tabs, TabsProps } from 'antd'
 import Color from 'color'
 import { CSSProperties, ReactNode, useState } from 'react'
 
-import CyanBlur from '@/assets/images/background/cyan-blur.png'
-import RedBlur from '@/assets/images/background/red-blur.png'
-import { IconButton, Iconify, SvgIcon } from '@/components/icon'
-import ProTag from '@/theme/antd/components/tag'
-import { useThemeToken } from '@/theme/hooks'
+import CyanBlur from '@/admin/assets/images/background/cyan-blur.png'
+import RedBlur from '@/admin/assets/images/background/red-blur.png'
+import { IconButton, Iconify, SvgIcon } from '@/admin/components/icon'
+import ProTag from '@/admin/theme/antd/components/tag'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 export default function NoticeButton() {
   const [drawerOpen, setDrawerOpen] = useState(false)

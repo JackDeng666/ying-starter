@@ -2,9 +2,9 @@ import { RedisClientType } from 'redis'
 import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { RedisToken, RedisKey } from '@/modules/redis/constant'
+import { RedisToken, RedisKey } from '@/server/modules/redis/constant'
 import { SysUserEntity, UserEntity } from '@ying/shared/entities'
-import { FileService } from '@/modules/file/file.service'
+import { FileService } from '@/server/modules/file/file.service'
 
 @Injectable()
 export class SysSettingService {

@@ -6,11 +6,11 @@ import { nanoid } from 'nanoid'
 import { FileSourceType, FileType } from '@ying/shared'
 import { FileEntity } from '@ying/shared/entities'
 import { EXPIR_SECONDS, MINIO_TOKEN } from './constant'
-import { minioConfig } from '@/config'
+import { minioConfig } from '@/server/config'
 import { ConfigType } from '@nestjs/config'
 
 type UploadFileOptions = {
-  file: Express.Multer.File
+  file: MulterFile
   fileType: FileType
   from: FileSourceType
   userId: number

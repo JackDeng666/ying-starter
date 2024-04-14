@@ -2,8 +2,8 @@
 
 import { useSearchParams } from 'next/navigation'
 import { CardWrapper } from '../_components/card-wrapper'
-import { useTranslate } from '@/i18n/client'
-import { FormError } from '@/components/form-error'
+import { useTranslate } from '@/client/i18n/client'
+import { FormError } from '@/client/components/form-error'
 
 const AuthErrorPage = () => {
   const { t } = useTranslate()

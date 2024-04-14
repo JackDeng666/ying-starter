@@ -3,11 +3,11 @@ import { ItemType } from 'antd/es/breadcrumb/Breadcrumb'
 import { useEffect, useState } from 'react'
 import { useMatches } from 'react-router-dom'
 
-import { usePermissionRoutes, useRouter } from '@/router/hooks'
-import { menuFilter } from '@/router/utils'
+import { usePermissionRoutes, useRouter } from '@/admin/router/hooks'
+import { menuFilter } from '@/admin/router/utils'
 
-import { AppRouteObject } from '@/types/router'
-import { IframeLink } from '@/constant'
+import { AppRouteObject } from '@/admin/types/router'
+import { IframeLink } from '@/admin/constant'
 
 /**
  * 动态面包屑解决方案：https://github.com/MinjieChang/myblog/issues/29
@@ -40,11 +40,11 @@ export default function BreadCrumb() {
             label: (
               <span
                 onClick={() => {
-                  if (item.meta.frameSrc && item.meta.component !== IframeLink) {
+                  if (item.meta?.frameSrc && item.meta.component !== IframeLink) {
                     window.open(item.meta.frameSrc, '_black')
                     return
                   }
-                  push(item.meta?.key)
+                  push(item.meta?.key || '')
                 }}
               >
                 {item.meta!.label}

@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Control, Controller } from 'react-hook-form'
 import { Button, Form, Input, DatePicker, Select, Typography } from 'antd'
 import dayjs from 'dayjs'
-import { BasicStatusOptions } from '@/constant'
+import { BasicStatusOptions } from '@/admin/constant'
 
 const { RangePicker } = DatePicker
 

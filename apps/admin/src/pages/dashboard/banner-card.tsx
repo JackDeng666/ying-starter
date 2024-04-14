@@ -1,9 +1,9 @@
 import { Col, Row } from 'antd'
 import Color from 'color'
 
-import Character3 from '@/assets/images/characters/character_3.png'
-// import { useUserInfo } from '@/store/userStore'
-import { useThemeToken } from '@/theme/hooks'
+import Character3 from '@/admin/assets/images/characters/character_3.png'
+// import { useUserInfo } from '@/admin/store/userStore'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 export default function BannerCard() {
   // const { name } = useUserInfo()

@@ -1,7 +1,7 @@
 import { Typography, Upload as AntdUpload } from 'antd'
 import { ItemRender } from 'antd/es/upload/interface'
 
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 import { StyledUpload } from './styles'
 import UploadIllustration from './upload-illustration'

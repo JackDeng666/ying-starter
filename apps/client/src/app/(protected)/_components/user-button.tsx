@@ -2,9 +2,9 @@
 
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Image } from '@nextui-org/react'
 
-import { useAuthStore, useAuth } from '@/store/auth-store'
-import { useTranslate } from '@/i18n/client'
-import { LogoutIcon } from '@/components/icons'
+import { useAuthStore, useAuth } from '@/client/store/auth-store'
+import { useTranslate } from '@/client/i18n/client'
+import { LogoutIcon } from '@/client/components/icons'
 
 export const UserButton = () => {
   const { t } = useTranslate()

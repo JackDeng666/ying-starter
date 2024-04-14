@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ms } from '@ying/utils'
-import { getLocale } from '@/i18n/server'
-import { DefaultLoginRedirect, AuthRoutes, LoginPage } from '@/routes'
+import { getLocale } from '@/client/i18n/server'
+import { DefaultLoginRedirect, AuthRoutes, LoginPage } from '@/client/routes'
 import { AppKey } from './enum'
 
 export function middleware(request: NextRequest) {
@@ -24,7 +24,7 @@ export function middleware(request: NextRequest) {
     let queryStr = ''
     // 如果需要回调的地址不是子域，则需要回传token。
     if (process.env.DOMAIN && !new URL(ssoCallback).hostname.includes(process.env.DOMAIN)) {
-      queryStr = `?${AppKey.QueryTokenKey}=${cookieToken.value}`
+      queryStr = `?${AppKey.QueryTokenKey}=${cookieToken?.value}`
     }
     if (cookieToken) {
       return NextResponse.redirect(`${ssoCallback}${queryStr}`)

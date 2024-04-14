@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from 'axios'
 import Cookies from 'js-cookie'
-import { AppKey } from '@/enum'
-import { clearUserInfoAndToken } from '@/store/auth-store'
+import { AppKey } from '@/client/enum'
+import { clearUserInfoAndToken } from '@/client/store/auth-store'
 
 export type ErrorRes = {
   status: number

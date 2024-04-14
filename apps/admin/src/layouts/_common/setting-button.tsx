@@ -6,15 +6,15 @@ import { CSSProperties, useState } from 'react'
 import { MdCircle } from 'react-icons/md'
 import screenfull from 'screenfull'
 
-import CyanBlur from '@/assets/images/background/cyan-blur.png'
-import RedBlur from '@/assets/images/background/red-blur.png'
-import { varHover } from '@/components/animate/variants/action'
-import { IconButton, SvgIcon } from '@/components/icon'
-import { useSettingActions, useSettings } from '@/store/settingStore'
-import { colorPrimarys } from '@/theme/antd/theme'
-import { useThemeToken } from '@/theme/hooks'
+import CyanBlur from '@/admin/assets/images/background/cyan-blur.png'
+import RedBlur from '@/admin/assets/images/background/red-blur.png'
+import { varHover } from '@/admin/components/animate/variants/action'
+import { IconButton, SvgIcon } from '@/admin/components/icon'
+import { useSettingActions, useSettings } from '@/admin/store/settingStore'
+import { colorPrimarys } from '@/admin/theme/antd/theme'
+import { useThemeToken } from '@/admin/theme/hooks'
 
-import { ThemeColorPresets, ThemeLayout, ThemeMode } from '@/types/enum'
+import { ThemeColorPresets, ThemeLayout, ThemeMode } from '@/admin/types/enum'
 
 /**
  * App Setting

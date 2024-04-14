@@ -2,13 +2,13 @@ import { Content } from 'antd/es/layout/layout'
 import { CSSProperties, forwardRef } from 'react'
 import { Outlet } from 'react-router-dom'
 
-import { useSettings } from '@/store/settingStore'
-import { useResponsive } from '@/theme/hooks'
+import { useSettings } from '@/admin/store/settingStore'
+import { useResponsive } from '@/admin/theme/hooks'
 
 import { NAV_WIDTH, NAV_COLLAPSED_WIDTH, HEADER_HEIGHT, MULTI_TABS_HEIGHT } from './config'
 import MultiTabs from './multi-tabs'
 
-import { ThemeLayout } from '@/types/enum'
+import { ThemeLayout } from '@/admin/types/enum'
 
 type Props = {
   offsetTop?: boolean

@@ -9,10 +9,10 @@ import { debounce } from '@ying/utils'
 import { ListUserDto } from '@ying/shared'
 import { UserEntity } from '@ying/shared/entities'
 
-import ProTag from '@/theme/antd/components/tag'
-// import { useThemeToken } from '@/theme/hooks'
-import { usePage } from '@/hooks/use-page'
-import { userApi } from '@/api'
+import ProTag from '@/admin/theme/antd/components/tag'
+// import { useThemeToken } from '@/admin/theme/hooks'
+import { usePage } from '@/admin/hooks/use-page'
+import { userApi } from '@/admin/api'
 
 import { PageQuery } from './page-query'
 

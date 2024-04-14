@@ -1,7 +1,7 @@
 import { Card } from 'antd'
 
-import Chart from '@/components/chart/chart'
-import useChart from '@/components/chart/useChart'
+import Chart from '@/admin/components/chart/chart'
+import useChart from '@/admin/components/chart/useChart'
 
 export default function CurrentDownload() {
   return (

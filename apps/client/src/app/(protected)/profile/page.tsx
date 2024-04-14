@@ -8,10 +8,10 @@ import { Button, Input } from '@nextui-org/react'
 
 import { UpdateUserInfoDto } from '@ying/shared'
 
-import { UploadImage } from '@/components/upload-image'
-import { useAuth, useAuthStore } from '@/store/auth-store'
-import { useTranslate } from '@/i18n/client'
-import { useApi } from '@/store/api-store'
+import { UploadImage } from '@/client/components/upload-image'
+import { useAuth, useAuthStore } from '@/client/store/auth-store'
+import { useTranslate } from '@/client/i18n/client'
+import { useApi } from '@/client/store/api-store'
 
 const ProfilePage = () => {
   const { getProfile } = useAuth()
@@ -33,6 +33,7 @@ const ProfilePage = () => {
   } = form
 
   const onSubmit = async (values: UpdateUserInfoDto) => {
+    if (!userApi) return
     try {
       await userApi.updateUserInfo(values)
       toast.success(t('Successfully modified user information!'))
@@ -71,7 +72,7 @@ const ProfilePage = () => {
             isDisabled={isSubmitting}
             placeholder={t('Please enter nickname')}
             isInvalid={Boolean(errors.name)}
-            errorMessage={t(errors.name?.message, { ns: 'validation' })}
+            errorMessage={t(errors.name?.message || '', { ns: 'validation' })}
             defaultValue={userInfo?.name}
             {...register('name')}
           />
@@ -86,7 +87,7 @@ const ProfilePage = () => {
                   <UploadImage
                     defaultUrl={userInfo.avatar?.url}
                     disabled={isSubmitting}
-                    handleUpload={file => fileApi.upload(file)}
+                    handleUpload={file => fileApi!.upload(file)}
                     onSuccess={fileEntity => {
                       field.onChange(fileEntity.id)
                       toast.success(t('Image uploaded successfully!'))

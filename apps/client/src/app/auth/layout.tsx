@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { LayoutProps } from '@/types'
+import { LayoutProps } from '@/client/types'
 
 const AuthLayout = ({ children }: LayoutProps) => {
   return (

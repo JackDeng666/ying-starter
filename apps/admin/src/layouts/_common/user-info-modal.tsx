@@ -4,9 +4,9 @@ import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
 import { UpdateSysUserSelfUserInfoDto, UpdateSysUserSelfPasswordDto } from '@ying/shared'
-import { fileApi, sysUserApi } from '@/api'
-import { UploadImage } from '@/components/upload-image'
-import { getUserInfo, logout, useUserInfo } from '@/store'
+import { fileApi, sysUserApi } from '@/admin/api'
+import { UploadImage } from '@/admin/components/upload-image'
+import { getUserInfo, logout, useUserInfo } from '@/admin/store'
 
 export type UserInfoModalProps = {
   title: string

@@ -3,9 +3,9 @@ import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 import { RedisClientType } from 'redis'
 import { ExtractJwt } from 'passport-jwt'
-import { IS_PUBLIC_KEY, ADMIN_SCOPE } from '@/common/decorator'
-import { RedisKey, RedisToken } from '@/modules/redis/constant'
-import { SysAuthService } from '@/admin/sys/auth/auth.service'
+import { IS_PUBLIC_KEY, ADMIN_SCOPE } from '@/server/common/decorator'
+import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
+import { SysAuthService } from '@/server/admin/sys/auth/auth.service'
 
 export type TAdminPayload = {
   id: number

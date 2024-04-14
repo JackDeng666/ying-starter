@@ -3,7 +3,7 @@ import { ScaleLoader } from 'react-spinners'
 import { Image } from '@nextui-org/react'
 import { SelectFileType, useUpload } from '@ying/hooks'
 import { FileEntity } from '@ying/shared/entities'
-import { cn } from '@/lib/utils'
+import { cn } from '@/client/lib/utils'
 import { PlusIcon } from './icons'
 
 type UploadProps = {

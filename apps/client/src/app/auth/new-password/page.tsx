@@ -8,18 +8,18 @@ import { Button, Input } from '@nextui-org/react'
 
 import { NewPasswordDto } from '@ying/shared'
 
-import { FormError } from '@/components/form-error'
-import { FormSuccess } from '@/components/form-success'
+import { FormError } from '@/client/components/form-error'
+import { FormSuccess } from '@/client/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
-import { useTranslate } from '@/i18n/client'
-import { useApi } from '@/store/api-store'
+import { useTranslate } from '@/client/i18n/client'
+import { useApi } from '@/client/store/api-store'
 
 const NewPasswordPage = () => {
   const { authApi } = useApi()
   const { t } = useTranslate()
   const searchParams = useSearchParams()
-  const token = searchParams.get('token')
-  const email = searchParams.get('email')
+  const token = searchParams.get('token') || undefined
+  const email = searchParams.get('email') || undefined
 
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
@@ -39,6 +39,7 @@ const NewPasswordPage = () => {
   } = form
 
   const onSubmit = async (values: NewPasswordDto) => {
+    if (!authApi) return
     setError('')
     setSuccess('')
 
@@ -62,7 +63,7 @@ const NewPasswordPage = () => {
             isClearable
             type="password"
             isInvalid={Boolean(errors.password)}
-            errorMessage={t(errors.password?.message, { ns: 'validation' })}
+            errorMessage={t(errors.password?.message || '', { ns: 'validation' })}
             classNames={{
               innerWrapper: 'h-16',
               inputWrapper: 'h-16',

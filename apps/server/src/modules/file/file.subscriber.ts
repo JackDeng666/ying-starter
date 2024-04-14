@@ -2,10 +2,10 @@ import { Inject } from '@nestjs/common'
 import { DataSource, EntitySubscriberInterface, EventSubscriber, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Client } from 'minio'
-import { EXPIR_SECONDS, MINIO_TOKEN } from '@/modules/file/constant'
+import { EXPIR_SECONDS, MINIO_TOKEN } from '@/server/modules/file/constant'
 import { FileEntity } from '@ying/shared/entities'
 import { ConfigType } from '@nestjs/config'
-import { minioConfig } from '@/config'
+import { minioConfig } from '@/server/config'
 import { FileType } from '@ying/shared'
 
 @EventSubscriber()

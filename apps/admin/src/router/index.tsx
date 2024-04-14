@@ -1,11 +1,11 @@
 import { Navigate, RouteObject, RouterProvider, createHashRouter } from 'react-router-dom'
 
-import DashboardLayout from '@/layouts/dashboard'
-import AuthGuard from '@/router/components/auth-guard'
-import Login from '@/pages/login/Login'
-import { usePermissionRoutes } from '@/router/hooks'
-import { ErrorRoutes } from '@/router/routes/error-routes'
-import { AppRouteObject } from '@/types/router'
+import DashboardLayout from '@/admin/layouts/dashboard'
+import AuthGuard from '@/admin/router/components/auth-guard'
+import Login from '@/admin/pages/login/Login'
+import { usePermissionRoutes } from '@/admin/router/hooks'
+import { ErrorRoutes } from '@/admin/router/routes/error-routes'
+import { AppRouteObject } from '@/admin/types/router'
 
 const { VITE_APP_HOMEPAGE: HOMEPAGE } = import.meta.env
 const LoginRoute: AppRouteObject = {

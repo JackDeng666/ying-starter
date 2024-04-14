@@ -15,11 +15,12 @@ import {
 } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
-import { useApi, useUpdate } from '@ying/hooks'
+import { useUpdate } from '@ying/hooks'
 import { BasicStatus, PermissionType, CreateOrUpdatePermissionDto } from '@ying/shared'
-import { permissionApi } from '@/api'
+import { permissionApi } from '@/admin/api'
+import { useApi } from '@/admin/hooks/use-api'
 import { SysPermissionEntity } from '@ying/shared/entities'
-import { ExternalLink, IframeLink } from '@/constant'
+import { ExternalLink, IframeLink } from '@/admin/constant'
 
 export type PermissionDrawerProps = {
   formValue: Partial<CreateOrUpdatePermissionDto>
@@ -39,7 +40,7 @@ export function PermissionDrawer({ title, show, formValue, onSuccess, onCancel }
   })
 
   const permissions = useMemo(() => {
-    function sort(list: SysPermissionEntity[]) {
+    function sort(list: SysPermissionEntity[] | undefined) {
       if (!list) return undefined
       return list
         .map(el => ({
@@ -241,8 +242,7 @@ export function PermissionDrawer({ title, show, formValue, onSuccess, onCancel }
                 name="frameSrc"
                 control={control}
                 render={({ field }) => (
-                  <>
-                    <Space direction="vertical" className="w-full">
+                  <Space direction="vertical" className="w-full">
                       <Space className="h-8 leading-8">
                         <Switch
                           checkedChildren="开启"
@@ -278,7 +278,6 @@ export function PermissionDrawer({ title, show, formValue, onSuccess, onCancel }
                         />
                       )}
                     </Space>
-                  </>
                 )}
               />
             </Form.Item>

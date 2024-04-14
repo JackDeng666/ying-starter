@@ -1,15 +1,15 @@
 import { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 
-import { CircleLoading } from '@/components/loading'
-import SimpleLayout from '@/layouts/simple'
-import Page403 from '@/pages/error/Page403'
-import Page404 from '@/pages/error/Page404'
-import Page500 from '@/pages/error/Page500'
+import { CircleLoading } from '@/admin/components/loading'
+import SimpleLayout from '@/admin/layouts/simple'
+import Page403 from '@/admin/pages/error/Page403'
+import Page404 from '@/admin/pages/error/Page404'
+import Page500 from '@/admin/pages/error/Page500'
 
 import AuthGuard from '../components/auth-guard'
 
-import { AppRouteObject } from '@/types/router'
+import { AppRouteObject } from '@/admin/types/router'
 
 /**
  * error routes

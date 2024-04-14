@@ -7,11 +7,11 @@ import { Button, Input } from '@nextui-org/react'
 
 import { ClientRegisterDto } from '@ying/shared'
 
-import { FormError } from '@/components/form-error'
-import { FormSuccess } from '@/components/form-success'
+import { FormError } from '@/client/components/form-error'
+import { FormSuccess } from '@/client/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
-import { useTranslate } from '@/i18n/client'
-import { useApi } from '@/store/api-store'
+import { useTranslate } from '@/client/i18n/client'
+import { useApi } from '@/client/store/api-store'
 
 const LoginPage = () => {
   const { authApi } = useApi()
@@ -34,6 +34,7 @@ const LoginPage = () => {
   } = form
 
   const onSubmit = async (values: ClientRegisterDto) => {
+    if (!authApi) return
     setSuccess('')
     setError('')
     try {
@@ -59,7 +60,7 @@ const LoginPage = () => {
           placeholder={t('Please enter nickname')}
           isClearable
           isInvalid={Boolean(errors.name)}
-          errorMessage={t(errors.name?.message, { ns: 'validation' })}
+          errorMessage={t(errors.name?.message || '', { ns: 'validation' })}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',
@@ -74,7 +75,7 @@ const LoginPage = () => {
           placeholder={t('Please enter email')}
           isClearable
           isInvalid={Boolean(errors.email)}
-          errorMessage={t(errors.email?.message, { ns: 'validation' })}
+          errorMessage={t(errors.email?.message || '', { ns: 'validation' })}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',
@@ -90,7 +91,7 @@ const LoginPage = () => {
           isClearable
           type="password"
           isInvalid={Boolean(errors.password)}
-          errorMessage={t(errors.password?.message, { ns: 'validation' })}
+          errorMessage={t(errors.password?.message || '', { ns: 'validation' })}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',

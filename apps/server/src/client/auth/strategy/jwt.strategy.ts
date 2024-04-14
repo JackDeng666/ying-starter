@@ -2,7 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
 import { Inject, Injectable } from '@nestjs/common'
 import { ConfigType } from '@nestjs/config'
-import { authConfig } from '@/config'
+import { authConfig } from '@/server/config'
 
 export const JWT_STRATEGY = 'jwt'
 

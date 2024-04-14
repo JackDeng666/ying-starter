@@ -1,11 +1,11 @@
 import { Navigate } from 'react-router-dom'
 
-import DashboardLayout from '@/layouts/dashboard'
+import DashboardLayout from '@/admin/layouts/dashboard'
 
 import AuthGuard from '../components/auth-guard'
 import { getMenuModules } from '../utils'
 
-import { AppRouteObject } from '@/types/router'
+import { AppRouteObject } from '@/admin/types/router'
 
 const menuModuleRoutes = getMenuModules()
 

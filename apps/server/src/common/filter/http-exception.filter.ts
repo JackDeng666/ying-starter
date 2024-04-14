@@ -15,9 +15,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (status === HttpStatus.NOT_FOUND) {
       let path = ''
       if (request.url.startsWith('/admin')) {
-        path = 'static/admin/index.html'
+        path = 'assets/admin/index.html'
       } else if (request.url.startsWith('/client')) {
-        path = 'static/client/index.html'
+        path = 'assets/client/index.html'
       }
       if (path) {
         const indexFile = createReadStream(join(process.cwd(), path))

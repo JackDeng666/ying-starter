@@ -9,8 +9,8 @@ import {
   UpdateSysUserSelfPasswordDto,
   UpdateSysUserSelfUserInfoDto
 } from '@ying/shared'
-import { AdminScope, PermissionDecorator, UID } from '@/common/decorator'
-import { pms } from '@/common/permission'
+import { AdminScope, PermissionDecorator, UID } from '@/server/common/decorator'
+import { pms } from '@/server/common/permission'
 
 @ApiTags('admin system user')
 @Controller('user')

@@ -11,8 +11,8 @@ import {
   UpdateSysUserSelfPasswordDto,
   UpdateSysUserSelfUserInfoDto
 } from '@ying/shared'
-import { comparePass, generatePass } from '@/common/utils'
-import { RedisKey, RedisToken } from '@/modules/redis/constant'
+import { comparePass, generatePass } from '@/server/common/utils'
+import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
 
 @Injectable()
 export class SysUserService {

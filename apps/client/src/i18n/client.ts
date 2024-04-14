@@ -23,7 +23,7 @@ i18n
 
 export function useTranslate(ns?: string, options: { keyPrefix?: string; lng?: string } = {}) {
   const searchParams = useSearchParams()
-  const lng = searchParams.get('lng')
+  const lng = searchParams.get('lng') || undefined
 
   return useTranslation(ns, { lng, ...options })
 }

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
 
-import { ImageProvider } from '@/components/image-provider'
+import { ImageProvider } from '@/client/components/image-provider'
 import './globals.css'
-import { getLocale, getFixedT } from '@/i18n/server'
-import { AppProvider } from '@/components/app-provider'
+import { getLocale, getFixedT } from '@/client/i18n/server'
+import { AppProvider } from '@/client/components/app-provider'
 
 export async function generateMetadata(): Promise<Metadata> {
   const lng = getLocale()
@@ -27,9 +27,9 @@ export default function RootLayout({
       <body className="h-screen bg-background font-sans antialiased">
         <AppProvider
           value={{
-            apiUrl: process.env.API_URL,
-            domain: process.env.DOMAIN,
-            authExpiresIn: process.env.AUTH_EXPIRES_IN
+            apiUrl: process.env.API_URL!,
+            domain: process.env.DOMAIN!,
+            authExpiresIn: process.env.AUTH_EXPIRES_IN!
           }}
         >
           <ImageProvider>

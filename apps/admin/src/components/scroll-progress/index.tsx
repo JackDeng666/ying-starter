@@ -1,7 +1,7 @@
 import { HTMLMotionProps, MotionValue, m, useSpring } from 'framer-motion'
 import { CSSProperties } from 'react'
 
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 interface Props extends HTMLMotionProps<'div'> {
   color?: string

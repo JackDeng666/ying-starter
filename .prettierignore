@@ -1,4 +1,4 @@
-node_modules
-dist
-pnpm-lock.yaml
-pnpm-workspace.yaml
+# Add files here to ignore them from prettier formatting
+/dist
+/coverage
+/.nx/cache

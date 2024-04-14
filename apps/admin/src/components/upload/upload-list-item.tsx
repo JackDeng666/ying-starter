@@ -3,8 +3,8 @@ import { ItemRender } from 'antd/es/upload/interface'
 import { m } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
-import { varFade } from '@/components/animate/variants'
-import { Iconify, SvgIcon } from '@/components/icon'
+import { varFade } from '@/admin/components/animate/variants'
+import { Iconify, SvgIcon } from '@/admin/components/icon'
 import { formatNumber } from '@ying/utils'
 
 import { getBlobUrl, getFileFormat, getFileThumb } from './utils'

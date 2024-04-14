@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { apiConfig, redisConfig, dbConfig, minioConfig, authConfig, mailConfig } from '@/config'
-import { RedisModule } from '@/modules/redis/redis.module'
-import { DbModule } from '@/modules/db/db.module'
-import { FileModule } from '@/modules/file/file.module'
-import { MailModule } from '@/modules/mail/mail.module'
-import { AdminModule } from '@/admin/admin.module'
-import { ClientModule } from '@/client/client.module'
+import { apiConfig, redisConfig, dbConfig, minioConfig, authConfig, mailConfig } from '@/server/config'
+import { RedisModule } from '@/server/modules/redis/redis.module'
+import { DbModule } from '@/server/modules/db/db.module'
+import { FileModule } from '@/server/modules/file/file.module'
+import { MailModule } from '@/server/modules/mail/mail.module'
+import { AdminModule } from '@/server/admin/admin.module'
+import { ClientModule } from '@/server/client/client.module'
 
 @Module({
   imports: [

@@ -1,9 +1,9 @@
 import { CSSProperties, ReactNode } from 'react'
 
-import { useSettings } from '@/store/settingStore'
-import { useThemeToken } from '@/theme/hooks'
+import { useSettings } from '@/admin/store/settingStore'
+import { useThemeToken } from '@/admin/theme/hooks'
 
-import { ThemeMode } from '@/types/enum'
+import { ThemeMode } from '@/admin/types/enum'
 
 type Props = {
   children?: ReactNode

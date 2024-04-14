@@ -6,11 +6,11 @@ import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { useBoolean, useEvent, useKeyPressEvent } from 'react-use'
 import styled from 'styled-components'
 
-import { IconButton, SvgIcon } from '@/components/icon'
-import Scrollbar from '@/components/scrollbar'
-import { usePermissionRoutes, useRouter } from '@/router/hooks'
-import ProTag from '@/theme/antd/components/tag'
-import { useThemeToken } from '@/theme/hooks'
+import { IconButton, SvgIcon } from '@/admin/components/icon'
+import Scrollbar from '@/admin/components/scrollbar'
+import { usePermissionRoutes, useRouter } from '@/admin/router/hooks'
+import ProTag from '@/admin/theme/antd/components/tag'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 export default function SearchBar() {
   const { replace } = useRouter()

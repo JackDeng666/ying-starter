@@ -1,4 +1,4 @@
-import { AppRouteObject, RouteMeta } from '@/types/router'
+import { AppRouteObject, RouteMeta } from '@/admin/types/router'
 
 /**
  * return menu routes

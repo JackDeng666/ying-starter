@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common'
 import { ConfigType } from '@nestjs/config'
 import { createClient } from 'redis'
-import { redisConfig } from '@/config/redis.config'
+import { redisConfig } from '@/server/config/redis.config'
 import { RedisToken } from './constant'
 
 @Global()

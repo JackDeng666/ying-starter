@@ -2,7 +2,7 @@ import { Progress } from 'antd'
 import Color from 'color'
 import { useEffect, useState } from 'react'
 
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 export function LineLoading() {
   const { colorTextBase, colorBgContainerDisabled } = useThemeToken()

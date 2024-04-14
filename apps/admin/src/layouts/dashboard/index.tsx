@@ -2,17 +2,17 @@ import { useScroll } from 'framer-motion'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { CircleLoading } from '@/components/loading'
-import ProgressBar from '@/components/progress-bar'
-import { useSettings } from '@/store/settingStore'
-import { useThemeToken } from '@/theme/hooks'
+import { CircleLoading } from '@/admin/components/loading'
+import ProgressBar from '@/admin/components/progress-bar'
+import { useSettings } from '@/admin/store/settingStore'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 import Header from './header'
 import Main from './main'
 import Nav from './nav'
 import NavHorizontal from './nav-horizontal'
 
-import { ThemeLayout, ThemeMode } from '@/types/enum'
+import { ThemeLayout, ThemeMode } from '@/admin/types/enum'
 
 function DashboardLayout() {
   const { colorBgElevated, colorTextBase } = useThemeToken()

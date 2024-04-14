@@ -5,7 +5,7 @@ import { RedisClientType } from 'redis'
 import { createTreeFns } from '@ying/utils'
 import { SysPermissionEntity } from '@ying/shared/entities'
 import { CreateOrUpdatePermissionDto } from '@ying/shared'
-import { RedisKey, RedisToken } from '@/modules/redis/constant'
+import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
 
 @Injectable()
 export class SysPermissionService {
@@ -37,7 +37,7 @@ export class SysPermissionService {
     }
 
     if (existPermission.status !== dto.status) {
-      ;[
+      [
         ...new Set(
           existPermission.roles
             .map(el => el.users)

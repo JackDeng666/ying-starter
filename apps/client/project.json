@@ -1,0 +1,32 @@
+{
+  "name": "client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/client",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project client --web",
+  "targets": {
+    "dev": {
+      "cache": true,
+      "executor": "@nx/next:server",
+      "options": {
+        "buildTarget": "server:build",
+        "port": 3256
+      }
+    },
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/client"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["apps/client/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

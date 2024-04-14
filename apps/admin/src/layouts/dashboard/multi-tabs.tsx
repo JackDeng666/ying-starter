@@ -5,11 +5,11 @@ import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from 'react
 import { useToggle, useFullscreen } from 'react-use'
 import styled from 'styled-components'
 
-import { Iconify } from '@/components/icon'
-import useKeepAlive, { KeepAliveTab } from '@/hooks/use-keepalive'
-import { useRouter } from '@/router/hooks'
-import { useSettings } from '@/store/settingStore'
-import { useResponsive, useThemeToken } from '@/theme/hooks'
+import { Iconify } from '@/admin/components/icon'
+import useKeepAlive, { KeepAliveTab } from '@/admin/hooks/use-keepalive'
+import { useRouter } from '@/admin/router/hooks'
+import { useSettings } from '@/admin/store/settingStore'
+import { useResponsive, useThemeToken } from '@/admin/theme/hooks'
 
 import {
   NAV_WIDTH,
@@ -20,7 +20,7 @@ import {
   NAV_HORIZONTAL_HEIGHT
 } from './config'
 
-import { MultiTabOperation, ThemeLayout } from '@/types/enum'
+import { MultiTabOperation, ThemeLayout } from '@/admin/types/enum'
 
 type Props = {
   offsetTop?: boolean

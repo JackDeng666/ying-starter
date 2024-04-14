@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import Cookies from 'js-cookie'
 import { ClientUserVo } from '@ying/shared'
-import { AppKey } from '@/enum'
+import { AppKey } from '@/client/enum'
 import { useApi } from './api-store'
-import { useAppContext } from '@/components/app-provider'
+import { useAppContext } from '@/client/components/app-provider'
 
 interface AuthStore {
   userInfo?: ClientUserVo
@@ -29,11 +29,13 @@ export const useAuth = () => {
   const { authApi, userApi } = useApi()
 
   const logout = async () => {
+    if (!authApi) return
     await authApi.logout()
     clearUserInfoAndToken(domain)
   }
 
   const getProfile = async () => {
+    if (!userApi) return
     const userInfo = await userApi.getProfile()
     useAuthStore.setState({ userInfo })
   }

@@ -3,8 +3,8 @@ import { Form, Drawer, Input, Button, Radio, Select, App } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { BasicStatus, CreateSysUserDto, UpdateSysUserDto } from '@ying/shared'
-import { roleApi, sysUserApi } from '@/api'
-import { useApi } from '@ying/hooks'
+import { roleApi, sysUserApi } from '@/admin/api'
+import { useApi } from '@/admin/hooks/use-api'
 import { debounce } from '@ying/utils'
 
 const createResolver = classValidatorResolver(CreateSysUserDto)

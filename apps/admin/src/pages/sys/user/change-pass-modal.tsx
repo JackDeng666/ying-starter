@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
 import { UpdateSysUserPasswordDto } from '@ying/shared'
-import { sysUserApi } from '@/api'
+import { sysUserApi } from '@/admin/api'
 
 const updateResolver = classValidatorResolver(UpdateSysUserPasswordDto)
 

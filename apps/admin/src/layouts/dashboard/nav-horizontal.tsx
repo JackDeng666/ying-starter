@@ -3,12 +3,12 @@ import { ItemType } from 'antd/es/menu/hooks/useItems'
 import { useState, useEffect, CSSProperties } from 'react'
 import { useMatches, useLocation } from 'react-router-dom'
 
-import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/router/hooks'
-import { menuFilter } from '@/router/utils'
-import { useThemeToken } from '@/theme/hooks'
+import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/admin/router/hooks'
+import { menuFilter } from '@/admin/router/utils'
+import { useThemeToken } from '@/admin/theme/hooks'
+import { IframeLink } from '@/admin/constant'
 
 import { NAV_HORIZONTAL_HEIGHT } from './config'
-import { IframeLink } from '@/constant'
 
 export default function NavHorizontal() {
   const { push } = useRouter()

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { ResetPasswordDto, UpdateUserInfoDto } from '@ying/shared'
 import { UserEntity } from '@ying/shared/entities'
-import { generatePass } from '@/common/utils'
+import { generatePass } from '@/server/common/utils'
 
 @Injectable()
 export class UserService {

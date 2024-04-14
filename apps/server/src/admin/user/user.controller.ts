@@ -2,7 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { ListUserDto } from '@ying/shared'
 import { UserService } from './user.service'
-import { AdminScope } from '@/common/decorator'
+import { AdminScope } from '@/server/common/decorator'
 
 @ApiTags('admin user')
 @Controller('admin/user')

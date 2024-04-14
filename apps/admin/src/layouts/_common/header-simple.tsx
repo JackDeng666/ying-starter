@@ -1,4 +1,4 @@
-import Logo from '@/components/logo'
+import Logo from '@/admin/components/logo'
 
 import SettingButton from './setting-button'
 

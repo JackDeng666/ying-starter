@@ -11,14 +11,14 @@ import Link from 'next/link'
 import { ms } from '@ying/utils'
 
 import { ClientLoginDto } from '@ying/shared'
-import { FormError } from '@/components/form-error'
-import { FormSuccess } from '@/components/form-success'
+import { FormError } from '@/client/components/form-error'
+import { FormSuccess } from '@/client/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
-import { AppKey } from '@/enum'
-import { useAuthStore } from '@/store/auth-store'
-import { useTranslate } from '@/i18n/client'
-import { useApi } from '@/store/api-store'
-import { useAppContext } from '@/components/app-provider'
+import { AppKey } from '@/client/enum'
+import { useAuthStore } from '@/client/store/auth-store'
+import { useTranslate } from '@/client/i18n/client'
+import { useApi } from '@/client/store/api-store'
+import { useAppContext } from '@/client/components/app-provider'
 
 const LoginPage = () => {
   const { domain, authExpiresIn } = useAppContext()
@@ -43,6 +43,7 @@ const LoginPage = () => {
   } = form
 
   const onSubmit = async (values: ClientLoginDto) => {
+    if (!authApi) return
     setError('')
     setSuccess('')
 
@@ -80,7 +81,7 @@ const LoginPage = () => {
           placeholder={t('Please enter email')}
           isClearable
           isInvalid={Boolean(errors.email)}
-          errorMessage={t(errors.email?.message, { ns: 'validation' })}
+          errorMessage={t(errors.email?.message || '', { ns: 'validation' })}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',
@@ -96,7 +97,7 @@ const LoginPage = () => {
           isClearable
           type="password"
           isInvalid={Boolean(errors.password)}
-          errorMessage={t(errors.password?.message, { ns: 'validation' })}
+          errorMessage={t(errors.password?.message || '', { ns: 'validation' })}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',

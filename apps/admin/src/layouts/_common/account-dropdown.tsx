@@ -2,9 +2,9 @@ import { Divider, MenuProps } from 'antd'
 import Dropdown, { DropdownProps } from 'antd/es/dropdown/dropdown'
 import React, { useState } from 'react'
 
-import { IconButton } from '@/components/icon'
-import { useUserInfo, logout } from '@/store/userStore'
-import { useThemeToken } from '@/theme/hooks'
+import { IconButton } from '@/admin/components/icon'
+import { useUserInfo, logout } from '@/admin/store/userStore'
+import { useThemeToken } from '@/admin/theme/hooks'
 import { UserInfoModal, UserInfoModalProps } from './user-info-modal'
 
 export default function AccountDropdown() {

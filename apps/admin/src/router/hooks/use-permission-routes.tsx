@@ -6,10 +6,10 @@ import { createTreeFns } from '@ying/utils'
 import { BasicStatus, PermissionType } from '@ying/shared'
 import { SysPermissionEntity } from '@ying/shared/entities'
 
-import { CircleLoading } from '@/components/loading'
-import { useUserPermission } from '@/store/userStore'
-import { AppRouteObject } from '@/types/router'
-import IframePage from '@/pages/iframe'
+import { CircleLoading } from '@/admin/components/loading'
+import { useUserPermission } from '@/admin/store/userStore'
+import { AppRouteObject } from '@/admin/types/router'
+import IframePage from '@/admin/pages/iframe'
 import { flattenMenuRoutes, menuFilter } from '../utils'
 
 // 使用 import.meta.glob 获取所有路由组件
@@ -82,7 +82,7 @@ function transformPermissionToMenuRoutes(
     }
 
     if (type === PermissionType.CATALOGUE) {
-      appRoute.meta.hideTab = true
+      if (appRoute.meta) appRoute.meta.hideTab = true
       if (!parentCode) {
         appRoute.element = (
           <Suspense fallback={<CircleLoading />}>
@@ -94,12 +94,12 @@ function transformPermissionToMenuRoutes(
       if (children.length) {
         appRoute.children.unshift({
           index: true,
-          element: <Navigate to={children[0].route} replace />
+          element: <Navigate to={children[0].route || ''} replace />
         })
       }
     } else if (type === PermissionType.MENU) {
       const Element = lazy(resolveComponent(component!) as any)
-      if (appRoute.meta.frameSrc) {
+      if (frameSrc) {
         appRoute.element = <IframePage src={frameSrc} />
       } else {
         appRoute.element = <Element />

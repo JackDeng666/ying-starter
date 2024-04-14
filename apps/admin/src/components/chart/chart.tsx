@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import ApexChart from 'react-apexcharts'
 
-import { useSettings } from '@/store/settingStore'
-import { useThemeToken } from '@/theme/hooks'
+import { useSettings } from '@/admin/store/settingStore'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 import { StyledApexChart } from './styles'
 

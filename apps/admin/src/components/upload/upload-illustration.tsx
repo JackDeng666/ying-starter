@@ -1,4 +1,4 @@
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/admin/theme/hooks'
 
 export default function UploadIllustration() {
   const {

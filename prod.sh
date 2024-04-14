@@ -1,9 +1,9 @@
 #!/bin/bash
 
-cd /app/apps/server
+cd /app/dist/apps/server
 
-nohup node dist/main.js &
+nohup node main.js &
 
-cd /app/apps/client
+cd /app/dist/apps/client
 
-node server.js
+npm start

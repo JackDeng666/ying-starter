@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
-import { getUserInfo, useUserToken } from '@/store'
+import { getUserInfo, useUserToken } from '@/admin/store'
 
 import { useRouter } from '../hooks'
 

@@ -1,6 +1,6 @@
-import Chart from '@/components/chart/chart'
-import useChart from '@/components/chart/useChart'
-import { SvgIcon } from '@/components/icon'
+import Chart from '@/admin/components/chart/chart'
+import useChart from '@/admin/components/chart/useChart'
+import { SvgIcon } from '@/admin/components/icon'
 import { Card } from 'antd'
 
 type Props = {

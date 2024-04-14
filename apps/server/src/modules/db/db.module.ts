@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigType } from '@nestjs/config'
-import { dbConfig } from '@/config'
+import { dbConfig } from '@/server/config'
 import { DbSeeder } from './db.seeder'
 import { SysPermissionEntity, SysRoleEntity, SysUserEntity } from '@ying/shared/entities'
 
@@ -18,7 +18,7 @@ import { SysPermissionEntity, SysRoleEntity, SysUserEntity } from '@ying/shared/
           username: dbConf.username,
           password: dbConf.password,
           database: dbConf.database,
-          synchronize: process.env.NODE_ENV === 'dev',
+          synchronize: process.env.APP_ENV === 'dev',
           autoLoadEntities: true,
           logging: false
         }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { LayoutProps } from '@/types'
+import { LayoutProps } from '@/client/types'
 
 export const ImageProvider = ({ children }: LayoutProps) => {
   useEffect(() => {

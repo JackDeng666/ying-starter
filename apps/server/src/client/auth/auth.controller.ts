@@ -1,10 +1,10 @@
 import { Controller, Post, UseGuards, Get, Req, Res, Inject, Body, UseFilters } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiTags } from '@nestjs/swagger'
 import { Request, Response } from 'express'
 import { ConfigType } from '@nestjs/config'
-import { authConfig } from '@/config'
+import { authConfig } from '@/server/config'
 import { ClientRegisterDto, ForgotPasswordDto, NewPasswordDto, NewVerificationDto } from '@ying/shared'
-import { ClientScope, UID, Token } from '@/common/decorator'
+import { ClientScope, UID, Token } from '@/server/common/decorator'
 import { AuthService } from './auth.service'
 import { FaceBookAuthGuard, GitHubAuthGuard, GoogleAuthGuard, LocalAuthGuard } from './strategy/authorize.guard'
 import { AuthRequest } from './types'
@@ -25,6 +25,7 @@ export class AuthController {
   }
 
   @Post('register')
+  @ApiBody({ type: ClientRegisterDto })
   async register(@Body() dto: ClientRegisterDto, @Req() req: Request) {
     return this.authService.register(dto, req.locale)
   }

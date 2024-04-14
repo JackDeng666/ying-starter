@@ -7,10 +7,10 @@ import { Button, Input } from '@nextui-org/react'
 
 import { ResetPasswordDto } from '@ying/shared'
 
-import { useAuth, useAuthStore } from '@/store/auth-store'
+import { useAuth, useAuthStore } from '@/client/store/auth-store'
 import { useRouter } from 'next/navigation'
-import { useTranslate } from '@/i18n/client'
-import { useApi } from '@/store/api-store'
+import { useTranslate } from '@/client/i18n/client'
+import { useApi } from '@/client/store/api-store'
 
 const ResetPasswordPage = () => {
   const { userApi } = useApi()
@@ -33,6 +33,7 @@ const ResetPasswordPage = () => {
   } = form
 
   const onSubmit = async (values: ResetPasswordDto) => {
+    if (!userApi) return
     try {
       await userApi.resetPassword(values)
       toast.success(t('Password changed successfully!'))
@@ -57,7 +58,7 @@ const ResetPasswordPage = () => {
             type="password"
             autoComplete="old-password"
             isInvalid={Boolean(errors.oldPassword)}
-            errorMessage={t(errors.oldPassword?.message, { ns: 'validation' })}
+            errorMessage={t(errors.oldPassword?.message || '', { ns: 'validation' })}
             {...register('oldPassword')}
           />
         )}
@@ -71,7 +72,7 @@ const ResetPasswordPage = () => {
           type="password"
           autoComplete="new-password"
           isInvalid={Boolean(errors.newPassword)}
-          errorMessage={t(errors.newPassword?.message, { ns: 'validation' })}
+          errorMessage={t(errors.newPassword?.message || '', { ns: 'validation' })}
           {...register('newPassword')}
         />
         <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
