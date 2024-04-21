@@ -18,6 +18,7 @@ import { FileSubscriber } from './file.subscriber'
         const minioClient = new Client({
           endPoint: minioConf.host,
           port: minioConf.port,
+          useSSL: minioConf.port === 443,
           accessKey: minioConf.accessKey,
           secretKey: minioConf.secretKey
         })
