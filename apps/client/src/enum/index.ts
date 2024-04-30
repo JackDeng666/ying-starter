@@ -1,8 +1,10 @@
 const prefix = 'ying-'
 
 export const AppKey = {
-  CookieTokenKey: prefix + 'auth-token',
+  CookieAccessTokenKey: prefix + 'access-token',
+  CookieRefreshTokenKey: prefix + 'refresh-token',
   CookieSSOCallbackKey: prefix + 'sso-cb',
-  QueryTokenKey: 'access_token',
+  QueryAccessTokenKey: 'access_token',
+  QueryRefreshTokenKey: 'refresh_token',
   QuerySSOCallbackKey: 'sso_cb'
 }

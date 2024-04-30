@@ -29,7 +29,8 @@ export default function RootLayout({
           value={{
             apiUrl: process.env.API_URL!,
             domain: process.env.DOMAIN!,
-            authExpiresIn: process.env.AUTH_EXPIRES_IN!
+            accessTokenExpiresIn: process.env.AUTH_EXPIRES_IN!,
+            refreshTokenExpiresIn: process.env.AUTH_REFRESH_EXPIRES_IN!
           }}
         >
           <ImageProvider>

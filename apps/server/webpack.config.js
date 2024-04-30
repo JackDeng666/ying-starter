@@ -14,7 +14,9 @@ module.exports = {
       assets: ['./src/assets'],
       optimization: false,
       outputHashing: 'none',
-      transformers: ['@nestjs/swagger/plugin']
+      transformers: [
+        { name: '@nestjs/swagger/plugin', options: { dtoFileNameSuffix: ['.dto.ts', '.entity.ts', '.vo.ts'] } }
+      ]
     })
   ]
 }

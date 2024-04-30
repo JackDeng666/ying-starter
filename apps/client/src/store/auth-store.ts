@@ -1,37 +1,51 @@
 import { create } from 'zustand'
 import Cookies from 'js-cookie'
-import { ClientUserVo } from '@ying/shared'
+import { ClientUserVo, ClientAuthVo } from '@ying/shared'
+import { ms } from '@ying/utils'
 import { AppKey } from '@/client/enum'
+import { TAppContext, useAppContext } from '@/client/components/app-provider'
 import { useApi } from './api-store'
-import { useAppContext } from '@/client/components/app-provider'
 
 interface AuthStore {
   userInfo?: ClientUserVo
-  userToken?: string
+  authToken: Partial<ClientAuthVo>
   setUserInfo: (userInfo: ClientUserVo) => void
-  setUserToken: (token: string) => void
+  setAuthToken: (authToken: ClientAuthVo) => void
 }
 
 export const useAuthStore = create<AuthStore>(set => ({
   userInfo: undefined,
-  userToken: Cookies.get(AppKey.CookieTokenKey),
+  authToken: {
+    accessToken: Cookies.get(AppKey.CookieAccessTokenKey),
+    refreshToken: Cookies.get(AppKey.CookieRefreshTokenKey)
+  },
   setUserInfo: userInfo => set({ userInfo }),
-  setUserToken: userToken => set({ userToken })
+  setAuthToken: authToken => set({ authToken })
 }))
 
-export const clearUserInfoAndToken = (domain: string) => {
-  useAuthStore.setState({ userInfo: undefined, userToken: undefined })
-  Cookies.remove(AppKey.CookieTokenKey, { domain })
+export const clearUserInfoAndToken = ({ domain }: TAppContext) => {
+  useAuthStore.setState({ userInfo: undefined, authToken: { accessToken: undefined, refreshToken: undefined } })
+  Cookies.remove(AppKey.CookieAccessTokenKey, { domain })
+  Cookies.remove(AppKey.CookieRefreshTokenKey, { domain })
+}
+
+export const updateAccessToken = (accessToken: string, { domain, accessTokenExpiresIn }: TAppContext) => {
+  const authToken = useAuthStore.getState().authToken
+  useAuthStore.setState({ authToken: { ...authToken, accessToken } })
+  Cookies.set(AppKey.CookieAccessTokenKey, accessToken, {
+    domain,
+    expires: new Date(Date.now() + ms(accessTokenExpiresIn))
+  })
 }
 
 export const useAuth = () => {
-  const { domain } = useAppContext()
+  const appContext = useAppContext()
   const { authApi, userApi } = useApi()
 
   const logout = async () => {
     if (!authApi) return
     await authApi.logout()
-    clearUserInfoAndToken(domain)
+    clearUserInfoAndToken(appContext)
   }
 
   const getProfile = async () => {

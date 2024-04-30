@@ -1,4 +1,4 @@
-import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common'
+import { Inject, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectDataSource } from '@nestjs/typeorm'
 import { DataSource } from 'typeorm'
@@ -7,6 +7,7 @@ import { ConfigType } from '@nestjs/config'
 import { nanoid } from 'nanoid'
 import { ms } from '@ying/utils'
 import {
+  ClientAuthVo,
   ClientRegisterDto,
   FileSourceType,
   FileType,
@@ -21,6 +22,7 @@ import { generatePass } from '@/server/common/utils'
 import { AccountEntity, FileEntity, UserEntity } from '@ying/shared/entities'
 import { TClientPayload } from './strategy/jwt.strategy'
 import { i18n } from '@/server/i18n'
+import { kMaxLength } from 'buffer'
 
 @Injectable()
 export class AuthService {
@@ -98,11 +100,44 @@ export class AuthService {
       email: user.email,
       avatar: user.avatar?.url
     }
-    const accessToken = this.jwtService.sign(payload)
-    await this.redisClient.set(`${RedisKey.ClientToken}:${user.id}:${accessToken}`, user.id, {
-      EX: ms(this.authConf.expiresIn) / 1000
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.authConf.secret,
+      expiresIn: this.authConf.expiresIn
     })
-    return accessToken
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.authConf.refreshSecret,
+      expiresIn: this.authConf.refreshExpiresIn
+    })
+    await this.redisClient.set(`${RedisKey.ClientRefreshToken}:${user.id}:${refreshToken}`, user.id, {
+      EX: ms(this.authConf.refreshExpiresIn) / 1000
+    })
+    return {
+      accessToken,
+      refreshToken
+    }
+  }
+
+  async refreshToken(token: string) {
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: this.authConf.refreshSecret
+      })
+
+      const existsToken = await this.redisClient.get(`${RedisKey.ClientRefreshToken}:${payload.id}:${token}`)
+      if (!existsToken) throw new UnauthorizedException()
+
+      delete payload.iat
+      delete payload.exp
+
+      const accessToken = this.jwtService.sign(payload, {
+        secret: this.authConf.secret,
+        expiresIn: this.authConf.expiresIn
+      })
+
+      return accessToken
+    } catch (error) {
+      throw new UnauthorizedException()
+    }
   }
 
   async register(dto: ClientRegisterDto, lng: string) {
@@ -222,6 +257,6 @@ export class AuthService {
   }
 
   async logout(token: string, uid: number) {
-    await this.redisClient.del(`${RedisKey.ClientToken}:${uid}:${token}`)
+    await this.redisClient.del(`${RedisKey.ClientRefreshToken}:${uid}:${token}`)
   }
 }

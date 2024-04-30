@@ -2,16 +2,18 @@
 
 import { ReactNode, createContext, useContext } from 'react'
 
-type TAppContext = {
+export type TAppContext = {
   apiUrl: string
   domain: string
-  authExpiresIn: string
+  accessTokenExpiresIn: string
+  refreshTokenExpiresIn: string
 }
 
 export const AppContext = createContext<TAppContext>({
   apiUrl: '',
   domain: '',
-  authExpiresIn: ''
+  accessTokenExpiresIn: '',
+  refreshTokenExpiresIn: ''
 })
 
 export const AppProvider = ({ children, value }: { children: ReactNode; value: TAppContext }) => {

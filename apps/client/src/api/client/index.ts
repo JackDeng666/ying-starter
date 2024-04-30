@@ -1,3 +1,4 @@
+import { TAppContext } from '@/client/components/app-provider'
 import { initRequest } from './request'
 import { AuthApi } from './auth'
 import { FileApi } from './file'
@@ -5,8 +6,8 @@ import { UserApi } from './user'
 
 export { AuthApi, FileApi, UserApi }
 
-export const initApi = (baseURL: string, domain: string) => {
-  const request = initRequest(baseURL, domain)
+export const initApi = (appContext: TAppContext) => {
+  const request = initRequest(appContext)
 
   const authApi = new AuthApi(request)
   const fileApi = new FileApi(request)

@@ -23,11 +23,11 @@ const setApi = (api: API) => {
 }
 
 export const useApi = () => {
-  const { apiUrl, domain } = useAppContext()
+  const appContext = useAppContext()
   const state = useApiStore()
 
   if (!state.ininted) {
-    setApi(initApi(apiUrl, domain))
+    setApi(initApi(appContext))
   }
 
   return state.api

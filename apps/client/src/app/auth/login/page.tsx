@@ -21,13 +21,13 @@ import { useApi } from '@/client/store/api-store'
 import { useAppContext } from '@/client/components/app-provider'
 
 const LoginPage = () => {
-  const { domain, authExpiresIn } = useAppContext()
+  const { domain, accessTokenExpiresIn, refreshTokenExpiresIn } = useAppContext()
   const { authApi } = useApi()
   const { t } = useTranslate()
   const router = useRouter()
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
-  const setUserToken = useAuthStore(state => state.setUserToken)
+  const setAuthToken = useAuthStore(state => state.setAuthToken)
 
   const form = useForm<ClientLoginDto>({
     resolver: classValidatorResolver(ClientLoginDto),
@@ -49,17 +49,22 @@ const LoginPage = () => {
 
     try {
       const res = await authApi.login(values)
-      Cookies.set(AppKey.CookieTokenKey, res, {
+      Cookies.set(AppKey.CookieAccessTokenKey, res.accessToken, {
         domain,
-        sameSite: 'strict',
-        expires: new Date(Date.now() + ms(authExpiresIn))
+        expires: new Date(Date.now() + ms(accessTokenExpiresIn))
       })
+      Cookies.set(AppKey.CookieRefreshTokenKey, res.refreshToken, {
+        domain,
+        expires: new Date(Date.now() + ms(refreshTokenExpiresIn))
+      })
+
       const ssoCallbackUrl = Cookies.get(AppKey.CookieSSOCallbackKey)
       if (ssoCallbackUrl) {
         Cookies.remove(AppKey.CookieSSOCallbackKey)
         window.location.href = ssoCallbackUrl
       }
-      setUserToken(res)
+
+      setAuthToken(res)
       router.replace('/')
     } catch (error: any) {
       setError(t(error.message, { ns: 'backend' }))

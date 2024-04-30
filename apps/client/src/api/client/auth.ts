@@ -1,4 +1,11 @@
-import { ClientLoginDto, ClientRegisterDto, NewVerificationDto, ForgotPasswordDto, NewPasswordDto } from '@ying/shared'
+import {
+  ClientLoginDto,
+  ClientRegisterDto,
+  NewVerificationDto,
+  ForgotPasswordDto,
+  NewPasswordDto,
+  ClientAuthVo
+} from '@ying/shared'
 import { BaseApi } from './request'
 
 export class AuthApi extends BaseApi {
@@ -10,7 +17,7 @@ export class AuthApi extends BaseApi {
     return this.request.post('/auth/new-verification', dto)
   }
 
-  login(dto: ClientLoginDto): Promise<string> {
+  login(dto: ClientLoginDto): Promise<ClientAuthVo> {
     return this.request.post('/auth/login', dto)
   }
 

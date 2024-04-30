@@ -16,63 +16,68 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(newUrl)
   }
 
-  const cookieToken = cookies.get(AppKey.CookieTokenKey)
+  const cookieAccessToken = cookies.get(AppKey.CookieAccessTokenKey)
+  const cookieRefreshToken = cookies.get(AppKey.CookieRefreshTokenKey)
+  const hasToken = cookieRefreshToken?.value
 
   // 传进了单点登录的回调地址
   const ssoCallback = searchParams.get(AppKey.QuerySSOCallbackKey)
   if (ssoCallback) {
-    let queryStr = ''
     // 如果需要回调的地址不是子域，则需要回传token。
-    if (process.env.DOMAIN && !new URL(ssoCallback).hostname.includes(process.env.DOMAIN)) {
-      queryStr = `?${AppKey.QueryTokenKey}=${cookieToken?.value}`
-    }
-    if (cookieToken) {
+    if (process.env.DOMAIN && !new URL(ssoCallback).hostname.includes(process.env.DOMAIN) && hasToken) {
+      const queryStr = `?${AppKey.QueryAccessTokenKey}=${cookieAccessToken?.value}&${AppKey.QueryRefreshTokenKey}=${cookieRefreshToken.value}`
       return NextResponse.redirect(`${ssoCallback}${queryStr}`)
     }
+
     // 没有token就先在cookie里保存一下回调地址
     searchParams.delete(AppKey.QuerySSOCallbackKey)
     const response = NextResponse.redirect(nextUrl)
     response.cookies.set({
       name: AppKey.CookieSSOCallbackKey,
       value: ssoCallback,
-      path: '/',
-      sameSite: 'strict'
+      path: '/'
     })
     return response
   }
 
   const cookieSSOCallback = cookies.get(AppKey.CookieSSOCallbackKey)
-  if (cookieSSOCallback && cookieToken) {
+  if (cookieSSOCallback && hasToken) {
     let queryStr = ''
     // 如果需要回调的地址不是子域，则需要回传token。
     if (process.env.DOMAIN && !new URL(cookieSSOCallback.value).hostname.includes(process.env.DOMAIN)) {
-      queryStr = `?${AppKey.QueryTokenKey}=${cookieToken.value}`
+      queryStr = `?${AppKey.QueryAccessTokenKey}=${cookieAccessToken?.value}&${AppKey.QueryRefreshTokenKey}=${cookieRefreshToken.value}`
     }
     const res = NextResponse.redirect(`${cookieSSOCallback.value}${queryStr}`)
     res.cookies.delete({ name: AppKey.CookieSSOCallbackKey })
     return res
   }
 
-  const callbackToken = searchParams.get(AppKey.QueryTokenKey)
-  if (callbackToken) {
-    searchParams.delete(AppKey.QueryTokenKey)
+  const queryAccessToken = searchParams.get(AppKey.QueryAccessTokenKey)
+  const queryRefreshToken = searchParams.get(AppKey.QueryRefreshTokenKey)
+  if (queryAccessToken && queryRefreshToken) {
+    searchParams.delete(AppKey.QueryAccessTokenKey)
     const response = NextResponse.redirect(nextUrl)
     response.cookies.set({
-      name: AppKey.CookieTokenKey,
-      value: callbackToken,
+      name: AppKey.CookieAccessTokenKey,
+      value: queryAccessToken,
       domain: process.env.DOMAIN,
-      sameSite: 'strict',
       maxAge: ms(process.env.AUTH_EXPIRES_IN!) / 1000
+    })
+    response.cookies.set({
+      name: AppKey.CookieRefreshTokenKey,
+      value: queryRefreshToken,
+      domain: process.env.DOMAIN,
+      maxAge: ms(process.env.AUTH_REFRESH_EXPIRES_IN!) / 1000
     })
     return response
   }
 
   const isAuthRoute = AuthRoutes.includes(nextUrl.pathname)
-  if (!cookieToken && !isAuthRoute) {
+  if (!hasToken && !isAuthRoute) {
     return NextResponse.redirect(new URL(LoginPage, url))
   }
 
-  if (cookieToken && (pathname === '/' || isAuthRoute)) {
+  if (hasToken && (pathname === '/' || isAuthRoute)) {
     return NextResponse.redirect(new URL(DefaultLoginRedirect, url))
   }
 }

@@ -3,7 +3,14 @@ import { ApiBody, ApiTags } from '@nestjs/swagger'
 import { Request, Response } from 'express'
 import { ConfigType } from '@nestjs/config'
 import { authConfig } from '@/server/config'
-import { ClientRegisterDto, ForgotPasswordDto, NewPasswordDto, NewVerificationDto } from '@ying/shared'
+import {
+  ClientAuthVo,
+  ClientLoginDto,
+  ClientRegisterDto,
+  ForgotPasswordDto,
+  NewPasswordDto,
+  NewVerificationDto
+} from '@ying/shared'
 import { ClientScope, UID, Token } from '@/server/common/decorator'
 import { AuthService } from './auth.service'
 import { FaceBookAuthGuard, GitHubAuthGuard, GoogleAuthGuard, LocalAuthGuard } from './strategy/authorize.guard'
@@ -20,12 +27,17 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Req() req: AuthRequest) {
+  @ApiBody({ type: ClientLoginDto })
+  login(@Req() req: AuthRequest): Promise<ClientAuthVo> {
     return this.authService.sign(req.user)
   }
 
+  @Get('refresh')
+  refresh(@Token() token: string) {
+    return this.authService.refreshToken(token)
+  }
+
   @Post('register')
-  @ApiBody({ type: ClientRegisterDto })
   async register(@Body() dto: ClientRegisterDto, @Req() req: Request) {
     return this.authService.register(dto, req.locale)
   }
@@ -62,8 +74,8 @@ export class AuthController {
   @UseGuards(GitHubAuthGuard)
   @UseFilters(AuthLoginExceptionFilter)
   async githubCallback(@Req() req: AuthRequest, @Res() res: Response) {
-    const accessToken = await this.authService.sign(req.user)
-    res.redirect(`${this.authConf.redirectUrl}?access_token=${accessToken}`)
+    const { accessToken, refreshToken } = await this.authService.sign(req.user)
+    res.redirect(`${this.authConf.redirectUrl}?access_token=${accessToken}&refresh_token=${refreshToken}`)
   }
 
   @Get('google')
@@ -77,8 +89,8 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   @UseFilters(AuthLoginExceptionFilter)
   async googleLoginCallback(@Req() req: AuthRequest, @Res() res: Response) {
-    const accessToken = await this.authService.sign(req.user)
-    res.redirect(`${this.authConf.redirectUrl}?access_token=${accessToken}`)
+    const { accessToken, refreshToken } = await this.authService.sign(req.user)
+    res.redirect(`${this.authConf.redirectUrl}?access_token=${accessToken}&refresh_token=${refreshToken}`)
   }
 
   @Get('facebook')
@@ -92,7 +104,7 @@ export class AuthController {
   @UseGuards(FaceBookAuthGuard)
   @UseFilters(AuthLoginExceptionFilter)
   async facebookCallback(@Req() req: AuthRequest, @Res() res: Response) {
-    const accessToken = await this.authService.sign(req.user)
-    res.redirect(`${this.authConf.redirectUrl}?access_token=${accessToken}`)
+    const { accessToken, refreshToken } = await this.authService.sign(req.user)
+    res.redirect(`${this.authConf.redirectUrl}?access_token=${accessToken}&refresh_token=${refreshToken}`)
   }
 }

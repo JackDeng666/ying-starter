@@ -17,6 +17,7 @@ i18n.init({
 export { i18n }
 
 export function getLocale(headers: Negotiator.Headers) {
+  if (!headers['accept-language']) return defaultLocale
   const languages = new Negotiator({ headers }).languages()
 
   return match(languages, locales, defaultLocale)

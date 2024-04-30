@@ -1,7 +1,8 @@
-import axios, { AxiosError, AxiosInstance } from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
 import { AppKey } from '@/client/enum'
-import { clearUserInfoAndToken } from '@/client/store/auth-store'
+import { clearUserInfoAndToken, updateAccessToken } from '@/client/store/auth-store'
+import { TAppContext } from '@/client/components/app-provider'
 
 export type ErrorRes = {
   status: number
@@ -11,12 +12,12 @@ export type ErrorRes = {
   [key: string]: unknown
 }
 
-export const initRequest = (baseURL: string, domain: string) => {
+export const initRequest = (appContext: TAppContext) => {
   const request = axios.create({
-    baseURL
+    baseURL: appContext.apiUrl
   })
   request.interceptors.request.use(config => {
-    const token = Cookies.get(AppKey.CookieTokenKey)
+    const token = Cookies.get(AppKey.CookieAccessTokenKey)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -29,11 +30,16 @@ export const initRequest = (baseURL: string, domain: string) => {
       }
       return response.data
     },
-    (error: AxiosError<ErrorRes>) => {
+    async (error: AxiosError<ErrorRes>) => {
       const res = error.response
       if (res) {
-        if (res.status === 401) {
-          clearUserInfoAndToken(domain)
+        if (res.status === 401 && !isRefreshRequest(res.config)) {
+          const isSuccess = await refreshToken(request, appContext)
+          if (isSuccess) {
+            return request.request(res.config)
+          } else {
+            clearUserInfoAndToken(appContext)
+          }
         }
         const msg = res.data.message
         if (Array.isArray(msg)) {
@@ -46,6 +52,42 @@ export const initRequest = (baseURL: string, domain: string) => {
   )
 
   return request
+}
+
+let promise
+
+async function refreshToken(request: AxiosInstance, appContext: TAppContext) {
+  if (promise) {
+    return promise
+  }
+
+  promise = new Promise(resolve => {
+    async function getRefreshToken() {
+      try {
+        const refreshToken = Cookies.get(AppKey.CookieRefreshTokenKey)
+        const accessToken = (await request.get('/auth/refresh', {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+            __isRefreshToken: true
+          }
+        })) as string
+
+        updateAccessToken(accessToken, appContext)
+
+        resolve(true)
+      } catch (error) {
+        resolve(false)
+      }
+    }
+
+    getRefreshToken()
+  })
+
+  return promise
+}
+
+function isRefreshRequest(config: AxiosRequestConfig) {
+  return !!config.headers?.__isRefreshToken
 }
 
 export class BaseApi {
