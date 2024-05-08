@@ -64,7 +64,8 @@ function transformPermissionToMenuRoutes(
       noCache,
       component,
       parentCode,
-      children = []
+      children = [],
+      hideMenu
     } = permission
 
     const appRoute: AppRouteObject = {
@@ -77,7 +78,8 @@ function transformPermissionToMenuRoutes(
         icon,
         frameSrc,
         component,
-        noCache
+        noCache,
+        hideMenu
       }
     }
 

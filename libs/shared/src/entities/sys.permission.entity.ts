@@ -59,6 +59,11 @@ export class SysPermissionEntity {
   component?: string
 
   @Column({
+    default: false
+  })
+  hideMenu: boolean
+
+  @Column({
     type: 'enum',
     enum: BasicStatus,
     default: BasicStatus.ENABLE

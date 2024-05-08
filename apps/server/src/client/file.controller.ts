@@ -24,7 +24,7 @@ export class FileController {
   })
   @Post('file')
   @UseInterceptors(FileInterceptor('file'))
-  uploadUserAvatar(
+  upload(
     @UploadedFile(
       new ParseFilePipe({
         validators: [

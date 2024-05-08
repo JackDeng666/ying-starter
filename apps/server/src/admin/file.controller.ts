@@ -24,7 +24,7 @@ export class AdminFileController {
   })
   @Post('file')
   @UseInterceptors(FileInterceptor('file'))
-  uploadUserAvatar(
+  upload(
     @UploadedFile(
       new ParseFilePipe({
         validators: [
