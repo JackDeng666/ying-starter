@@ -5,6 +5,7 @@ import { ms } from '@ying/utils'
 import { AppKey } from '@/client/enum'
 import { TAppContext, useAppContext } from '@/client/components/app-provider'
 import { useApi } from './api-store'
+import { useCallback } from 'react'
 
 interface AuthStore {
   userInfo?: ClientUserVo
@@ -42,17 +43,17 @@ export const useAuth = () => {
   const appContext = useAppContext()
   const { authApi, userApi } = useApi()
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     if (!authApi) return
     await authApi.logout()
     clearUserInfoAndToken(appContext)
-  }
+  }, [authApi, appContext])
 
-  const getProfile = async () => {
+  const getProfile = useCallback(async () => {
     if (!userApi) return
     const userInfo = await userApi.getProfile()
     useAuthStore.setState({ userInfo })
-  }
+  }, [userApi])
 
   return {
     logout,

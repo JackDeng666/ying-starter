@@ -1,20 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ms } from '@ying/utils'
-import { getLocale } from '@/client/i18n/server'
-import { DefaultLoginRedirect, AuthRoutes, LoginPage } from '@/client/routes'
+import { DefaultLoginRedirect, ProtectedRoutes, LoginPage } from './routes'
 import { AppKey } from './enum'
 
 export function middleware(request: NextRequest) {
+  if (!process.env.AUTH_EXPIRES_IN) throw new Error('AUTH_EXPIRES_IN missing!')
+  if (!process.env.AUTH_REFRESH_EXPIRES_IN) throw new Error('AUTH_REFRESH_EXPIRES_IN missing!')
+
   const { nextUrl, cookies, url } = request
   const { pathname, searchParams } = nextUrl
-
-  const currentLng = searchParams.get('lng')
-  const locale = getLocale()
-  if (!currentLng || currentLng !== locale) {
-    const newUrl = new URL(url)
-    newUrl.searchParams.set('lng', locale)
-    return NextResponse.redirect(newUrl)
-  }
 
   const cookieAccessToken = cookies.get(AppKey.CookieAccessTokenKey)
   const cookieRefreshToken = cookies.get(AppKey.CookieRefreshTokenKey)
@@ -55,29 +49,28 @@ export function middleware(request: NextRequest) {
   const queryAccessToken = searchParams.get(AppKey.QueryAccessTokenKey)
   const queryRefreshToken = searchParams.get(AppKey.QueryRefreshTokenKey)
   if (queryAccessToken && queryRefreshToken) {
-    searchParams.delete(AppKey.QueryAccessTokenKey)
-    const response = NextResponse.redirect(nextUrl)
+    const response = NextResponse.redirect(new URL(DefaultLoginRedirect, url))
     response.cookies.set({
       name: AppKey.CookieAccessTokenKey,
       value: queryAccessToken,
       domain: process.env.DOMAIN,
-      maxAge: ms(process.env.AUTH_EXPIRES_IN!) / 1000
+      maxAge: ms(process.env.AUTH_EXPIRES_IN) / 1000
     })
     response.cookies.set({
       name: AppKey.CookieRefreshTokenKey,
       value: queryRefreshToken,
       domain: process.env.DOMAIN,
-      maxAge: ms(process.env.AUTH_REFRESH_EXPIRES_IN!) / 1000
+      maxAge: ms(process.env.AUTH_REFRESH_EXPIRES_IN) / 1000
     })
     return response
   }
 
-  const isAuthRoute = AuthRoutes.includes(nextUrl.pathname)
-  if (!hasToken && !isAuthRoute) {
+  const isProtectedRoute = ProtectedRoutes.includes(nextUrl.pathname)
+  if (!hasToken && isProtectedRoute) {
     return NextResponse.redirect(new URL(LoginPage, url))
   }
 
-  if (hasToken && (pathname === '/' || isAuthRoute)) {
+  if (hasToken && pathname.startsWith('/auth')) {
     return NextResponse.redirect(new URL(DefaultLoginRedirect, url))
   }
 }

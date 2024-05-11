@@ -91,7 +91,8 @@ docker run --name ying-starter -d \
   -e AUTH_ADMIN_PASS=Admin.123 \
   -e AUTH_ADMIN_EXPIRES_IN=1d \
   -e AUTH_SECRET= \
-  -e AUTH_EXPIRES_IN=7d \
+  -e AUTH_EXPIRES_IN=1h \
+  -e AUTH_REFRESH_EXPIRES_IN=7d \
   -e AUTH_REDIRECT_URL=http://localhost:3256 \
   -e AUTH_GITHUB_ID= \
   -e AUTH_GITHUB_SECRET= \

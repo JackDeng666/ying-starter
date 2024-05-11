@@ -1,7 +1,6 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
-import { UserButton } from './user-button'
 import { cn } from '@/client/lib/utils'
 import { useTranslate } from '@/client/i18n/client'
 
@@ -39,7 +38,6 @@ export const Navbar = () => {
           </div>
         </div>
       </div>
-      <UserButton />
     </nav>
   )
 }

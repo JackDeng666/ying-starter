@@ -7,13 +7,15 @@ export type TAppContext = {
   domain: string
   accessTokenExpiresIn: string
   refreshTokenExpiresIn: string
+  lng: string
 }
 
 export const AppContext = createContext<TAppContext>({
   apiUrl: '',
   domain: '',
   accessTokenExpiresIn: '',
-  refreshTokenExpiresIn: ''
+  refreshTokenExpiresIn: '',
+  lng: ''
 })
 
 export const AppProvider = ({ children, value }: { children: ReactNode; value: TAppContext }) => {

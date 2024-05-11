@@ -1,6 +1,9 @@
 const basic = {
-  'App Title': 'Ying Auth',
-  'Welcome to': '欢迎来到 Ying Auth',
+  'Privacy Policy': '隐私协议',
+  'Cookie Policy': 'Cookie 协议',
+  Terms: '条款',
+  'App Title': 'Ying Starter',
+  'Welcome to': '欢迎来到 Ying Starter',
   Email: '邮箱',
   'Please enter email': '请输入邮箱',
   Password: '密码',

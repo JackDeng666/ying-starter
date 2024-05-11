@@ -14,7 +14,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . .
 
-ENV NODE_ENV prod
+ENV NODE_ENV production
 
 RUN pnpm build
 
@@ -33,7 +33,7 @@ COPY --from=builder /app/dist ./dist
 
 COPY ./prod.sh ./prod.sh
 
-ENV NODE_ENV prod
+ENV NODE_ENV production
 
 ENV PORT 3256
 EXPOSE 3256

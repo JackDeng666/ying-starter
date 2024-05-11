@@ -1,5 +1,9 @@
 import React from 'react'
 
-export type LayoutProps = {
+export interface LayoutProps {
   children: React.ReactNode
+}
+
+export interface LayoutWithClassProps extends LayoutProps {
+  className?: string
 }
