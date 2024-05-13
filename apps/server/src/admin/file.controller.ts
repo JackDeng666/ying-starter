@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AdminScope, UID } from '@/server/common/decorator'
-import { FileService } from '@/server/modules/file/file.service'
+import { FileService } from '@/server/modules/storage/file.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { FileSourceType, FileType } from '@ying/shared'
 

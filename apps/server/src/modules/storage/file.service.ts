@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 import { FileSourceType, FileType } from '@ying/shared'
 import { FileEntity } from '@ying/shared/entities'
 import { EXPIR_SECONDS, MINIO_TOKEN } from './constant'
-import { minioConfig } from '@/server/config'
+import { storageConfig } from '@/server/config'
 import { ConfigType } from '@nestjs/config'
 
 type UploadFileOptions = {
@@ -29,10 +29,10 @@ export class FileService {
   private readonly minioClient: Client
 
   @InjectRepository(FileEntity)
-  private readonly minioFileRepository: Repository<FileEntity>
+  private readonly fileRepository: Repository<FileEntity>
 
-  @Inject(minioConfig.KEY)
-  private readonly minioCof: ConfigType<typeof minioConfig>
+  @Inject(storageConfig.KEY)
+  private readonly minioCof: ConfigType<typeof storageConfig>
 
   async uploadFile({ file, fileType, from, userId }: UploadFileOptions) {
     const fileName = nanoid()
@@ -45,20 +45,20 @@ export class FileService {
     })
     const url = await this.getPresignedUrl(objectName)
 
-    const minioFile = this.minioFileRepository.create({
+    const minioFile = this.fileRepository.create({
       type: fileType,
       path: objectName,
       url,
       from,
       userId
     })
-    await this.minioFileRepository.save(minioFile)
+    await this.fileRepository.save(minioFile)
 
     return minioFile
   }
 
   async addFile({ url, fileType, from, userId }: AddFileOptions) {
-    const minioFile = this.minioFileRepository.create({
+    const minioFile = this.fileRepository.create({
       type: fileType,
       path: url,
       url,
@@ -66,7 +66,7 @@ export class FileService {
       userId
     })
 
-    await this.minioFileRepository.save(minioFile)
+    await this.fileRepository.save(minioFile)
 
     return minioFile
   }
@@ -76,7 +76,7 @@ export class FileService {
   }
 
   async deleteFiles(files: FileEntity[]) {
-    await this.minioFileRepository.delete({ id: In(files.map(el => el.id)) })
+    await this.fileRepository.delete({ id: In(files.map(el => el.id)) })
 
     await this.minioClient.removeObjects(
       this.minioCof.bucket,
@@ -85,7 +85,7 @@ export class FileService {
   }
 
   async deleteDriftFilesByExcludeIds(excludeIds: number[]) {
-    const driftFiles = await this.minioFileRepository.find({
+    const driftFiles = await this.fileRepository.find({
       where: { id: Not(In(excludeIds)) }
     })
 

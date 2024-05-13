@@ -1,6 +1,7 @@
 import {
   Controller,
   FileTypeValidator,
+  Get,
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
@@ -8,8 +9,8 @@ import {
   UseInterceptors
 } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { ClientScope, UID } from '@/server/common/decorator'
-import { FileService } from '@/server/modules/file/file.service'
+import { ClientScope, Public, UID } from '@/server/common/decorator'
+import { FileService } from '@/server/modules/storage/file.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { FileSourceType, FileType } from '@ying/shared'
 

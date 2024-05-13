@@ -16,9 +16,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       let path = ''
       if (request.url.startsWith('/admin')) {
         path = 'assets/admin/index.html'
-      } else if (request.url.startsWith('/client')) {
-        path = 'assets/client/index.html'
       }
+      // else if (request.url.startsWith('/client')) {
+      //   path = 'assets/client/index.html'
+      // }
       if (path) {
         const indexFile = createReadStream(join(process.cwd(), path))
         indexFile.pipe(response)

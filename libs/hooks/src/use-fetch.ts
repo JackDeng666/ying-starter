@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 
-type UseApiOptions<T> = {
+type UseFetchOptions<T> = {
   func: (params?: any) => Promise<T>
   immediately?: boolean
 }
 
-export const useApi = <T>({ func, immediately = true }: UseApiOptions<T>) => {
+export const useFetch = <T>({ func, immediately = true }: UseFetchOptions<T>) => {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<T>()
 

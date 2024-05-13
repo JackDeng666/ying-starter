@@ -21,6 +21,12 @@
         }
       }
     },
+    "build": {
+      "options": {
+        "outputPath": "dist/apps/server",
+        "outputFileName": "main.js"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {

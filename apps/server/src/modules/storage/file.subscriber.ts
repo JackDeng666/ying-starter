@@ -2,10 +2,10 @@ import { Inject } from '@nestjs/common'
 import { DataSource, EntitySubscriberInterface, EventSubscriber, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Client } from 'minio'
-import { EXPIR_SECONDS, MINIO_TOKEN } from '@/server/modules/file/constant'
+import { EXPIR_SECONDS, MINIO_TOKEN } from '@/server/modules/storage/constant'
 import { FileEntity } from '@ying/shared/entities'
 import { ConfigType } from '@nestjs/config'
-import { minioConfig } from '@/server/config'
+import { storageConfig } from '@/server/config'
 import { FileType } from '@ying/shared'
 
 @EventSubscriber()
@@ -16,8 +16,8 @@ export class FileSubscriber implements EntitySubscriberInterface<FileEntity> {
     private readonly minioClient: Client,
     @InjectRepository(FileEntity)
     private readonly minioFileRepository: Repository<FileEntity>,
-    @Inject(minioConfig.KEY)
-    private readonly minioCof: ConfigType<typeof minioConfig>
+    @Inject(storageConfig.KEY)
+    private readonly minioCof: ConfigType<typeof storageConfig>
   ) {
     dataSource.subscribers.push(this)
   }
