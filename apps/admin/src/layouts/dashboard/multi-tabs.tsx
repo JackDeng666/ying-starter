@@ -1,7 +1,7 @@
 import { Dropdown, MenuProps, Tabs, TabsProps } from 'antd'
 import Color from 'color'
 import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from '@hello-pangea/dnd'
 import { useToggle, useFullscreen } from 'react-use'
 import styled from 'styled-components'
 
