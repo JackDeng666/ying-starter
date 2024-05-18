@@ -8,7 +8,7 @@ export class ResetPasswordDto {
     message: 'Incorrect password format'
   })
   @IsNotEmpty({
-    message: 'New password should not be empty'
+    message: 'validation.new_password_should_not_be_empty'
   })
   newPassword: string
 }
@@ -17,7 +17,7 @@ export class UpdateUserInfoDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty({
-    message: 'Nickname should not be empty'
+    message: 'validation.nickname_should_not_be_empty'
   })
   name: string
 

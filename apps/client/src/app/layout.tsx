@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
+import 'nprogress/nprogress.css'
 
 import { AppProvider } from '@/client/components/app-provider'
 import { CustomNavbar } from '@/client/components/navbar'

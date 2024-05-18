@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import {
-  Image,
   Button,
+  Image,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -18,25 +18,28 @@ import {
   NavbarMenuToggle,
   Navbar
 } from '@nextui-org/react'
+import NextImage from 'next/image'
 import { LuLogOut } from 'react-icons/lu'
+import NProgress from 'nprogress'
 
 import { Brand } from '@/client/components/brand'
 
 import { Page1, Page2, ProtectedRoutes } from '@/client/routes'
+import { useRouter, useAppPending } from '@/client/store/app-store'
 import { useAuth, useAuthStore } from '@/client/store/auth-store'
 import { useTranslate } from '@/client/i18n/client'
 
 export const CustomNavbar = () => {
   const pathname = usePathname()
+  const router = useRouter()
+  const isPending = useAppPending()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const userInfo = useAuthStore(state => state.userInfo)
   const authToken = useAuthStore(state => state.authToken)
 
   const { logout, getProfile } = useAuth()
-  const { t } = useTranslate()
-
-  const router = useRouter()
+  const { t } = useTranslate('auth')
 
   useEffect(() => {
     setIsMenuOpen(false)
@@ -51,6 +54,14 @@ export const CustomNavbar = () => {
       getProfile()
     }
   }, [getProfile, userInfo, authToken])
+
+  useEffect(() => {
+    if (isPending) {
+      NProgress.start()
+    } else {
+      NProgress.done()
+    }
+  }, [isPending])
 
   const menuItems = [
     {
@@ -69,7 +80,7 @@ export const CustomNavbar = () => {
 
   return (
     <Navbar isBordered onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen}>
-      <NavbarMenuToggle className="sm:hidden" />
+      <NavbarMenuToggle />
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.name}-${index}`}>
@@ -109,7 +120,14 @@ export const CustomNavbar = () => {
               <Button
                 variant="faded"
                 isIconOnly
-                startContent={<Image src={userInfo?.avatar?.url} alt="avatar" />}
+                startContent={
+                  <Image
+                    src={userInfo?.avatar?.url}
+                    removeWrapper
+                    alt="avatar"
+                    className="w-full h-full object-cover"
+                  />
+                }
                 radius="full"
               ></Button>
             </DropdownTrigger>
@@ -120,30 +138,30 @@ export const CustomNavbar = () => {
               </DropdownItem>
               <DropdownItem
                 key="personal_information"
-                textValue={t('Personal information')}
+                textValue={t('text.personal_information')}
                 onClick={() => {
                   router.replace('/profile')
                 }}
               >
-                {t('Personal information')}
+                {t('text.personal_information')}
               </DropdownItem>
               <DropdownItem
                 key="reset_password"
-                textValue={t('Reset password')}
+                textValue={t('text.reset_password')}
                 onClick={() => {
                   router.replace('/reset-password')
                 }}
               >
-                {t('Reset password')}
+                {t('text.reset_password')}
               </DropdownItem>
               <DropdownItem
                 key="logout"
                 color="danger"
                 endContent={<LuLogOut className="text-lg" />}
-                textValue={t('Logout')}
+                textValue={t('text.logout')}
                 onClick={logout}
               >
-                {t('Logout')}
+                {t('text.logout')}
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -152,12 +170,12 @@ export const CustomNavbar = () => {
         <NavbarContent justify="end">
           <NavbarItem>
             <Link isBlock color="primary" className="cursor-pointer" onClick={() => router.push('/auth/login')}>
-              Login
+              {t('text.login')}
             </Link>
           </NavbarItem>
           <NavbarItem>
             <Link isBlock color="primary" className="cursor-pointer" onClick={() => router.push('/auth/register')}>
-              Sign Up
+              {t('text.register')}
             </Link>
           </NavbarItem>
         </NavbarContent>

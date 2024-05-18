@@ -1,11 +1,9 @@
-import backend from './backend'
 import basic from './basic'
-import validation from './validation'
+import auth from './auth'
 
 const zh = {
-  backend,
   basic,
-  validation
+  auth
 }
 
 export default zh

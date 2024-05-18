@@ -33,13 +33,11 @@ export class UserService {
     })
 
     if (existingUser.password && existingUser.password !== generatePass(dto.oldPassword)) {
-      throw new InternalServerErrorException('Old password error!')
+      throw new InternalServerErrorException('error.old_password_error')
     }
 
     existingUser.password = generatePass(dto.newPassword)
 
     await this.userRepository.save(existingUser)
-
-    return 'Password modification successful!'
   }
 }

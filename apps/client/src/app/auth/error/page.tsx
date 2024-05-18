@@ -6,15 +6,16 @@ import { useTranslate } from '@/client/i18n/client'
 import { FormError } from '@/client/components/form-error'
 
 const AuthErrorPage = () => {
-  const { t } = useTranslate()
+  const { t } = useTranslate('auth')
+  const { t: tB } = useTranslate('basic')
   const searcheParams = useSearchParams()
   const msg = searcheParams.get('msg')
 
   return (
     <CardWrapper
-      headerLabel={t('Something went wrong!')}
+      headerLabel={tB('something_went_wrong')}
       backButtonHref="/auth/login"
-      backButtonLabel={t('Back to login')}
+      backButtonLabel={t('text.back_to_login')}
     >
       <FormError message={msg} />
     </CardWrapper>

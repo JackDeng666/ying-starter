@@ -27,15 +27,15 @@ export class LocalStrategy extends PassportStrategy(Strategy, LOCAL_STRATEGY) {
     })
 
     if (!existingUser) {
-      throw new InternalServerErrorException('Email does not exist!')
+      throw new InternalServerErrorException('error.email_does_not_exist')
     }
 
     if (!existingUser.emailVerified) {
-      throw new InternalServerErrorException('The email has not been verified yet!')
+      throw new InternalServerErrorException('error.the_email_has_not_been_verified_yet')
     }
 
     if (existingUser.password !== generatePass(password)) {
-      throw new InternalServerErrorException('Password error!')
+      throw new InternalServerErrorException('error.password_error')
     }
 
     return existingUser

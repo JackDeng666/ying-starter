@@ -10,13 +10,14 @@ import { NewPasswordDto } from '@ying/shared'
 
 import { FormError } from '@/client/components/form-error'
 import { FormSuccess } from '@/client/components/form-success'
-import { CardWrapper } from '../_components/card-wrapper'
 import { useTranslate } from '@/client/i18n/client'
-import { useApi } from '@/client/store/api-store'
+import { useApi } from '@/client/store/app-store'
+import { ErrorRes } from '@/client/api/client/request'
+import { CardWrapper } from '../_components/card-wrapper'
 
 const NewPasswordPage = () => {
   const { authApi } = useApi()
-  const { t } = useTranslate()
+  const { t } = useTranslate('auth')
   const searchParams = useSearchParams()
   const token = searchParams.get('token') || undefined
   const email = searchParams.get('email') || undefined
@@ -45,25 +46,29 @@ const NewPasswordPage = () => {
 
     try {
       await authApi.newPassword(values)
-      setSuccess(t('Password changed successfully!'))
-    } catch (error: any) {
-      setError(t(error.message, { ns: 'backend' }))
+      setSuccess(t('success.password_changed_successfully'))
+    } catch (error) {
+      setError(t((error as ErrorRes).message))
     }
   }
 
   return (
-    <CardWrapper headerLabel={t('Reset password')} backButtonLabel={t('Back to login')} backButtonHref="/auth/login">
+    <CardWrapper
+      headerLabel={t('text.reset_password')}
+      backButtonLabel={t('text.back_to_login')}
+      backButtonHref="/auth/login"
+    >
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
           <Input
             variant="flat"
-            label={t('New password')}
+            label={t('text.new_password')}
             disabled={isSubmitting}
-            placeholder={t('Please enter new password')}
+            placeholder={t('text.please_enter_new_password')}
             isClearable
             type="password"
             isInvalid={Boolean(errors.password)}
-            errorMessage={t(errors.password?.message || '', { ns: 'validation' })}
+            errorMessage={t(errors.password?.message || '')}
             classNames={{
               innerWrapper: 'h-16',
               inputWrapper: 'h-16',
@@ -75,7 +80,7 @@ const NewPasswordPage = () => {
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
-          {t('Reset password')}
+          {t('text.reset_password')}
         </Button>
       </form>
     </CardWrapper>

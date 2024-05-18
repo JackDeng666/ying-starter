@@ -4,18 +4,19 @@ import { useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { toast } from 'sonner'
 import { Button, Input } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 
 import { ResetPasswordDto } from '@ying/shared'
 
-import { useAuth, useAuthStore } from '@/client/store/auth-store'
-import { useRouter } from 'next/navigation'
 import { useTranslate } from '@/client/i18n/client'
-import { useApi } from '@/client/store/api-store'
+import { useApi } from '@/client/store/app-store'
+import { useAuth, useAuthStore } from '@/client/store/auth-store'
+import { ErrorRes } from '@/client/api/client/request'
 
 const ResetPasswordPage = () => {
   const { userApi } = useApi()
   const { logout } = useAuth()
-  const { t } = useTranslate()
+  const { t } = useTranslate('auth')
   const router = useRouter()
   const userInfo = useAuthStore(state => state.userInfo)
 
@@ -36,11 +37,11 @@ const ResetPasswordPage = () => {
     if (!userApi) return
     try {
       await userApi.resetPassword(values)
-      toast.success(t('Password changed successfully!'))
+      toast.success(t('success.password_changed_successfully'))
       await logout()
       router.replace('/')
-    } catch (error: any) {
-      toast.error(t(error?.message, { ns: 'backend' }))
+    } catch (error) {
+      toast.error(t((error as ErrorRes)?.message))
     }
   }
 
@@ -52,13 +53,13 @@ const ResetPasswordPage = () => {
             className="mb-4"
             variant="bordered"
             labelPlacement="outside"
-            label={t('Old password')}
+            label={t('text.old_password')}
             isDisabled={isSubmitting}
-            placeholder={t('Please enter old password')}
+            placeholder={t('text.please_enter_old_password')}
             type="password"
             autoComplete="old-password"
             isInvalid={Boolean(errors.oldPassword)}
-            errorMessage={t(errors.oldPassword?.message || '', { ns: 'validation' })}
+            errorMessage={t(errors.oldPassword?.message || '')}
             {...register('oldPassword')}
           />
         )}
@@ -66,17 +67,17 @@ const ResetPasswordPage = () => {
           className="mb-4"
           variant="bordered"
           labelPlacement="outside"
-          label={t('New password')}
+          label={t('text.new_password')}
           isDisabled={isSubmitting}
-          placeholder={t('Please enter new password')}
+          placeholder={t('text.please_enter_new_password')}
           type="password"
           autoComplete="new-password"
           isInvalid={Boolean(errors.newPassword)}
-          errorMessage={t(errors.newPassword?.message || '', { ns: 'validation' })}
+          errorMessage={t(errors.newPassword?.message || '')}
           {...register('newPassword')}
         />
         <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
-          {userInfo?.hasPassword ? t('Confirm reset') : t('Set password')}
+          {userInfo?.hasPassword ? t('text.confirm_reset') : t('text.set_password')}
         </Button>
       </form>
     </div>

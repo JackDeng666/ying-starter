@@ -74,3 +74,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+#nprogress .bar {
+  background: hsl(var(--nextui-primary)) !important;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: hsl(var(--nextui-primary)) !important;
+  border-left-color: hsl(var(--nextui-primary)) !important;
+}

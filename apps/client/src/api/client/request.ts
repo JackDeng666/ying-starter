@@ -18,8 +18,12 @@ export const initRequest = (appContext: TAppContext) => {
   })
   request.interceptors.request.use(config => {
     const token = Cookies.get(AppKey.CookieAccessTokenKey)
+    const lng = Cookies.get(AppKey.CookieLanguageKey)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
+    }
+    if (lng) {
+      config.headers['custom-lng'] = lng
     }
     return config
   })

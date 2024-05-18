@@ -17,13 +17,14 @@ import { CardWrapper } from '../_components/card-wrapper'
 import { AppKey } from '@/client/enum'
 import { useAuthStore } from '@/client/store/auth-store'
 import { useTranslate } from '@/client/i18n/client'
-import { useApi } from '@/client/store/api-store'
+import { useApi } from '@/client/store/app-store'
 import { useAppContext } from '@/client/components/app-provider'
+import { ErrorRes } from '@/client/api/client/request'
 
 const LoginPage = () => {
   const { domain, accessTokenExpiresIn, refreshTokenExpiresIn } = useAppContext()
   const { authApi } = useApi()
-  const { t } = useTranslate()
+  const { t } = useTranslate('auth')
   const router = useRouter()
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
@@ -66,27 +67,27 @@ const LoginPage = () => {
 
       setAuthToken(res)
       router.replace('/')
-    } catch (error: any) {
-      setError(t(error.message, { ns: 'backend' }))
+    } catch (error) {
+      setError(t((error as ErrorRes)?.message))
     }
   }
 
   return (
     <CardWrapper
-      headerLabel={t('Welcome to')}
-      backButtonLabel={t('No account?')}
+      headerLabel={t('text.welcome_to')}
+      backButtonLabel={t('text.no_account')}
       backButtonHref="/auth/register"
       showSocial
     >
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <Input
           variant="flat"
-          label={t('Email')}
+          label={t('text.email')}
           isDisabled={isSubmitting}
-          placeholder={t('Please enter email')}
+          placeholder={t('text.please_enter_email')}
           isClearable
           isInvalid={Boolean(errors.email)}
-          errorMessage={t(errors.email?.message || '', { ns: 'validation' })}
+          errorMessage={t(errors.email?.message || '')}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',
@@ -96,13 +97,13 @@ const LoginPage = () => {
         />
         <Input
           variant="flat"
-          label={t('Password')}
+          label={t('text.password')}
           isDisabled={isSubmitting}
-          placeholder={t('Please enter password')}
+          placeholder={t('text.please_enter_password')}
           isClearable
           type="password"
           isInvalid={Boolean(errors.password)}
-          errorMessage={t(errors.password?.message || '', { ns: 'validation' })}
+          errorMessage={t(errors.password?.message || '')}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',
@@ -111,12 +112,12 @@ const LoginPage = () => {
           {...register('password')}
         />
         <Button size="sm" variant="light">
-          <Link href="/auth/forgot-password">{t('Forgot password?')}</Link>
+          <Link href="/auth/forgot-password">{t('text.forgot_password')}</Link>
         </Button>
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
-          {t('Login')}
+          {t('text.login')}
         </Button>
       </form>
     </CardWrapper>

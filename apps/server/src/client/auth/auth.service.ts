@@ -7,7 +7,6 @@ import { ConfigType } from '@nestjs/config'
 import { nanoid } from 'nanoid'
 import { ms } from '@ying/utils'
 import {
-  ClientAuthVo,
   ClientRegisterDto,
   FileSourceType,
   FileType,
@@ -15,14 +14,13 @@ import {
   NewPasswordDto,
   NewVerificationDto
 } from '@ying/shared'
+import { AccountEntity, FileEntity, UserEntity } from '@ying/shared/entities'
 import { authConfig } from '@/server/config'
 import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
 import { MailService } from '@/server/modules/mail/mail.service'
 import { generatePass } from '@/server/common/utils'
-import { AccountEntity, FileEntity, UserEntity } from '@ying/shared/entities'
-import { TClientPayload } from './strategy/jwt.strategy'
 import { i18n } from '@/server/i18n'
-import { kMaxLength } from 'buffer'
+import { TClientPayload } from './strategy/jwt.strategy'
 
 @Injectable()
 export class AuthService {
@@ -52,7 +50,7 @@ export class AuthService {
       where: { email }
     })
 
-    if (!existAccount && existUser) throw new InternalServerErrorException('The email has been registered!')
+    if (!existAccount && existUser) throw new InternalServerErrorException('error.the_email_has_been_registered')
 
     if (existAccount && existAccount.user) {
       return existAccount.user
@@ -147,7 +145,7 @@ export class AuthService {
       })
 
       if (existingUser && existingUser.emailVerified) {
-        throw new InternalServerErrorException('The email has been registered!')
+        throw new InternalServerErrorException('error.the_email_has_been_registered')
       }
 
       if (existingUser) {
@@ -198,7 +196,7 @@ export class AuthService {
     const token = await this.redisClient.get(`${RedisKey.VerificationToken}:${dto.email}:${dto.token}`)
 
     if (!token) {
-      throw new InternalServerErrorException('Token is invalid!')
+      throw new InternalServerErrorException('error.token_is_invalid')
     }
 
     await this.dataSource.getRepository(UserEntity).update({ email: dto.email }, { emailVerified: true })
@@ -212,7 +210,7 @@ export class AuthService {
     })
 
     if (!existingUser) {
-      throw new InternalServerErrorException('Email does not exist!')
+      throw new InternalServerErrorException('error.email_does_not_exist')
     }
 
     const token = await this.generatePasswordResetToken(dto.email)
@@ -228,7 +226,7 @@ export class AuthService {
     const token = await this.redisClient.get(`${RedisKey.PasswordResetToken}:${dto.email}:${dto.token}`)
 
     if (!token) {
-      throw new InternalServerErrorException('Token is invalid!')
+      throw new InternalServerErrorException('error.token_is_invalid')
     }
 
     await this.dataSource

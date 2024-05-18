@@ -9,13 +9,14 @@ import { ClientRegisterDto } from '@ying/shared'
 
 import { FormError } from '@/client/components/form-error'
 import { FormSuccess } from '@/client/components/form-success'
-import { CardWrapper } from '../_components/card-wrapper'
 import { useTranslate } from '@/client/i18n/client'
-import { useApi } from '@/client/store/api-store'
+import { useApi } from '@/client/store/app-store'
+import { CardWrapper } from '../_components/card-wrapper'
+import { ErrorRes } from '@/client/api/client/request'
 
 const LoginPage = () => {
   const { authApi } = useApi()
-  const { t } = useTranslate()
+  const { t } = useTranslate('auth')
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
 
@@ -39,28 +40,28 @@ const LoginPage = () => {
     setError('')
     try {
       await authApi.register(values)
-      setSuccess(t('Confirm email has been sent!'))
-    } catch (error: any) {
-      setError(t(error.message, { ns: 'backend' }))
+      setSuccess(t('success.confirm_email_has_been_sent'))
+    } catch (error) {
+      setError(t((error as ErrorRes)?.message))
     }
   }
 
   return (
     <CardWrapper
-      headerLabel={t('Register an account')}
-      backButtonLabel={t('Already have an account?')}
+      headerLabel={t('text.register_an_account')}
+      backButtonLabel={t('text.already_have_an_account')}
       backButtonHref="/auth/login"
       showSocial
     >
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <Input
           variant="flat"
-          label={t('Nickname')}
+          label={t('text.nickname')}
           disabled={isSubmitting}
-          placeholder={t('Please enter nickname')}
+          placeholder={t('text.please_enter_nickname')}
           isClearable
           isInvalid={Boolean(errors.name)}
-          errorMessage={t(errors.name?.message || '', { ns: 'validation' })}
+          errorMessage={t(errors.name?.message || '')}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',
@@ -70,12 +71,12 @@ const LoginPage = () => {
         />
         <Input
           variant="flat"
-          label={t('Email')}
+          label={t('text.email')}
           disabled={isSubmitting}
-          placeholder={t('Please enter email')}
+          placeholder={t('text.please_enter_email')}
           isClearable
           isInvalid={Boolean(errors.email)}
-          errorMessage={t(errors.email?.message || '', { ns: 'validation' })}
+          errorMessage={t(errors.email?.message || '')}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',
@@ -85,13 +86,13 @@ const LoginPage = () => {
         />
         <Input
           variant="flat"
-          label={t('Password')}
+          label={t('text.password')}
           disabled={isSubmitting}
-          placeholder={t('Please enter password')}
+          placeholder={t('text.please_enter_password')}
           isClearable
           type="password"
           isInvalid={Boolean(errors.password)}
-          errorMessage={t(errors.password?.message || '', { ns: 'validation' })}
+          errorMessage={t(errors.password?.message || '')}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',
@@ -102,7 +103,7 @@ const LoginPage = () => {
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
-          {t('Register')}
+          {t('text.register')}
         </Button>
       </form>
     </CardWrapper>

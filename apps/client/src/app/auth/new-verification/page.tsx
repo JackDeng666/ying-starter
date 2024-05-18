@@ -6,13 +6,14 @@ import { useSearchParams } from 'next/navigation'
 
 import { FormError } from '@/client/components/form-error'
 import { FormSuccess } from '@/client/components/form-success'
-import { CardWrapper } from '../_components/card-wrapper'
 import { useTranslate } from '@/client/i18n/client'
-import { useApi } from '@/client/store/api-store'
+import { useApi } from '@/client/store/app-store'
+
+import { CardWrapper } from '../_components/card-wrapper'
 
 const NewVerificationPage = () => {
   const { authApi } = useApi()
-  const { t } = useTranslate()
+  const { t } = useTranslate('auth')
   const [error, setError] = useState<string | undefined>()
   const [success, setSuccess] = useState<string | undefined>()
 
@@ -27,10 +28,10 @@ const NewVerificationPage = () => {
     authApi
       .newVerification({ token, email })
       .then(() => {
-        setSuccess(t('Email verified successfully!'))
+        setSuccess(t('success.email_verified_successfully'))
       })
       .catch(error => {
-        setError(t(error.message, { ns: 'backend' }))
+        setError(t(error.message))
       })
   }, [token, email, success, error, t, authApi])
 
@@ -42,8 +43,8 @@ const NewVerificationPage = () => {
 
   return (
     <CardWrapper
-      headerLabel={t('Confirm your verification')}
-      backButtonLabel={t('Back to login')}
+      headerLabel={t('text.confirm_your_verification')}
+      backButtonLabel={t('text.back_to_login')}
       backButtonHref="/auth/login"
     >
       <div className="flex items-center w-full justify-center">

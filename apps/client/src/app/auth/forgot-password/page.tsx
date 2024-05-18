@@ -10,11 +10,12 @@ import { FormError } from '@/client/components/form-error'
 import { FormSuccess } from '@/client/components/form-success'
 import { CardWrapper } from '../_components/card-wrapper'
 import { useTranslate } from '@/client/i18n/client'
-import { useApi } from '@/client/store/api-store'
+import { useApi } from '@/client/store/app-store'
+import { ErrorRes } from '@/client/api/client/request'
 
 const ForgotPasswordPage = () => {
   const { authApi } = useApi()
-  const { t } = useTranslate()
+  const { t } = useTranslate('auth')
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
 
@@ -36,24 +37,28 @@ const ForgotPasswordPage = () => {
 
     try {
       await authApi.forgotPassword(values)
-      setSuccess(t('Password reset email sent successfully!'))
-    } catch (error: any) {
-      setError(t(error.message, { ns: 'backend' }))
+      setSuccess(t('success.password_reset_email_sent_successfully'))
+    } catch (error) {
+      setError(t((error as ErrorRes)?.message))
     }
   }
 
   return (
-    <CardWrapper headerLabel={t('Forgot password?')} backButtonLabel={t('Back to login')} backButtonHref="/auth/login">
+    <CardWrapper
+      headerLabel={t('text.forgot_password')}
+      backButtonLabel={t('text.back_to_login')}
+      backButtonHref="/auth/login"
+    >
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <Input
           variant="flat"
-          label={t('Email')}
+          label={t('text.email')}
           disabled={isSubmitting}
-          placeholder={t('Please enter email')}
+          placeholder={t('text.please_enter_email')}
           isClearable
           type="email"
           isInvalid={Boolean(errors.email)}
-          errorMessage={t(errors.email?.message || '', { ns: 'validation' })}
+          errorMessage={t(errors.email?.message || '')}
           classNames={{
             innerWrapper: 'h-16',
             inputWrapper: 'h-16',
@@ -64,7 +69,7 @@ const ForgotPasswordPage = () => {
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
-          {t('Send reset email')}
+          {t('text.send_reset_email')}
         </Button>
       </form>
     </CardWrapper>

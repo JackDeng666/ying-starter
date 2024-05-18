@@ -8,15 +8,16 @@ import { Button, Input } from '@nextui-org/react'
 
 import { UpdateUserInfoDto } from '@ying/shared'
 
-import { UploadImage } from '@/client/components/upload-image'
+import { UploadImage } from '@/client/components/image/upload-image'
 import { useAuth, useAuthStore } from '@/client/store/auth-store'
+import { useApi } from '@/client/store/app-store'
 import { useTranslate } from '@/client/i18n/client'
-import { useApi } from '@/client/store/api-store'
+import { ErrorRes } from '@/client/api/client/request'
 
 const ProfilePage = () => {
   const { getProfile } = useAuth()
   const { fileApi, userApi } = useApi()
-  const { t } = useTranslate()
+  const { t } = useTranslate('auth')
   const userInfo = useAuthStore(state => state.userInfo)
 
   const form = useForm<UpdateUserInfoDto>({
@@ -36,10 +37,10 @@ const ProfilePage = () => {
     if (!userApi) return
     try {
       await userApi.updateUserInfo(values)
-      toast.success(t('Successfully modified user information!'))
+      toast.success(t('success.successfully_modified_user_information'))
       getProfile()
     } catch (error) {
-      console.log(error)
+      toast.error(t((error as ErrorRes)?.message))
     }
   }
 
@@ -60,7 +61,7 @@ const ProfilePage = () => {
             className="mb-4"
             variant="bordered"
             labelPlacement="outside"
-            label={t('Email')}
+            label={t('text.email')}
             value={userInfo.email}
             isDisabled
           />
@@ -68,11 +69,11 @@ const ProfilePage = () => {
             className="mb-4"
             variant="bordered"
             labelPlacement="outside"
-            label={t('Nickname')}
+            label={t('text.nickname')}
             isDisabled={isSubmitting}
-            placeholder={t('Please enter nickname')}
+            placeholder={t('text.please_enter_nickname')}
             isInvalid={Boolean(errors.name)}
-            errorMessage={t(errors.name?.message || '', { ns: 'validation' })}
+            errorMessage={t(errors.name?.message || '')}
             defaultValue={userInfo?.name}
             {...register('name')}
           />
@@ -82,15 +83,20 @@ const ProfilePage = () => {
             name="avatarId"
             render={({ field }) => (
               <div className="mb-6">
-                <p className="text-sm">{t('Avatar')}</p>
+                <p className="text-sm">{t('text.avatar')}</p>
                 <div className="w-full flex justify-center">
                   <UploadImage
                     defaultUrl={userInfo.avatar?.url}
                     disabled={isSubmitting}
-                    handleUpload={file => fileApi!.upload(file)}
+                    withCrop
+                    aspectRatio={1}
+                    handleUpload={file => {
+                      if (!fileApi) return
+                      return fileApi.upload(file)
+                    }}
                     onSuccess={fileEntity => {
                       field.onChange(fileEntity.id)
-                      toast.success(t('Image uploaded successfully!'))
+                      toast.success(t('success.image_uploaded_successfully'))
                     }}
                   />
                 </div>
@@ -99,7 +105,7 @@ const ProfilePage = () => {
           />
 
           <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
-            {t('Confirm modifications')}
+            {t('text.confirm_modifications')}
           </Button>
         </form>
       )}

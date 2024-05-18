@@ -2,33 +2,33 @@ import { IsEmail, IsNotEmpty, Matches } from 'class-validator'
 
 export class ClientLoginDto {
   @IsEmail(undefined, {
-    message: 'Incorrect email format'
+    message: 'validation.incorrect_email_format'
   })
   @IsNotEmpty({
-    message: 'Email should not be empty'
+    message: 'validation.email_should_not_be_empty'
   })
   email: string
 
   @Matches(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*;',.])/, {
-    message: 'Incorrect password format'
+    message: 'validation.incorrect_password_format'
   })
   @IsNotEmpty({
-    message: 'Password should not be empty'
+    message: 'validation.password_should_not_be_empty'
   })
   password: string
 }
 
 export class ClientRegisterDto {
   @IsNotEmpty({
-    message: 'Nickname should not be empty'
+    message: 'validation.nickname_should_not_be_empty'
   })
   name: string
 
   @IsEmail(undefined, {
-    message: 'Incorrect email format'
+    message: 'validation.incorrect_email_format'
   })
   @IsNotEmpty({
-    message: 'Email should not be empty'
+    message: 'validation.email_should_not_be_empty'
   })
   email: string
 
@@ -36,55 +36,55 @@ export class ClientRegisterDto {
     message: 'Incorrect password format'
   })
   @IsNotEmpty({
-    message: 'Password should not be empty'
+    message: 'validation.password_should_not_be_empty'
   })
   password: string
 }
 
 export class NewVerificationDto {
   @IsNotEmpty({
-    message: 'Email should not be empty'
+    message: 'validation.email_should_not_be_empty'
   })
   @IsEmail(undefined, {
-    message: 'Incorrect email format'
+    message: 'validation.incorrect_email_format'
   })
   email: string
 
   @IsNotEmpty({
-    message: 'Token should not be empty'
+    message: 'validation.token_should_not_be_empty'
   })
   token: string
 }
 
 export class ForgotPasswordDto {
   @IsNotEmpty({
-    message: 'Email should not be empty'
+    message: 'validation.email_should_not_be_empty'
   })
   @IsEmail(undefined, {
-    message: 'Incorrect email format'
+    message: 'validation.incorrect_email_format'
   })
   email: string
 }
 
 export class NewPasswordDto {
   @IsNotEmpty({
-    message: 'Email should not be empty'
+    message: 'validation.email_should_not_be_empty'
   })
   @IsEmail(undefined, {
-    message: 'Incorrect email format'
+    message: 'validation.incorrect_email_format'
   })
   email: string
 
   @IsNotEmpty({
-    message: 'Token should not be empty'
+    message: 'validation.token_should_not_be_empty'
   })
   token: string
 
   @Matches(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*;',.])/, {
-    message: 'Incorrect password format'
+    message: 'validation.incorrect_password_format'
   })
   @IsNotEmpty({
-    message: 'Password should not be empty'
+    message: 'validation.password_should_not_be_empty'
   })
   password: string
 }

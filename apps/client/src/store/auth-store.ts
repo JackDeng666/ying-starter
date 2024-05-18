@@ -4,7 +4,7 @@ import { ClientUserVo, ClientAuthVo } from '@ying/shared'
 import { ms } from '@ying/utils'
 import { AppKey } from '@/client/enum'
 import { TAppContext, useAppContext } from '@/client/components/app-provider'
-import { useApi } from './api-store'
+import { useApi } from './app-store'
 import { useCallback } from 'react'
 
 interface AuthStore {
