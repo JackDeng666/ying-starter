@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional } from 'class-validator'
+import { IsArray, IsNumber, IsOptional } from 'class-validator'
 import { Transform } from 'class-transformer'
 
 export class ListDto {
@@ -11,4 +11,8 @@ export class ListDto {
   @IsOptional()
   @Transform(({ value }) => Number(value))
   size?: number
+
+  @IsOptional()
+  @IsArray()
+  date?: string[]
 }

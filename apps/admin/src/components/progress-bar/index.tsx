@@ -45,8 +45,8 @@ export default function ProgressBar() {
   const changeNprogressBar = () => {
     const nprogress = document.getElementById('nprogress')
     if (nprogress) {
-      const bar: HTMLElement = nprogress.querySelector('.bar')!
-      const peg: HTMLElement = nprogress.querySelector('.peg')!
+      const bar: HTMLElement = nprogress.querySelector('.bar')
+      const peg: HTMLElement = nprogress.querySelector('.peg')
 
       bar.style.background = colorPrimary
       bar.style.boxShadow = `0 0 2px ${colorPrimary}`

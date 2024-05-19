@@ -14,10 +14,6 @@ export class ListRoleDto extends ListDto {
   @IsOptional()
   @IsEnum(BasicStatus)
   status?: BasicStatus
-
-  @IsOptional()
-  @IsArray()
-  date?: string[]
 }
 
 export class CreateRoleDto {

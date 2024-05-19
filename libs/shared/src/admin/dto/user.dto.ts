@@ -1,4 +1,4 @@
-import { IsArray, IsOptional } from 'class-validator'
+import { IsOptional } from 'class-validator'
 import { ListDto } from './list.dto'
 
 export class ListUserDto extends ListDto {
@@ -7,8 +7,4 @@ export class ListUserDto extends ListDto {
 
   @IsOptional()
   email?: string
-
-  @IsOptional()
-  @IsArray()
-  date?: string[]
 }

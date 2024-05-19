@@ -30,10 +30,6 @@ export class ListSysUserDto extends ListDto {
   @IsOptional()
   @IsEnum(BasicStatus)
   status?: BasicStatus
-
-  @IsOptional()
-  @IsArray()
-  date?: string[]
 }
 
 export class CreateSysUserDto {

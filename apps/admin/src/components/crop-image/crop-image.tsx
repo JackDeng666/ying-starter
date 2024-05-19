@@ -1,8 +1,10 @@
 import { useState, forwardRef, useImperativeHandle, useRef, useCallback } from 'react'
 import { Rnd } from 'react-rnd'
-import { Image as NextUIImage } from '@nextui-org/react'
+
+import { useThemeToken } from '@/admin/theme/hooks'
 
 import { HandleComponent } from './handle-component'
+import { StyledRnd } from './styles'
 
 type CropImageProps = {
   url: string
@@ -29,6 +31,7 @@ type RenderData = {
 }
 
 export const CropImage = forwardRef<TCropImageHandle, CropImageProps>(({ url, aspectRatio }, ref) => {
+  const themeToken = useThemeToken()
   const containerRef = useRef<HTMLDivElement>(null)
 
   const [renderData, setRenderData] = useState<RenderData>({
@@ -120,10 +123,10 @@ export const CropImage = forwardRef<TCropImageHandle, CropImageProps>(({ url, as
 
   return (
     <div className="w-full h-full relative overflow-hidden" ref={containerRef}>
-      <NextUIImage src={url} alt="crop image" className="w-full h-full rounded-none" onLoad={setImage} />
+      <img src={url} alt="crop" className="w-full h-full rounded-none" onLoad={setImage} />
       {renderRnd && (
         <Rnd
-          className="z-10 border-[2px] border-primary shadow-[0_0_0_99999px_rgba(229,231,235,0.6)]"
+          className="z-10 shadow-[0_0_0_99999px_rgba(229,231,235,0.6)]"
           lockAspectRatio={aspectRatio}
           default={{
             x: renderData.renderX,
@@ -149,7 +152,9 @@ export const CropImage = forwardRef<TCropImageHandle, CropImageProps>(({ url, as
           onDragStop={(_, { x, y }) => {
             setRenderData(prev => ({ ...prev, renderX: x, renderY: y }))
           }}
-        />
+        >
+          <StyledRnd $token={themeToken}></StyledRnd>
+        </Rnd>
       )}
     </div>
   )

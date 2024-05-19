@@ -2,18 +2,20 @@ import { Button, Card, Popconfirm, message } from 'antd'
 import Table, { ColumnsType } from 'antd/es/table'
 import { useForm } from 'react-hook-form'
 import { useCallback, useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+
 import { debounce, getOption } from '@ying/utils'
+import { BasicStatus, ListSysUserDto, UpdateSysUserDto } from '@ying/shared'
+import { SysUserEntity } from '@ying/shared/entities'
 
 import { IconButton, Iconify } from '@/admin/components/icon'
 import ProTag from '@/admin/theme/antd/components/tag'
 import { useThemeToken } from '@/admin/theme/hooks'
 import { usePage } from '@/admin/hooks/use-page'
 import { sysUserApi } from '@/admin/api'
-import { BasicStatus, ListSysUserDto, UpdateSysUserDto } from '@ying/shared'
-import { SysUserEntity } from '@ying/shared/entities'
+import { BasicStatusOptions, BasicStatusOptionsType } from '@/admin/constant'
 
 import { PageQuery } from './page-query'
-import { BasicStatusOptions, BasicStatusOptionsType } from '@/admin/constant'
 import { UserDrawer, UserDrawerProps } from './user-drawer'
 import { ChangePassModal, ChangePassModalProps } from './change-pass-modal'
 
@@ -63,7 +65,7 @@ export default function UserPage() {
       render: (_, record) => {
         return (
           <div className="flex">
-            <img alt="" src={record.avatar.url} className="h-10 w-10 rounded-full" />
+            <img alt="avatar" src={record.avatar.url} className="h-10 w-10 rounded-full object-cover" />
             <div className="ml-2 flex flex-col">
               <span className="text-sm">{record.name}</span>
               <span style={{ color: colorTextSecondary }} className="text-xs">
@@ -98,6 +100,12 @@ export default function UserPage() {
       )
     },
     { title: '备注', dataIndex: 'remark' },
+    {
+      title: '创建时间',
+      dataIndex: 'createAt',
+      width: 160,
+      render: (_, record) => <div>{dayjs(record.createAt).format('YYYY-MM-DD HH:mm:ss')}</div>
+    },
     {
       title: '操作',
       key: 'operation',

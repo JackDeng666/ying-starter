@@ -1,32 +1,29 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Between, FindOptionsWhere, Like, Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
+import { BaseService } from '@/server/common/service/base.service'
 import { UserEntity } from '@ying/shared/entities'
 import { ListUserDto } from '@ying/shared'
 
 @Injectable()
-export class UserService {
-  @InjectRepository(UserEntity)
-  private readonly userRepository: Repository<UserEntity>
+export class UserService extends BaseService<UserEntity> {
+  constructor(
+    @InjectRepository(UserEntity)
+    readonly userRepository: Repository<UserEntity>
+  ) {
+    super(userRepository)
+  }
 
   list(listUserDto: ListUserDto) {
-    const { page, size, name, email, date } = listUserDto
+    const { take, skip, where } = this.buildListQuery(listUserDto)
+    const { name, email } = listUserDto
 
-    const skip = ((page || 1) - 1) * (size || 10)
-    const take = size || 10
-
-    const where: FindOptionsWhere<UserEntity> = {
+    Object.assign(where, {
       name: name ? Like(`%${name}%`) : undefined,
       email: email ? Like(`%${email}%`) : undefined
-    }
+    })
 
-    if (date) {
-      const startDate = new Date(date[0])
-      const endDate = new Date(date[1])
-      where.createAt = Between(startDate, new Date(endDate.setDate(endDate.getDate() + 1)))
-    }
-
-    return this.userRepository.find({
+    return this.repository.find({
       where,
       skip,
       take,
@@ -38,19 +35,14 @@ export class UserService {
   }
 
   listCount(listUserDto: ListUserDto) {
-    const { name, email, date } = listUserDto
+    const { where } = this.buildListQuery(listUserDto)
+    const { name, email } = listUserDto
 
-    const where: FindOptionsWhere<UserEntity> = {
+    Object.assign(where, {
       name: name ? Like(`%${name}%`) : undefined,
       email: email ? Like(`%${email}%`) : undefined
-    }
+    })
 
-    if (date) {
-      const startDate = new Date(date[0])
-      const endDate = new Date(date[1])
-      where.createAt = Between(startDate, new Date(endDate.setDate(endDate.getDate() + 1)))
-    }
-
-    return this.userRepository.countBy(where)
+    return this.repository.countBy(where)
   }
 }

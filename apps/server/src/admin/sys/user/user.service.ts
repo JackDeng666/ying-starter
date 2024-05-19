@@ -1,5 +1,5 @@
 import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common'
-import { Between, FindOptionsWhere, Like, Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RedisClientType } from 'redis'
 import { SysRoleEntity, SysUserEntity } from '@ying/shared/entities'
@@ -13,32 +13,28 @@ import {
 } from '@ying/shared'
 import { comparePass, generatePass } from '@/server/common/utils'
 import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
+import { BaseService } from '@/server/common/service/base.service'
 
 @Injectable()
-export class SysUserService {
-  @InjectRepository(SysUserEntity)
-  private readonly sysUserRepository: Repository<SysUserEntity>
-
-  @Inject(RedisToken)
-  private readonly redisClient: RedisClientType
+export class SysUserService extends BaseService<SysUserEntity> {
+  constructor(
+    @InjectRepository(SysUserEntity)
+    readonly sysUserRepository: Repository<SysUserEntity>,
+    @Inject(RedisToken)
+    readonly redisClient: RedisClientType
+  ) {
+    super(sysUserRepository)
+  }
 
   async list(dto: ListSysUserDto) {
-    const { page, size, name, account, status, date } = dto
+    const { where, take, skip } = this.buildListQuery(dto)
+    const { name, account, status } = dto
 
-    const skip = ((page || 1) - 1) * (size || 10)
-    const take = size || 10
-
-    const where: FindOptionsWhere<SysUserEntity> = {
+    Object.assign(where, {
       name: name ? Like(`%${name}%`) : undefined,
       account: account ? Like(`%${account}%`) : undefined,
       status
-    }
-
-    if (date) {
-      const startDate = new Date(date[0])
-      const endDate = new Date(date[1])
-      where.createAt = Between(startDate, new Date(endDate.setDate(endDate.getDate() + 1)))
-    }
+    })
 
     return this.sysUserRepository.find({
       where,
@@ -52,18 +48,15 @@ export class SysUserService {
   }
 
   listCount(dto: ListSysUserDto) {
-    const { name, status, date } = dto
+    const { where } = this.buildListQuery(dto)
+    const { name, status, account } = dto
 
-    const where: FindOptionsWhere<SysUserEntity> = {
+    Object.assign(where, {
       name: name ? Like(`%${name}%`) : undefined,
+      account: account ? Like(`%${account}%`) : undefined,
       status
-    }
+    })
 
-    if (date) {
-      const startDate = new Date(date[0])
-      const endDate = new Date(date[1])
-      where.createAt = Between(startDate, new Date(endDate.setDate(endDate.getDate() + 1)))
-    }
     return this.sysUserRepository.countBy(where)
   }
 
@@ -87,10 +80,6 @@ export class SysUserService {
     })
     this.redisClient.del(`${RedisKey.AdminPermission}:${user.id}`)
     return this.sysUserRepository.save(user)
-  }
-
-  delete(id: number) {
-    return this.sysUserRepository.delete(id)
   }
 
   updatePassword(dto: UpdateSysUserPasswordDto) {

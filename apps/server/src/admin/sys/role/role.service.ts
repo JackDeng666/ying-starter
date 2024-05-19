@@ -5,30 +5,27 @@ import { RedisClientType } from 'redis'
 import { SysPermissionEntity, SysRoleEntity } from '@ying/shared/entities'
 import { CreateRoleDto, ListRoleDto, UpdateRoleDto } from '@ying/shared'
 import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
+import { BaseService } from '@/server/common/service/base.service'
 
 @Injectable()
-export class SysRoleService {
-  @InjectRepository(SysRoleEntity)
-  private readonly sysRoleRepository: Repository<SysRoleEntity>
-  @Inject(RedisToken)
-  private readonly redisClient: RedisClientType
+export class SysRoleService extends BaseService<SysRoleEntity> {
+  constructor(
+    @InjectRepository(SysRoleEntity)
+    readonly sysRoleRepository: Repository<SysRoleEntity>,
+    @Inject(RedisToken)
+    readonly redisClient: RedisClientType
+  ) {
+    super(sysRoleRepository)
+  }
 
-  async list(listRoleDto: ListRoleDto) {
-    const { page, size, name, status, date } = listRoleDto
+  async list(dto: ListRoleDto) {
+    const { where, take, skip } = this.buildListQuery(dto)
+    const { name, status } = dto
 
-    const skip = ((page || 1) - 1) * (size || 10)
-    const take = size || 10
-
-    const where: FindOptionsWhere<SysRoleEntity> = {
+    Object.assign(where, {
       name: name ? Like(`%${name}%`) : undefined,
       status
-    }
-
-    if (date) {
-      const startDate = new Date(date[0])
-      const endDate = new Date(date[1])
-      where.createAt = Between(startDate, new Date(endDate.setDate(endDate.getDate() + 1)))
-    }
+    })
 
     return this.sysRoleRepository.find({
       where,
@@ -41,19 +38,15 @@ export class SysRoleService {
     })
   }
 
-  listCount(listRoleDto: ListRoleDto) {
-    const { name, status, date } = listRoleDto
+  listCount(dto: ListRoleDto) {
+    const { where } = this.buildListQuery(dto)
+    const { name, status } = dto
 
-    const where: FindOptionsWhere<SysRoleEntity> = {
+    Object.assign(where, {
       name: name ? Like(`%${name}%`) : undefined,
       status
-    }
+    })
 
-    if (date) {
-      const startDate = new Date(date[0])
-      const endDate = new Date(date[1])
-      where.createAt = Between(startDate, new Date(endDate.setDate(endDate.getDate() + 1)))
-    }
     return this.sysRoleRepository.countBy(where)
   }
 
@@ -88,9 +81,5 @@ export class SysRoleService {
 
     Object.assign(role, updateRoleDto)
     return this.sysRoleRepository.save(role)
-  }
-
-  delete(id: number) {
-    return this.sysRoleRepository.delete(id)
   }
 }
