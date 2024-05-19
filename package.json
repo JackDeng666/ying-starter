@@ -16,7 +16,11 @@
     "dev": "nx run-many -t dev",
     "build": "nx run-many -t build",
     "format": "prettier -w .",
-    "lint": "nx run-many -t lint"
+    "lint": "nx run-many -t lint",
+    "typeorm": "ts-node ./node_modules/typeorm/cli -d ./typeorm.config.ts",
+    "migrate:generate": "npm run typeorm -- migration:generate",
+    "migrate:run": "npm run typeorm -- migration:run",
+    "migrate:revert": "npm run typeorm -- migration:revert"
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",

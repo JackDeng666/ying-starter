@@ -1,6 +1,6 @@
 import { Column, Entity } from 'typeorm'
 import { FileType, FileSourceType } from '../enum'
-import { BaseEntity } from './base.entity'
+import { BaseEntity } from './base'
 
 @Entity({ name: 'file' })
 export class FileEntity extends BaseEntity {

@@ -32,6 +32,6 @@ async function bootstrap() {
   SwaggerModule.setup('doc', app, document)
 
   await app.listen(apiConf.port)
-  Logger.log(`Application running on: http://localhost:${apiConf.port}/api`, 'Main')
+  Logger.log(`🚀 Application is running on: http://localhost:${apiConf.port}/api`, 'Main')
 }
 bootstrap()

@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToMany, OneToOne } from 'typeorm'
 import { Exclude, instanceToPlain } from 'class-transformer'
 import { BasicStatus } from '../enum'
-import { BaseEntity } from './base.entity'
+import { BaseEntity } from './base'
 import { SysRoleEntity } from './sys.role.entity'
 import { SysPermissionEntity } from './sys.permission.entity'
 import { FileEntity } from './file.entity'
