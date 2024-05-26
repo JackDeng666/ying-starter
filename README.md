@@ -77,6 +77,7 @@ docker run --name ying-starter -d \
   -e DB_USER=root \
   -e DB_PASSWORD=ying123456 \
   -e DB_NAME=ying_starter \
+  -e STORAGE_MODE=local \
   -e MINIO_HOST= \
   -e MINIO_PORT= \
   -e MINIO_BUCKET= \
@@ -102,3 +103,5 @@ docker run --name ying-starter -d \
   -e AUTH_FACEBOOK_SECRET= \
   ying-starter:test
 ```
+
+如何对象存储使用本地模式，并需要保存容器内的文件，可以添加映射到容器内的`/app/upload`。

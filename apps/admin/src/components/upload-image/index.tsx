@@ -27,9 +27,9 @@ export const UploadImage = ({
 
   const { loading, startUpload } = useUpload({
     handleUpload,
-    onSuccess: minioFile => {
-      setUrl(minioFile.url)
-      onSuccess && onSuccess(minioFile)
+    onSuccess: fileEntity => {
+      setUrl(fileEntity.url)
+      onSuccess && onSuccess(fileEntity)
     }
   })
 

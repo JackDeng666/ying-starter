@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import { ScheduleModule } from '@nestjs/schedule'
 import { apiConfig, redisConfig, dbConfig, storageConfig, authConfig, mailConfig } from '@/server/config'
 import { RedisModule } from '@/server/modules/redis/redis.module'
 import { DbModule } from '@/server/modules/db/db.module'
@@ -15,6 +16,7 @@ import { ClientModule } from '@/server/client/client.module'
       load: [apiConfig, redisConfig, dbConfig, authConfig, mailConfig, storageConfig],
       envFilePath: ['.env.local', '.env']
     }),
+    ScheduleModule.forRoot(),
     RedisModule,
     DbModule,
     StorageModule,

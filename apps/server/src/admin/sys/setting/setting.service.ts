@@ -2,8 +2,8 @@ import { RedisClientType } from 'redis'
 import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { RedisToken, RedisKey } from '@/server/modules/redis/constant'
 import { SysUserEntity, UserEntity } from '@ying/shared/entities'
+import { RedisToken, RedisKey } from '@/server/modules/redis/constant'
 import { FileService } from '@/server/modules/storage/file.service'
 
 @Injectable()

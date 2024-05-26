@@ -21,7 +21,6 @@ export class DbSeeder {
     private readonly sysRoleRepository: Repository<SysRoleEntity>,
     @Inject(authConfig.KEY)
     private readonly authConf: ConfigType<typeof authConfig>,
-    @Inject(FileService)
     private readonly fileService: FileService
   ) {
     this.initPermission()

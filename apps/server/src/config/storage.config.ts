@@ -1,25 +1,34 @@
 import { registerAs } from '@nestjs/config'
 
 export const storageConfig = registerAs('storageConfig', () => {
-  if (!process.env.MINIO_HOST) {
-    throw new Error('MINIO_HOST is not exist')
+  if (!process.env.STORAGE_MODE) {
+    throw new Error('STORAGE_MODE is not exist')
   }
-  if (!process.env.MINIO_BUCKET) {
-    throw new Error('MINIO_BUCKET is not exist')
+  if (process.env.STORAGE_MODE !== 'local' && process.env.STORAGE_MODE !== 'minio') {
+    throw new Error('STORAGE_MODE must be local or minio')
   }
-  if (!process.env.MINIO_ACCESS_KEY) {
-    throw new Error('MINIO_ACCESS_KEY is not exist')
+  if (process.env.STORAGE_MODE === 'minio') {
+    if (!process.env.MINIO_HOST) {
+      throw new Error('MINIO_HOST is not exist')
+    }
+    if (!process.env.MINIO_BUCKET) {
+      throw new Error('MINIO_BUCKET is not exist')
+    }
+    if (!process.env.MINIO_ACCESS_KEY) {
+      throw new Error('MINIO_ACCESS_KEY is not exist')
+    }
+    if (!process.env.MINIO_SECRET_KEY) {
+      throw new Error('MINIO_SECRET_KEY is not exist')
+    }
   }
-  if (!process.env.MINIO_SECRET_KEY) {
-    throw new Error('MINIO_SECRET_KEY is not exist')
-  }
+
   return {
+    mode: process.env.STORAGE_MODE as 'local' | 'minio',
+    serverUrl: process.env.SERVER_URL || 'http://localhost:3000',
     host: process.env.MINIO_HOST,
     port: +process.env.MINIO_PORT,
     bucket: process.env.MINIO_BUCKET,
     accessKey: process.env.MINIO_ACCESS_KEY,
-    secretKey: process.env.MINIO_SECRET_KEY,
-    uploadthingSecret: process.env.UPLOADTHING_SECRET,
-    uploadthingAppId: process.env.UPLOADTHING_APP_ID
+    secretKey: process.env.MINIO_SECRET_KEY
   }
 })

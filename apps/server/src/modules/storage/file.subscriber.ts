@@ -1,25 +1,26 @@
-import { Inject } from '@nestjs/common'
 import { DataSource, EntitySubscriberInterface, EventSubscriber, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Client } from 'minio'
-import { EXPIR_SECONDS, MINIO_TOKEN } from '@/server/modules/storage/constant'
-import { FileEntity } from '@ying/shared/entities'
 import { ConfigType } from '@nestjs/config'
-import { storageConfig } from '@/server/config'
+import { Inject } from '@nestjs/common'
+import { FileEntity } from '@ying/shared/entities'
 import { FileType } from '@ying/shared'
+import { storageConfig } from '@/server/config'
+import { EXPIR_SECONDS } from './constant'
+import { FileService } from './file.service'
 
 @EventSubscriber()
 export class FileSubscriber implements EntitySubscriberInterface<FileEntity> {
   constructor(
     dataSource: DataSource,
-    @Inject(MINIO_TOKEN)
-    private readonly minioClient: Client,
-    @InjectRepository(FileEntity)
-    private readonly minioFileRepository: Repository<FileEntity>,
     @Inject(storageConfig.KEY)
-    private readonly minioCof: ConfigType<typeof storageConfig>
+    private readonly storageConf: ConfigType<typeof storageConfig>,
+    @InjectRepository(FileEntity)
+    private readonly fileRepository: Repository<FileEntity>,
+    private readonly fileService: FileService
   ) {
-    dataSource.subscribers.push(this)
+    if (this.storageConf.mode == 'minio') {
+      dataSource.subscribers.push(this)
+    }
   }
 
   listenTo() {
@@ -30,9 +31,9 @@ export class FileSubscriber implements EntitySubscriberInterface<FileEntity> {
     try {
       if (entity.type === FileType.Url) return
       if (Date.now() - new Date(entity.updateAt).getTime() > EXPIR_SECONDS * 1000) {
-        const newUrl = await this.minioClient.presignedUrl('get', this.minioCof.bucket, entity.path, EXPIR_SECONDS)
+        const newUrl = await this.fileService.getPresignedUrl(entity.path)
         entity.url = newUrl
-        this.minioFileRepository.update({ id: entity.id }, { url: newUrl })
+        this.fileRepository.update({ id: entity.id }, { url: newUrl })
       }
     } catch (error) {
       console.error(error)

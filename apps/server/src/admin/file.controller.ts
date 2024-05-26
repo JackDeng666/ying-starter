@@ -8,10 +8,10 @@ import {
   UseInterceptors
 } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { AdminScope, UID } from '@/server/common/decorator'
-import { FileService } from '@/server/modules/storage/file.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { FileSourceType, FileType } from '@ying/shared'
+import { AdminScope, UID } from '@/server/common/decorator'
+import { FileService } from '@/server/modules/storage/file.service'
 
 @ApiTags('admin file')
 @Controller('admin')

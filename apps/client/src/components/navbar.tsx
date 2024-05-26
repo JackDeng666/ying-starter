@@ -80,7 +80,7 @@ export const CustomNavbar = () => {
 
   return (
     <Navbar isBordered onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen}>
-      <NavbarMenuToggle />
+      <NavbarMenuToggle className="sm:hidden" />
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.name}-${index}`}>

@@ -1,94 +1,47 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { In, Not, Repository } from 'typeorm'
-import { Client } from 'minio'
-import { nanoid } from 'nanoid'
-import { FileSourceType, FileType } from '@ying/shared'
-import { FileEntity } from '@ying/shared/entities'
-import { EXPIR_SECONDS, MINIO_TOKEN } from './constant'
-import { storageConfig } from '@/server/config'
+import { Repository } from 'typeorm'
 import { ConfigType } from '@nestjs/config'
-
-type UploadFileOptions = {
-  file: MulterFile
-  fileType: FileType
-  from: FileSourceType
-  userId: number
-}
-
-type AddFileOptions = {
-  url: string
-  fileType: FileType
-  from: FileSourceType
-  userId: number
-}
+import { FileEntity } from '@ying/shared/entities'
+import { storageConfig } from '@/server/config'
+import { AbstractFileService, AddFileOptions, UploadFileOptions } from './abstract.file.service'
+import { LocalFileService } from './local.file.service'
+import { MinioFileService } from './minio.file.service'
 
 @Injectable()
-export class FileService {
-  @Inject(MINIO_TOKEN)
-  private readonly minioClient: Client
+export class FileService implements AbstractFileService {
+  private fileService: AbstractFileService
 
-  @InjectRepository(FileEntity)
-  private readonly fileRepository: Repository<FileEntity>
-
-  @Inject(storageConfig.KEY)
-  private readonly minioCof: ConfigType<typeof storageConfig>
-
-  async uploadFile({ file, fileType, from, userId }: UploadFileOptions) {
-    const fileName = nanoid()
-    const objectName = `${fileType}/${fileName}`
-
-    await this.minioClient.putObject(this.minioCof.bucket, objectName, file.buffer, {
-      'Content-Type': file.mimetype,
-      from,
-      userId
-    })
-    const url = await this.getPresignedUrl(objectName)
-
-    const minioFile = this.fileRepository.create({
-      type: fileType,
-      path: objectName,
-      url,
-      from,
-      userId
-    })
-    await this.fileRepository.save(minioFile)
-
-    return minioFile
+  constructor(
+    @Inject(storageConfig.KEY)
+    private readonly storageConf: ConfigType<typeof storageConfig>,
+    @InjectRepository(FileEntity)
+    private readonly fileRepository: Repository<FileEntity>
+  ) {
+    if (storageConf.mode === 'local') {
+      this.fileService = new LocalFileService(this.storageConf, this.fileRepository)
+    } else if (storageConf.mode === 'minio') {
+      this.fileService = new MinioFileService(this.storageConf, this.fileRepository)
+    }
   }
 
-  async addFile({ url, fileType, from, userId }: AddFileOptions) {
-    const minioFile = this.fileRepository.create({
-      type: fileType,
-      path: url,
-      url,
-      from,
-      userId
-    })
-
-    await this.fileRepository.save(minioFile)
-
-    return minioFile
+  uploadFile(options: UploadFileOptions) {
+    return this.fileService.uploadFile(options)
   }
 
-  getPresignedUrl(objectName: string) {
-    return this.minioClient.presignedUrl('get', this.minioCof.bucket, objectName, EXPIR_SECONDS)
+  addFile(options: AddFileOptions) {
+    return this.fileService.addFile(options)
   }
 
-  async deleteFiles(files: FileEntity[]) {
-    await this.fileRepository.delete({ id: In(files.map(el => el.id)) })
-
-    await this.minioClient.removeObjects(
-      this.minioCof.bucket,
-      files.filter(el => el.type !== FileType.Url).map(el => el.path)
-    )
+  getPresignedUrl(path: string) {
+    return this.fileService.getPresignedUrl(path)
   }
 
-  async deleteDriftFilesByExcludeIds(excludeIds: number[]) {
-    const driftFiles = await this.fileRepository.find({
-      where: { id: Not(In(excludeIds)) }
-    })
+  deleteFiles(files: FileEntity[]) {
+    return this.fileService.deleteFiles(files)
+  }
 
-    await this.deleteFiles(driftFiles)
+  deleteDriftFilesByExcludeIds(excludeIds: number[]) {
+    return this.fileService.deleteDriftFilesByExcludeIds(excludeIds)
   }
 }

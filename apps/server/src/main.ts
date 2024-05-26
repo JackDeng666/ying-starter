@@ -3,7 +3,8 @@ import { NestFactory } from '@nestjs/core'
 import { ConfigType } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { NestExpressApplication } from '@nestjs/platform-express'
-import { apiConfig } from '@/server/config'
+import { join } from 'path'
+import { apiConfig, storageConfig } from '@/server/config'
 import { ProcessTimeInterceptor, ResponseWrapInterceptor } from '@/server/common/interceptor'
 import { OtherExceptionFilter, HttpExceptionFilter } from '@/server/common/filter'
 import { AppModule } from './app.module'
@@ -11,6 +12,7 @@ import { AppModule } from './app.module'
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
   const apiConf = app.get<ConfigType<typeof apiConfig>>(apiConfig.KEY)
+  const storageConf = app.get<ConfigType<typeof storageConfig>>(storageConfig.KEY)
   app.enableCors()
   app.setGlobalPrefix('/api')
   app.useGlobalInterceptors(new ProcessTimeInterceptor())
@@ -23,7 +25,11 @@ async function bootstrap() {
       forbidUnknownValues: true
     })
   )
-  app.useStaticAssets('assets')
+  app.useStaticAssets(join(__dirname, 'assets'))
+
+  if (storageConf.mode === 'local') {
+    app.useStaticAssets(join(__dirname, '../../../upload'), { prefix: '/upload' })
+  }
 
   const config = new DocumentBuilder().setTitle('ying app').setDescription('ying app').setVersion('1.0').build()
   const document = SwaggerModule.createDocument(app, config, {
