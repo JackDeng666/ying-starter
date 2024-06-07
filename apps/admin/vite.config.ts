@@ -24,7 +24,14 @@ export default defineConfig({
   },
 
   plugins: [
-    react(),
+    react({
+      babel: {
+        plugins: [
+          ['@babel/plugin-proposal-decorators', { legacy: true }],
+          ['@babel/plugin-proposal-class-properties', { loose: true }]
+        ]
+      }
+    }),
     // nxViteTsPaths(), // 会导致不同组件的 zustand 实例不一致。
     tsconfigPaths(),
     createSvgIconsPlugin({
