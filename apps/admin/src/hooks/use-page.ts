@@ -1,32 +1,34 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TablePaginationConfig } from 'antd/es/table'
 import { ListDto } from '@ying/shared'
-import { useApi } from '@/admin/hooks/use-api'
+import { useFetch } from '@ying/fontend-shared/hooks'
 
 type UsePageOptions<T> = {
   listApi: (pageOptions: ListDto) => Promise<T>
   listCount: () => Promise<number>
+  defaultPageSize?: 10 | 20 | 30 | 40 | 50 | 80 | 100
 }
 
-export const usePage = <T>({ listApi, listCount }: UsePageOptions<T>) => {
+export const usePage = <T>({ listApi, listCount, defaultPageSize = 10 }: UsePageOptions<T>) => {
+  const [current, setCurrent] = useState(1)
+  const [pageSize, setPageSize] = useState<number>(defaultPageSize)
+
   const {
     data: list,
     loading: listLoading,
     run: loadList
-  } = useApi({
-    func: useCallback((params: any) => listApi(params), [listApi])
+  } = useFetch<T, { page: number; size: number }>({
+    func: useCallback((params?: object) => listApi(params), [listApi]),
+    immediately: false
   })
 
   const {
     data: count,
     loading: countLoading,
     run: loadListCount
-  } = useApi({
+  } = useFetch({
     func: useCallback(() => listCount(), [listCount])
   })
-
-  const [current, setCurrent] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
 
   const resetPagination = () => {
     setCurrent(1)
@@ -46,21 +48,26 @@ export const usePage = <T>({ listApi, listCount }: UsePageOptions<T>) => {
       current,
       total: count,
       showSizeChanger: true,
-      pageSizeOptions: [10, 20, 50],
+      pageSize,
+      pageSizeOptions: [10, 20, 30, 40, 50, 80, 100],
       onChange,
       showTotal: () => `总共 ${count} 条`
     }
-  }, [current, count, onChange])
+  }, [current, count, onChange, pageSize])
 
   const reload = useCallback(() => {
     resetPagination()
-    loadList({})
-    loadListCount()
-  }, [loadList, loadListCount])
-
-  const reloadCurretnPage = useCallback(() => {
     loadList({ page: current, size: pageSize })
-  }, [current, pageSize, loadList])
+    loadListCount()
+  }, [loadList, loadListCount, current, pageSize])
+
+  const reloadCurrent = useCallback(() => {
+    loadList({ page: current, size: pageSize })
+  }, [loadList, current, pageSize])
+
+  useEffect(() => {
+    loadList({ page: current, size: pageSize })
+  }, [])
 
   return {
     list,
@@ -72,6 +79,6 @@ export const usePage = <T>({ listApi, listCount }: UsePageOptions<T>) => {
     pagination,
     resetPagination,
     reload,
-    reloadCurretnPage
+    reloadCurrent
   }
 }

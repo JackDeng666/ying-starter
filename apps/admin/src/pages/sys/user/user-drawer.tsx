@@ -2,10 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { Form, Drawer, Input, Button, Radio, Select, App } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
-import { BasicStatus, CreateSysUserDto, UpdateSysUserDto } from '@ying/shared'
-import { roleApi, sysUserApi } from '@/admin/api'
-import { useApi } from '@/admin/hooks/use-api'
+
 import { debounce } from '@ying/utils'
+import { BasicStatus, CreateSysUserDto, UpdateSysUserDto } from '@ying/shared'
+import { useFetch } from '@ying/fontend-shared/hooks'
+
+import { roleApi, sysUserApi } from '@/admin/api'
 
 const createResolver = classValidatorResolver(CreateSysUserDto)
 const updateResolver = classValidatorResolver(UpdateSysUserDto)
@@ -21,7 +23,7 @@ export type UserDrawerProps = {
 export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: UserDrawerProps) {
   const { message } = App.useApp()
   const [form] = Form.useForm()
-  const { data: roles, run: loadRoles } = useApi({
+  const { data: roles, run: loadRoles } = useFetch({
     func: useCallback(async name => {
       const data = await roleApi.list({ name })
       return data.map(el => ({ ...el, disabled: el.name === 'Super Admin' }))

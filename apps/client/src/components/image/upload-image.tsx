@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ScaleLoader } from 'react-spinners'
 import { Image, useDisclosure } from '@nextui-org/react'
-import { SelectFileType, useUpload, selectFile } from '@ying/hooks'
+import { SelectFileType, useUpload, selectFile } from '@ying/fontend-shared/hooks'
 import { FileEntity } from '@ying/shared/entities'
 import { cn } from '@/client/lib/utils'
 import { PlusIcon } from '@/client/components/icons'

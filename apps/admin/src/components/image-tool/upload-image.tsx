@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { PlusOutlined, Loading3QuartersOutlined } from '@ant-design/icons'
 import { FileEntity } from '@ying/shared/entities'
-import { SelectFileType, selectFile, useUpload } from '@ying/hooks'
+import { SelectFileType, selectFile, useUpload } from '@ying/fontend-shared/hooks'
 import { cn } from '@/admin/utils/lib'
 import { CropModal, CropModalProps } from '@/admin/components/image-tool/crop-image/crop-modal'
 import { TSaveRes } from '@/admin/components/image-tool/crop-image/crop-image'

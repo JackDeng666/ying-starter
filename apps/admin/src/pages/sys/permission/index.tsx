@@ -5,16 +5,15 @@ import { useCallback, useMemo, useState } from 'react'
 import { IconButton, Iconify, SvgIcon } from '@/admin/components/icon'
 import ProTag from '@/admin/theme/antd/components/tag'
 
-import { getOption } from '@ying/utils'
-
 import { BasicStatus, PermissionType, CreateOrUpdatePermissionDto } from '@ying/shared'
-import { BasicStatusOptions, BasicStatusOptionsType, PermissionOptions, PermissionOptionsType } from '@/admin/constant'
+import { SysPermissionEntity } from '@ying/shared/entities'
+import { getOption } from '@ying/utils'
+import { useFetch } from '@ying/fontend-shared/hooks'
 
+import { BasicStatusOptions, BasicStatusOptionsType, PermissionOptions, PermissionOptionsType } from '@/admin/constant'
 import { permissionApi } from '@/admin/api'
-import { useApi } from '@/admin/hooks/use-api'
 
 import { PermissionDrawer, PermissionDrawerProps } from './permission-drawer'
-import { SysPermissionEntity } from '@ying/shared/entities'
 
 const defaultPermissionValue: Partial<CreateOrUpdatePermissionDto> = {
   code: undefined,
@@ -35,7 +34,7 @@ export default function PermissionPage() {
     data,
     loading: listLoading,
     run: loadList
-  } = useApi({
+  } = useFetch({
     func: useCallback(() => permissionApi.list(), [])
   })
 

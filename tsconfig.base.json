@@ -20,7 +20,7 @@
       "@/admin/*": ["apps/admin/src/*"],
       "@/client/*": ["apps/client/src/*"],
       "@/server/*": ["apps/server/src/*"],
-      "@ying/hooks": ["libs/hooks/src/index.ts"],
+      "@ying/fontend-shared/*": ["libs/fontend-shared/src/*"],
       "@ying/shared": ["libs/shared/src/index.ts"],
       "@ying/shared/*": ["libs/shared/src/*"],
       "@ying/utils": ["libs/utils/src/index.ts"]

@@ -2,10 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Form, Drawer, Input, InputNumber, Button, App, Radio, TreeSelect } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
+
 import { BasicStatus, CreateRoleDto, UpdateRoleDto } from '@ying/shared'
-import { permissionApi, roleApi } from '@/admin/api'
-import { useApi } from '@/admin/hooks/use-api'
 import { SysPermissionEntity } from '@ying/shared/entities'
+import { useFetch } from '@ying/fontend-shared/hooks'
+
+import { permissionApi, roleApi } from '@/admin/api'
 
 const createResolver = classValidatorResolver(CreateRoleDto)
 const updateResolver = classValidatorResolver(UpdateRoleDto)
@@ -21,7 +23,7 @@ export type RoleDrawerProps = {
 export function RoleDrawer({ title, show, formValue, onSuccess, onCancel }: RoleDrawerProps) {
   const [form] = Form.useForm()
 
-  const { data } = useApi({
+  const { data } = useFetch({
     func: useCallback(() => permissionApi.list(), [])
   })
 

@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
 
-type UseFetchOptions<T> = {
-  func: (params?: any) => Promise<T>
+type useFetchOptions<T, U> = {
+  func: (params?: U) => Promise<T>
   immediately?: boolean
 }
 
-export const useFetch = <T>({ func, immediately = true }: UseFetchOptions<T>) => {
+export const useFetch = <T, U>({ func, immediately = true }: useFetchOptions<T, U>) => {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<T>()
 
   const run = useCallback(
-    async (params?: any) => {
+    async (params?: U) => {
       try {
         setLoading(true)
         const res = await func(params)
@@ -24,7 +24,7 @@ export const useFetch = <T>({ func, immediately = true }: UseFetchOptions<T>) =>
   )
 
   useEffect(() => {
-    if (immediately) run({})
+    if (immediately) run()
   }, [run, immediately, func])
 
   return {

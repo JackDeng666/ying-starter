@@ -1,5 +1,5 @@
 import { Button, Card, App, Space } from 'antd'
-import { useSubmit } from '@ying/hooks'
+import { useSubmit } from '@ying/fontend-shared/hooks'
 import { sysSettingApi } from '@/admin/api'
 
 export default function SettingPage() {

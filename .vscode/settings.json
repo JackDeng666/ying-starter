@@ -1,4 +1,4 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "conventionalCommits.scopes": ["admin"]
+  "conventionalCommits.scopes": ["admin", "all"]
 }

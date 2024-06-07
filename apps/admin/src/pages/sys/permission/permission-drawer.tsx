@@ -15,11 +15,12 @@ import {
 } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
-import { useUpdate } from '@ying/hooks'
-import { BasicStatus, PermissionType, CreateOrUpdatePermissionDto } from '@ying/shared'
-import { permissionApi } from '@/admin/api'
-import { useApi } from '@/admin/hooks/use-api'
+
+import { useUpdate, useFetch } from '@ying/fontend-shared/hooks'
 import { SysPermissionEntity } from '@ying/shared/entities'
+import { BasicStatus, PermissionType, CreateOrUpdatePermissionDto } from '@ying/shared'
+
+import { permissionApi } from '@/admin/api'
 import { ExternalLink, IframeLink } from '@/admin/constant'
 
 export type PermissionDrawerProps = {
@@ -35,7 +36,7 @@ export function PermissionDrawer({ title, show, formValue, onSuccess, onCancel }
   const [form] = Form.useForm()
   const { message } = App.useApp()
 
-  const { data } = useApi({
+  const { data } = useFetch({
     func: useCallback(() => permissionApi.list(), [])
   })
 
@@ -243,41 +244,41 @@ export function PermissionDrawer({ title, show, formValue, onSuccess, onCancel }
                 control={control}
                 render={({ field }) => (
                   <Space direction="vertical" className="w-full">
-                      <Space className="h-8 leading-8">
-                        <Switch
-                          checkedChildren="开启"
-                          unCheckedChildren="关闭"
-                          value={showFrameSrc}
-                          onChange={isShow => {
-                            if (isShow) {
-                              setValue('component', IframeLink)
-                            } else {
-                              setValue('component', '')
-                            }
-                            setShowFrameSrc(isShow)
-                          }}
-                        />
-                      </Space>
-
-                      {showFrameSrc && (
-                        <Input
-                          addonBefore={
-                            <Select
-                              defaultValue={IframeLink}
-                              onChange={value => {
-                                setValue('component', value)
-                              }}
-                            >
-                              <Select.Option value={IframeLink}>内嵌</Select.Option>
-                              <Select.Option value={ExternalLink}>跳转</Select.Option>
-                            </Select>
+                    <Space className="h-8 leading-8">
+                      <Switch
+                        checkedChildren="开启"
+                        unCheckedChildren="关闭"
+                        value={showFrameSrc}
+                        onChange={isShow => {
+                          if (isShow) {
+                            setValue('component', IframeLink)
+                          } else {
+                            setValue('component', '')
                           }
-                          allowClear
-                          placeholder="请输入链接"
-                          {...field}
-                        />
-                      )}
+                          setShowFrameSrc(isShow)
+                        }}
+                      />
                     </Space>
+
+                    {showFrameSrc && (
+                      <Input
+                        addonBefore={
+                          <Select
+                            defaultValue={IframeLink}
+                            onChange={value => {
+                              setValue('component', value)
+                            }}
+                          >
+                            <Select.Option value={IframeLink}>内嵌</Select.Option>
+                            <Select.Option value={ExternalLink}>跳转</Select.Option>
+                          </Select>
+                        }
+                        allowClear
+                        placeholder="请输入链接"
+                        {...field}
+                      />
+                    )}
+                  </Space>
                 )}
               />
             </Form.Item>

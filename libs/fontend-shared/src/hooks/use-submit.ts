@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
-type TCallback = () => Promise<any>
-type TSubmitFn = (callFn: TCallback) => () => Promise<void>
+type TCallback<T> = () => Promise<T>
+type TSubmitFn<T> = (callFn: TCallback<T>) => () => Promise<void>
 
-export const useSubmit = (): [boolean, TSubmitFn] => {
+export const useSubmit = <T>(): [boolean, TSubmitFn<T>] => {
   const [loading, setLoading] = useState(false)
 
-  const submitFn: TSubmitFn = callFn => {
+  const submitFn: TSubmitFn<T> = callFn => {
     return async () => {
       try {
         setLoading(true)
