@@ -3,16 +3,17 @@ import { PlusOutlined, Loading3QuartersOutlined } from '@ant-design/icons'
 import { FileEntity } from '@ying/shared/entities'
 import { SelectFileType, selectFile, useUpload } from '@ying/hooks'
 import { cn } from '@/admin/utils/lib'
-import { CropModal, CropModalProps } from '@/admin/components/crop-image/crop-modal'
-import { TSaveRes } from '@/admin/components/crop-image/crop-image'
+import { CropModal, CropModalProps } from '@/admin/components/image-tool/crop-image/crop-modal'
+import { TSaveRes } from '@/admin/components/image-tool/crop-image/crop-image'
 
-type MinioUploadProps = {
+type UploadProps = {
   className?: string
   handleUpload: (file: File) => Promise<FileEntity>
   defaultUrl?: string
   onSuccess?: (file: FileEntity) => void
   withCrop?: boolean
   aspectRatio?: number
+  willSetUrl?: boolean
 }
 
 export const UploadImage = ({
@@ -21,14 +22,15 @@ export const UploadImage = ({
   withCrop,
   aspectRatio,
   onSuccess,
-  handleUpload
-}: MinioUploadProps) => {
+  handleUpload,
+  willSetUrl = true
+}: UploadProps) => {
   const [url, setUrl] = useState(defaultUrl)
 
   const { loading, startUpload } = useUpload({
     handleUpload,
     onSuccess: fileEntity => {
-      setUrl(fileEntity.url)
+      willSetUrl && setUrl(fileEntity.url)
       onSuccess && onSuccess(fileEntity)
     }
   })
@@ -38,14 +40,14 @@ export const UploadImage = ({
   }, [defaultUrl])
 
   const [cropModalProps, setCropModalProps] = useState<CropModalProps>({
-    isOpen: false,
+    open: false,
     url: '',
     aspectRatio,
     onCrop(res: TSaveRes) {
       startUpload(res.file)
     },
     onClose: () => {
-      setCropModalProps(prev => ({ ...prev, isOpen: false }))
+      setCropModalProps(prev => ({ ...prev, open: false, url: '' }))
     }
   })
 
@@ -56,7 +58,7 @@ export const UploadImage = ({
       setCropModalProps(prev => ({
         ...prev,
         url,
-        isOpen: true
+        open: true
       }))
     } else {
       startUpload(file)
@@ -66,7 +68,10 @@ export const UploadImage = ({
   return (
     <>
       <div
-        className={cn('inline-block w-[110px] h-[110px] cursor-pointer overflow-hidden rounded-sm', className)}
+        className={cn(
+          'inline-block w-[110px] h-[110px] cursor-pointer overflow-hidden rounded-md shadow-sm border border-gray/20',
+          className
+        )}
         onClick={handleSelect}
       >
         {

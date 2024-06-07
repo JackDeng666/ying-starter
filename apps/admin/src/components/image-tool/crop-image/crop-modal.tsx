@@ -3,14 +3,14 @@ import { Modal } from 'antd'
 import { CropImage, TCropImageHandle, TSaveRes } from './crop-image'
 
 export type CropModalProps = {
-  isOpen: boolean
+  open: boolean
   onClose: () => void
   url?: string
   onCrop?: (res: TSaveRes) => void
   aspectRatio?: number
 }
 
-export const CropModal = ({ isOpen, url, aspectRatio, onClose, onCrop }: CropModalProps) => {
+export const CropModal = ({ open, url, aspectRatio, onClose, onCrop }: CropModalProps) => {
   const ref = useRef<TCropImageHandle>(null)
 
   const onOk = async () => {
@@ -23,8 +23,8 @@ export const CropModal = ({ isOpen, url, aspectRatio, onClose, onCrop }: CropMod
   }
 
   return (
-    <Modal title="裁剪图片" open={isOpen} onCancel={onClose} onOk={onOk}>
-      {url && <CropImage url={url} ref={ref} aspectRatio={aspectRatio} />}
+    <Modal title="裁剪图片" open={open} onCancel={onClose} onOk={onOk}>
+      <CropImage ref={ref} url={url} aspectRatio={aspectRatio} />
     </Modal>
   )
 }

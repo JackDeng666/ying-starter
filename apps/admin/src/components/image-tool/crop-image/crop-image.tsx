@@ -46,38 +46,48 @@ export const CropImage = forwardRef<TCropImageHandle, CropImageProps>(({ url, as
   const [renderRnd, setRenderRnd] = useState(false)
 
   const setImage = useCallback(async () => {
-    if (!containerRef.current) return
-    const { width, height } = containerRef.current.getBoundingClientRect()
+    setRenderRnd(false)
+    setTimeout(() => {
+      if (!containerRef.current) return
+      const { width, height } = containerRef.current.getBoundingClientRect()
 
-    const half2W = width / 2
-    const half2H = height / 2
+      const half2W = width / 2
+      const half2H = height / 2
 
-    let renderW = half2W
-    let renderH = half2H
-    let renderX = renderW - renderW / 2
-    let renderY = renderH - renderH / 2
+      // 默认裁剪区域显示宽高的一半并居中
+      // let renderW = half2W
+      // let renderH = half2H
+      // let renderX = renderW - renderW / 2
+      // let renderY = renderH - renderH / 2
 
-    if (aspectRatio) {
-      if (renderW > renderH) {
-        renderW = renderH * aspectRatio
-      } else {
-        renderH = renderW / aspectRatio
+      // 默认裁剪区域整张图片
+      let renderW = width
+      let renderH = height
+      let renderX = 0
+      let renderY = 0
+
+      if (aspectRatio) {
+        if (renderW > renderH) {
+          renderW = renderH * aspectRatio
+        } else {
+          renderH = renderW / aspectRatio
+        }
+
+        renderX = half2W - renderW / 2
+        renderY = half2H - renderH / 2
       }
 
-      renderX = half2W - renderW / 2
-      renderY = half2H - renderH / 2
-    }
-
-    setRenderData(prev => ({
-      ...prev,
-      containerW: width,
-      containerH: height,
-      renderW,
-      renderH,
-      renderX,
-      renderY
-    }))
-    setRenderRnd(true)
+      setRenderData(prev => ({
+        ...prev,
+        containerW: width,
+        containerH: height,
+        renderW,
+        renderH,
+        renderX,
+        renderY
+      }))
+      setRenderRnd(true)
+    }, 0)
   }, [aspectRatio])
 
   useImperativeHandle(ref, () => ({

@@ -5,7 +5,7 @@ import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
 import { UpdateSysUserSelfUserInfoDto, UpdateSysUserSelfPasswordDto } from '@ying/shared'
 import { fileApi, sysUserApi } from '@/admin/api'
-import { UploadImage } from '@/admin/components/upload-image'
+import { UploadImage } from '@/admin/components/image-tool/upload-image'
 import { getUserInfo, logout, useUserInfo } from '@/admin/store'
 
 export type UserInfoModalProps = {

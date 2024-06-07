@@ -1,34 +1,53 @@
-import '@/admin/utils/highlight'
-import ReactQuill, { ReactQuillProps } from 'react-quill'
-import Toolbar, { formats } from './toolbar'
-import { useSettings } from '@/admin/store/settingStore'
-import { useThemeToken } from '@/admin/theme/hooks'
-import { StyledEditor } from './styles'
+import { useEffect } from 'react'
+import TextStyle from '@tiptap/extension-text-style'
+import Image from '@tiptap/extension-image'
+import Highlight from '@tiptap/extension-highlight'
+import TextAlign from '@tiptap/extension-text-align'
+import Placeholder from '@tiptap/extension-placeholder'
+import Color from '@tiptap/extension-color'
+import StarterKit from '@tiptap/starter-kit'
+import { EditorContent, useEditor } from '@tiptap/react'
 
-interface Props extends ReactQuillProps {
-  sample?: boolean
+import { ToolBar } from './toolbar'
+
+import './styles.scss'
+
+type EditorProps = {
+  value: string
+  placeholder?: string
+  onChange: (richText: string) => void
 }
-export default function Editor({ id = 'slash-quill', sample = false, ...other }: Props) {
-  const token = useThemeToken()
-  const { themeMode } = useSettings()
-  const modules = {
-    toolbar: {
-      container: `#${id}`
-    },
-    history: {
-      delay: 500,
-      maxStack: 100,
-      userOnly: true
-    },
-    syntax: true,
-    clipboard: {
-      matchVisual: false
-    }
-  }
+
+export default function Editor({ value, onChange, placeholder = '请输入内容' }: EditorProps) {
+  const extensions = [
+    StarterKit,
+    TextStyle,
+    TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    Highlight.configure({ multicolor: true }),
+    Color.configure({
+      types: ['textStyle']
+    }),
+    Image.configure({ inline: true }),
+    Placeholder.configure({
+      placeholder
+    })
+  ]
+
+  const editor = useEditor({
+    extensions,
+    content: value,
+    onUpdate: ({ editor }) => onChange(editor.getHTML())
+  })
+
+  useEffect(() => {
+    if (!value) return
+    editor.commands.setContent(value)
+  }, [value, editor])
+
   return (
-    <StyledEditor $token={token} $thememode={themeMode}>
-      <Toolbar id={id} isSimple={sample} />
-      <ReactQuill modules={modules} formats={formats} {...other} placeholder="Write something awesome..." />
-    </StyledEditor>
+    <div className="border border-[#f1f1f1] rounded-lg shadow-sm overflow-hidden">
+      <ToolBar editor={editor} />
+      <EditorContent editor={editor} />
+    </div>
   )
 }

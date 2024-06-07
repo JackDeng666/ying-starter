@@ -1,109 +1,191 @@
-import { useSettings } from '@/admin/store/settingStore'
-import { useThemeToken } from '@/admin/theme/hooks'
+import {
+  LuBold,
+  LuItalic,
+  LuStrikethrough,
+  LuListOrdered,
+  LuList,
+  LuBrackets,
+  LuUndo2,
+  LuRedo2,
+  LuAlignLeft,
+  LuAlignCenter,
+  LuAlignRight
+} from 'react-icons/lu'
+import { Select } from 'antd'
 
-import { StyledToolbar } from './styles'
+import { ToolButton } from './tool-button'
+import { ImageTool } from './image-tool'
+import { TextColorTool } from './text-color-tool'
+import { BgColorTool } from './bg-color-tool'
+import { EditorProps } from './type'
 
-const HEADINGS = ['Heading 1', 'Heading 2', 'Heading 3', 'Heading 4', 'Heading 5', 'Heading 6']
-
-export const formats = [
-  'align',
-  'background',
-  'blockquote',
-  'bold',
-  'bullet',
-  'code',
-  'code-block',
-  'color',
-  'direction',
-  'font',
-  'formula',
-  'header',
-  'image',
-  'indent',
-  'italic',
-  'link',
-  'list',
-  'script',
-  'size',
-  'strike',
-  'table',
-  'underline',
-  'video'
+const TextOptions = [
+  { label: 'H1', value: 'h1' },
+  { label: 'H2', value: 'h2' },
+  { label: 'H3', value: 'h3' },
+  { label: 'H4', value: 'h4' },
+  { label: 'H5', value: 'h5' },
+  { label: 'H6', value: 'h6' },
+  { label: 'P', value: 'p' }
 ]
 
-type EditorToolbarProps = {
-  id: string
-  isSimple?: boolean
-}
+export const ToolBar = ({ editor }: EditorProps) => {
+  function calcActiveText() {
+    if (!editor) return 'p'
+    if (editor.isActive('paragraph')) {
+      return 'p'
+    }
+    if (editor.isActive('heading', { level: 1 })) {
+      return 'h1'
+    }
+    if (editor.isActive('heading', { level: 2 })) {
+      return 'h2'
+    }
+    if (editor.isActive('heading', { level: 3 })) {
+      return 'h3'
+    }
+    if (editor.isActive('heading', { level: 4 })) {
+      return 'h4'
+    }
+    if (editor.isActive('heading', { level: 5 })) {
+      return 'h5'
+    }
+    if (editor.isActive('heading', { level: 6 })) {
+      return 'h6'
+    }
+    return 'p'
+  }
 
-export default function Toolbar({ id, isSimple, ...other }: EditorToolbarProps) {
-  const token = useThemeToken()
-  const { themeMode } = useSettings()
+  const activeText = calcActiveText()
+
+  const selectText = (value: string) => {
+    const chain = editor.chain().focus()
+    let textAlign = undefined
+    if (editor.isActive({ textAlign: 'left' })) {
+      textAlign = 'left'
+    }
+    if (editor.isActive({ textAlign: 'center' })) {
+      textAlign = 'center'
+    }
+    if (editor.isActive({ textAlign: 'right' })) {
+      textAlign = 'right'
+    }
+    switch (value) {
+      case 'p':
+        chain.setParagraph().setTextAlign(textAlign).run()
+        break
+      case 'h1':
+        chain.setHeading({ level: 1 }).setTextAlign(textAlign).run()
+        break
+      case 'h2':
+        chain.setHeading({ level: 2 }).setTextAlign(textAlign).run()
+        break
+      case 'h3':
+        chain.setHeading({ level: 3 }).setTextAlign(textAlign).run()
+        break
+      case 'h4':
+        chain.setHeading({ level: 4 }).setTextAlign(textAlign).run()
+        break
+      case 'h5':
+        chain.setHeading({ level: 5 }).setTextAlign(textAlign).run()
+        break
+      case 'h6':
+        chain.setHeading({ level: 6 }).setTextAlign(textAlign).run()
+        break
+    }
+  }
+
+  if (!editor) {
+    return null
+  }
+
   return (
-    <StyledToolbar $token={token} $thememode={themeMode} {...other}>
-      <div id={id}>
-        <div className="ql-formats">
-          <select className="ql-header" defaultValue="">
-            {HEADINGS.map((heading, index) => (
-              <option key={heading} value={index + 1}>
-                {heading}
-              </option>
-            ))}
-            <option value="">Normal</option>
-          </select>
-        </div>
+    <div className="flex flex-wrap gap-2 border-b border-[#f1f1f1] p-2">
+      <Select
+        style={{ width: 60, borderRadius: '0.375rem' }}
+        value={activeText}
+        onChange={selectText}
+        options={TextOptions}
+      />
+      <ToolButton
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        disabled={!editor.can().chain().focus().toggleBold().run()}
+        active={editor.isActive('bold')}
+      >
+        <LuBold />
+      </ToolButton>
+      <ToolButton
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        disabled={!editor.can().chain().focus().toggleItalic().run()}
+        active={editor.isActive('italic')}
+      >
+        <LuItalic />
+      </ToolButton>
+      <ToolButton
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        disabled={!editor.can().chain().focus().toggleStrike().run()}
+        active={editor.isActive('strike')}
+      >
+        <LuStrikethrough />
+      </ToolButton>
 
-        <div className="ql-formats">
-          <button type="button" className="ql-bold" />
-          <button type="button" className="ql-italic" />
-          <button type="button" className="ql-underline" />
-          <button type="button" className="ql-strike" />
-        </div>
+      <ToolButton
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        active={editor.isActive('bulletList')}
+      >
+        <LuList />
+      </ToolButton>
+      <ToolButton
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        active={editor.isActive('orderedList')}
+      >
+        <LuListOrdered />
+      </ToolButton>
+      <ToolButton
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        active={editor.isActive('blockquote')}
+      >
+        <LuBrackets />
+      </ToolButton>
+      <ToolButton onClick={() => editor.chain().focus().setHorizontalRule().run()}>__</ToolButton>
 
-        {!isSimple && (
-          <div className="ql-formats">
-            <select className="ql-color" />
-            <select className="ql-background" />
-          </div>
-        )}
+      <ToolButton
+        onClick={() => editor.chain().focus().setTextAlign('left').run()}
+        active={editor.isActive({ textAlign: 'left' })}
+      >
+        <LuAlignLeft />
+      </ToolButton>
+      <ToolButton
+        onClick={() => editor.chain().focus().setTextAlign('center').run()}
+        active={editor.isActive({ textAlign: 'center' })}
+      >
+        <LuAlignCenter />
+      </ToolButton>
+      <ToolButton
+        onClick={() => editor.chain().focus().setTextAlign('right').run()}
+        active={editor.isActive({ textAlign: 'right' })}
+      >
+        <LuAlignRight />
+      </ToolButton>
 
-        <div className="ql-formats">
-          <button type="button" className="ql-list" value="ordered" />
-          <button type="button" className="ql-list" value="bullet" />
-          {!isSimple && <button type="button" className="ql-indent" value="-1" />}
-          {!isSimple && <button type="button" className="ql-indent" value="+1" />}
-        </div>
+      <TextColorTool editor={editor} />
 
-        {!isSimple && (
-          <div className="ql-formats">
-            <button type="button" className="ql-script" value="super" />
-            <button type="button" className="ql-script" value="sub" />
-          </div>
-        )}
+      <BgColorTool editor={editor} />
 
-        {!isSimple && (
-          <div className="ql-formats">
-            <button type="button" className="ql-code-block" />
-            <button type="button" className="ql-blockquote" />
-          </div>
-        )}
+      <ImageTool editor={editor} />
 
-        <div className="ql-formats">
-          <button type="button" className="ql-direction" value="rtl" />
-          <select className="ql-align" />
-        </div>
-
-        <div className="ql-formats">
-          <button type="button" className="ql-link" />
-          <button type="button" className="ql-image" />
-          <button type="button" className="ql-video" />
-        </div>
-
-        <div className="ql-formats">
-          {!isSimple && <button type="button" className="ql-formula" />}
-          <button type="button" className="ql-clean" />
-        </div>
-      </div>
-    </StyledToolbar>
+      <ToolButton
+        onClick={() => editor.chain().focus().undo().run()}
+        disabled={!editor.can().chain().focus().undo().run()}
+      >
+        <LuUndo2 />
+      </ToolButton>
+      <ToolButton
+        onClick={() => editor.chain().focus().redo().run()}
+        disabled={!editor.can().chain().focus().redo().run()}
+      >
+        <LuRedo2 />
+      </ToolButton>
+    </div>
   )
 }
