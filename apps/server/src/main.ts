@@ -28,7 +28,7 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, 'assets'))
 
   if (storageConf.mode === 'local') {
-    app.useStaticAssets(join(__dirname, '../../../upload'), { prefix: '/upload' })
+    app.useStaticAssets(join(__dirname, '../../../uploadfiles'), { prefix: '/upload' })
   }
 
   const config = new DocumentBuilder().setTitle('ying app').setDescription('ying app').setVersion('1.0').build()

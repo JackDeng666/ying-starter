@@ -22,7 +22,7 @@ export class LocalFileService implements AbstractFileService {
     const fileName = nanoid()
     const objectName = `${fileType}/${fileName}.${ext}`
 
-    const filePath = join(__dirname, `../../../upload/${objectName}`)
+    const filePath = join(__dirname, `../../../uploadfiles/${objectName}`)
 
     this.checkDirExistAndCreate(filePath)
     writeFileSync(filePath, file.buffer)
@@ -60,7 +60,7 @@ export class LocalFileService implements AbstractFileService {
   }
 
   async deleteFiles(files: FileEntity[]) {
-    await Promise.all(files.map(el => this.deleteFile(join(__dirname, `../../../upload/${el.path}`))))
+    await Promise.all(files.map(el => this.deleteFile(join(__dirname, `../../../uploadfiles/${el.path}`))))
 
     await this.fileRepository.delete({ id: In(files.map(el => el.id)) })
   }

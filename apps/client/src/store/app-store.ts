@@ -58,6 +58,10 @@ export const useRouter = () => {
 
   useEffect(() => {
     useAppStore.setState({ isPending })
+
+    return () => {
+      useAppStore.setState({ isPending: false })
+    }
   }, [isPending])
 
   return {
