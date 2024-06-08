@@ -5,16 +5,17 @@ import { useForm } from 'react-hook-form'
 
 import { IconButton, Iconify } from '@/admin/components/icon'
 import ProTag from '@/admin/theme/antd/components/tag'
-import { BasicStatus, ListRoleDto, UpdateRoleDto } from '@ying/shared'
-
-import { RoleDrawer, RoleDrawerProps } from './role-drawer'
 
 import { debounce, getOption } from '@ying/utils'
+import { BasicStatus, ListRoleDto, UpdateRoleDto } from '@ying/shared'
+import { SysRoleEntity } from '@ying/shared/entities'
+
 import { BasicStatusOptions, BasicStatusOptionsType } from '@/admin/constant'
 import { usePage } from '@/admin/hooks/use-page'
-import { roleApi } from '@/admin/api'
+import { sysRoleApi } from '@/admin/api'
+
 import { PageQuery } from './page-query'
-import { SysRoleEntity } from '@ying/shared/entities'
+import { RoleDrawer, RoleDrawerProps } from './role-drawer'
 
 const DEFAULE_ROLE_VALUE: Partial<UpdateRoleDto> = {
   id: undefined,
@@ -31,7 +32,7 @@ export default function RolePage() {
   const { list, listLoading, pagination, reload } = usePage({
     listApi: useCallback(
       ({ page, size }) =>
-        roleApi.list({
+        sysRoleApi.list({
           ...getValues(),
           page,
           size
@@ -40,7 +41,7 @@ export default function RolePage() {
     ),
     listCount: useCallback(
       () =>
-        roleApi.listCount({
+        sysRoleApi.listCount({
           ...getValues()
         }),
       [getValues]
@@ -87,7 +88,7 @@ export default function RolePage() {
             cancelText="取消"
             placement="left"
             onConfirm={async () => {
-              await roleApi.del(record.id)
+              await sysRoleApi.del(record.id)
               message.success('删除成功！')
               reload()
             }}

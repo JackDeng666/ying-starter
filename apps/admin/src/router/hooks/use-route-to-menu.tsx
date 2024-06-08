@@ -1,4 +1,4 @@
-import { ItemType } from 'antd/es/menu/hooks/useItems'
+import { ItemType } from 'antd/es/menu/interface'
 import { useCallback } from 'react'
 
 import { Iconify, SvgIcon } from '@/admin/components/icon'
@@ -17,7 +17,7 @@ export function useRouteToMenuFn() {
       return items
         .filter(item => !item.meta?.hideMenu)
         .map(item => {
-          const menuItem: any = []
+          const menuItem: any = {}
           const { meta, children } = item
           if (meta) {
             const { key, label, icon, disabled, suffix } = meta

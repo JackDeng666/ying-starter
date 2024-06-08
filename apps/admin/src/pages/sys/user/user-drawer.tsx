@@ -7,7 +7,7 @@ import { debounce } from '@ying/utils'
 import { BasicStatus, CreateSysUserDto, UpdateSysUserDto } from '@ying/shared'
 import { useFetch } from '@ying/fontend-shared/hooks'
 
-import { roleApi, sysUserApi } from '@/admin/api'
+import { sysRoleApi, sysUserApi } from '@/admin/api'
 
 const createResolver = classValidatorResolver(CreateSysUserDto)
 const updateResolver = classValidatorResolver(UpdateSysUserDto)
@@ -25,7 +25,7 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
   const [form] = Form.useForm()
   const { data: roles, run: loadRoles } = useFetch({
     func: useCallback(async name => {
-      const data = await roleApi.list({ name })
+      const data = await sysRoleApi.list({ name })
       return data.map(el => ({ ...el, disabled: el.name === 'Super Admin' }))
     }, [])
   })

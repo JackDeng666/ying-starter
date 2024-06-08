@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common'
 import { RouterModule } from '@nestjs/core'
-import { SysPermissionModule } from './permission/permission.module'
 import { SysRoleModule } from './role/role.module'
 import { SysUserModule } from './user/user.module'
 import { SysAuthModule } from './auth/auth.module'
@@ -8,7 +7,6 @@ import { SysSettingModule } from './setting/setting.module'
 
 @Module({
   imports: [
-    SysPermissionModule,
     SysRoleModule,
     SysUserModule,
     SysAuthModule,
@@ -17,10 +15,6 @@ import { SysSettingModule } from './setting/setting.module'
       {
         path: 'admin/sys',
         children: [
-          {
-            path: '/',
-            module: SysPermissionModule
-          },
           {
             path: '/',
             module: SysRoleModule

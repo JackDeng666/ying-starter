@@ -1,6 +1,6 @@
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { Menu, MenuProps } from 'antd'
-import { ItemType } from 'antd/es/menu/hooks/useItems'
+import { ItemType } from 'antd/es/menu/interface'
 import Color from 'color'
 import { CSSProperties, useEffect, useState } from 'react'
 import { useLocation, useMatches } from 'react-router-dom'
@@ -8,14 +8,12 @@ import { useLocation, useMatches } from 'react-router-dom'
 import Logo from '@/admin/components/logo'
 import Scrollbar from '@/admin/components/scrollbar'
 import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/admin/router/hooks'
-import { menuFilter } from '@/admin/router/utils'
 import { useSettingActions, useSettings } from '@/admin/store/settingStore'
 import { useThemeToken } from '@/admin/theme/hooks'
-
-import { NAV_COLLAPSED_WIDTH, NAV_WIDTH } from './config'
-
 import { ThemeLayout } from '@/admin/types/enum'
 import { IframeLink } from '@/admin/constant'
+
+import { NAV_COLLAPSED_WIDTH, NAV_WIDTH } from './config'
 
 type Props = {
   closeSideBarDrawer?: () => void
@@ -36,7 +34,7 @@ export default function Nav(props: Props) {
   }
 
   const routeToMenuFn = useRouteToMenuFn()
-  const { permissionRoutes, flattenedRoutes } = usePermissionRoutes()
+  const { navMenuRoutes, flattenedRoutes } = usePermissionRoutes()
 
   /**
    * state
@@ -56,10 +54,9 @@ export default function Nav(props: Props) {
   }, [pathname, matches, collapsed, themeLayout])
 
   useEffect(() => {
-    const menuRoutes = menuFilter(permissionRoutes)
-    const menus = routeToMenuFn(menuRoutes)
+    const menus = routeToMenuFn(navMenuRoutes)
     setMenuList(menus)
-  }, [permissionRoutes, routeToMenuFn])
+  }, [navMenuRoutes, routeToMenuFn])
 
   useEffect(() => {
     if (themeLayout === ThemeLayout.Vertical) {

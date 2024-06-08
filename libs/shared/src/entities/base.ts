@@ -11,3 +11,12 @@ export class BaseEntity {
   @UpdateDateColumn()
   updateAt: Date
 }
+
+@Entity()
+export class BaseEntityWithoutId {
+  @CreateDateColumn()
+  createAt: Date
+
+  @UpdateDateColumn()
+  updateAt: Date
+}

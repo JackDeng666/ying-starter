@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { SysRoleService } from './role.service'
 import { CreateRoleDto, ListRoleDto, UpdateRoleDto } from '@ying/shared'
+import { pms } from '@ying/shared/permission'
 import { AdminScope, PermissionDecorator } from '@/server/common/decorator'
-import { pms } from '@/server/common/permission'
+import { SysRoleService } from './role.service'
 
 @ApiTags('admin system role')
 @Controller('role')
@@ -26,6 +26,14 @@ export class SysRoleController {
   @Get('list-count')
   listCount(@Query() listRoleDto: ListRoleDto) {
     return this.sysRoleService.listCount(listRoleDto)
+  }
+
+  @ApiOperation({
+    summary: 'get permissions list'
+  })
+  @Get('permissions')
+  listPermissions() {
+    return this.sysRoleService.listPermissions()
   }
 
   @ApiOperation({

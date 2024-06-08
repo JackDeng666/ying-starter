@@ -2,11 +2,10 @@ import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/commo
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 import { RedisClientType } from 'redis'
+import { TPermission } from '@ying/shared/permission/type'
 import { PERMISSION_SIGN } from '@/server/common/decorator'
-import { TPermission } from '@/server/common/permission/type'
 import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
 import { SysAuthService } from '@/server/admin/sys/auth/auth.service'
-import { BasicStatus } from '@ying/shared'
 
 @Injectable()
 export class AdminPermissionGuard implements CanActivate {
@@ -38,7 +37,7 @@ export class AdminPermissionGuard implements CanActivate {
 
     if (!userPermissionCodesStr) {
       const userInfo = await this.authService.getUserInfo(userId)
-      userPermissionCodes = userInfo.permissions.filter(el => el.status === BasicStatus.ENABLE).map(el => el.code)
+      userPermissionCodes = userInfo.permissions.map(el => el.code)
       this.redisClient.set(KEY, JSON.stringify(userPermissionCodes))
     } else {
       userPermissionCodes = JSON.parse(userPermissionCodesStr)

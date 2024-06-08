@@ -32,9 +32,9 @@
 - Redis
 - MinIO
 
-中后台管理端的角色权限控制目录在 `apps\server\src\common\permission` 里去控制，每次更新会覆盖数据库。
-
 在共享库里有个特殊的库 `libs\shared`，这个目录用来存放 `DTO` , `VO` 和数据库的 `Entity` 对象， `tsconfig.base.json` 文件中配置了特殊前缀指向这个目录，这样前端代码可以直接读取服务端已经写好的数据类型，同时配合 `react-hook-form` 和 `@hookform/resolvers/class-validator`，传入对应的 `DTO` 后， 可以让前后端公用同一套数据校验逻辑。
+
+中后台管理端的角色权限控制目录在 `libs\shared\src\permission` 里去控制，server端在启动时每次都会检查并更新数据库。
 
 ## 开发环境版本
 

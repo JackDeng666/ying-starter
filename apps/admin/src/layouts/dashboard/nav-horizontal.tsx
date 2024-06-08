@@ -1,10 +1,9 @@
 import { Menu, MenuProps } from 'antd'
-import { ItemType } from 'antd/es/menu/hooks/useItems'
+import { ItemType } from 'antd/es/menu/interface'
 import { useState, useEffect, CSSProperties } from 'react'
 import { useMatches, useLocation } from 'react-router-dom'
 
 import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/admin/router/hooks'
-import { menuFilter } from '@/admin/router/utils'
 import { useThemeToken } from '@/admin/theme/hooks'
 import { IframeLink } from '@/admin/constant'
 
@@ -18,7 +17,7 @@ export default function NavHorizontal() {
   const { colorBgElevated } = useThemeToken()
 
   const routeToMenuFn = useRouteToMenuFn()
-  const { permissionRoutes, flattenedRoutes } = usePermissionRoutes()
+  const { navMenuRoutes, flattenedRoutes } = usePermissionRoutes()
 
   /**
    * state
@@ -32,10 +31,9 @@ export default function NavHorizontal() {
   }, [pathname, matches])
 
   useEffect(() => {
-    const menuRoutes = menuFilter(permissionRoutes)
-    const menus = routeToMenuFn(menuRoutes)
+    const menus = routeToMenuFn(navMenuRoutes)
     setMenuList(menus)
-  }, [permissionRoutes, routeToMenuFn])
+  }, [navMenuRoutes, routeToMenuFn])
 
   /**
    * events

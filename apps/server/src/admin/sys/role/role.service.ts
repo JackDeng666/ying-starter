@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Between, FindOptionsWhere, Like, Repository } from 'typeorm'
+import { Like, Repository, TreeRepository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RedisClientType } from 'redis'
 import { SysPermissionEntity, SysRoleEntity } from '@ying/shared/entities'
 import { CreateRoleDto, ListRoleDto, UpdateRoleDto } from '@ying/shared'
+import { createTreeFns } from '@ying/utils'
 import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
 import { BaseService } from '@/server/common/service/base.service'
 
@@ -12,6 +13,8 @@ export class SysRoleService extends BaseService<SysRoleEntity> {
   constructor(
     @InjectRepository(SysRoleEntity)
     readonly sysRoleRepository: Repository<SysRoleEntity>,
+    @InjectRepository(SysPermissionEntity)
+    readonly sysPermissionRepository: TreeRepository<SysPermissionEntity>,
     @Inject(RedisToken)
     readonly redisClient: RedisClientType
   ) {
@@ -48,6 +51,16 @@ export class SysRoleService extends BaseService<SysRoleEntity> {
     })
 
     return this.sysRoleRepository.countBy(where)
+  }
+
+  async listPermissions() {
+    const list = await this.sysPermissionRepository
+      .createQueryBuilder()
+      .addOrderBy('sortId is null', 'ASC')
+      .addOrderBy('sortId', 'ASC')
+      .getMany()
+
+    return createTreeFns(list, 'code', 'parentCode').toTree(null)
   }
 
   create(createRoleDto: CreateRoleDto) {

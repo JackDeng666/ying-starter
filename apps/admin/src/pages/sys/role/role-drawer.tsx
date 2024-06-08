@@ -7,7 +7,7 @@ import { BasicStatus, CreateRoleDto, UpdateRoleDto } from '@ying/shared'
 import { SysPermissionEntity } from '@ying/shared/entities'
 import { useFetch } from '@ying/fontend-shared/hooks'
 
-import { permissionApi, roleApi } from '@/admin/api'
+import { sysRoleApi } from '@/admin/api'
 
 const createResolver = classValidatorResolver(CreateRoleDto)
 const updateResolver = classValidatorResolver(UpdateRoleDto)
@@ -24,13 +24,13 @@ export function RoleDrawer({ title, show, formValue, onSuccess, onCancel }: Role
   const [form] = Form.useForm()
 
   const { data } = useFetch({
-    func: useCallback(() => permissionApi.list(), [])
+    func: useCallback(() => sysRoleApi.listPermission(), [])
   })
 
   const permissionList = useMemo(() => {
     function sort(list: SysPermissionEntity[]) {
       if (!list) return undefined
-      return list.map(el => ({ ...el, children: sort(el.children) })).sort((a, b) => b.sort - a.sort)
+      return list.map(el => ({ ...el, children: sort(el.children) }))
     }
 
     return sort(data)
@@ -57,9 +57,9 @@ export function RoleDrawer({ title, show, formValue, onSuccess, onCancel }: Role
     try {
       setLoading(true)
       if (value.id) {
-        await roleApi.update(value)
+        await sysRoleApi.update(value)
       } else {
-        await roleApi.create(value)
+        await sysRoleApi.create(value)
       }
       message.success(`${title}成功`)
       onSuccess()

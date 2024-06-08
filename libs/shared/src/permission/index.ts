@@ -11,8 +11,8 @@ export const pms = {
 
 let sortId = 1
 
-export function gennerate(permission: typeof pms, parentCode: string) {
-  const arr = []
+export function gennerate(permission: typeof pms, parentCode: string | null) {
+  const arr: SysPermissionEntity[] = []
   Object.keys(permission).forEach(key => {
     if (key !== 'meta') {
       const ob = {

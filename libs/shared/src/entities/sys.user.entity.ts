@@ -28,11 +28,11 @@ export class SysUserEntity extends BaseEntity {
   @Column({
     nullable: true
   })
-  avatarId: number
+  avatarId?: number
 
   @OneToOne(() => FileEntity)
   @JoinColumn()
-  avatar: FileEntity
+  avatar?: FileEntity
 
   @Column({
     type: 'enum',

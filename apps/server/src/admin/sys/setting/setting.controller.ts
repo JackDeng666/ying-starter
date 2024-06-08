@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { SysSettingService } from './setting.service'
+import { pms } from '@ying/shared/permission'
 import { AdminScope, PermissionDecorator } from '@/server/common/decorator'
-import { pms } from '@/server/common/permission'
+import { SysSettingService } from './setting.service'
 
 @ApiTags('admin system setting')
 @Controller('setting')

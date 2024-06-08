@@ -8,28 +8,26 @@ import { ErrorRoutes } from '@/admin/router/routes/error-routes'
 import { AppRouteObject } from '@/admin/types/router'
 
 const { VITE_APP_HOMEPAGE: HOMEPAGE } = import.meta.env
+
 const LoginRoute: AppRouteObject = {
   path: '/login',
   Component: Login
 }
-const PAGE_NOT_FOUND_ROUTE: AppRouteObject = {
-  path: '*',
-  element: <Navigate to="/404" replace />
-}
 
 export default function Router() {
-  const { permissionRoutes } = usePermissionRoutes()
-  const asyncRoutes: AppRouteObject = {
+  const { routerRoutes } = usePermissionRoutes()
+
+  const menuRoute: AppRouteObject = {
     path: '/',
     element: (
       <AuthGuard>
         <DashboardLayout />
       </AuthGuard>
     ),
-    children: [{ index: true, element: <Navigate to={HOMEPAGE} replace /> }, ...permissionRoutes]
+    children: [{ index: true, element: <Navigate to={HOMEPAGE} replace /> }, ...routerRoutes]
   }
 
-  const routes = [LoginRoute, asyncRoutes, ErrorRoutes, PAGE_NOT_FOUND_ROUTE]
+  const routes = [LoginRoute, menuRoute, ...ErrorRoutes]
 
   const router = createHashRouter(routes as unknown as RouteObject[])
   return <RouterProvider router={router} />

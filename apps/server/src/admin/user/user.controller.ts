@@ -1,12 +1,14 @@
 import { Controller, Get, Query } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { ListUserDto } from '@ying/shared'
+import { pms } from '@ying/shared/permission'
+import { AdminScope, PermissionDecorator } from '@/server/common/decorator'
 import { UserService } from './user.service'
-import { AdminScope } from '@/server/common/decorator'
 
 @ApiTags('admin user')
 @Controller('admin/user')
 @AdminScope()
+@PermissionDecorator(pms.user)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

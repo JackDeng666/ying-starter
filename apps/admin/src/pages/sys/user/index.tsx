@@ -65,7 +65,7 @@ export default function UserPage() {
       render: (_, record) => {
         return (
           <div className="flex">
-            <img alt="avatar" src={record.avatar.url} className="h-10 w-10 rounded-full object-cover" />
+            <img alt="avatar" src={record.avatar?.url} className="h-10 w-10 rounded-full object-cover" />
             <div className="ml-2 flex flex-col">
               <span className="text-sm">{record.name}</span>
               <span style={{ color: colorTextSecondary }} className="text-xs">

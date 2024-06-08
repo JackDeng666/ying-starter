@@ -67,6 +67,7 @@ export const usePage = <T>({ listApi, listCount, defaultPageSize = 10 }: UsePage
 
   useEffect(() => {
     loadList({ page: current, size: pageSize })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {

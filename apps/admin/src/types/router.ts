@@ -1,7 +1,9 @@
 import { ReactNode } from 'react'
 import { RouteObject } from 'react-router-dom'
 
-export interface RouteMeta {
+import { TPermission } from '@ying/shared/permission/type'
+
+export type RouteMeta = {
   /**
    * antd menu selectedKeys
    */
@@ -50,6 +52,10 @@ export interface RouteMeta {
    * do not cache in multi tab
    */
   noCache?: boolean
+  /**
+   * the permission class
+   */
+  permission?: typeof TPermission
 }
 export type AppRouteObject = {
   sort?: number

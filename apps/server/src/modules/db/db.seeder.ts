@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Repository, TreeRepository } from 'typeorm'
+import { In, Repository, TreeRepository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ConfigType } from '@nestjs/config'
 import { faker } from '@faker-js/faker'
 import { authConfig } from '@/server/config'
+import { FileSourceType, FileType } from '@ying/shared'
 import { SysPermissionEntity, SysRoleEntity, SysUserEntity } from '@ying/shared/entities'
+import { getPermissionTree } from '@ying/shared/permission'
 import { FileService } from '@/server/modules/storage/file.service'
 import { generatePass } from '@/server/common/utils'
-import { getPermissionTree } from '@/server/common/permission'
-import { FileSourceType, FileType } from '@ying/shared'
 
 @Injectable()
 export class DbSeeder {
@@ -33,26 +33,35 @@ export class DbSeeder {
     const existPermissions = await this.sysPermissionRepository.find()
     const codes = existPermissions.map(el => el.code)
 
-    const permissionTreeIntoDb = (arr: SysPermissionEntity[]) => {
-      arr.forEach(async permission => {
-        if (codes.includes(permission.code)) {
-          await this.sysPermissionRepository.update(
-            { code: permission.code },
-            this.sysPermissionRepository.create({
-              ...permission,
-              children: undefined
-            })
-          )
-        } else {
-          await this.sysPermissionRepository.save(this.sysPermissionRepository.create(permission))
-        }
-        if (permission.children?.length) {
-          permissionTreeIntoDb(permission.children)
-        }
-      })
+    const newCodes = []
+
+    const permissionTreeIntoDb = async (arr: SysPermissionEntity[]) => {
+      newCodes.push(...arr.map(permission => permission.code))
+
+      await Promise.all(
+        arr.map(async permission => {
+          if (codes.includes(permission.code)) {
+            await this.sysPermissionRepository.update(
+              { code: permission.code },
+              this.sysPermissionRepository.create({
+                ...permission,
+                children: undefined
+              })
+            )
+          } else {
+            await this.sysPermissionRepository.save(this.sysPermissionRepository.create(permission))
+          }
+          if (permission.children?.length) {
+            await permissionTreeIntoDb(permission.children)
+          }
+        })
+      )
     }
 
-    permissionTreeIntoDb(permissionTree)
+    await permissionTreeIntoDb(permissionTree)
+
+    const waitDeleteCodes = codes.filter(code => !newCodes.includes(code))
+    await this.sysPermissionRepository.delete({ code: In(waitDeleteCodes) })
   }
 
   async initRoleAndUser() {

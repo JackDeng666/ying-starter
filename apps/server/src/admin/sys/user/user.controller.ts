@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { SysUserService } from './user.service'
+
 import {
   CreateSysUserDto,
   ListSysUserDto,
@@ -9,8 +9,9 @@ import {
   UpdateSysUserSelfPasswordDto,
   UpdateSysUserSelfUserInfoDto
 } from '@ying/shared'
+import { pms } from '@ying/shared/permission'
 import { AdminScope, PermissionDecorator, UID } from '@/server/common/decorator'
-import { pms } from '@/server/common/permission'
+import { SysUserService } from './user.service'
 
 @ApiTags('admin system user')
 @Controller('user')

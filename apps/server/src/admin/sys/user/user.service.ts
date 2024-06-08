@@ -2,9 +2,12 @@ import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common
 import { Like, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RedisClientType } from 'redis'
+import { faker } from '@faker-js/faker'
 import { SysRoleEntity, SysUserEntity } from '@ying/shared/entities'
 import {
   CreateSysUserDto,
+  FileSourceType,
+  FileType,
   ListSysUserDto,
   UpdateSysUserDto,
   UpdateSysUserPasswordDto,
@@ -14,6 +17,7 @@ import {
 import { comparePass, generatePass } from '@/server/common/utils'
 import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
 import { BaseService } from '@/server/common/service/base.service'
+import { FileService } from '@/server/modules/storage/file.service'
 
 @Injectable()
 export class SysUserService extends BaseService<SysUserEntity> {
@@ -21,7 +25,8 @@ export class SysUserService extends BaseService<SysUserEntity> {
     @InjectRepository(SysUserEntity)
     readonly sysUserRepository: Repository<SysUserEntity>,
     @Inject(RedisToken)
-    readonly redisClient: RedisClientType
+    readonly redisClient: RedisClientType,
+    readonly fileService: FileService
   ) {
     super(sysUserRepository)
   }
@@ -68,7 +73,25 @@ export class SysUserService extends BaseService<SysUserEntity> {
       role.id = id
       return role
     })
-    return this.sysUserRepository.save(sysUser)
+
+    const newSysUser = await this.sysUserRepository.save(sysUser)
+
+    const newFile = await this.fileService.addFile({
+      url: faker.image.avatarLegacy(),
+      fileType: FileType.Url,
+      from: FileSourceType.Admin,
+      userId: newSysUser.id
+    })
+
+    this.sysUserRepository.update(
+      {
+        id: newSysUser.id
+      },
+      {
+        avatar: newFile
+      }
+    )
+    return newSysUser
   }
 
   update(dto: UpdateSysUserDto) {
