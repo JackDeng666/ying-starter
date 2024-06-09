@@ -1,15 +1,17 @@
 import {
   Controller,
   FileTypeValidator,
+  Get,
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors
 } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { FileSourceType, FileType } from '@ying/shared'
+import { FileSourceType, FileType, ListFileDto } from '@ying/shared'
 import { AdminScope, UID } from '@/server/common/decorator'
 import { FileService } from '@/server/modules/storage/file.service'
 
@@ -45,5 +47,21 @@ export class AdminFileController {
       from: FileSourceType.Admin,
       userId
     })
+  }
+
+  @ApiOperation({
+    summary: 'get file list'
+  })
+  @Get('file/list')
+  list(@Query() dto: ListFileDto) {
+    return this.fileService.list(dto)
+  }
+
+  @ApiOperation({
+    summary: 'get file list count'
+  })
+  @Get('file/list-count')
+  listCount(@Query() dto: ListFileDto) {
+    return this.fileService.listCount(dto)
   }
 }

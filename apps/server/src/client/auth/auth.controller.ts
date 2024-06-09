@@ -17,7 +17,7 @@ import { FaceBookAuthGuard, GitHubAuthGuard, GoogleAuthGuard, LocalAuthGuard } f
 import { AuthRequest } from './types'
 import { AuthLoginExceptionFilter } from './auth.login.filter'
 
-@ApiTags('clien auth')
+@ApiTags('client auth')
 @Controller('auth')
 export class AuthController {
   @Inject()

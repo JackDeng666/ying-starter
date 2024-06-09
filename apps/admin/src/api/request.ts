@@ -27,8 +27,9 @@ request.interceptors.request.use(config => {
 
 request.interceptors.response.use(
   response => {
-    if (response.data.data) {
-      return response.data.data
+    const data = response.data.data
+    if (data !== null || data !== undefined) {
+      return data
     }
     return response.data
   },

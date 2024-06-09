@@ -4,12 +4,14 @@ import { Repository } from 'typeorm'
 import { ConfigType } from '@nestjs/config'
 import { FileEntity } from '@ying/shared/entities'
 import { storageConfig } from '@/server/config'
+import { BaseService } from '@/server/common/service/base.service'
 import { AbstractFileService, AddFileOptions, UploadFileOptions } from './abstract.file.service'
 import { LocalFileService } from './local.file.service'
 import { MinioFileService } from './minio.file.service'
+import { ListFileDto } from '@ying/shared'
 
 @Injectable()
-export class FileService implements AbstractFileService {
+export class FileService extends BaseService<FileEntity> implements AbstractFileService {
   private fileService: AbstractFileService
 
   constructor(
@@ -18,6 +20,7 @@ export class FileService implements AbstractFileService {
     @InjectRepository(FileEntity)
     private readonly fileRepository: Repository<FileEntity>
   ) {
+    super(fileRepository)
     if (storageConf.mode === 'local') {
       this.fileService = new LocalFileService(this.storageConf, this.fileRepository)
     } else if (storageConf.mode === 'minio') {
@@ -43,5 +46,37 @@ export class FileService implements AbstractFileService {
 
   deleteDriftFilesByExcludeIds(excludeIds: number[]) {
     return this.fileService.deleteDriftFilesByExcludeIds(excludeIds)
+  }
+
+  list(dto: ListFileDto) {
+    const { take, skip, where } = this.buildListQuery(dto)
+    const { type, from } = dto
+
+    Object.assign(where, {
+      type,
+      from
+    })
+
+    return this.repository.find({
+      where,
+      skip,
+      take,
+      relations: [],
+      order: {
+        createAt: 'DESC'
+      }
+    })
+  }
+
+  listCount(dto: ListFileDto) {
+    const { where } = this.buildListQuery(dto)
+    const { type, from } = dto
+
+    Object.assign(where, {
+      type,
+      from
+    })
+
+    return this.repository.countBy(where)
   }
 }

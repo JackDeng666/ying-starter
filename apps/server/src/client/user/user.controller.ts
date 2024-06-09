@@ -5,7 +5,7 @@ import { AuthRequest } from '@/server/client/auth/types'
 import { UserService } from './user.service'
 import { ClientUserVo, ResetPasswordDto, UpdateUserInfoDto } from '@ying/shared'
 
-@ApiTags('clien user')
+@ApiTags('client user')
 @Controller('user')
 @ClientScope()
 export class UserController {
