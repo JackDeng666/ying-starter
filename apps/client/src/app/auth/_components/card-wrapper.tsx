@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardHeader, CardFooter } from '@nextui-org/react'
+import { Card, CardHeader, CardContent, CardFooter } from '@/client/components/ui/card'
 import { Header } from './header'
 import { Social } from './social'
 import { BackButton } from './back-button'
@@ -25,7 +25,7 @@ export const CardWrapper = ({
       <CardHeader className="px-6 pt-6">
         <Header label={headerLabel} />
       </CardHeader>
-      <div className="px-6 py-0">{children}</div>
+      <CardContent className="pb-2">{children}</CardContent>
       <CardFooter className="px-6 pb-4 flex-col gap-2">
         {showSocial && <Social />}
         {backButtonLabel && backButtonHref && <BackButton label={backButtonLabel} href={backButtonHref} />}

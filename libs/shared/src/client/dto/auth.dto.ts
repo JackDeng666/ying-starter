@@ -33,7 +33,7 @@ export class ClientRegisterDto {
   email: string
 
   @Matches(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*;',.])/, {
-    message: 'Incorrect password format'
+    message: 'validation.incorrect_password_format'
   })
   @IsNotEmpty({
     message: 'validation.password_should_not_be_empty'

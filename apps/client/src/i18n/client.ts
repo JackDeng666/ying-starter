@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 import { initReactI18next, useTranslation } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
-import { useAppContext } from '@/client/components/app-provider'
+import { useAppContext } from '@/client/providers/app'
 import { AppKey } from '@/client/enum'
 import { locales, defaultLocale } from './config'
 import { resources } from './locales'

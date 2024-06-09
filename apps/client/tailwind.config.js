@@ -1,12 +1,6 @@
-const { join } = require('path')
-const { nextui } = require('@nextui-org/react')
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    join(__dirname, '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'),
-    '../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
-  ],
+  content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}'],
   theme: {
     container: {
       center: true,
@@ -22,6 +16,10 @@ module.exports = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))'
+        },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))'
@@ -68,5 +66,5 @@ module.exports = {
       }
     }
   },
-  plugins: [require('tailwindcss-animate'), nextui()]
+  plugins: [require('tailwindcss-animate')]
 }

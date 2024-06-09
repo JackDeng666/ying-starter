@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { BeatLoader } from 'react-spinners'
 import { useSearchParams } from 'next/navigation'
 
-import { FormError } from '@/client/components/form-error'
-import { FormSuccess } from '@/client/components/form-success'
+import { FormError } from '@/client/components/ui/form-error'
+import { FormSuccess } from '@/client/components/ui/form-success'
 import { useTranslate } from '@/client/i18n/client'
 import { useApi } from '@/client/store/app-store'
 

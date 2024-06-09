@@ -3,7 +3,7 @@ import { create } from 'zustand'
 import { useRouter as useNextRouter } from 'next/navigation'
 import { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { initApi, AuthApi, FileApi, UserApi } from '@/client/api/client'
-import { useAppContext } from '@/client/components/app-provider'
+import { useAppContext } from '@/client/providers/app'
 
 type API = {
   authApi?: AuthApi

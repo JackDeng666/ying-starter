@@ -64,3 +64,17 @@ export function deepCopy<T>(obj: T): T {
 
   return objCopy as T
 }
+
+// 让传入异步函数最少经过固定的秒数才返回内容
+export function delyFunc<T extends (...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>>>(func: T, dely: number) {
+  return async (...args: Parameters<typeof func>): Promise<Awaited<ReturnType<typeof func>>> => {
+    const time = Date.now()
+    const res = await func(...args)
+    const afterTime = Date.now() - time
+    const finalDely = dely - afterTime
+    if (finalDely > 0) {
+      await new Promise(re => setTimeout(re, finalDely))
+    }
+    return res
+  }
+}

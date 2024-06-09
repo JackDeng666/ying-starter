@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 import { ClientUserVo, ClientAuthVo } from '@ying/shared'
 import { ms } from '@ying/utils'
 import { AppKey } from '@/client/enum'
-import { TAppContext, useAppContext } from '@/client/components/app-provider'
+import { TAppContext, useAppContext } from '@/client/providers/app'
 import { useApi } from './app-store'
 import { useCallback } from 'react'
 

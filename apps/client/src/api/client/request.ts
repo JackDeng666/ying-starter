@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
 import { AppKey } from '@/client/enum'
 import { clearUserInfoAndToken, updateAccessToken } from '@/client/store/auth-store'
-import { TAppContext } from '@/client/components/app-provider'
+import { TAppContext } from '@/client/providers/app'
 
 export type ErrorRes = {
   status: number

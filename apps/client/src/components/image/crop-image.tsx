@@ -1,6 +1,5 @@
 import { useState, forwardRef, useImperativeHandle, useRef, useCallback } from 'react'
 import { Rnd } from 'react-rnd'
-import { Image as NextUIImage } from '@nextui-org/react'
 
 import { HandleComponent } from './handle-component'
 
@@ -120,7 +119,7 @@ export const CropImage = forwardRef<TCropImageHandle, CropImageProps>(({ url, as
 
   return (
     <div className="w-full h-full relative overflow-hidden" ref={containerRef}>
-      <NextUIImage src={url} alt="crop image" className="w-full h-full rounded-none" onLoad={setImage} />
+      <img src={url} alt="crop image" className="w-full h-full rounded-none" onLoad={setImage} />
       {renderRnd && (
         <Rnd
           className="z-10 border-[2px] border-primary shadow-[0_0_0_99999px_rgba(229,231,235,0.6)]"

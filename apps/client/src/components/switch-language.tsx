@@ -1,17 +1,16 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { Select, SelectItem } from '@nextui-org/react'
 import Cookies from 'js-cookie'
 
 import { storage } from '@ying/utils'
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/client/components/ui/select'
 import { locales } from '@/client/i18n/config'
 import { useTranslate } from '@/client/i18n/client'
 import { AppKey } from '@/client/enum'
 import { useRouter } from '@/client/store/app-store'
-import { useAppContext } from './app-provider'
-import { SelectorIcon } from './icons'
+import { useAppContext } from '@/client/providers/app'
 
 export const SwitchLanguage = () => {
   const { domain, lng } = useAppContext()
@@ -42,21 +41,17 @@ export const SwitchLanguage = () => {
   }, [checkLanguage])
 
   return (
-    <Select
-      aria-label="language"
-      className="w-40 text-muted-foreground"
-      size="sm"
-      variant="bordered"
-      color="primary"
-      disableSelectorIconRotation
-      selectorIcon={<SelectorIcon />}
-      selectedKeys={[currentLocale]}
-    >
-      {lngs.map(item => (
-        <SelectItem key={item.value} value={item.value} onClick={() => selectLanguage(item.value)}>
-          {item.label}
-        </SelectItem>
-      ))}
+    <Select onValueChange={selectLanguage} defaultValue={currentLocale}>
+      <SelectTrigger className="w-[150px]">
+        <SelectValue placeholder="Theme" />
+      </SelectTrigger>
+      <SelectContent>
+        {lngs.map(item => (
+          <SelectItem key={item.value} value={item.value}>
+            {item.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
     </Select>
   )
 }

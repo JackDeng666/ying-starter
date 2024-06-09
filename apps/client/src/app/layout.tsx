@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
 import 'nprogress/nprogress.css'
 
-import { AppProvider } from '@/client/components/app-provider'
+import { AppProvider } from '@/client/providers/app'
 import { CustomNavbar } from '@/client/components/navbar'
 import { Footer } from '@/client/components/footer'
 import { getLocale, getFixedT } from '@/client/i18n/server'

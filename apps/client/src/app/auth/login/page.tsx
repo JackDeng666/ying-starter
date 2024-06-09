@@ -5,21 +5,24 @@ import { useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
-import { Button, Input } from '@nextui-org/react'
-import Link from 'next/link'
 
 import { ms } from '@ying/utils'
-
 import { ClientLoginDto } from '@ying/shared'
-import { FormError } from '@/client/components/form-error'
-import { FormSuccess } from '@/client/components/form-success'
-import { CardWrapper } from '../_components/card-wrapper'
+
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/client/components/ui/form'
+import { Button } from '@/client/components/ui/button'
+import { Input } from '@/client/components/ui/input'
+import { Link } from '@/client/components/link'
+import { FormError } from '@/client/components/ui/form-error'
+import { FormSuccess } from '@/client/components/ui/form-success'
+
 import { AppKey } from '@/client/enum'
 import { useAuthStore } from '@/client/store/auth-store'
 import { useTranslate } from '@/client/i18n/client'
 import { useApi } from '@/client/store/app-store'
-import { useAppContext } from '@/client/components/app-provider'
+import { useAppContext } from '@/client/providers/app'
 import { ErrorRes } from '@/client/api/client/request'
+import { CardWrapper } from '../_components/card-wrapper'
 
 const LoginPage = () => {
   const { domain, accessTokenExpiresIn, refreshTokenExpiresIn } = useAppContext()
@@ -39,7 +42,6 @@ const LoginPage = () => {
   })
 
   const {
-    register,
     formState: { errors, isSubmitting }
   } = form
 
@@ -79,47 +81,52 @@ const LoginPage = () => {
       backButtonHref="/auth/register"
       showSocial
     >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <Input
-          variant="flat"
-          label={t('text.email')}
-          isDisabled={isSubmitting}
-          placeholder={t('text.please_enter_email')}
-          isClearable
-          isInvalid={Boolean(errors.email)}
-          errorMessage={t(errors.email?.message || '')}
-          classNames={{
-            innerWrapper: 'h-16',
-            inputWrapper: 'h-16',
-            label: 'text-base'
-          }}
-          {...register('email')}
-        />
-        <Input
-          variant="flat"
-          label={t('text.password')}
-          isDisabled={isSubmitting}
-          placeholder={t('text.please_enter_password')}
-          isClearable
-          type="password"
-          isInvalid={Boolean(errors.password)}
-          errorMessage={t(errors.password?.message || '')}
-          classNames={{
-            innerWrapper: 'h-16',
-            inputWrapper: 'h-16',
-            label: 'text-base'
-          }}
-          {...register('password')}
-        />
-        <Button size="sm" variant="light">
-          <Link href="/auth/forgot-password">{t('text.forgot_password')}</Link>
-        </Button>
-        <FormError message={error} />
-        <FormSuccess message={success} />
-        <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
-          {t('text.login')}
-        </Button>
-      </form>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('text.email')}</FormLabel>
+                <FormControl>
+                  <Input placeholder={t('text.please_enter_email')} disabled={isSubmitting} clearable {...field} />
+                </FormControl>
+                <FormMessage>{t(errors.email?.message || '')}</FormMessage>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('text.password')}</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder={t('text.please_enter_password')}
+                    autoComplete=""
+                    clearable
+                    disabled={isSubmitting}
+                    type="password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage>{t(errors.password?.message || '')}</FormMessage>
+              </FormItem>
+            )}
+          />
+
+          <Button size="sm" variant="ghost">
+            <Link href="/auth/forgot-password">{t('text.forgot_password')}</Link>
+          </Button>
+          <FormError message={error} />
+          <FormSuccess message={success} />
+          <Button color="primary" loading={isSubmitting} type="submit" className="w-full">
+            {t('text.login')}
+          </Button>
+        </form>
+      </Form>
     </CardWrapper>
   )
 }

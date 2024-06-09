@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@nextui-org/react'
+import { Button } from '@/client/components/ui/button'
 import { Link } from '@/client/components/link'
 
 interface BackButtonProps {
@@ -10,7 +10,7 @@ interface BackButtonProps {
 
 export const BackButton = ({ href, label }: BackButtonProps) => {
   return (
-    <Button variant="light" className="font-normal w-full text-sm" size="sm">
+    <Button variant="ghost" className="font-normal w-full text-sm" size="sm">
       <Link href={href}>{label}</Link>
     </Button>
   )

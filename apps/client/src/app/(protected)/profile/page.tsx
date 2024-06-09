@@ -1,13 +1,15 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import { toast } from 'sonner'
-import { Button, Input } from '@nextui-org/react'
 
 import { UpdateUserInfoDto } from '@ying/shared'
 
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/client/components/ui/form'
+import { Input } from '@/client/components/ui/input'
+import { Button } from '@/client/components/ui/button'
 import { UploadImage } from '@/client/components/image/upload-image'
 import { useAuth, useAuthStore } from '@/client/store/auth-store'
 import { useApi } from '@/client/store/app-store'
@@ -28,8 +30,6 @@ const ProfilePage = () => {
     }
   })
   const {
-    register,
-    control,
     formState: { errors, isSubmitting }
   } = form
 
@@ -56,58 +56,63 @@ const ProfilePage = () => {
   return (
     <div className="w-full h-full p-4">
       {userInfo && (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
-          <Input
-            className="mb-4"
-            variant="bordered"
-            labelPlacement="outside"
-            label={t('text.email')}
-            value={userInfo.email}
-            isDisabled
-          />
-          <Input
-            className="mb-4"
-            variant="bordered"
-            labelPlacement="outside"
-            label={t('text.nickname')}
-            isDisabled={isSubmitting}
-            placeholder={t('text.please_enter_nickname')}
-            isInvalid={Boolean(errors.name)}
-            errorMessage={t(errors.name?.message || '')}
-            defaultValue={userInfo?.name}
-            {...register('name')}
-          />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <FormItem>
+              <FormLabel>{t('text.email')}</FormLabel>
+              <FormControl>
+                <Input disabled value={userInfo.email} />
+              </FormControl>
+            </FormItem>
 
-          <Controller
-            control={control}
-            name="avatarId"
-            render={({ field }) => (
-              <div className="mb-6">
-                <p className="text-sm">{t('text.avatar')}</p>
-                <div className="w-full flex justify-center">
-                  <UploadImage
-                    defaultUrl={userInfo.avatar?.url}
-                    disabled={isSubmitting}
-                    withCrop
-                    aspectRatio={1}
-                    handleUpload={file => {
-                      if (!fileApi) return
-                      return fileApi.upload(file)
-                    }}
-                    onSuccess={fileEntity => {
-                      field.onChange(fileEntity.id)
-                      toast.success(t('success.image_uploaded_successfully'))
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('text.nickname')}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t('text.please_enter_nickname')} disabled={isSubmitting} clearable {...field} />
+                  </FormControl>
+                  <FormMessage>{t(errors.name?.message || '')}</FormMessage>
+                </FormItem>
+              )}
+            />
 
-          <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
-            {t('text.confirm_modifications')}
-          </Button>
-        </form>
+            <FormField
+              control={form.control}
+              name="avatarId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('text.avatar')}</FormLabel>
+                  <FormControl>
+                    <div className="w-full flex justify-center">
+                      <UploadImage
+                        defaultUrl={userInfo.avatar?.url}
+                        disabled={isSubmitting}
+                        withCrop
+                        aspectRatio={1}
+                        handleUpload={file => {
+                          if (!fileApi) return
+                          return fileApi.upload(file)
+                        }}
+                        onSuccess={fileEntity => {
+                          field.onChange(fileEntity.id)
+                          toast.success(t('success.image_uploaded_successfully'))
+                        }}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage>{t(errors.avatarId?.message || '')}</FormMessage>
+                </FormItem>
+              )}
+            />
+
+            <Button color="primary" loading={isSubmitting} type="submit" className="w-full">
+              {t('text.confirm_modifications')}
+            </Button>
+          </form>
+        </Form>
       )}
     </div>
   )

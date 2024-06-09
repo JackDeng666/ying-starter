@@ -4,12 +4,14 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
-import { Button, Input } from '@nextui-org/react'
 
 import { NewPasswordDto } from '@ying/shared'
 
-import { FormError } from '@/client/components/form-error'
-import { FormSuccess } from '@/client/components/form-success'
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/client/components/ui/form'
+import { Input } from '@/client/components/ui/input'
+import { Button } from '@/client/components/ui/button'
+import { FormError } from '@/client/components/ui/form-error'
+import { FormSuccess } from '@/client/components/ui/form-success'
 import { useTranslate } from '@/client/i18n/client'
 import { useApi } from '@/client/store/app-store'
 import { ErrorRes } from '@/client/api/client/request'
@@ -35,7 +37,6 @@ const NewPasswordPage = () => {
   })
 
   const {
-    register,
     formState: { errors, isSubmitting }
   } = form
 
@@ -58,31 +59,34 @@ const NewPasswordPage = () => {
       backButtonLabel={t('text.back_to_login')}
       backButtonHref="/auth/login"
     >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="space-y-4">
-          <Input
-            variant="flat"
-            label={t('text.new_password')}
-            disabled={isSubmitting}
-            placeholder={t('text.please_enter_new_password')}
-            isClearable
-            type="password"
-            isInvalid={Boolean(errors.password)}
-            errorMessage={t(errors.password?.message || '')}
-            classNames={{
-              innerWrapper: 'h-16',
-              inputWrapper: 'h-16',
-              label: 'text-base'
-            }}
-            {...register('password')}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('text.new_password')}</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder={t('text.please_enter_new_password')}
+                    clearable
+                    disabled={isSubmitting}
+                    type="password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage>{t(errors.password?.message || '')}</FormMessage>
+              </FormItem>
+            )}
           />
-        </div>
-        <FormError message={error} />
-        <FormSuccess message={success} />
-        <Button color="primary" isLoading={isSubmitting} type="submit" className="w-full">
-          {t('text.reset_password')}
-        </Button>
-      </form>
+          <FormError message={error} />
+          <FormSuccess message={success} />
+          <Button color="primary" loading={isSubmitting} type="submit" className="w-full">
+            {t('text.reset_password')}
+          </Button>
+        </form>
+      </Form>
     </CardWrapper>
   )
 }

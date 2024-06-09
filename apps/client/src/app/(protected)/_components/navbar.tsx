@@ -11,11 +11,9 @@ export const Navbar = () => {
   const router = useRouter()
 
   return (
-    <nav className="flex justify-between items-end p-4 pb-0 shadow-sm">
+    <nav className="flex justify-between items-end p-4 pb-0 border-b">
       <div className="flex gap-x-4">
-        <div
-          className={cn(' text-center h-10 border-primary-500', pathname === '/profile' ? 'border-b-4' : 'border-b-0')}
-        >
+        <div className={cn('text-center h-10 border-primary', pathname === '/profile' ? 'border-b-4' : 'border-b-0')}>
           <div
             className="cursor-pointer"
             onClick={() => {
@@ -27,7 +25,7 @@ export const Navbar = () => {
         </div>
         <div
           className={cn(
-            'text-center h-10 border-primary-500',
+            'text-center h-10 border-primary',
             pathname === '/reset-password' ? 'border-b-4' : 'border-b-0'
           )}
         >

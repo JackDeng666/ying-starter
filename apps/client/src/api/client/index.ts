@@ -1,4 +1,4 @@
-import { TAppContext } from '@/client/components/app-provider'
+import { TAppContext } from '@/client/providers/app'
 import { initRequest } from './request'
 import { AuthApi } from './auth'
 import { FileApi } from './file'
