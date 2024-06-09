@@ -10,8 +10,7 @@ export class SysRoleEntity extends BaseEntity {
   name: string
 
   @Column({
-    type: 'enum',
-    enum: BasicStatus,
+    type: 'tinyint',
     default: BasicStatus.ENABLE
   })
   status: BasicStatus

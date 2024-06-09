@@ -1,5 +1,5 @@
 export enum BasicStatus {
-  DISABLE = 1,
+  DISABLE,
   ENABLE
 }
 
@@ -12,10 +12,4 @@ export enum FileType {
 export enum FileSourceType {
   Admin = 'admin',
   Client = 'client'
-}
-
-export enum PermissionType {
-  CATALOGUE = 1,
-  MENU,
-  BUTTON
 }

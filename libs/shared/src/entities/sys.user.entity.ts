@@ -35,8 +35,7 @@ export class SysUserEntity extends BaseEntity {
   avatar?: FileEntity
 
   @Column({
-    type: 'enum',
-    enum: BasicStatus,
+    type: 'tinyint',
     default: BasicStatus.ENABLE
   })
   status: BasicStatus
