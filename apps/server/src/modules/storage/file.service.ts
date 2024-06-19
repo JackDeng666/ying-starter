@@ -2,13 +2,13 @@ import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { ConfigType } from '@nestjs/config'
+import { ListFileDto } from '@ying/shared'
 import { FileEntity } from '@ying/shared/entities'
 import { storageConfig } from '@/server/config'
 import { BaseService } from '@/server/common/service/base.service'
 import { AbstractFileService, AddFileOptions, UploadFileOptions } from './abstract.file.service'
 import { LocalFileService } from './local.file.service'
 import { MinioFileService } from './minio.file.service'
-import { ListFileDto } from '@ying/shared'
 
 @Injectable()
 export class FileService extends BaseService<FileEntity> implements AbstractFileService {

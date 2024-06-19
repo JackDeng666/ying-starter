@@ -1,4 +1,5 @@
 import { useAppContext } from '@/client/providers/app'
+import { useRouter } from '@/client/store/app-store'
 
 export type AuthProvider = 'google' | 'github' | 'facebook'
 
@@ -7,6 +8,7 @@ type SignInProps = {
 }
 
 export const useSignIn = () => {
+  const router = useRouter()
   const { apiUrl } = useAppContext()
 
   const signIn = ({ provider }: SignInProps) => {
@@ -22,7 +24,8 @@ export const useSignIn = () => {
         url = apiUrl + '/auth/facebook'
         break
     }
-    window.location.href = url
+
+    router.replace(url)
   }
   return signIn
 }

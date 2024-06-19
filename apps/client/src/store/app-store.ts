@@ -2,14 +2,8 @@ import { useEffect, useTransition } from 'react'
 import { create } from 'zustand'
 import { useRouter as useNextRouter } from 'next/navigation'
 import { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { initApi, AuthApi, FileApi, UserApi } from '@/client/api/client'
+import { initApi, API } from '@/client/api/client'
 import { useAppContext } from '@/client/providers/app'
-
-type API = {
-  authApi?: AuthApi
-  fileApi?: FileApi
-  userApi?: UserApi
-}
 
 type AppStore = {
   apiIninted: boolean

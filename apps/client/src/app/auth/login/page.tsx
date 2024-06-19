@@ -60,14 +60,15 @@ const LoginPage = () => {
         domain,
         expires: new Date(Date.now() + ms(refreshTokenExpiresIn))
       })
+      setAuthToken(res)
 
       const ssoCallbackUrl = Cookies.get(AppKey.CookieSSOCallbackKey)
       if (ssoCallbackUrl) {
         Cookies.remove(AppKey.CookieSSOCallbackKey)
-        window.location.href = ssoCallbackUrl
+
+        return router.replace(ssoCallbackUrl)
       }
 
-      setAuthToken(res)
       router.replace('/')
     } catch (error) {
       setError(t((error as ErrorRes)?.message))

@@ -331,15 +331,23 @@ export default function MultiTabs({ offsetTop = false }: Props) {
   useEffect(() => {
     function handleMouseWheel(event: WheelEvent) {
       event.preventDefault()
-      scrollContainer.current!.scrollLeft += event.deltaY
+      scrollContainer.current.scrollLeft += event.deltaY
     }
 
-    scrollContainer.current!.addEventListener('mouseenter', () => {
-      scrollContainer.current!.addEventListener('wheel', handleMouseWheel)
-    })
-    scrollContainer.current!.addEventListener('mouseleave', () => {
-      scrollContainer.current!.removeEventListener('wheel', handleMouseWheel)
-    })
+    scrollContainer.current.addEventListener(
+      'mouseenter',
+      () => {
+        scrollContainer.current.addEventListener('wheel', handleMouseWheel, { passive: false })
+      },
+      { passive: false }
+    )
+    scrollContainer.current.addEventListener(
+      'mouseleave',
+      () => {
+        scrollContainer.current.removeEventListener('wheel', handleMouseWheel)
+      },
+      { passive: false }
+    )
   }, [])
 
   return (

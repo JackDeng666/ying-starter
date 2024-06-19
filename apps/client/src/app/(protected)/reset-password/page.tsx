@@ -74,7 +74,7 @@ const ResetPasswordPage = () => {
           )}
           <FormField
             control={form.control}
-            name="oldPassword"
+            name="newPassword"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('text.new_password')}</FormLabel>

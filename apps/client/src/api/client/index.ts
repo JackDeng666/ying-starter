@@ -6,6 +6,12 @@ import { UserApi } from './user'
 
 export { AuthApi, FileApi, UserApi }
 
+export type API = {
+  authApi?: AuthApi
+  fileApi?: FileApi
+  userApi?: UserApi
+}
+
 export const initApi = (appContext: TAppContext) => {
   const request = initRequest(appContext)
 
