@@ -1,9 +1,13 @@
 import axios, { AxiosError } from 'axios'
 import { message as Message } from 'antd'
+import dayjs from 'dayjs'
+import _ from 'lodash'
+
 import { storage } from '@ying/utils'
+import { UserTokenVo } from '@ying/shared'
+
 import { clearUserInfoAndToken } from '@/admin/store'
 import { StorageEnum } from '@/admin/types/enum'
-import { UserTokenVo } from '@ying/shared'
 
 export const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API
@@ -50,3 +54,20 @@ request.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+export function timeRangeTransform<T extends object>(data: T, fields: (keyof T)[] | keyof T) {
+  if (fields) {
+    fields = Array.isArray(fields) ? fields : [fields]
+  } else {
+    fields = []
+  }
+
+  for (const field of fields) {
+    const timeRange = _.get(data, field)
+    if (timeRange && Array.isArray(timeRange)) {
+      _.set(data, field, [dayjs(timeRange[0]).toISOString(), dayjs(timeRange[1]).toISOString()])
+    }
+  }
+
+  return data
+}

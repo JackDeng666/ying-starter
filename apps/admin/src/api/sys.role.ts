@@ -1,17 +1,17 @@
 import { CreateRoleDto, ListRoleDto, UpdateRoleDto } from '@ying/shared'
-import { request } from './request'
+import { request, timeRangeTransform } from './request'
 import { SysRoleEntity, SysPermissionEntity } from '@ying/shared/entities'
 
-export function list(data: ListRoleDto): Promise<SysRoleEntity[]> {
-  return request.get('/sys/role/list', { params: data })
+export function list(params: ListRoleDto): Promise<SysRoleEntity[]> {
+  return request.get('/sys/role/list', { params: timeRangeTransform(params, 'date') })
 }
 
 export function listPermission(): Promise<SysPermissionEntity[]> {
   return request.get('/sys/role/permissions')
 }
 
-export function listCount(data: ListRoleDto): Promise<number> {
-  return request.get('/sys/role/list-count', { params: data })
+export function listCount(params: ListRoleDto): Promise<number> {
+  return request.get('/sys/role/list-count', { params: timeRangeTransform(params, 'date') })
 }
 
 export function create(data: CreateRoleDto) {

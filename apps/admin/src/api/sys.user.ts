@@ -7,14 +7,14 @@ import {
   UpdateSysUserSelfPasswordDto
 } from '@ying/shared'
 import { SysUserEntity } from '@ying/shared/entities'
-import { request } from './request'
+import { request, timeRangeTransform } from './request'
 
 export function list(params: ListSysUserDto): Promise<SysUserEntity[]> {
-  return request.get('/sys/user/list', { params })
+  return request.get('/sys/user/list', { params: timeRangeTransform(params, 'date') })
 }
 
 export function listCount(params: ListSysUserDto): Promise<number> {
-  return request.get('/sys/user/list-count', { params })
+  return request.get('/sys/user/list-count', { params: timeRangeTransform(params, 'date') })
 }
 
 export function create(data: CreateSysUserDto) {

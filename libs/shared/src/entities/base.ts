@@ -10,13 +10,19 @@ import { nanoid } from 'nanoid'
 
 @Entity()
 export class BaseEntityWithoutId {
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'datetime'
+  })
   createAt: Date
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    type: 'datetime'
+  })
   updateAt: Date
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({
+    type: 'datetime'
+  })
   deletedAt: Date
 }
 

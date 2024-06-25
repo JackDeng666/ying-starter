@@ -4,7 +4,7 @@ import { tap } from 'rxjs/operators'
 
 @Injectable()
 export class ProcessTimeInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<void> {
     const { method, path } = context.switchToHttp().getRequest()
     const now = Date.now()
     return next.handle().pipe(

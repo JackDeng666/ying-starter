@@ -1,6 +1,6 @@
 import { ListFileDto } from '@ying/shared'
 import { FileEntity } from '@ying/shared/entities'
-import { request } from './request'
+import { request, timeRangeTransform } from './request'
 
 export function upload(file: File): Promise<FileEntity> {
   const form = new FormData()
@@ -9,9 +9,9 @@ export function upload(file: File): Promise<FileEntity> {
 }
 
 export function list(params: ListFileDto): Promise<FileEntity[]> {
-  return request.get('/file/list', { params })
+  return request.get('/file/list', { params: timeRangeTransform(params, 'date') })
 }
 
 export function listCount(params: ListFileDto): Promise<number> {
-  return request.get('/file/list-count', { params })
+  return request.get('/file/list-count', { params: timeRangeTransform(params, 'date') })
 }

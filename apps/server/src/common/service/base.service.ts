@@ -16,7 +16,7 @@ export class BaseService<TEntity extends BaseEntity> {
     if (date) {
       const startDate = new Date(date[0])
       const endDate = new Date(date[1])
-      where.createAt = Between(startDate, new Date(endDate.setDate(endDate.getDate() + 1))) as FindOptionsWhereProperty<
+      where.createAt = Between(startDate, endDate) as FindOptionsWhereProperty<
         NonNullable<TEntity['createAt']>,
         NonNullable<TEntity['createAt']>
       >

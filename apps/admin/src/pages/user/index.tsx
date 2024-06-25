@@ -1,20 +1,17 @@
-import { Card } from 'antd'
+import { Card, Form, Input, Tag } from 'antd'
 import Table, { ColumnsType } from 'antd/es/table'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useCallback, useEffect } from 'react'
 import dayjs from 'dayjs'
 
 import { debounce } from '@ying/utils'
-
 import { ListUserDto } from '@ying/shared'
 import { UserEntity } from '@ying/shared/entities'
 
-import ProTag from '@/admin/theme/antd/components/tag'
 // import { useThemeToken } from '@/admin/theme/hooks'
 import { usePage } from '@/admin/hooks/use-page'
 import { userApi } from '@/admin/api'
-
-import { PageQuery } from './page-query'
+import { PageQuery } from '@/admin/components/page-query'
 
 export default function UserPage() {
   const { control, watch, reset, getValues } = useForm<ListUserDto>()
@@ -102,7 +99,7 @@ export default function UserPage() {
       align: 'center',
       width: 100,
       render: (_, record) => (
-        <ProTag color={record.emailVerified ? 'cyan' : 'warning'}>{record.emailVerified ? '已验证' : '未验证'}</ProTag>
+        <Tag color={record.emailVerified ? 'cyan' : 'warning'}>{record.emailVerified ? '已验证' : '未验证'}</Tag>
       )
     },
     {
@@ -125,7 +122,23 @@ export default function UserPage() {
 
   return (
     <Card bordered={false} styles={{ body: { paddingBottom: 0 } }}>
-      <PageQuery control={control} reset={reset} />
+      <PageQuery control={control} reset={reset}>
+        <Form.Item label="昵称" className="!mb-0">
+          <Controller
+            control={control}
+            name="name"
+            render={({ field }) => <Input allowClear placeholder="请输入昵称" autoComplete="off" {...field} />}
+          />
+        </Form.Item>
+
+        <Form.Item label="邮箱" className="!mb-0">
+          <Controller
+            control={control}
+            name="email"
+            render={({ field }) => <Input allowClear placeholder="请输入邮箱" autoComplete="off" {...field} />}
+          />
+        </Form.Item>
+      </PageQuery>
 
       <Table
         rowKey="id"
