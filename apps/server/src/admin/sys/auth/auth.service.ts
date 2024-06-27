@@ -1,4 +1,4 @@
-import { Injectable, Inject, NotAcceptableException } from '@nestjs/common'
+import { Injectable, Inject, NotAcceptableException, UnauthorizedException } from '@nestjs/common'
 import { RedisClientType } from 'redis'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigType } from '@nestjs/config'
@@ -91,7 +91,7 @@ export class SysAuthService {
       relations: ['roles', 'roles.permissions', 'avatar']
     })
 
-    if (!sysUserEntity) return
+    if (!sysUserEntity) throw new UnauthorizedException()
 
     const roles = sysUserEntity.roles.filter(role => role.status === BasicStatus.ENABLE)
     sysUserEntity.permissions = unique(roles.reduce((prev, cur) => [...prev, ...cur.permissions], []))
