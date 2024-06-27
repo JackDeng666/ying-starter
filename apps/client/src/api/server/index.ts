@@ -1,1 +1,1 @@
-export * as authApi from './auth'
+export * as testApi from './test'

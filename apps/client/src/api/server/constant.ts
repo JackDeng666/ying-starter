@@ -1,4 +1,4 @@
-export const API_URL = process.env.API_URL
+export const API_URL = process.env.SERVER_URL + '/api/client'
 
 export type ResOrError<T> = {
   status: number

@@ -1,13 +1,17 @@
 import { cookies, headers } from 'next/headers'
 import { AppKey } from '@/client/enum'
+import { defaultLocale } from '@/client/i18n/config'
 
 const getHeaders = () => {
   const headersOb = {}
 
+  const customLng = cookies().get(AppKey.CookieLanguageKey)?.value
+  if (customLng) {
+    headersOb['custom-lng'] = customLng
+  }
+
   return Object.assign(headersOb, {
-    'accept-language': headers().get('accept-language'),
-    'custom-lng': cookies().get(AppKey.CookieLanguageKey)?.value,
-    authorization: `Bearer ${cookies().get(AppKey.CookieAccessTokenKey)}`
+    'accept-language': headers().get('accept-language') || defaultLocale
   })
 }
 

@@ -7,7 +7,7 @@ import { CustomNavbar } from '@/client/components/navbar'
 import { Footer } from '@/client/components/footer'
 import { getLocale, getFixedT } from '@/client/i18n/server'
 import { LayoutProps } from '@/client/types'
-
+import { API_URL } from '@/client/api/server/constant'
 import './globals.css'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function RootLayout({ children }: LayoutProps) {
-  const apiUrl = process.env.API_URL
+  const apiUrl = API_URL
   const domain = process.env.DOMAIN
   const accessTokenExpiresIn = process.env.AUTH_EXPIRES_IN
   const refreshTokenExpiresIn = process.env.AUTH_REFRESH_EXPIRES_IN
