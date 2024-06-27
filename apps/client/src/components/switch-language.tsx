@@ -28,13 +28,18 @@ export const SwitchLanguage = () => {
   }
 
   const checkLanguage = useCallback(() => {
-    const storageLng = storage.getStringItem(AppKey.CookieLanguageKey)
+    let storageLng = storage.getStringItem(AppKey.CookieLanguageKey)
     const cookieLng = Cookies.get(AppKey.CookieLanguageKey)
 
-    if (storageLng && !cookieLng) {
+    if (!storageLng) {
+      storage.setStringItem(AppKey.CookieLanguageKey, currentLocale)
+      storageLng = currentLocale
+    }
+
+    if (!cookieLng) {
       Cookies.set(AppKey.CookieLanguageKey, storageLng, { domain, expires: 365 })
     }
-  }, [domain])
+  }, [domain, currentLocale])
 
   useEffect(() => {
     checkLanguage()

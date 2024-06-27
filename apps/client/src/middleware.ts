@@ -14,6 +14,18 @@ export function middleware(request: NextRequest) {
   const cookieRefreshToken = cookies.get(AppKey.CookieRefreshTokenKey)
   const hasToken = cookieRefreshToken?.value
 
+  const lng = searchParams.get(AppKey.QueryLanguageKey)
+  if (lng) {
+    searchParams.delete(AppKey.QueryLanguageKey)
+    const response = NextResponse.redirect(nextUrl)
+    response.cookies.set({
+      name: AppKey.CookieLanguageKey,
+      value: lng,
+      path: '/'
+    })
+    return response
+  }
+
   // 传进了单点登录的回调地址
   const ssoCallback = searchParams.get(AppKey.QuerySSOCallbackKey)
   if (ssoCallback) {

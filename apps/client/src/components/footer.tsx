@@ -11,7 +11,7 @@ export const Footer = () => {
   const { t } = useTranslate()
 
   return (
-    <footer className="bg-white h-20 relative border-t-1">
+    <footer className="bg-white h-20 relative border-t">
       <MaxWidthWrapper>
         <div className="h-full flex flex-col md:flex-row md:justify-between justify-center items-center">
           <div className="flex items-center justify-center space-x-4 pb-2 md:pb-0">
