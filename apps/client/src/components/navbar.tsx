@@ -19,7 +19,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/client/components/ui/sheet'
 import { Link } from '@/client/components/link'
 import { Brand } from '@/client/components/brand'
 
-import { Page1, Page2, ProtectedRoutes } from '@/client/routes'
+import { LandingPage, Page1, Page2, ProtectedRoutes } from '@/client/routes'
 import { useRouter, useAppPending } from '@/client/store/app-store'
 import { useAuth, useAuthStore } from '@/client/store/auth-store'
 import { useTranslate } from '@/client/i18n/client'
@@ -54,7 +54,7 @@ export const CustomNavbar = () => {
   }, [pathname])
 
   useEffect(() => {
-    if (!authToken.refreshToken && ProtectedRoutes.includes(pathname)) router.replace('/')
+    if (!authToken.refreshToken && ProtectedRoutes.includes(pathname)) router.replace(LandingPage)
   }, [authToken, router, pathname])
 
   useEffect(() => {
@@ -76,12 +76,17 @@ export const CustomNavbar = () => {
   }
 
   return (
-    <div className="px-4 h-16 border-b-1">
+    <div
+      className={cn(
+        'px-4 h-16 border-b sticky top-0 bg-background z-50',
+        pathname === LandingPage && 'bg-transparent backdrop-blur-sm border-b-0'
+      )}
+    >
       <MaxWidthWrapper className="flex justify-between items-start">
-        <div className="h-full flex gap-4">
+        <div className="h-full flex">
           <Sheet open={isMenuOpen} onOpenChange={val => setIsMenuOpen(val)}>
             <SheetTrigger>
-              <LuAlignJustify className="text-xl sm:hidden" />
+              <LuAlignJustify className="text-xl mr-2 sm:hidden" />
             </SheetTrigger>
             <SheetContent side="left">
               <div className="flex flex-col items-center gap-4 pt-8">
@@ -100,13 +105,13 @@ export const CustomNavbar = () => {
               </div>
             </SheetContent>
           </Sheet>
-          <Brand />
+          <Brand className="mr-4" />
           <div className="hidden sm:flex gap-4">
             {menuItems.map(item => (
               <Link
                 key={item.link}
                 className={cn(
-                  'w-full border-b-4 border-transparent transition-colors',
+                  'border-b-4 border-transparent transition-colors',
                   pathname === item.link && 'border-primary'
                 )}
                 href={item.link}

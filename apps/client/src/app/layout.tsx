@@ -35,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps) {
 
   return (
     <html lang="en">
-      <body className="font-sans min-h-screen flex flex-col">
+      <body className="font-sans">
         <AppProvider
           value={{
             apiUrl,
@@ -45,10 +45,12 @@ export default function RootLayout({ children }: LayoutProps) {
             lng
           }}
         >
-          <Toaster position="top-center" richColors />
-          <CustomNavbar />
-          <div className="flex-1 flex flex-col bg-secondary">{children}</div>
-          <Footer />
+          <main className="min-h-screen flex flex-col bg-accent" vaul-drawer-wrapper="">
+            <Toaster position="top-center" richColors />
+            <CustomNavbar />
+            <div className="flex-1 flex flex-col ">{children}</div>
+            <Footer />
+          </main>
         </AppProvider>
       </body>
     </html>
