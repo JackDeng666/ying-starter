@@ -1,12 +1,12 @@
 import { APP_GUARD } from '@nestjs/core'
 import { Module } from '@nestjs/common'
 import { AdminAuthGuard, AdminPermissionGuard } from '@/server/admin/sys/auth/guard'
-import { AdminFileController } from './file.controller'
 import { SysModule } from './sys/sys.module'
 import { UserModule } from './user/user.module'
+import { CommonModule } from './common/common.module'
 
 @Module({
-  imports: [SysModule, UserModule],
+  imports: [SysModule, UserModule, CommonModule],
   providers: [
     {
       provide: APP_GUARD,
@@ -16,7 +16,6 @@ import { UserModule } from './user/user.module'
       provide: APP_GUARD,
       useClass: AdminPermissionGuard
     }
-  ],
-  controllers: [AdminFileController]
+  ]
 })
 export class AdminModule {}

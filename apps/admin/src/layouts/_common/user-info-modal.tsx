@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
 import { UpdateSysUserSelfUserInfoDto, UpdateSysUserSelfPasswordDto } from '@ying/shared'
-import { fileApi, sysUserApi } from '@/admin/api'
+import { commonApi, sysUserApi } from '@/admin/api'
 import { UploadImage } from '@/admin/components/image-tool/upload-image'
 import { getUserInfo, logout, useUserInfo } from '@/admin/store'
 
@@ -106,7 +106,7 @@ const ChangeUserInfoForm = ({ onCancel }: ChangeUserInfoFormProps) => {
               withCrop
               aspectRatio={1}
               defaultUrl={userInfo?.avatar?.url}
-              handleUpload={file => fileApi.upload(file)}
+              handleUpload={file => commonApi.uploadFile(file)}
               onSuccess={file => {
                 field.onChange(file.id)
               }}

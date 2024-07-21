@@ -18,7 +18,7 @@ import { ErrorRes } from '@/client/api/client/request'
 
 const ProfilePage = () => {
   const { getProfile } = useAuth()
-  const { fileApi, userApi } = useApi()
+  const { commonApi, userApi } = useApi()
   const { t } = useTranslate('auth')
   const userInfo = useAuthStore(state => state.userInfo)
 
@@ -93,8 +93,8 @@ const ProfilePage = () => {
                         withCrop
                         aspectRatio={1}
                         handleUpload={file => {
-                          if (!fileApi) return
-                          return fileApi.upload(file)
+                          if (!commonApi) return
+                          return commonApi.upload(file)
                         }}
                         onSuccess={fileEntity => {
                           field.onChange(fileEntity.id)

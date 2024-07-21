@@ -3,12 +3,13 @@ import { APP_GUARD, RouterModule } from '@nestjs/core'
 import { ClientAuthGuard } from './auth/strategy/client.auth.guard'
 import { UserModule } from './user/user.module'
 import { AuthModule } from './auth/auth.module'
-import { FileController } from './file.controller'
+import { CommonModule } from './common/common.module'
 
 @Module({
   imports: [
     UserModule,
     AuthModule,
+    CommonModule,
     RouterModule.register([
       {
         path: 'client',
@@ -20,12 +21,15 @@ import { FileController } from './file.controller'
           {
             path: '/',
             module: AuthModule
+          },
+          {
+            path: '/',
+            module: CommonModule
           }
         ]
       }
     ])
   ],
-  controllers: [FileController],
   providers: [
     {
       provide: APP_GUARD,

@@ -1,4 +1,6 @@
 const basic = {
+  about: 'About',
+  feedback: 'Feedback',
   privacy_policy: 'Privacy Policy',
   cookie_policy: 'Cookie Policy',
   terms: 'Terms',
@@ -7,7 +9,24 @@ const basic = {
   close: 'Close',
   confirm: 'Confirm',
   en: 'English',
-  zh: 'Chinese'
+  zh: 'Chinese',
+  submit_success: 'Submitted successfully!',
+  text: {
+    first_name: 'FirstName',
+    please_enter_first_name: 'Please enter your first name',
+    last_name: 'LastName',
+    please_enter_last_name: 'Please enter your last name',
+    email: 'Email',
+    please_enter_email: 'Please enter your email',
+    content: 'Content',
+    please_enter_content: 'Please enter your feedback content',
+    send: 'Send'
+  },
+  validation: {
+    email_should_not_be_empty: 'Email should not be empty',
+    incorrect_email_format: 'Incorrect email format',
+    content_should_not_be_empty: 'Content should not be empty'
+  }
 }
 
 export default basic

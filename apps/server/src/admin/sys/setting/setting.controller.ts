@@ -1,8 +1,9 @@
-import { Controller, Get } from '@nestjs/common'
+import { Body, Controller, Get, Post } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { pms } from '@ying/shared/permission'
 import { AdminScope, PermissionDecorator } from '@/server/common/decorator'
 import { SysSettingService } from './setting.service'
+import { SettingDto } from '@ying/shared'
 
 @ApiTags('admin system setting')
 @Controller('setting')
@@ -27,5 +28,22 @@ export class SysSettingController {
   @Get('clear-drift-file')
   clearDriftFile() {
     return this.sysSettingService.clearDriftFile()
+  }
+
+  @ApiOperation({
+    summary: 'get setting'
+  })
+  @Get()
+  getSetting() {
+    return this.sysSettingService.getSetting()
+  }
+
+  @ApiOperation({
+    summary: 'update setting'
+  })
+  @PermissionDecorator(pms.sys.setting.updateSetting)
+  @Post()
+  updateSetting(@Body() settingDto: SettingDto) {
+    return this.sysSettingService.updateSetting(settingDto)
   }
 }

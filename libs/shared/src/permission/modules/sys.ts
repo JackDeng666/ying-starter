@@ -70,5 +70,11 @@ export class sys {
         code: 'sys:setting:clear-drift-file'
       }
     }
+    static updateSetting = class {
+      static meta: TMeta = {
+        label: '更新配置',
+        code: 'sys:setting:update-setting'
+      }
+    }
   }
 }

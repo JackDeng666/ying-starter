@@ -11,15 +11,22 @@ import {
 } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { FileSourceType, FileType, ListFileDto } from '@ying/shared'
+
+import { FileSourceType, FileType, ListFeedbackDto, ListFileDto } from '@ying/shared'
+
 import { AdminScope, UID } from '@/server/common/decorator'
 import { FileService } from '@/server/modules/storage/file.service'
 
-@ApiTags('admin file')
+import { FeedbackService } from './feedback.service'
+
+@ApiTags('client common')
 @Controller('admin')
 @AdminScope()
-export class AdminFileController {
-  constructor(private readonly fileService: FileService) {}
+export class CommonController {
+  constructor(
+    readonly fileService: FileService,
+    readonly feedbackService: FeedbackService
+  ) {}
 
   @ApiOperation({
     summary: 'upload file'
@@ -53,7 +60,7 @@ export class AdminFileController {
     summary: 'get file list'
   })
   @Get('file/list')
-  list(@Query() dto: ListFileDto) {
+  fileList(@Query() dto: ListFileDto) {
     return this.fileService.list(dto)
   }
 
@@ -61,7 +68,17 @@ export class AdminFileController {
     summary: 'get file list count'
   })
   @Get('file/list-count')
-  listCount(@Query() dto: ListFileDto) {
+  fileListCount(@Query() dto: ListFileDto) {
     return this.fileService.listCount(dto)
+  }
+
+  @Get('feedback/list')
+  feedbackList(@Query() dto: ListFeedbackDto) {
+    return this.feedbackService.list(dto)
+  }
+
+  @Get('feedback/list-count')
+  feedbackListCount(@Query() dto: ListFeedbackDto) {
+    return this.feedbackService.listCount(dto)
   }
 }

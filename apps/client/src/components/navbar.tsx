@@ -19,7 +19,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/client/components/ui/sheet'
 import { Link } from '@/client/components/link'
 import { Brand } from '@/client/components/brand'
 
-import { LandingPage, Page1, Page2, ProtectedRoutes } from '@/client/routes'
+import { LandingPage, MenuItems, ProtectedRoutes } from '@/client/routes'
 import { useRouter, useAppPending } from '@/client/store/app-store'
 import { useAuth, useAuthStore } from '@/client/store/auth-store'
 import { useTranslate } from '@/client/i18n/client'
@@ -37,17 +37,6 @@ export const CustomNavbar = () => {
 
   const { logout, getProfile } = useAuth()
   const { t } = useTranslate('auth')
-
-  const menuItems = [
-    {
-      name: 'Page1',
-      link: Page1
-    },
-    {
-      name: 'Page2',
-      link: Page2
-    }
-  ]
 
   useEffect(() => {
     setIsMenuOpen(false)
@@ -90,7 +79,7 @@ export const CustomNavbar = () => {
             </SheetTrigger>
             <SheetContent side="left">
               <div className="flex flex-col items-center gap-4 pt-8">
-                {menuItems.map(item => (
+                {MenuItems.map(item => (
                   <Link
                     key={item.link}
                     className={cn(
@@ -99,7 +88,7 @@ export const CustomNavbar = () => {
                     )}
                     href={item.link}
                   >
-                    {item.name}
+                    {t(item.name)}
                   </Link>
                 ))}
               </div>
@@ -107,7 +96,7 @@ export const CustomNavbar = () => {
           </Sheet>
           <Brand className="mr-4" />
           <div className="hidden sm:flex gap-4">
-            {menuItems.map(item => (
+            {MenuItems.map(item => (
               <Link
                 key={item.link}
                 className={cn(
@@ -116,7 +105,7 @@ export const CustomNavbar = () => {
                 )}
                 href={item.link}
               >
-                {item.name}
+                {t(item.name)}
               </Link>
             ))}
           </div>

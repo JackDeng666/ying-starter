@@ -9,6 +9,8 @@ import { CircleLoading } from '@/admin/components/loading'
 const Dashbord = lazy(() => import('@/admin/pages/dashboard'))
 const User = lazy(() => import('@/admin/pages/user'))
 
+const Feedback = lazy(() => import('@/admin/pages/feedback'))
+
 const Role = lazy(() => import('@/admin/pages/sys/role'))
 const SysUser = lazy(() => import('@/admin/pages/sys/user'))
 const Settings = lazy(() => import('@/admin/pages/sys/setting'))
@@ -33,6 +35,15 @@ export const menuRoutes: AppRouteObject[] = [
       permission: pms.user
     },
     element: <User />
+  },
+  {
+    path: 'feedback',
+    meta: {
+      icon: 'solar:chat-line-bold-duotone',
+      key: '/feedback',
+      label: '反馈管理'
+    },
+    element: <Feedback />
   },
   {
     path: 'sys',

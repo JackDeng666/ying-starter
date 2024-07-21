@@ -24,5 +24,5 @@ export abstract class AbstractFileService {
 
   abstract deleteFiles(files: FileEntity[]): void
 
-  abstract deleteDriftFilesByExcludeIds(excludeIds: number[]): void
+  abstract deleteDriftFilesByExcludeIds(excludeIds: number[]): Promise<void>
 }

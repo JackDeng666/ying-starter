@@ -1,21 +1,23 @@
 import { RedisClientType } from 'redis'
 import { Inject, Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { InjectDataSource } from '@nestjs/typeorm'
+import { DataSource } from 'typeorm'
 import { SysUserEntity, UserEntity } from '@ying/shared/entities'
 import { RedisToken, RedisKey } from '@/server/modules/redis/constant'
 import { FileService } from '@/server/modules/storage/file.service'
+import { SettingDto } from '@ying/shared'
+
+const DEFAULT_SETTING: SettingDto = {
+  debugUserIds: ''
+}
 
 @Injectable()
 export class SysSettingService {
+  @InjectDataSource()
+  private dataSource: DataSource
+
   @Inject(RedisToken)
   private readonly redisClient: RedisClientType
-
-  @InjectRepository(SysUserEntity)
-  private readonly sysUserRepository: Repository<SysUserEntity>
-
-  @InjectRepository(UserEntity)
-  private readonly userEntity: Repository<UserEntity>
 
   @Inject()
   private readonly fileService: FileService
@@ -28,18 +30,34 @@ export class SysSettingService {
   }
 
   async clearDriftFile() {
-    const sysUsers = await this.sysUserRepository.find({
+    const sysUserRepository = this.dataSource.getRepository(SysUserEntity)
+    const userRepository = this.dataSource.getRepository(UserEntity)
+
+    const sysUsers = await sysUserRepository.find({
       select: ['avatarId']
     })
 
-    const users = await this.userEntity.find({
+    const users = await userRepository.find({
       select: ['avatarId']
     })
 
-    const fileIds = []
+    const fileIds: number[] = []
     fileIds.push(...sysUsers.map(el => el.avatarId))
     fileIds.push(...users.map(el => el.avatarId))
 
-    await this.fileService.deleteDriftFilesByExcludeIds(fileIds)
+    await this.fileService.deleteDriftFilesByExcludeIds([...new Set(fileIds)])
+  }
+
+  async getSetting() {
+    const settingStr = await this.redisClient.get(RedisKey.Setting)
+    if (!settingStr) {
+      await this.redisClient.set(RedisKey.Setting, JSON.stringify(DEFAULT_SETTING))
+      return DEFAULT_SETTING
+    }
+    return JSON.parse(settingStr)
+  }
+
+  async updateSetting(dto: SettingDto) {
+    await this.redisClient.set(RedisKey.Setting, JSON.stringify(dto))
   }
 }

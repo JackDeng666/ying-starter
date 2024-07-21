@@ -7,7 +7,7 @@ import { ListFileDto, FileType, FileSourceType } from '@ying/shared'
 import { FileEntity } from '@ying/shared/entities'
 import { debounce } from '@ying/utils'
 
-import { fileApi } from '@/admin/api'
+import { commonApi } from '@/admin/api'
 import { usePage } from '@/admin/hooks/use-page'
 import { useThemeToken } from '@/admin/theme/hooks'
 
@@ -28,7 +28,7 @@ export const ImageList = ({ selectedFiles, setSelectedFiles, maxLength = 1 }: Im
   const { list, listLoading, pagination, reload } = usePage({
     listApi: useCallback(
       ({ page, size }) =>
-        fileApi.list({
+        commonApi.listFile({
           ...getValues(),
           page,
           size
@@ -37,7 +37,7 @@ export const ImageList = ({ selectedFiles, setSelectedFiles, maxLength = 1 }: Im
     ),
     listCount: useCallback(
       () =>
-        fileApi.listCount({
+        commonApi.listFileCount({
           ...getValues()
         }),
       [getValues]
@@ -69,7 +69,7 @@ export const ImageList = ({ selectedFiles, setSelectedFiles, maxLength = 1 }: Im
   return (
     <Spin spinning={listLoading}>
       <div className="flex flex-wrap gap-4">
-        <UploadImage handleUpload={file => fileApi.upload(file)} willSetUrl={false} onSuccess={reload} withCrop />
+        <UploadImage handleUpload={file => commonApi.uploadFile(file)} willSetUrl={false} onSuccess={reload} withCrop />
         {list?.map(el => {
           const isSelected = selectedFileIds.includes(el.id)
           return (

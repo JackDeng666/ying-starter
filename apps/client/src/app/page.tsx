@@ -112,7 +112,7 @@ export default function Page() {
         <p className="text-4xl text-center">常见问题</p>
         <Accordion type="multiple" className="w-full">
           <AccordionItem value="1">
-            <AccordionTrigger>1.修改了代码移动了文件的时候会经常报错？</AccordionTrigger>
+            <AccordionTrigger>1.修改了代码移动了文件的时候会经常报错（比如xxx project graph等报错）？</AccordionTrigger>
             <AccordionContent>删除根目录下的.nx、tmp文件夹，随后重启即可。</AccordionContent>
           </AccordionItem>
         </Accordion>
