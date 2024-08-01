@@ -17,10 +17,10 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params: { lng } }: { params: BasicParams }): Promise<Metadata> {
-  const { t } = await getServerTranslation(lng, 'authv2')
+  const { t } = await getServerTranslation(lng)
 
   return {
-    title: t('text.welcome_to')
+    title: t('app_title')
   }
 }
 
