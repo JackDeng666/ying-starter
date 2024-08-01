@@ -9,19 +9,19 @@ type SignInProps = {
 
 export const useSignIn = () => {
   const router = useRouter()
-  const { apiUrl } = useAppContext()
+  const { serverUrl } = useAppContext()
 
   const signIn = ({ provider }: SignInProps) => {
     let url = ''
     switch (provider) {
       case 'github':
-        url = apiUrl + '/auth/github'
+        url = serverUrl + '/api/client/auth/github'
         break
       case 'google':
-        url = apiUrl + '/auth/google'
+        url = serverUrl + '/api/client/auth/google'
         break
       case 'facebook':
-        url = apiUrl + '/auth/facebook'
+        url = serverUrl + '/api/client/auth/facebook'
         break
     }
 
