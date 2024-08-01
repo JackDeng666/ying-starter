@@ -12,7 +12,18 @@ export const AuthErrorPage = '/auth/error'
 export const ProfilePage = '/profile'
 export const ResetPasswordPage = '/reset-password'
 
-export const ProtectedRoutes = [ProfilePage, ResetPasswordPage]
+export const UserPages = [
+  {
+    name: 'text.personal_information',
+    link: ProfilePage
+  },
+  {
+    name: 'text.reset_password',
+    link: ResetPasswordPage
+  }
+]
+
+export const ProtectedRoutes = [...UserPages.map(el => el.link)]
 
 export const MenuItems = [
   {
@@ -26,3 +37,16 @@ export const MenuItems = [
 ]
 
 export const DefaultLoginRedirect = '/profile'
+
+export const AllRoutes = [
+  LandingPage,
+  AboutPage,
+  FeedbackPage,
+  LoginPage,
+  RegisterPage,
+  NewVerificationPage,
+  ForgotPasswordPage,
+  NewPasswordPage,
+  AuthErrorPage,
+  ...ProtectedRoutes
+]

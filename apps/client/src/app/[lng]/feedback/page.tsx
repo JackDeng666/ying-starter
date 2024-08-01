@@ -18,7 +18,7 @@ import { useApi } from '@/client/store/app-store'
 import { useTranslate } from '@/client/i18n/client'
 
 export default function Page() {
-  const { t } = useTranslate()
+  const { t } = useTranslate('auth')
   const { commonApi } = useApi()
   const formRef = useRef<HTMLFormElement>(null)
   const form = useForm<CreateFeedbackDto>({

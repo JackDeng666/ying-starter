@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { ScheduleModule } from '@nestjs/schedule'
+import { AcceptLanguageResolver, HeaderResolver, I18nModule } from 'nestjs-i18n'
+import { join } from 'path'
+
 import { apiConfig, redisConfig, dbConfig, storageConfig, authConfig, mailConfig } from '@/server/config'
 import { RedisModule } from '@/server/modules/redis/redis.module'
 import { DbModule } from '@/server/modules/db/db.module'
@@ -15,6 +18,14 @@ import { ClientModule } from '@/server/client/client.module'
       isGlobal: true,
       load: [apiConfig, redisConfig, dbConfig, authConfig, mailConfig, storageConfig],
       envFilePath: ['.env.local', '.env']
+    }),
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      loaderOptions: {
+        path: join(__dirname, './i18n/'),
+        watch: true
+      },
+      resolvers: [new HeaderResolver(['lng']), AcceptLanguageResolver]
     }),
     ScheduleModule.forRoot(),
     RedisModule,

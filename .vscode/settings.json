@@ -1,4 +1,5 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "conventionalCommits.scopes": ["admin", "all", "client", "server"]
+  "conventionalCommits.scopes": ["admin", "all", "client", "server"],
+  "i18n-ally.localesPaths": ["locales", "apps/server/src/i18n", "apps/client/src/i18n", "apps/client/src/i18n/locales"]
 }

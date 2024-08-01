@@ -1,52 +1,35 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import Cookies from 'js-cookie'
-
-import { storage } from '@ying/utils'
+import { useParams, usePathname } from 'next/navigation'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/client/components/ui/select'
-import { locales } from '@/client/i18n/config'
+import { languages } from '@/client/i18n/config'
 import { useTranslate } from '@/client/i18n/client'
 import { AppKey } from '@/client/enum'
 import { useRouter } from '@/client/store/app-store'
 import { useAppContext } from '@/client/providers/app'
 
 export const SwitchLanguage = () => {
-  const { domain, lng } = useAppContext()
-  const { t } = useTranslate()
+  const { lng } = useParams()
+  const pathname = usePathname()
+  const { domain } = useAppContext()
+  const translation = useTranslate()
   const router = useRouter()
-  const [currentLocale, setCurrentLocale] = useState(lng)
+  const [currentLng, setCurrentLng] = useState(lng as string)
 
-  const lngs = locales.map(local => ({ label: t(local), value: local }))
+  const lngs = useMemo(() => languages.map(l => ({ label: translation.t(l), value: l })), [translation])
 
-  function selectLanguage(lng: string) {
-    setCurrentLocale(lng)
-    storage.setStringItem(AppKey.CookieLanguageKey, lng)
-    Cookies.set(AppKey.CookieLanguageKey, lng, { domain, expires: 365 })
+  function selectLanguage(changeLng: string) {
+    setCurrentLng(changeLng)
+    Cookies.set(AppKey.CookieLanguageKey, changeLng, { domain, expires: 365 })
+    router.replace(pathname.replace(`/${lng}`, `/${changeLng}`))
     router.refresh()
   }
 
-  const checkLanguage = useCallback(() => {
-    let storageLng = storage.getStringItem(AppKey.CookieLanguageKey)
-    const cookieLng = Cookies.get(AppKey.CookieLanguageKey)
-
-    if (!storageLng) {
-      storage.setStringItem(AppKey.CookieLanguageKey, currentLocale)
-      storageLng = currentLocale
-    }
-
-    if (!cookieLng) {
-      Cookies.set(AppKey.CookieLanguageKey, storageLng, { domain, expires: 365 })
-    }
-  }, [domain, currentLocale])
-
-  useEffect(() => {
-    checkLanguage()
-  }, [checkLanguage])
-
   return (
-    <Select onValueChange={selectLanguage} defaultValue={currentLocale}>
+    <Select onValueChange={selectLanguage} defaultValue={currentLng} value={currentLng}>
       <SelectTrigger className="w-[150px]">
         <SelectValue placeholder="Theme" />
       </SelectTrigger>

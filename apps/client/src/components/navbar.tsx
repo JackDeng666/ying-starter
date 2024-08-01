@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
 import { LuLogOut, LuAlignJustify } from 'react-icons/lu'
 import NProgress from 'nprogress'
 
@@ -24,6 +23,7 @@ import { useRouter, useAppPending } from '@/client/store/app-store'
 import { useAuth, useAuthStore } from '@/client/store/auth-store'
 import { useTranslate } from '@/client/i18n/client'
 import { cn } from '@/client/lib/utils'
+import { usePathname } from '@/client/hooks/use-pathname'
 import { MaxWidthWrapper } from './max-width-wrapper'
 
 export const CustomNavbar = () => {

@@ -1,28 +1,30 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import { ReactNode, createContext, useContext } from 'react'
+import { initI18n } from '@/client/i18n/client'
 
 export type TAppContext = {
-  apiUrl: string
+  serverUrl: string
   domain: string
   accessTokenExpiresIn: string
   refreshTokenExpiresIn: string
-  lng: string
   pageSpyUrl?: string
   pageSpyProject?: string
 }
 
 export const AppContext = createContext<TAppContext>({
-  apiUrl: '',
+  serverUrl: '',
   domain: '',
   accessTokenExpiresIn: '',
   refreshTokenExpiresIn: '',
-  lng: '',
   pageSpyUrl: '',
   pageSpyProject: ''
 })
 
 export const AppProvider = ({ children, value }: { children: ReactNode; value: TAppContext }) => {
+  const { lng } = useParams()
+  initI18n(lng as string)
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }
 

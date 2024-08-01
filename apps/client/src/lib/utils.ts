@@ -12,3 +12,12 @@ export function replaceState() {
     window.history.replaceState({}, '', url)
   }
 }
+
+export function pathMatchArr(path: string, arr: string[], macthFunc: 'startsWith' | 'endsWith') {
+  for (let i = 0; i < arr.length; i++) {
+    const el = arr[i]
+    if (path[macthFunc](el)) {
+      return el
+    }
+  }
+}

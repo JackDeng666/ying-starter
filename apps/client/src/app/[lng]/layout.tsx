@@ -6,47 +6,47 @@ import { AppProvider } from '@/client/providers/app'
 import { CustomNavbar } from '@/client/components/navbar'
 import { Footer } from '@/client/components/footer'
 import { PageSpyScript } from '@/client/components/page-spy-script'
-import { getLocale, getFixedT } from '@/client/i18n/server'
-import { LayoutProps } from '@/client/types'
-import { API_URL } from '@/client/api/server/constant'
+import { getServerTranslation } from '@/client/i18n/server'
+import { BasicParams, LayoutProps } from '@/client/types'
+import { fallbackLng, languages } from '@/client/i18n/config'
+
 import './globals.css'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const lng = getLocale()
+export async function generateStaticParams() {
+  return languages.map(lng => ({ lng }))
+}
 
-  const { t } = getFixedT(lng)
+export async function generateMetadata({ params: { lng } }: { params: BasicParams }): Promise<Metadata> {
+  const { t } = await getServerTranslation(lng, 'authv2')
 
   return {
-    title: t('App Title'),
-    description: t('App Title')
+    title: t('text.welcome_to')
   }
 }
 
-export default function RootLayout({ children }: LayoutProps) {
-  const apiUrl = API_URL
+export default async function RootLayout({ children, params }: LayoutProps) {
+  const lng = params?.lng || fallbackLng
+  const serverUrl = process.env.SERVER_URL
   const domain = process.env.DOMAIN
   const accessTokenExpiresIn = process.env.AUTH_EXPIRES_IN
   const refreshTokenExpiresIn = process.env.AUTH_REFRESH_EXPIRES_IN
   const pageSpyUrl = process.env.PAGE_SPY_URL
   const pageSpyProject = process.env.PAGE_SPY_PROJECT
 
-  if (!apiUrl) return new Error('API_URL missing')
+  if (!serverUrl) return new Error('SERVER_URL missing')
   if (!domain) return new Error('DOMAIN missing')
   if (!accessTokenExpiresIn) return new Error('AUTH_EXPIRES_IN missing')
   if (!refreshTokenExpiresIn) return new Error('AUTH_REFRESH_EXPIRES_IN missing')
 
-  const lng = getLocale()
-
   return (
-    <html lang="en">
+    <html lang={lng}>
       <body className="font-sans">
         <AppProvider
           value={{
-            apiUrl,
+            serverUrl,
             domain,
             accessTokenExpiresIn,
             refreshTokenExpiresIn,
-            lng,
             pageSpyUrl,
             pageSpyProject
           }}

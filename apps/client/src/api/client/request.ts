@@ -14,7 +14,7 @@ export type ErrorRes = {
 
 export const initRequest = (appContext: TAppContext) => {
   const request = axios.create({
-    baseURL: appContext.apiUrl
+    baseURL: `${appContext.serverUrl}/api/client`
   })
   request.interceptors.request.use(config => {
     const token = Cookies.get(AppKey.CookieAccessTokenKey)
@@ -23,7 +23,7 @@ export const initRequest = (appContext: TAppContext) => {
       config.headers.Authorization = `Bearer ${token}`
     }
     if (lng) {
-      config.headers['custom-lng'] = lng
+      config.headers['lng'] = lng
     }
     return config
   })

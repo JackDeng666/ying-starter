@@ -7,6 +7,5 @@ export const AppKey = {
   CookieLanguageKey: prefix + 'lng',
   QueryAccessTokenKey: 'access_token',
   QueryRefreshTokenKey: 'refresh_token',
-  QuerySSOCallbackKey: 'sso_cb',
-  QueryLanguageKey: 'lng'
+  QuerySSOCallbackKey: 'sso_cb'
 }

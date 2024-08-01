@@ -1,37 +1,33 @@
-import i18n from 'i18next'
-import { match } from '@formatjs/intl-localematcher'
-import Negotiator from 'negotiator'
+import { createInstance, i18n } from 'i18next'
+import I18nResourcesToBackend from 'i18next-resources-to-backend'
 import { headers, cookies } from 'next/headers'
+import acceptLanguage from 'accept-language'
 import { AppKey } from '@/client/enum'
-import { locales, defaultLocale } from './config'
-import { resources } from './locales'
+import { languages, fallbackLng, getOptions } from './config'
 
-i18n.init({
-  supportedLngs: locales,
-  fallbackLng: defaultLocale,
-  fallbackNS: 'basic',
-  defaultNS: 'basic',
-  ns: 'basic',
-  resources
-})
-
-export function getFixedT(lng?: string, ns?: string) {
-  return {
-    t: i18n.getFixedT(lng || '', ns),
-    i18n
-  }
-}
+acceptLanguage.languages(languages)
 
 export function getLocale() {
-  const cookie = cookies()
+  let lng: string | undefined | null = acceptLanguage.get(cookies().get(AppKey.CookieLanguageKey)?.value)
+  if (!lng) lng = acceptLanguage.get(headers().get('Accept-Language'))
+  if (!lng) lng = fallbackLng
+  return lng
+}
 
-  const cookieLng = cookie.get(AppKey.CookieLanguageKey)?.value
+let i18nInstance: i18n | undefined
 
-  if (cookieLng) return cookieLng
+const getI18n = async (lng?: string, ns?: string) => {
+  if (i18nInstance) return i18nInstance
+  i18nInstance = createInstance()
+  const LocalBackend = I18nResourcesToBackend((lng: string, ns: string) => import(`./locales/${lng}/${ns}.json`))
+  await i18nInstance.use(LocalBackend).init(getOptions(lng, ns))
+  return i18nInstance
+}
 
-  const languages = new Negotiator({
-    headers: { 'accept-language': headers().get('accept-language') || undefined }
-  }).languages()
-
-  return match(languages, locales, defaultLocale)
+export async function getServerTranslation(lng: string, ns?: string, options: { keyPrefix?: string } = {}) {
+  const i18n = await getI18n(lng, ns)
+  return {
+    t: i18n.getFixedT(lng, Array.isArray(ns) ? ns[0] : ns, options.keyPrefix),
+    i18n
+  }
 }

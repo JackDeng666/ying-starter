@@ -39,7 +39,7 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() dto: ClientRegisterDto, @Req() req: Request) {
-    return this.authService.register(dto, req.locale)
+    return this.authService.register(dto)
   }
 
   @Post('new-verification')
@@ -49,7 +49,7 @@ export class AuthController {
 
   @Post('forgot-password')
   async forgotPassword(@Body() dto: ForgotPasswordDto, @Req() req: Request) {
-    return this.authService.forgotPassword(dto, req.locale)
+    return this.authService.forgotPassword(dto)
   }
 
   @Post('new-password')

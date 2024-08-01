@@ -1,30 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ms } from '@ying/utils'
-import { DefaultLoginRedirect, ProtectedRoutes, LoginPage } from './routes'
-import { AppKey } from './enum'
+import { DefaultLoginRedirect, ProtectedRoutes, LoginPage, AllRoutes } from '@/client/routes'
+import { AppKey } from '@/client/enum'
+import { languagesWithSlashes } from '@/client/i18n/config'
+import { getLocale } from '@/client/i18n/server'
+import { pathMatchArr } from '@/client/lib/utils'
 
-export function middleware(request: NextRequest) {
-  if (!process.env.AUTH_EXPIRES_IN) throw new Error('AUTH_EXPIRES_IN missing!')
-  if (!process.env.AUTH_REFRESH_EXPIRES_IN) throw new Error('AUTH_REFRESH_EXPIRES_IN missing!')
+type TMatchData = {
+  matchLng?: string
+  matchRoute?: string
+}
 
+function languagesMiddleware(request: NextRequest, { matchLng, matchRoute }: TMatchData) {
+  const { url } = request
+
+  if (matchRoute) {
+    if (!matchLng) {
+      const lng = getLocale()
+      return NextResponse.redirect(new URL(`/${lng}${matchRoute}`, url))
+    }
+  }
+}
+
+function authMiddleware(request: NextRequest, { matchLng, matchRoute }: TMatchData) {
   const { nextUrl, cookies, url } = request
   const { pathname, searchParams } = nextUrl
 
   const cookieAccessToken = cookies.get(AppKey.CookieAccessTokenKey)
   const cookieRefreshToken = cookies.get(AppKey.CookieRefreshTokenKey)
   const hasToken = cookieRefreshToken?.value
-
-  const lng = searchParams.get(AppKey.QueryLanguageKey)
-  if (lng) {
-    searchParams.delete(AppKey.QueryLanguageKey)
-    const response = NextResponse.redirect(nextUrl)
-    response.cookies.set({
-      name: AppKey.CookieLanguageKey,
-      value: lng,
-      path: '/'
-    })
-    return response
-  }
 
   // 传进了单点登录的回调地址
   const ssoCallback = searchParams.get(AppKey.QuerySSOCallbackKey)
@@ -61,6 +65,9 @@ export function middleware(request: NextRequest) {
   const queryAccessToken = searchParams.get(AppKey.QueryAccessTokenKey)
   const queryRefreshToken = searchParams.get(AppKey.QueryRefreshTokenKey)
   if (queryAccessToken && queryRefreshToken) {
+    if (!process.env.AUTH_EXPIRES_IN) throw new Error('AUTH_EXPIRES_IN missing!')
+    if (!process.env.AUTH_REFRESH_EXPIRES_IN) throw new Error('AUTH_REFRESH_EXPIRES_IN missing!')
+
     const response = NextResponse.redirect(new URL(DefaultLoginRedirect, url))
     response.cookies.set({
       name: AppKey.CookieAccessTokenKey,
@@ -77,14 +84,29 @@ export function middleware(request: NextRequest) {
     return response
   }
 
-  const isProtectedRoute = ProtectedRoutes.includes(nextUrl.pathname)
-  if (!hasToken && isProtectedRoute) {
-    return NextResponse.redirect(new URL(LoginPage, url))
+  const matchProtectedRoute = pathMatchArr(pathname, ProtectedRoutes, 'endsWith')
+
+  if (!hasToken && matchProtectedRoute) {
+    return NextResponse.redirect(new URL(`${matchLng}/${LoginPage}`, url))
   }
 
-  if (hasToken && pathname.startsWith('/auth')) {
-    return NextResponse.redirect(new URL(DefaultLoginRedirect, url))
+  if (hasToken && matchProtectedRoute?.startsWith('/auth')) {
+    return NextResponse.redirect(new URL(`${matchLng}/${DefaultLoginRedirect}`, url))
   }
+}
+
+export function middleware(request: NextRequest) {
+  const { nextUrl } = request
+  const { pathname } = nextUrl
+
+  const matchLng = pathMatchArr(pathname, languagesWithSlashes, 'startsWith')
+  const matchRoute = pathMatchArr(pathname, AllRoutes, 'endsWith')
+
+  const lngRes = languagesMiddleware(request, { matchLng, matchRoute })
+  if (lngRes) return lngRes
+
+  const authRes = authMiddleware(request, { matchLng, matchRoute })
+  if (authRes) return authRes
 }
 
 export const config = {

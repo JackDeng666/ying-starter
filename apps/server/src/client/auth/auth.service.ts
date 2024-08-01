@@ -5,6 +5,7 @@ import { DataSource } from 'typeorm'
 import { RedisClientType } from 'redis'
 import { ConfigType } from '@nestjs/config'
 import { nanoid } from 'nanoid'
+import { I18nContext } from 'nestjs-i18n'
 import { ms } from '@ying/utils'
 import {
   ClientRegisterDto,
@@ -19,7 +20,6 @@ import { authConfig } from '@/server/config'
 import { RedisKey, RedisToken } from '@/server/modules/redis/constant'
 import { MailService } from '@/server/modules/mail/mail.service'
 import { generatePass } from '@/server/common/utils'
-import { i18n } from '@/server/i18n'
 import { TClientPayload } from './strategy/jwt.strategy'
 
 @Injectable()
@@ -138,7 +138,7 @@ export class AuthService {
     }
   }
 
-  async register(dto: ClientRegisterDto, lng: string) {
+  async register(dto: ClientRegisterDto) {
     await this.dataSource.transaction(async transaction => {
       const existingUser = await transaction.findOne(UserEntity, {
         where: { email: dto.email }
@@ -165,12 +165,11 @@ export class AuthService {
       }
 
       const token = await this.generateVerificationToken(dto.email)
-
       const link = `${this.authConf.redirectUrl}/auth/new-verification?token=${token}&email=${dto.email}`
-
-      const t = i18n.getFixedT(lng)
-
-      await this.mailService.sendMail(dto.email, t('confirmEmail'), t('confirmEmailContent', { link }))
+      const i18n = I18nContext.current()
+      const title = i18n.t('auth.confirmEmail')
+      const content = i18n.t('auth.confirmEmailContent', { args: { link } })
+      await this.mailService.sendMail(dto.email, title, content)
     })
   }
 
@@ -204,7 +203,7 @@ export class AuthService {
     await this.redisClient.del(`${RedisKey.VerificationToken}:${dto.email}:${dto.token}`)
   }
 
-  async forgotPassword(dto: ForgotPasswordDto, lng: string) {
+  async forgotPassword(dto: ForgotPasswordDto) {
     const existingUser = await this.dataSource.getRepository(UserEntity).findOne({
       where: { email: dto.email }
     })
@@ -214,12 +213,11 @@ export class AuthService {
     }
 
     const token = await this.generatePasswordResetToken(dto.email)
-
     const link = `${this.authConf.redirectUrl}/auth/new-password?token=${token}&email=${dto.email}`
-
-    const t = i18n.getFixedT(lng)
-
-    await this.mailService.sendMail(dto.email, t('resetPassword'), t('resetContent', { link }))
+    const i18n = I18nContext.current()
+    const title = i18n.t('auth.resetPassword')
+    const content = i18n.t('auth.resetContent', { args: { link } })
+    await this.mailService.sendMail(dto.email, title, content)
   }
 
   async newPasswordDto(dto: NewPasswordDto) {
