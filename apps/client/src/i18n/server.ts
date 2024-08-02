@@ -3,14 +3,13 @@ import I18nResourcesToBackend from 'i18next-resources-to-backend'
 import { headers, cookies } from 'next/headers'
 import acceptLanguage from 'accept-language'
 import { AppKey } from '@/client/enum'
-import { languages, fallbackLng, getOptions } from './config'
+import { languages, getOptions } from './config'
 
 acceptLanguage.languages(languages)
 
 export function getLocale() {
-  let lng: string | undefined | null = acceptLanguage.get(cookies().get(AppKey.CookieLanguageKey)?.value)
+  let lng: string | undefined | null = cookies().get(AppKey.CookieLanguageKey)?.value
   if (!lng) lng = acceptLanguage.get(headers().get('Accept-Language'))
-  if (!lng) lng = fallbackLng
   return lng
 }
 

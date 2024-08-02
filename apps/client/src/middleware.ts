@@ -22,7 +22,7 @@ function languagesMiddleware(request: NextRequest, { matchLng, matchRoute }: TMa
   }
 }
 
-function authMiddleware(request: NextRequest, { matchLng, matchRoute }: TMatchData) {
+function authMiddleware(request: NextRequest, { matchLng }: TMatchData) {
   const { nextUrl, cookies, url } = request
   const { pathname, searchParams } = nextUrl
 
