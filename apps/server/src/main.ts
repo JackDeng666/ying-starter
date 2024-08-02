@@ -27,10 +27,8 @@ async function bootstrap() {
   )
   app.useStaticAssets(join(__dirname, 'assets'))
 
-  // 语言文件位置 部署后从dist启动刚好也是3层
-  app.useStaticAssets(join(__dirname, '../../../locales'), { prefix: '/locales' })
   if (storageConf.mode === 'local') {
-    // 存储本地模式图片存储的位置
+    // 存储本地模式图片存储的位置，部署后从dist启动刚好也是3层
     app.useStaticAssets(join(__dirname, '../../../uploadfiles'), { prefix: '/upload' })
   }
 
