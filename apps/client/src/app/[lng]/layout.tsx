@@ -8,13 +8,9 @@ import { Footer } from '@/client/components/footer'
 import { PageSpyScript } from '@/client/components/page-spy-script'
 import { getServerTranslation } from '@/client/i18n/server'
 import { BasicParams, LayoutProps } from '@/client/types'
-import { fallbackLng, languages } from '@/client/i18n/config'
+import { fallbackLng } from '@/client/i18n/config'
 
 import './globals.css'
-
-export async function generateStaticParams() {
-  return languages.map(lng => ({ lng }))
-}
 
 export async function generateMetadata({ params: { lng } }: { params: BasicParams }): Promise<Metadata> {
   const { t } = await getServerTranslation(lng)
@@ -25,7 +21,6 @@ export async function generateMetadata({ params: { lng } }: { params: BasicParam
 }
 
 export default async function RootLayout({ children, params }: LayoutProps) {
-  const lng = params?.lng || fallbackLng
   const serverUrl = process.env.SERVER_URL
   const domain = process.env.DOMAIN
   const accessTokenExpiresIn = process.env.AUTH_EXPIRES_IN
@@ -39,6 +34,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
   if (!accessTokenExpiresIn) return new Error('AUTH_EXPIRES_IN missing')
   if (!refreshTokenExpiresIn) return new Error('AUTH_REFRESH_EXPIRES_IN missing')
 
+  const lng = params?.lng || fallbackLng
   return (
     <html lang={lng}>
       <body className="font-sans">
