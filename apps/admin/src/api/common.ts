@@ -1,7 +1,7 @@
 import { ListFeedbackDto, ListFileDto } from '@ying/shared'
 import { FeedbackEntity, FileEntity } from '@ying/shared/entities'
 
-import { request, timeRangeTransform } from './request'
+import { request, timeDataTransform } from './request'
 
 export function uploadFile(file: File): Promise<FileEntity> {
   const form = new FormData()
@@ -10,19 +10,19 @@ export function uploadFile(file: File): Promise<FileEntity> {
 }
 
 export function listFile(params: ListFileDto): Promise<FileEntity[]> {
-  return request.get('/file/list', { params: timeRangeTransform(params, 'date') })
+  return request.get('/file/list', { params: timeDataTransform(params, 'date') })
 }
 
 export function listFileCount(params: ListFileDto): Promise<number> {
-  return request.get('/file/list-count', { params: timeRangeTransform(params, 'date') })
+  return request.get('/file/list-count', { params: timeDataTransform(params, 'date') })
 }
 
 export function listFeedback(params: ListFeedbackDto): Promise<FeedbackEntity[]> {
-  return request.get('/feedback/list', { params: timeRangeTransform(params, 'date') })
+  return request.get('/feedback/list', { params: timeDataTransform(params, 'date') })
 }
 
 export function listFeedbackCount(params: ListFeedbackDto): Promise<number> {
-  return request.get('/feedback/list-count', { params: timeRangeTransform(params, 'date') })
+  return request.get('/feedback/list-count', { params: timeDataTransform(params, 'date') })
 }
 
 export function deleteFeedback(id: number) {

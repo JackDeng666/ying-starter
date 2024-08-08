@@ -1,5 +1,5 @@
-import { CreateFeedbackDto } from '@ying/shared'
-import { FileEntity } from '@ying/shared/entities'
+import { CreateFeedbackDto, CreateVisitorDto, NoticeSubscribeDto } from '@ying/shared'
+import { FileEntity, VisitorEntity } from '@ying/shared/entities'
 
 import { BaseApi } from './request'
 
@@ -16,5 +16,17 @@ export class CommonApi extends BaseApi {
     const form = new FormData()
     form.append('file', file)
     return this.request.post('/file', form)
+  }
+
+  createVisitor(dto: CreateVisitorDto): Promise<VisitorEntity> {
+    return this.request.post('/visitor', dto)
+  }
+
+  subscribe(dto: NoticeSubscribeDto) {
+    return this.request.post('/visitor/subscribe', dto)
+  }
+
+  bindUser(id: string): Promise<VisitorEntity> {
+    return this.request.get(`/visitor/${id}/bind`)
   }
 }

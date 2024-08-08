@@ -8,7 +8,7 @@ import { debounce, getOption } from '@ying/utils'
 import { BasicStatus, ListRoleDto, UpdateRoleDto } from '@ying/shared'
 import { SysRoleEntity } from '@ying/shared/entities'
 
-import { BasicStatusOptions, BasicStatusOptionsType } from '@/admin/constant'
+import { BasicStatusOptions, BasicStatusOption } from '@/admin/constant'
 import { usePage } from '@/admin/hooks/use-page'
 import { sysRoleApi } from '@/admin/api'
 import { PageQuery } from '@/admin/components/page-query'
@@ -100,7 +100,7 @@ export default function RolePage() {
       align: 'center',
       width: 100,
       render: status => {
-        const option = getOption<BasicStatusOptionsType>(BasicStatusOptions, status)
+        const option = getOption<BasicStatusOption>(BasicStatusOptions, status)
         return <Tag color={option.color}>{option.label}</Tag>
       }
     },

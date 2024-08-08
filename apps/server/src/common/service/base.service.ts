@@ -38,10 +38,10 @@ export class BaseService<TEntity extends BaseEntity> {
   }
 
   delete(id: number) {
-    this.repository.delete(id)
+    return this.repository.delete(id)
   }
 
   softDelete(id: number) {
-    this.repository.softDelete(id)
+    return this.repository.softDelete(id)
   }
 }

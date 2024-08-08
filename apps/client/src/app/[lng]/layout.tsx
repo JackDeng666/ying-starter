@@ -32,6 +32,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
   const refreshTokenExpiresIn = process.env.AUTH_REFRESH_EXPIRES_IN
   const pageSpyUrl = process.env.PAGE_SPY_URL
   const pageSpyProject = process.env.PAGE_SPY_PROJECT
+  const vapidPublicKey = process.env.VAPID_PUBLIC_KEY
 
   if (!serverUrl) return new Error('SERVER_URL missing')
   if (!domain) return new Error('DOMAIN missing')
@@ -48,7 +49,8 @@ export default async function RootLayout({ children, params }: LayoutProps) {
             accessTokenExpiresIn,
             refreshTokenExpiresIn,
             pageSpyUrl,
-            pageSpyProject
+            pageSpyProject,
+            vapidPublicKey
           }}
         >
           <main className="min-h-screen flex flex-col bg-accent" vaul-drawer-wrapper="">

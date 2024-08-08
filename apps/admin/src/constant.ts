@@ -4,15 +4,15 @@ import { BasicStatus } from '@ying/shared'
 
 export type TypeOption = {
   label: string
-  value: number
+  value: number | string
 }
 
-export type BasicStatusOptionsType = TypeOption & {
+export type BasicStatusOption = TypeOption & {
   value: BasicStatus
   color: BaseType
 }
 
-export const BasicStatusOptions: BasicStatusOptionsType[] = [
+export const BasicStatusOptions: BasicStatusOption[] = [
   {
     value: BasicStatus.ENABLE,
     color: 'success',

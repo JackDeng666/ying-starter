@@ -1,9 +1,9 @@
 import { Column, Entity } from 'typeorm'
 import { FileType, FileSourceType } from '../enum'
-import { BaseEntity } from './base'
+import { BaseEntityWithAutoId } from './base'
 
 @Entity({ name: 'file' })
-export class FileEntity extends BaseEntity {
+export class FileEntity extends BaseEntityWithAutoId {
   @Column({
     type: 'enum',
     enum: FileType

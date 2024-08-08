@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import { message as Message } from 'antd'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import _ from 'lodash'
 
 import { storage } from '@ying/utils'
@@ -55,7 +55,7 @@ request.interceptors.response.use(
   }
 )
 
-export function timeRangeTransform<T extends object>(data: T, fields: (keyof T)[] | keyof T) {
+export function timeDataTransform<T extends object>(data: T, fields: (keyof T)[] | keyof T) {
   if (fields) {
     fields = Array.isArray(fields) ? fields : [fields]
   } else {
@@ -63,9 +63,13 @@ export function timeRangeTransform<T extends object>(data: T, fields: (keyof T)[
   }
 
   for (const field of fields) {
-    const timeRange = _.get(data, field)
-    if (timeRange && Array.isArray(timeRange)) {
-      _.set(data, field, [dayjs(timeRange[0]).toISOString(), dayjs(timeRange[1]).toISOString()])
+    const timeData = _.get(data, field)
+    if (timeData) {
+      if (Array.isArray(timeData)) {
+        _.set(data, field, [dayjs(timeData[0]).toISOString(), dayjs(timeData[1]).toISOString()])
+      } else {
+        _.set(data, field, dayjs(timeData as Dayjs).toISOString())
+      }
     }
   }
 

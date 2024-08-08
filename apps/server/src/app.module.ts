@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule, ConfigType } from '@nestjs/config'
+import { BullModule } from '@nestjs/bull'
 import { ScheduleModule } from '@nestjs/schedule'
 import { AcceptLanguageResolver, HeaderResolver, I18nModule } from 'nestjs-i18n'
 import { join } from 'path'
 
-import { apiConfig, redisConfig, dbConfig, storageConfig, authConfig, mailConfig } from '@/server/config'
+import { apiConfig, redisConfig, dbConfig, storageConfig, authConfig, mailConfig, pushConfig } from '@/server/config'
 import { RedisModule } from '@/server/common/modules/redis/redis.module'
 import { DbModule } from '@/server/common/modules/db/db.module'
 import { StorageModule } from '@/server/common/modules/storage/storage.module'
 import { MailModule } from '@/server/common/modules/mail/mail.module'
+import { PushModule } from '@/server/common/modules/push/push.module'
 import { AdminModule } from '@/server/business/admin/admin.module'
 import { ClientModule } from '@/server/business/client/client.module'
 
@@ -16,7 +18,7 @@ import { ClientModule } from '@/server/business/client/client.module'
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [apiConfig, redisConfig, dbConfig, authConfig, mailConfig, storageConfig],
+      load: [apiConfig, redisConfig, dbConfig, authConfig, mailConfig, storageConfig, pushConfig],
       envFilePath: ['.env.local', '.env']
     }),
     I18nModule.forRoot({
@@ -29,9 +31,23 @@ import { ClientModule } from '@/server/business/client/client.module'
     }),
     ScheduleModule.forRoot(),
     RedisModule,
+    BullModule.forRootAsync({
+      useFactory: (redisConf: ConfigType<typeof redisConfig>) => {
+        return {
+          redis: {
+            host: redisConf.host,
+            port: redisConf.port,
+            password: redisConf.pass,
+            db: 1
+          }
+        }
+      },
+      inject: [redisConfig.KEY]
+    }),
     DbModule,
     StorageModule,
     MailModule,
+    PushModule,
     AdminModule,
     ClientModule
   ]

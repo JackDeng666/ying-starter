@@ -20,7 +20,8 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli -d ./typeorm.config.ts",
     "migrate:generate": "npm run typeorm -- migration:generate",
     "migrate:run": "npm run typeorm -- migration:run",
-    "migrate:revert": "npm run typeorm -- migration:revert"
+    "migrate:revert": "npm run typeorm -- migration:revert",
+    "webpush:generate": "web-push generate-vapid-keys"
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",
@@ -68,6 +69,8 @@
     "@types/ramda": "^0.29.12",
     "@types/react": "18.2.78",
     "@types/react-dom": "18.2.25",
+    "@types/ua-parser-js": "^0.7.39",
+    "@types/web-push": "^3.6.3",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "@typescript-eslint/parser": "^7.6.0",
     "@vitejs/plugin-react": "^4.2.1",
@@ -101,6 +104,7 @@
   "optionalDependencies": {
     "@ant-design/cssinjs": "^1.19.1",
     "@ant-design/icons": "^5.3.6",
+    "@fingerprintjs/fingerprintjs": "^4.4.3",
     "@hello-pangea/dnd": "^16.6.0",
     "@hookform/resolvers": "^3.3.4",
     "@huolala-tech/page-spy-browser": "^1.9.2",
@@ -148,6 +152,7 @@
     "styled-components": "^6.1.8",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
+    "ua-parser-js": "^1.0.38",
     "usehooks-ts": "^3.1.0",
     "vite-plugin-svg-icons": "^2.0.1",
     "zustand": "4.5.2"
@@ -155,6 +160,7 @@
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@nestjs/axios": "^3.0.2",
+    "@nestjs/bull": "^10.2.0",
     "@nestjs/common": "^10.3.7",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.3.7",
@@ -166,6 +172,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "accept-language": "^3.0.18",
     "axios": "^1.7.2",
+    "bull": "^4.16.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "express": "^4.19.2",
@@ -191,6 +198,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "tslib": "^2.6.2",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "web-push": "^3.6.7"
   }
 }

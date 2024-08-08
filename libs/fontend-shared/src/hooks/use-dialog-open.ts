@@ -4,11 +4,13 @@ type UseDialogOpenProps = {
   defaultOpen?: boolean
 }
 
-export const useDialogOpen = (props: UseDialogOpenProps = {}) => {
+export const useDialogOpen = <TFormValue>(props: UseDialogOpenProps = {}) => {
   const { defaultOpen = false } = props
   const [open, setOpen] = useState(defaultOpen)
+  const [formValue, setFormValue] = useState<TFormValue | undefined>()
 
-  const onOpen = useCallback(() => {
+  const onOpen = useCallback((value?: TFormValue) => {
+    value ? setFormValue(value) : setFormValue(undefined)
     setOpen(true)
   }, [])
 
@@ -22,6 +24,7 @@ export const useDialogOpen = (props: UseDialogOpenProps = {}) => {
 
   return {
     open,
+    formValue,
     onOpen,
     onClose,
     onOpenChange

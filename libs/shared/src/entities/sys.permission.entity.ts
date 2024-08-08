@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm'
 import { SysRoleEntity } from './sys.role.entity'
-import { BaseEntityWithoutId } from './base'
+import { BaseEntity } from './base'
 
 @Entity('sys_permission')
-export class SysPermissionEntity extends BaseEntityWithoutId {
+export class SysPermissionEntity extends BaseEntity {
   @Column({
     nullable: true
   })

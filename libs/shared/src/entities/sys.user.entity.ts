@@ -1,13 +1,13 @@
 import { Column, Entity, JoinColumn, ManyToMany, OneToOne } from 'typeorm'
 import { Exclude, instanceToPlain } from 'class-transformer'
 import { BasicStatus } from '../enum'
-import { BaseEntity } from './base'
+import { BaseEntityWithAutoId } from './base'
 import { SysRoleEntity } from './sys.role.entity'
 import { SysPermissionEntity } from './sys.permission.entity'
 import { FileEntity } from './file.entity'
 
 @Entity('sys_user')
-export class SysUserEntity extends BaseEntity {
+export class SysUserEntity extends BaseEntityWithAutoId {
   @Column()
   name: string
 

@@ -1,11 +1,12 @@
+import { useCallback } from 'react'
 import { create } from 'zustand'
 import Cookies from 'js-cookie'
 import { ClientUserVo, ClientAuthVo } from '@ying/shared'
 import { ms } from '@ying/utils'
 import { AppKey } from '@/client/enum'
 import { TAppContext, useAppContext } from '@/client/providers/app'
+import { useVisitor } from '@/client/hooks/use-visitor'
 import { useApi } from './app-store'
-import { useCallback } from 'react'
 
 interface AuthStore {
   userInfo?: ClientUserVo
@@ -41,7 +42,8 @@ export const updateAccessToken = (accessToken: string, { domain, accessTokenExpi
 
 export const useAuth = () => {
   const appContext = useAppContext()
-  const { authApi, userApi } = useApi()
+  const { authApi, userApi, commonApi } = useApi()
+  const { visitor, storeVisitor } = useVisitor()
 
   const logout = useCallback(async () => {
     if (!authApi) return
@@ -50,10 +52,14 @@ export const useAuth = () => {
   }, [authApi, appContext])
 
   const getProfile = useCallback(async () => {
-    if (!userApi) return
+    if (!userApi || !visitor || !commonApi) return
     const userInfo = await userApi.getProfile()
     useAuthStore.setState({ userInfo })
-  }, [userApi])
+    if (!visitor.userId) {
+      const newVisitor = await commonApi.bindUser(visitor.id)
+      storeVisitor(newVisitor)
+    }
+  }, [userApi, visitor, commonApi, storeVisitor])
 
   return {
     logout,

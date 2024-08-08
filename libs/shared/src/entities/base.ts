@@ -9,7 +9,9 @@ import {
 import { nanoid } from 'nanoid'
 
 @Entity()
-export class BaseEntityWithoutId {
+export class BaseEntity {
+  id: string | number
+
   @CreateDateColumn({
     type: 'datetime'
   })
@@ -27,13 +29,13 @@ export class BaseEntityWithoutId {
 }
 
 @Entity()
-export class BaseEntity extends BaseEntityWithoutId {
+export class BaseEntityWithAutoId extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 }
 
 @Entity()
-export class BaseEntityWithNanoID extends BaseEntityWithoutId {
+export class BaseEntityWithNanoID extends BaseEntity {
   @PrimaryColumn('varchar', { length: 20 })
   id = nanoid(20)
 }

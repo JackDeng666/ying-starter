@@ -42,7 +42,6 @@ export const SelectImage = ({ maxLength = 1, className, value, onChange }: Selec
 
     const [reSortedItem] = items.splice(source.index, 1)
     items.splice(destination.index, 0, reSortedItem)
-    console.log(items, reSortedItem, 'ii')
     onChange(items)
   }
 

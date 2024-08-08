@@ -1,8 +1,8 @@
 import { Column, Entity } from 'typeorm'
-import { BaseEntity } from './base'
+import { BaseEntityWithAutoId } from './base'
 
 @Entity({ name: 'feedback' })
-export class FeedbackEntity extends BaseEntity {
+export class FeedbackEntity extends BaseEntityWithAutoId {
   @Column()
   firstName: string
 

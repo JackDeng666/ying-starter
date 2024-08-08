@@ -4,9 +4,10 @@ import { AdminAuthGuard, AdminPermissionGuard } from '@/server/business/admin/sy
 import { SysModule } from './sys/sys.module'
 import { UserModule } from './user/user.module'
 import { CommonModule } from './common/common.module'
+import { NotificationModule } from './notification/notification.module'
 
 @Module({
-  imports: [SysModule, UserModule, CommonModule],
+  imports: [SysModule, UserModule, CommonModule, NotificationModule],
   providers: [
     {
       provide: APP_GUARD,

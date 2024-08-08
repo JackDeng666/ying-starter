@@ -1,10 +1,11 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
-import { BaseEntity } from './base'
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm'
+import { BaseEntityWithAutoId } from './base'
 import { FileEntity } from './file.entity'
 import { AccountEntity } from './account.entity'
+import { VisitorEntity } from './visitor.entity'
 
 @Entity({ name: 'user' })
-export class UserEntity extends BaseEntity {
+export class UserEntity extends BaseEntityWithAutoId {
   @Column({ type: 'varchar', nullable: true })
   name?: string
 
@@ -28,4 +29,7 @@ export class UserEntity extends BaseEntity {
 
   @OneToOne(() => AccountEntity, account => account.user)
   account?: AccountEntity
+
+  @OneToMany(() => VisitorEntity, visitor => visitor.user)
+  visitors: VisitorEntity[]
 }

@@ -12,7 +12,7 @@ import { IconButton, Iconify } from '@/admin/components/icon'
 import { useThemeToken } from '@/admin/theme/hooks'
 import { usePage } from '@/admin/hooks/use-page'
 import { sysUserApi } from '@/admin/api'
-import { BasicStatusOptions, BasicStatusOptionsType } from '@/admin/constant'
+import { BasicStatusOptions, BasicStatusOption } from '@/admin/constant'
 import { PageQuery } from '@/admin/components/page-query'
 
 import { UserDrawer, UserDrawerProps } from './user-drawer'
@@ -144,7 +144,7 @@ export default function UserPage() {
       align: 'center',
       width: 100,
       render: status => {
-        const option = getOption<BasicStatusOptionsType>(BasicStatusOptions, status)
+        const option = getOption<BasicStatusOption>(BasicStatusOptions, status)
         return <Tag color={option.color}>{option.label}</Tag>
       }
     },

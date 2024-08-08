@@ -28,7 +28,7 @@ export function debounce<T>(callback: (params?: T) => void, delay = 200): (param
   }
 }
 
-export function getOption<T extends { label: string; value: number }>(arr: T[], value: number): T | undefined {
+export function getOption<T extends { label: string; value: string | number }>(arr: T[], value: number): T | undefined {
   return arr.find(el => el.value === value)
 }
 

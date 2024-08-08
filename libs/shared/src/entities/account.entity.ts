@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
-import { BaseEntity } from './base'
+import { BaseEntityWithAutoId } from './base'
 import { UserEntity } from './user.entity'
 
 @Entity({ name: 'account' })
-export class AccountEntity extends BaseEntity {
+export class AccountEntity extends BaseEntityWithAutoId {
   @Column()
   type: string
 

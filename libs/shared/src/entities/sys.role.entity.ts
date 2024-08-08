@@ -1,11 +1,11 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm'
 import { BasicStatus } from '../enum'
-import { BaseEntity } from './base'
+import { BaseEntityWithAutoId } from './base'
 import { SysPermissionEntity } from './sys.permission.entity'
 import { SysUserEntity } from './sys.user.entity'
 
 @Entity('sys_role')
-export class SysRoleEntity extends BaseEntity {
+export class SysRoleEntity extends BaseEntityWithAutoId {
   @Column()
   name: string
 

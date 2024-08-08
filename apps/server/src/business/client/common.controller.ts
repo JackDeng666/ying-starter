@@ -5,6 +5,7 @@ import {
   Get,
   Inject,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
   Post,
   UploadedFile,
@@ -14,13 +15,22 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { RedisClientType } from 'redis'
 
-import { CreateFeedbackDto, FileSourceType, FileType, SettingDto } from '@ying/shared'
+import {
+  CreateFeedbackDto,
+  CreateVisitorDto,
+  FileSourceType,
+  FileType,
+  NoticeSubscribeDto,
+  SettingDto
+} from '@ying/shared'
 
 import { ClientScope, Public, UID } from '@/server/common/decorator'
 import { FileService } from '@/server/common/modules/storage/file.service'
 import { RedisKey, RedisToken } from '@/server/common/modules/redis/constant'
 
 import { FeedbackService } from '@/server/business/modules/feedback/feedback.service'
+import { VisitorService } from '@/server/business/modules/notification/visitor.service'
+import { PushRecordService } from '@/server/business/modules/notification/push.record.service'
 
 @ApiTags('client common')
 @Controller('client')
@@ -30,7 +40,9 @@ export class CommonController {
     readonly feedbackService: FeedbackService,
     readonly fileService: FileService,
     @Inject(RedisToken)
-    readonly redisClient: RedisClientType
+    readonly redisClient: RedisClientType,
+    readonly visitorService: VisitorService,
+    readonly pushRecordService: PushRecordService
   ) {}
 
   @Get('check-live-debug')
@@ -74,5 +86,28 @@ export class CommonController {
       from: FileSourceType.Client,
       userId
     })
+  }
+
+  @Public()
+  @Post('visitor')
+  async createVisitor(@Body() dto: CreateVisitorDto) {
+    return this.visitorService.createVisitor(dto)
+  }
+
+  @Public()
+  @Post('visitor/subscribe')
+  async subscribe(@Body() dto: NoticeSubscribeDto) {
+    return this.visitorService.subscribe(dto)
+  }
+
+  @Get('visitor/:id/bind')
+  async bindUser(@Param('id') id: string, @UID() uid: number) {
+    return this.visitorService.bindUser(id, uid)
+  }
+
+  @Public()
+  @Get('notice/:pushRecordId/click')
+  async click(@Param('pushRecordId') pushRecordId: string) {
+    return this.pushRecordService.click(pushRecordId)
   }
 }

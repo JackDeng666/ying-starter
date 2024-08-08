@@ -8,8 +8,11 @@ import { CircleLoading } from '@/admin/components/loading'
 
 const Dashbord = lazy(() => import('@/admin/pages/dashboard'))
 const User = lazy(() => import('@/admin/pages/user'))
-
 const Feedback = lazy(() => import('@/admin/pages/feedback'))
+const PushTemplate = lazy(() => import('@/admin/pages/notification/push-template/push-template-page'))
+const PushTask = lazy(() => import('@/admin/pages/notification/push-task/push-task-page'))
+const PushRecord = lazy(() => import('@/admin/pages/notification/push-record/push-record-page'))
+const Visitor = lazy(() => import('@/admin/pages/notification/visitor/visitor-page'))
 
 const Role = lazy(() => import('@/admin/pages/sys/role'))
 const SysUser = lazy(() => import('@/admin/pages/sys/user'))
@@ -26,6 +29,7 @@ export const menuRoutes: AppRouteObject[] = [
     },
     element: <Dashbord />
   },
+
   {
     path: 'user',
     meta: {
@@ -44,6 +48,61 @@ export const menuRoutes: AppRouteObject[] = [
       label: '反馈管理'
     },
     element: <Feedback />
+  },
+  {
+    path: 'notification',
+    element: (
+      <Suspense fallback={<CircleLoading />}>
+        <Outlet />
+      </Suspense>
+    ),
+    meta: {
+      icon: 'solar:bell-bing-bold-duotone',
+      key: '/notification',
+      label: '通知管理'
+    },
+    children: [
+      {
+        index: true,
+        element: <Navigate to="role" replace />
+      },
+      {
+        path: 'push-template',
+        meta: {
+          icon: 'solar:document-bold-duotone',
+          key: '/notification/push-template',
+          label: '推送模板'
+        },
+        element: <PushTemplate />
+      },
+      {
+        path: 'push-task',
+        meta: {
+          icon: 'solar:siren-bold-duotone',
+          key: '/notification/push-task',
+          label: '推送任务'
+        },
+        element: <PushTask />
+      },
+      {
+        path: 'push-record',
+        meta: {
+          icon: 'solar:record-square-bold-duotone',
+          key: '/notification/push-record',
+          label: '推送记录'
+        },
+        element: <PushRecord />
+      },
+      {
+        path: 'visitor',
+        meta: {
+          icon: 'solar:user-hand-up-bold-duotone',
+          key: '/notification/visitor',
+          label: '浏览用户'
+        },
+        element: <Visitor />
+      }
+    ]
   },
   {
     path: 'sys',
