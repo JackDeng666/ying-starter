@@ -100,6 +100,9 @@ docker run --name ying-starter -d \
   -e AUTH_GOOGLE_SECRET= \
   -e AUTH_FACEBOOK_ID= \
   -e AUTH_FACEBOOK_SECRET= \
+  -e VAPID_SUBJECT=mailto:http://localhost:3256 \
+  -e VAPID_PUBLIC_KEY=BCeOtQOGgu4arg2axtgTBz72kc-OyLomMBgoQCX2S1wMUOr3Z4J9UivXmdsVtDOryRlAJYjTMEViVjjLpxZPcrs \
+  -e VAPID_PRIVATE_KEY=foPUG2TRWnk5-nqxIrso5JrX5qdVA9IwXBCslxXZrqk \
   ying-starter:test
 ```
 

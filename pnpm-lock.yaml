@@ -60,8 +60,8 @@ dependencies:
     specifier: ^4.19.2
     version: 4.19.2
   husky:
-    specifier: ^9.1.4
-    version: 9.1.4
+    specifier: '8'
+    version: 8.0.3
   i18next:
     specifier: ^23.12.2
     version: 23.12.2
@@ -92,9 +92,6 @@ dependencies:
   nodemailer:
     specifier: ^6.9.14
     version: 6.9.14
-  numeral:
-    specifier: ^2.0.6
-    version: 2.0.6
   passport:
     specifier: ^0.7.0
     version: 0.7.0
@@ -232,6 +229,9 @@ optionalDependencies:
   nprogress:
     specifier: ^0.2.0
     version: 0.2.0
+  numeral:
+    specifier: ^2.0.6
+    version: 2.0.6
   ramda:
     specifier: ^0.29.1
     version: 0.29.1
@@ -11242,9 +11242,9 @@ packages:
     engines: {node: '>=16.17.0'}
     dev: true
 
-  /husky@9.1.4:
-    resolution: {integrity: sha512-bho94YyReb4JV7LYWRWxZ/xr6TtOTt8cMfmQ39MQYJ7f/YE268s3GdghGwi+y4zAeqewE5zYLvuhV0M0ijsDEA==}
-    engines: {node: '>=18'}
+  /husky@8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
     hasBin: true
     dev: false
 
@@ -13609,7 +13609,9 @@ packages:
 
   /numeral@2.0.6:
     resolution: {integrity: sha512-qaKRmtYPZ5qdw4jWJD6bxEf1FJEqllJrwxCLIm0sQU/A7v2/czigzOb+C2uSiFsa9lBUzeH7M1oK+Q+OLxL3kA==}
+    requiresBuild: true
     dev: false
+    optional: true
 
   /nwsapi@2.2.12:
     resolution: {integrity: sha512-qXDmcVlZV4XRtKFzddidpfVP4oMSGhga+xdMc25mv8kaLUHtgzCDhUxkrN8exkGdTlLNaXj7CV3GtON7zuGZ+w==}
