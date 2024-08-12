@@ -2,16 +2,18 @@ import { useCallback, useEffect, useRef } from 'react'
 import type { PushSubscription } from 'web-push'
 
 import { useApi } from '@/client/store/app-store'
-import { useVisitor } from './use-visitor'
+import { useVisitorStore } from '@/client/store/visitor-store'
+import { useAppContext } from '@/client/providers/app'
 
-export const useNotificationSw = (serverUrl: string, vapidPublicKey?: string) => {
+export const useNotificationSw = () => {
+  const { serverUrl, vapidPublicKey } = useAppContext()
   const { commonApi } = useApi()
-  const { visitor } = useVisitor()
+  const visitor = useVisitorStore(store => store.visitor)
   const initedRef = useRef(false)
 
   const subscribe = useCallback(
     async (registration: ServiceWorkerRegistration) => {
-      if (!commonApi || !visitor?.id) return
+      if (!commonApi || !vapidPublicKey || !visitor) return
       console.log('start subscribe')
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
@@ -73,7 +75,7 @@ export const useNotificationSw = (serverUrl: string, vapidPublicKey?: string) =>
   )
 
   const registerSw = useCallback(async () => {
-    if (initedRef.current || !vapidPublicKey || !visitor?.id) return
+    if (initedRef.current || !vapidPublicKey || !visitor) return
     initedRef.current = true
     if ('serviceWorker' in navigator) {
       const registration = await navigator.serviceWorker.register('/notification-sw.js', { scope: '/notification' })

@@ -66,7 +66,6 @@ docker build -t ying-starter:test .
 docker run --name ying-starter -d \
   -p 3000:3000 \
   -p 3256:3256 \
-  -e API_URL=http://localhost:3000/api/client \
   -e DOMAIN=localhost \
   -e SERVER_URL=http://localhost:3000 \
   -e REDIS_HOST=kubernetes.docker.internal \
@@ -104,4 +103,4 @@ docker run --name ying-starter -d \
   ying-starter:test
 ```
 
-如何对象存储使用本地模式，并需要保存容器内的文件，可以添加映射到容器内的`/app/upload`。
+如何对象存储使用本地模式，并需要保存容器内的文件，可以添加映射到容器内的`/app/uploadfiles`。

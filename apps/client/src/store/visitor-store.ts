@@ -1,26 +1,35 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
+import { create } from 'zustand'
 import { load } from '@fingerprintjs/fingerprintjs'
 import UAParser from 'ua-parser-js'
-
-import { AppKey } from '@/client/enum'
-import { useApi } from '@/client/store/app-store'
 import { VisitorEntity } from '@ying/shared/entities'
+import { AppKey } from '@/client/enum'
+import { useApi } from './app-store'
 
 const DeviceTypes = ['windows', 'android', 'ios', 'mac os']
 
+type VisitorStore = {
+  visitor: VisitorEntity | undefined
+}
+
+export const useVisitorStore = create<VisitorStore>(() => ({
+  visitor: undefined
+}))
+
+export const setVisitor = (visitor: VisitorEntity) => {
+  useVisitorStore.setState({ visitor })
+  localStorage.setItem(AppKey.storageVisitorKey, JSON.stringify(visitor))
+}
+
 export const useVisitor = () => {
   const { commonApi } = useApi()
-  const [visitor, setVisitor] = useState<VisitorEntity | undefined>()
-
-  const storeVisitor = (newVisitor: VisitorEntity) => {
-    localStorage.setItem(AppKey.storageVisitorKey, JSON.stringify(newVisitor))
-    setVisitor(newVisitor)
-  }
 
   const initVisitor = useCallback(async () => {
-    const storageVisitor = localStorage.getItem(AppKey.storageVisitorKey)
-    if (storageVisitor) {
-      return setVisitor(JSON.parse(storageVisitor))
+    const storageVisitorStr = localStorage.getItem(AppKey.storageVisitorKey)
+    if (storageVisitorStr) {
+      const storageVisitor: VisitorEntity = JSON.parse(storageVisitorStr)
+      setVisitor(storageVisitor)
+      return storageVisitor
     }
 
     if (!commonApi) return
@@ -36,16 +45,11 @@ export const useVisitor = () => {
     const visitorId = (await fp.get()).visitorId
 
     const newVisitor = await commonApi.createVisitor({ visitorId, ...env })
-
-    storeVisitor(newVisitor)
+    setVisitor(newVisitor)
+    return newVisitor
   }, [commonApi])
 
   useEffect(() => {
     initVisitor()
   }, [initVisitor])
-
-  return {
-    visitor,
-    storeVisitor
-  }
 }

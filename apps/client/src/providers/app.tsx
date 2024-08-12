@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation'
 import { ReactNode, createContext, useContext } from 'react'
 import { initI18n } from '@/client/i18n/client'
 import { useNotificationSw } from '@/client/hooks/use-notification-sw'
+import { useVisitor } from '@/client/store/visitor-store'
 
 export type TAppContext = {
   serverUrl: string
@@ -22,11 +23,22 @@ export const AppContext = createContext<TAppContext>({
   refreshTokenExpiresIn: ''
 })
 
-export const AppProvider = ({ children, value }: { children: ReactNode; value: TAppContext }) => {
+const AppInitProvider = ({ children }: { children: ReactNode }) => {
   const { lng } = useParams()
   initI18n(lng as string)
-  useNotificationSw(value.serverUrl, value.vapidPublicKey)
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>
+
+  useVisitor()
+  useNotificationSw()
+
+  return children
+}
+
+export const AppProvider = ({ children, value }: { children: ReactNode; value: TAppContext }) => {
+  return (
+    <AppContext.Provider value={value}>
+      <AppInitProvider>{children}</AppInitProvider>
+    </AppContext.Provider>
+  )
 }
 
 export const useAppContext = () => {

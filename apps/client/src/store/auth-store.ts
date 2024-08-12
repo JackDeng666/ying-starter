@@ -5,8 +5,8 @@ import { ClientUserVo, ClientAuthVo } from '@ying/shared'
 import { ms } from '@ying/utils'
 import { AppKey } from '@/client/enum'
 import { TAppContext, useAppContext } from '@/client/providers/app'
-import { useVisitor } from '@/client/hooks/use-visitor'
 import { useApi } from './app-store'
+import { useVisitorStore, setVisitor } from './visitor-store'
 
 interface AuthStore {
   userInfo?: ClientUserVo
@@ -43,7 +43,7 @@ export const updateAccessToken = (accessToken: string, { domain, accessTokenExpi
 export const useAuth = () => {
   const appContext = useAppContext()
   const { authApi, userApi, commonApi } = useApi()
-  const { visitor, storeVisitor } = useVisitor()
+  const visitor = useVisitorStore(store => store.visitor)
 
   const logout = useCallback(async () => {
     if (!authApi) return
@@ -57,9 +57,9 @@ export const useAuth = () => {
     useAuthStore.setState({ userInfo })
     if (!visitor.userId) {
       const newVisitor = await commonApi.bindUser(visitor.id)
-      storeVisitor(newVisitor)
+      setVisitor(newVisitor)
     }
-  }, [userApi, visitor, commonApi, storeVisitor])
+  }, [userApi, visitor, commonApi])
 
   return {
     logout,

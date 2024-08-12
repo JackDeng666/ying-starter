@@ -14,7 +14,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/client/components/ui/dropdown-menu'
-import { Sheet, SheetContent, SheetTrigger } from '@/client/components/ui/sheet'
+import { Sheet, SheetTitle, SheetDescription, SheetContent, SheetTrigger } from '@/client/components/ui/sheet'
 import { Link } from '@/client/components/link'
 import { Brand } from '@/client/components/brand'
 
@@ -78,6 +78,8 @@ export const CustomNavbar = () => {
               <LuAlignJustify className="text-xl mr-2 sm:hidden" />
             </SheetTrigger>
             <SheetContent side="left">
+              <SheetTitle />
+              <SheetDescription />
               <div className="flex flex-col items-center gap-4 pt-8">
                 {MenuItems.map(item => (
                   <Link
