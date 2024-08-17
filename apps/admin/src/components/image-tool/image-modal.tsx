@@ -26,7 +26,7 @@ export const ImageModal = ({ files, open, onSelect, onCancel, maxLength = 1 }: I
   }
 
   return (
-    <Modal open={open} onCancel={onCancel} width={`75%`} title="选择图片" onOk={onOk}>
+    <Modal open={open} onCancel={onCancel} width="75%" title="选择图片" onOk={onOk}>
       <ImageList selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} maxLength={maxLength} />
     </Modal>
   )

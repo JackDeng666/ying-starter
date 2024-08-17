@@ -1,5 +1,6 @@
 export const LandingPage = '/'
-export const AboutPage = '/about'
+export const ArticlePage = '/article'
+export const ArticleDetailPage = '/article/:id'
 export const FeedbackPage = '/feedback'
 
 export const LoginPage = '/auth/login'
@@ -25,22 +26,12 @@ export const UserPages = [
 
 export const ProtectedRoutes = [...UserPages.map(el => el.link)]
 
-export const MenuItems = [
-  {
-    name: 'about',
-    link: AboutPage
-  },
-  {
-    name: 'feedback',
-    link: FeedbackPage
-  }
-]
-
 export const DefaultLoginRedirect = '/profile'
 
 export const AllRoutes = [
   LandingPage,
-  AboutPage,
+  ArticlePage,
+  ArticleDetailPage,
   FeedbackPage,
   LoginPage,
   RegisterPage,

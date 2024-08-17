@@ -1,89 +1,79 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Form, Drawer, Input, Button, Radio, Select, App } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
-import { debounce } from '@ying/utils'
 import { BasicStatus, CreateSysUserDto, UpdateSysUserDto } from '@ying/shared'
-import { useFetch } from '@ying/fontend-shared/hooks'
+import { useDialogOpen, useFetch } from '@ying/fontend-shared/hooks'
 
 import { sysRoleApi, sysUserApi } from '@/admin/api'
+import { defultUserValues } from './constant'
 
 const createResolver = classValidatorResolver(CreateSysUserDto)
 const updateResolver = classValidatorResolver(UpdateSysUserDto)
 
-export type UserDrawerProps = {
-  formValue: Partial<UpdateSysUserDto>
-  title: string
-  show: boolean
-  onSuccess: VoidFunction
-  onCancel: VoidFunction
+export type UserDrawerProps = ReturnType<typeof useDialogOpen<UpdateSysUserDto>> & {
+  onSuccess?: VoidFunction
 }
 
-export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: UserDrawerProps) {
+export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerProps) {
+  const title = formValue ? '编辑系统用户' : '新增系统用户'
   const { message } = App.useApp()
   const [form] = Form.useForm()
-  const { data: roles, run: loadRoles } = useFetch({
+
+  const { data: roles, debounceRun: loadRoles } = useFetch({
     func: useCallback(async name => {
       const data = await sysRoleApi.list({ name })
       return data.map(el => ({ ...el, disabled: el.name === 'Super Admin' }))
     }, [])
   })
 
-  const handleSearch = debounce(value => {
-    loadRoles(value)
-  }, 500)
-
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset
   } = useForm<CreateSysUserDto & UpdateSysUserDto>({
-    resolver: formValue.id ? updateResolver : createResolver,
-    defaultValues: formValue
+    resolver: formValue ? updateResolver : createResolver,
+    defaultValues: defultUserValues
   })
 
   useEffect(() => {
-    reset(formValue)
+    if (formValue) {
+      reset(formValue)
+    } else {
+      reset(defultUserValues)
+    }
   }, [formValue, reset])
 
-  const [loading, setLoading] = useState(false)
-
   const handlePost = async (value: CreateSysUserDto & UpdateSysUserDto) => {
-    try {
-      setLoading(true)
-      if (value.id) {
-        await sysUserApi.update(value)
-      } else {
-        await sysUserApi.create(value)
-      }
-      message.success(`${title}成功`)
-      onSuccess()
-    } catch (error) {
-    } finally {
-      setLoading(false)
+    if (value.id) {
+      await sysUserApi.update(value)
+    } else {
+      await sysUserApi.create(value)
     }
+    onClose()
+    message.success(`${title}成功`)
+    onSuccess && onSuccess()
   }
 
   return (
     <Drawer
       title={title}
-      open={show}
-      onClose={onCancel}
+      open={open}
+      onClose={onClose}
       width={660}
       footer={
         <div className="flex-1 flex justify-end gap-2">
-          <Button type="primary" onClick={form.submit} loading={loading}>
+          <Button type="primary" onClick={form.submit} loading={isSubmitting}>
             提交
           </Button>
         </div>
       }
     >
       <Form onFinish={handleSubmit(handlePost)} form={form} labelCol={{ span: 2 }}>
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="昵称"
-          name="name"
           required
           validateStatus={errors.name ? 'error' : ''}
           help={errors.name && errors.name.message}
@@ -95,9 +85,8 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
           />
         </Form.Item>
 
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="账号"
-          name="account"
           required
           validateStatus={errors.account ? 'error' : ''}
           help={errors.account && errors.account.message}
@@ -109,10 +98,9 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
           />
         </Form.Item>
 
-        {!formValue.id && (
-          <Form.Item<CreateSysUserDto>
+        {!formValue && (
+          <Form.Item
             label="密码"
-            name="password"
             required
             validateStatus={errors.password ? 'error' : ''}
             help={errors.password && errors.password.message}
@@ -127,9 +115,8 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
           </Form.Item>
         )}
 
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="邮箱"
-          name="email"
           validateStatus={errors.email ? 'error' : ''}
           help={errors.email && errors.email.message}
         >
@@ -140,9 +127,8 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
           />
         </Form.Item>
 
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="状态"
-          name="status"
           required
           validateStatus={errors.status ? 'error' : ''}
           help={errors.status && errors.status.message}
@@ -159,9 +145,8 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
           />
         </Form.Item>
 
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="角色"
-          name="roleIds"
           validateStatus={errors.roleIds ? 'error' : ''}
           help={errors.roleIds && errors.roleIds.message}
         >
@@ -178,9 +163,7 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
                 mode="multiple"
                 placeholder="请选择角色"
                 options={roles}
-                onSearch={value => {
-                  handleSearch(value)
-                }}
+                onSearch={loadRoles}
                 allowClear
                 {...field}
               />
@@ -188,9 +171,8 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
           />
         </Form.Item>
 
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="备注"
-          name="remark"
           validateStatus={errors.remark ? 'error' : ''}
           help={errors.remark && errors.remark.message}
         >

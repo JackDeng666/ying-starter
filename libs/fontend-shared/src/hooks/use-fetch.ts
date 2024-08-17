@@ -8,7 +8,7 @@ type useFetchOptions<T, U> = {
   debounceTimeout?: number
 }
 
-export const useFetch = <T, U>({ func, immediately = true, debounceTimeout = 0 }: useFetchOptions<T, U>) => {
+export const useFetch = <T, U>({ func, immediately = true, debounceTimeout = 500 }: useFetchOptions<T, U>) => {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<T>()
 

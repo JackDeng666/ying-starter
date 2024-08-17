@@ -32,10 +32,8 @@ export function SendNotificationModal({ open, formValue, onClose }: SendNotifica
   }, [formValue, setValue])
 
   const handlePost = async (value: SendNotificationDto) => {
-    try {
-      await notificationApi.sendNotice(value)
-      message.success('发送通知成功')
-    } catch (error) {}
+    await notificationApi.sendNotice(value)
+    message.success('发送通知成功')
   }
 
   return (

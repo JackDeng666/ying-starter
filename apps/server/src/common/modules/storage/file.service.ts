@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm'
+import { DataSource, Repository } from 'typeorm'
 import { ConfigType } from '@nestjs/config'
 import { ListFileDto } from '@ying/shared'
 import { FileEntity } from '@ying/shared/entities'
@@ -18,13 +18,15 @@ export class FileService extends BaseService<FileEntity> implements AbstractFile
     @Inject(storageConfig.KEY)
     private readonly storageConf: ConfigType<typeof storageConfig>,
     @InjectRepository(FileEntity)
-    private readonly fileRepository: Repository<FileEntity>
+    private readonly fileRepository: Repository<FileEntity>,
+    @InjectDataSource()
+    private dataSource: DataSource
   ) {
     super(fileRepository)
     if (storageConf.mode === 'local') {
-      this.fileService = new LocalFileService(this.storageConf, this.fileRepository)
+      this.fileService = new LocalFileService(this.storageConf, this.dataSource)
     } else if (storageConf.mode === 'minio') {
-      this.fileService = new MinioFileService(this.storageConf, this.fileRepository)
+      this.fileService = new MinioFileService(this.storageConf, this.dataSource)
     }
   }
 
@@ -78,5 +80,10 @@ export class FileService extends BaseService<FileEntity> implements AbstractFile
     })
 
     return this.repository.countBy(where)
+  }
+
+  async deleteFileById(id: number) {
+    const file = await this.fileRepository.findOne({ where: { id } })
+    return this.deleteFiles([file])
   }
 }

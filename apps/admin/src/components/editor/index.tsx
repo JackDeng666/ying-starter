@@ -8,17 +8,19 @@ import Color from '@tiptap/extension-color'
 import StarterKit from '@tiptap/starter-kit'
 import { EditorContent, useEditor } from '@tiptap/react'
 
-import { ToolBar } from './toolbar'
+import { cn } from '@/admin/utils/lib'
 
+import { ToolBar } from './toolbar'
 import './styles.scss'
 
 type EditorProps = {
-  value: string
+  className?: string
   placeholder?: string
+  value: string
   onChange: (richText: string) => void
 }
 
-export default function Editor({ value, onChange, placeholder = '请输入内容' }: EditorProps) {
+export default function Editor({ className, value, onChange, placeholder = '请输入内容' }: EditorProps) {
   const extensions = [
     StarterKit,
     TextStyle,
@@ -40,14 +42,13 @@ export default function Editor({ value, onChange, placeholder = '请输入内容
   })
 
   useEffect(() => {
-    if (!value) return
     editor.commands.setContent(value)
   }, [value, editor])
 
   return (
     <div className="border border-[#f1f1f1] rounded-lg shadow-sm overflow-hidden">
       <ToolBar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className={cn('h-60 overflow-y-auto bg-[#fcfcfc]', className)} />
     </div>
   )
 }

@@ -1,19 +1,21 @@
-import { App, Button, Card, Form, Input, Popconfirm } from 'antd'
+import { App, Button, Card, Form, Input } from 'antd'
 import Table, { ColumnsType } from 'antd/es/table'
 import { Controller, useForm } from 'react-hook-form'
 import { useCallback, useEffect } from 'react'
 import dayjs from 'dayjs'
+import { useLocation } from 'react-router-dom'
 
 import { debounce } from '@ying/utils'
 import { useDialogOpen } from '@ying/fontend-shared/hooks'
 
 import { ListPushTemplateDto } from '@ying/shared'
-import { PushTemplateEntity } from '@ying/shared/entities'
+import { ArticleEntity, PushTemplateEntity } from '@ying/shared/entities'
 
 import { IconButton, Iconify } from '@/admin/components/icon'
 import { usePage } from '@/admin/hooks/use-page'
 import { notificationApi } from '@/admin/api'
 import { PageQuery } from '@/admin/components/page-query'
+import { PageOperations } from '@/admin/components/page-operations'
 
 import { PushTemplateDrawer } from './push-template-drawer'
 import { SendNotificationModal } from './send-notification-modal'
@@ -46,8 +48,25 @@ export default function Page() {
     return () => subscription.unsubscribe()
   }, [watch, reload])
 
-  const pushTemplateDrawerProps = useDialogOpen<PushTemplateEntity>()
+  const pushTemplateDrawerProps = useDialogOpen<Partial<PushTemplateEntity>>()
   const sendNotificationModalProps = useDialogOpen<PushTemplateEntity>()
+
+  const location = useLocation()
+  const { onOpen: openPushTemplateDrawer } = pushTemplateDrawerProps
+  useEffect(() => {
+    const state = location.state
+    if (state) {
+      if (state.type === 'setArticle') {
+        const record = state.record as ArticleEntity
+        openPushTemplateDrawer({
+          name: record.name,
+          title: record.title,
+          link: `${import.meta.env.VITE_APP_CLIENT_URL}/article/${record.id}`,
+          image: record.cover
+        })
+      }
+    }
+  }, [location, openPushTemplateDrawer])
 
   const columns: ColumnsType<PushTemplateEntity> = [
     {
@@ -80,37 +99,20 @@ export default function Page() {
       width: 120,
       fixed: 'right',
       render: (_, record) => (
-        <div className="flex w-full justify-center gap-1 text-gray">
-          <IconButton
-            onClick={() => {
-              sendNotificationModalProps.onOpen(record)
-            }}
-          >
-            <Iconify icon="solar:card-send-bold-duotone" size={18} />
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              pushTemplateDrawerProps.onOpen(record)
-            }}
-          >
-            <Iconify icon="solar:pen-bold-duotone" size={18} />
-          </IconButton>
-          <Popconfirm
-            title={`确定删除【${record.name}】？`}
-            okText="确定"
-            cancelText="取消"
-            placement="left"
-            onConfirm={async () => {
-              await notificationApi.deletePushTemplate(record.id)
-              message.success('删除成功！')
-              reload()
-            }}
-          >
-            <IconButton>
-              <Iconify icon="mingcute:delete-2-fill" size={18} className="text-error" />
+        <PageOperations
+          extra={
+            <IconButton onClick={() => sendNotificationModalProps.onOpen(record)}>
+              <Iconify icon="solar:card-send-bold-duotone" size={18} />
             </IconButton>
-          </Popconfirm>
-        </div>
+          }
+          onEdit={() => pushTemplateDrawerProps.onOpen(record)}
+          deleteTitle={`确定删除【${record.name}】？`}
+          onDelete={async () => {
+            await notificationApi.deletePushTemplate(record.id)
+            message.success('删除成功！')
+            reload()
+          }}
+        />
       )
     }
   ]

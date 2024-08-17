@@ -1,7 +1,7 @@
 import { dirname, join } from 'path'
 import { writeFileSync, unlink, existsSync, mkdirSync, PathLike } from 'fs'
 import { ConfigType } from '@nestjs/config'
-import { In, Not, Repository } from 'typeorm'
+import { DataSource, In, Not, Repository } from 'typeorm'
 import { nanoid } from 'nanoid'
 import { FileEntity } from '@ying/shared/entities'
 import { storageConfig } from '@/server/config'
@@ -10,14 +10,17 @@ import { AddFileOptions, UploadFileOptions, AbstractFileService } from './abstra
 export class LocalFileService implements AbstractFileService {
   private readonly storageConf: ConfigType<typeof storageConfig>
 
+  private readonly dataSource: DataSource
+
   private readonly fileRepository: Repository<FileEntity>
 
-  constructor(storageConf: ConfigType<typeof storageConfig>, fileRepository: Repository<FileEntity>) {
+  constructor(storageConf: ConfigType<typeof storageConfig>, dataSource: DataSource) {
     this.storageConf = storageConf
-    this.fileRepository = fileRepository
+    this.dataSource = dataSource
+    this.fileRepository = dataSource.getRepository(FileEntity)
   }
 
-  async uploadFile({ file, fileType, from, userId }: UploadFileOptions) {
+  async uploadFile({ file, fileType, from, userId, extra }: UploadFileOptions) {
     const ext = this.getFileExt(file.originalname)
     const fileName = nanoid()
     const objectName = `${fileType}/${fileName}.${ext}`
@@ -34,7 +37,8 @@ export class LocalFileService implements AbstractFileService {
       path: objectName,
       url,
       from,
-      userId
+      userId,
+      extra
     })
     await this.fileRepository.save(fileEnitity)
 
@@ -60,9 +64,10 @@ export class LocalFileService implements AbstractFileService {
   }
 
   async deleteFiles(files: FileEntity[]) {
-    await Promise.all(files.map(el => this.deleteFile(join(__dirname, `../../../uploadfiles/${el.path}`))))
-
-    await this.fileRepository.delete({ id: In(files.map(el => el.id)) })
+    await this.dataSource.transaction(async t => {
+      await t.delete(FileEntity, { id: In(files.map(el => el.id)) })
+      await Promise.all(files.map(el => this.deleteFile(join(__dirname, `../../../uploadfiles/${el.path}`))))
+    })
   }
 
   deleteFile(path: PathLike) {

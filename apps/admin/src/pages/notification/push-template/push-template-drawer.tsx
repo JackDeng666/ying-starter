@@ -14,8 +14,8 @@ import { FormList } from '@/admin/components/form/form-list'
 const createResolver = classValidatorResolver(CreatePushTemplateDto)
 const updateResolver = classValidatorResolver(UpdatePushTemplateDto)
 
-export type PushTemplateDrawerProps = ReturnType<typeof useDialogOpen<PushTemplateEntity>> & {
-  onSuccess: VoidFunction
+type PushTemplateDrawerProps = ReturnType<typeof useDialogOpen<Partial<PushTemplateEntity>>> & {
+  onSuccess?: VoidFunction
 }
 
 const defaultValue: CreatePushTemplateDto = {
@@ -28,7 +28,7 @@ const defaultValue: CreatePushTemplateDto = {
 }
 
 export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: PushTemplateDrawerProps) {
-  const title = `${formValue ? '编辑' : '新增'}推送模板`
+  const title = `${formValue?.id ? '编辑' : '新增'}推送模板`
   const [form] = Form.useForm()
   const { message } = App.useApp()
   const {
@@ -37,7 +37,7 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
     formState: { errors, isSubmitting },
     reset
   } = useForm<CreatePushTemplateDto & UpdatePushTemplateDto>({
-    resolver: formValue ? updateResolver : createResolver,
+    resolver: formValue?.id ? updateResolver : createResolver,
     defaultValues: defaultValue
   })
 
@@ -45,9 +45,8 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
 
   const updateForm = useCallback(async () => {
     if (formValue) {
-      const data = await notificationApi.getPushTemplate(formValue.id)
-      reset(data)
-      setImage(data.image)
+      reset(formValue)
+      setImage(formValue.image)
     } else {
       reset(defaultValue)
       setImage(undefined)
@@ -65,7 +64,7 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
       await notificationApi.createPushTemplate(value)
     }
     message.success(`${title}成功`)
-    onSuccess()
+    onSuccess && onSuccess()
     onClose()
   }
 
@@ -135,13 +134,7 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
             name="imageId"
             control={control}
             render={({ field }) => (
-              <SelectImage
-                value={image ? [image] : []}
-                onChange={files => {
-                  setImage(files[0])
-                  field.onChange(files[0].id)
-                }}
-              />
+              <SelectImage maxLength={1} defaultValue={image} onChange={files => field.onChange(files[0]?.id)} />
             )}
           />
         </Form.Item>

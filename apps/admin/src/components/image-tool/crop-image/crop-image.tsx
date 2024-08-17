@@ -8,6 +8,8 @@ import { StyledRnd } from './styles'
 
 type CropImageProps = {
   url: string
+  type: string
+  name: string
   // 宽/高的值
   aspectRatio?: number
 }
@@ -30,7 +32,7 @@ type RenderData = {
   renderY: number
 }
 
-export const CropImage = forwardRef<TCropImageHandle, CropImageProps>(({ url, aspectRatio }, ref) => {
+export const CropImage = forwardRef<TCropImageHandle, CropImageProps>(({ url, type, name, aspectRatio }, ref) => {
   const themeToken = useThemeToken()
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -95,8 +97,6 @@ export const CropImage = forwardRef<TCropImageHandle, CropImageProps>(({ url, as
       const { containerW, containerH, renderW, renderH, renderX, renderY } = renderData
 
       const canvas = document.createElement('canvas')
-      canvas.width = renderW
-      canvas.height = renderH
       const ctx = canvas.getContext('2d')
 
       const drawImage = new Image()
@@ -109,21 +109,26 @@ export const CropImage = forwardRef<TCropImageHandle, CropImageProps>(({ url, as
       const xRatio = originWidth / containerW
       const yRatio = originHeight / containerH
 
+      const cutW = Math.round(renderW * xRatio)
+      const cutH = Math.round(renderH * yRatio)
+      canvas.width = cutW
+      canvas.height = cutH
+
       ctx?.drawImage(
         drawImage,
-        Math.round(renderX * xRatio),
+        Math.round(renderX * yRatio),
         Math.round(renderY * yRatio),
-        originWidth,
-        originHeight,
+        cutW,
+        cutH,
         0,
         0,
-        containerW,
-        containerH
+        cutW,
+        cutH
       )
 
-      const blob: Blob | null = await new Promise(resolve => canvas.toBlob(resolve))
+      const blob: Blob | null = await new Promise(resolve => canvas.toBlob(resolve, type, 0.7))
       if (blob) {
-        const file = new File([blob], 'filename.png', { type: 'image/png' })
+        const file = new File([blob], name, { type })
         const url = URL.createObjectURL(blob)
 
         return { file, url }

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
-import { Pagination, Spin, Image, message } from 'antd'
+import { Pagination, Spin, Image, message, Popconfirm } from 'antd'
 import { useForm } from 'react-hook-form'
-import { EyeFilled, CheckCircleFilled } from '@ant-design/icons'
+import { EyeFilled, CheckCircleFilled, DeleteOutlined } from '@ant-design/icons'
 
 import { ListFileDto, FileType, FileSourceType } from '@ying/shared'
 import { FileEntity } from '@ying/shared/entities'
@@ -56,7 +56,12 @@ export const ImageList = ({ selectedFiles, setSelectedFiles, maxLength = 1 }: Im
   const onClick = (file: FileEntity) => {
     if (!setSelectedFiles) return
     const index = selectedFileIds.findIndex(id => id === file.id)
+    // 选择新图片
     if (index === -1) {
+      // 只能选一张图片时直接切换
+      if (maxLength === 1) {
+        return setSelectedFiles([file])
+      }
       if (selectedFiles.length >= maxLength) {
         return message.warning(`图片最多可选${maxLength}张`)
       }
@@ -69,7 +74,11 @@ export const ImageList = ({ selectedFiles, setSelectedFiles, maxLength = 1 }: Im
   return (
     <Spin spinning={listLoading}>
       <div className="flex flex-wrap gap-4">
-        <UploadImage handleUpload={file => commonApi.uploadFile(file)} willSetUrl={false} onSuccess={reload} withCrop />
+        <UploadImage
+          handleUpload={(file, fileInfo) => commonApi.uploadImage(file, fileInfo)}
+          onSuccess={reload}
+          willSetUrl={false}
+        />
         {list?.map(el => {
           const isSelected = selectedFileIds.includes(el.id)
           return (
@@ -93,6 +102,28 @@ export const ImageList = ({ selectedFiles, setSelectedFiles, maxLength = 1 }: Im
                   className="w-full h-full absolute left-0 top-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity"
                   onClick={() => onClick(el)}
                 >
+                  <Popconfirm
+                    title="确定删除？"
+                    okText="确定"
+                    cancelText="取消"
+                    placement="left"
+                    onPopupClick={e => {
+                      e.stopPropagation()
+                    }}
+                    onConfirm={async () => {
+                      await commonApi.deleteFile(el.id)
+                      message.success('删除成功！')
+                      reload()
+                    }}
+                  >
+                    <DeleteOutlined
+                      className="text-base text-white/90 absolute right-10 top-2 rounded-md p-1 bg-white/40 hover:bg-white/60"
+                      onClick={e => {
+                        e.stopPropagation()
+                      }}
+                    />
+                  </Popconfirm>
+
                   <EyeFilled
                     className="text-base text-white/90 absolute right-2 top-2 rounded-md p-1 bg-white/40 hover:bg-white/60"
                     onClick={e => {

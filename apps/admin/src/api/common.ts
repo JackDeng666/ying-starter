@@ -1,12 +1,13 @@
 import { ListFeedbackDto, ListFileDto } from '@ying/shared'
-import { FeedbackEntity, FileEntity } from '@ying/shared/entities'
+import { FeedbackEntity, FileEntity, TFileExtra } from '@ying/shared/entities'
 
 import { request, timeDataTransform } from './request'
 
-export function uploadFile(file: File): Promise<FileEntity> {
+export function uploadImage(file: File, extra?: TFileExtra): Promise<FileEntity> {
   const form = new FormData()
   form.append('file', file)
-  return request.post('/file', form)
+  form.append('extra', JSON.stringify(extra))
+  return request.post('/file/image', form)
 }
 
 export function listFile(params: ListFileDto): Promise<FileEntity[]> {
@@ -15,6 +16,10 @@ export function listFile(params: ListFileDto): Promise<FileEntity[]> {
 
 export function listFileCount(params: ListFileDto): Promise<number> {
   return request.get('/file/list-count', { params: timeDataTransform(params, 'date') })
+}
+
+export function deleteFile(id: number) {
+  return request.delete(`/file/${id}`)
 }
 
 export function listFeedback(params: ListFeedbackDto): Promise<FeedbackEntity[]> {

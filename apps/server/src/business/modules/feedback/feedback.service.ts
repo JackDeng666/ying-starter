@@ -16,14 +16,17 @@ export class FeedbackService extends BaseService<FeedbackEntity> {
     super(feedbackRepository)
   }
 
-  list(dto: ListFeedbackDto) {
-    const { where, take, skip } = this.buildListQuery(dto)
+  buildListQuery(dto: ListFeedbackDto) {
+    const listQuery = super.buildListQuery(dto)
     const { email } = dto
-
-    Object.assign(where, {
+    Object.assign(listQuery.where, {
       email: email ? Like(`%${email}%`) : undefined
     })
+    return listQuery
+  }
 
+  list(dto: ListFeedbackDto) {
+    const { where, skip, take } = this.buildListQuery(dto)
     return this.feedbackRepository.find({
       where,
       skip,
@@ -36,12 +39,6 @@ export class FeedbackService extends BaseService<FeedbackEntity> {
 
   listCount(dto: ListFeedbackDto) {
     const { where } = this.buildListQuery(dto)
-    const { email } = dto
-
-    Object.assign(where, {
-      email: email ? Like(`%${email}%`) : undefined
-    })
-
     return this.feedbackRepository.countBy(where)
   }
 }

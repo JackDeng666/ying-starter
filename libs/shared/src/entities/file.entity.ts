@@ -2,6 +2,13 @@ import { Column, Entity } from 'typeorm'
 import { FileType, FileSourceType } from '../enum'
 import { BaseEntityWithAutoId } from './base'
 
+export type TFileExtra = {
+  size: number
+  type: string
+  width?: number
+  height?: number
+}
+
 @Entity({ name: 'file' })
 export class FileEntity extends BaseEntityWithAutoId {
   @Column({
@@ -28,4 +35,10 @@ export class FileEntity extends BaseEntityWithAutoId {
     length: 2083
   })
   url: string
+
+  @Column({
+    type: 'simple-json',
+    nullable: true
+  })
+  extra?: TFileExtra
 }

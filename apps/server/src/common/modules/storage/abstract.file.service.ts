@@ -6,6 +6,7 @@ export type UploadFileOptions = {
   fileType: FileType
   from: FileSourceType
   userId: number
+  extra?: object
 }
 
 export type AddFileOptions = {

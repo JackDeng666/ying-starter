@@ -1,5 +1,5 @@
 import { CreateFeedbackDto, CreateVisitorDto, NoticeSubscribeDto } from '@ying/shared'
-import { FileEntity, VisitorEntity } from '@ying/shared/entities'
+import { FileEntity, TFileExtra, VisitorEntity } from '@ying/shared/entities'
 
 import { BaseApi } from './request'
 
@@ -12,10 +12,11 @@ export class CommonApi extends BaseApi {
     return this.request.post('/feedback', dto)
   }
 
-  upload(file: File): Promise<FileEntity> {
+  uploadImage(file: File, extra?: TFileExtra): Promise<FileEntity> {
     const form = new FormData()
     form.append('file', file)
-    return this.request.post('/file', form)
+    form.append('extra', JSON.stringify(extra))
+    return this.request.post('/file/image', form)
   }
 
   createVisitor(dto: CreateVisitorDto): Promise<VisitorEntity> {

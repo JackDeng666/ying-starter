@@ -1,15 +1,17 @@
 import {
+  Body,
   Controller,
+  Delete,
   FileTypeValidator,
   Get,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
   Post,
   Query,
   UploadedFile,
   UseInterceptors
 } from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 
 import { FileSourceType, FileType, ListFeedbackDto, ListFileDto } from '@ying/shared'
@@ -19,7 +21,6 @@ import { FileService } from '@/server/common/modules/storage/file.service'
 
 import { FeedbackService } from '@/server/business/modules/feedback/feedback.service'
 
-@ApiTags('admin common')
 @Controller('admin')
 @AdminScope()
 export class CommonController {
@@ -28,10 +29,7 @@ export class CommonController {
     readonly feedbackService: FeedbackService
   ) {}
 
-  @ApiOperation({
-    summary: 'upload file'
-  })
-  @Post('file')
+  @Post('file/image')
   @UseInterceptors(FileInterceptor('file'))
   upload(
     @UploadedFile(
@@ -46,30 +44,31 @@ export class CommonController {
       })
     )
     file: MulterFile,
+    @Body() body: { extra: string },
     @UID() userId: number
   ) {
     return this.fileService.uploadFile({
       file,
       fileType: FileType.Image,
       from: FileSourceType.Admin,
-      userId
+      userId,
+      extra: JSON.parse(body.extra)
     })
   }
 
-  @ApiOperation({
-    summary: 'get file list'
-  })
   @Get('file/list')
   fileList(@Query() dto: ListFileDto) {
     return this.fileService.list(dto)
   }
 
-  @ApiOperation({
-    summary: 'get file list count'
-  })
   @Get('file/list-count')
   fileListCount(@Query() dto: ListFileDto) {
     return this.fileService.listCount(dto)
+  }
+
+  @Delete('file/:id')
+  deleteFile(@Param('id') id: number) {
+    return this.fileService.deleteFileById(id)
   }
 
   @Get('feedback/list')
@@ -80,5 +79,10 @@ export class CommonController {
   @Get('feedback/list-count')
   feedbackListCount(@Query() dto: ListFeedbackDto) {
     return this.feedbackService.listCount(dto)
+  }
+
+  @Delete('feedback/:id')
+  deleteFeedback(@Param('id') id: number) {
+    return this.feedbackService.delete(id)
   }
 }

@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
 import { BaseEntityWithAutoId } from './base'
-import { PushActionDto } from '../admin'
+import { PushActionDto } from '../dto'
 import { FileEntity } from './file.entity'
 
 @Entity({ name: 'push_template' })

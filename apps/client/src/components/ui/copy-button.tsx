@@ -3,16 +3,14 @@
 import * as React from 'react'
 import { LuCheck, LuClipboard } from 'react-icons/lu'
 
+import { copyText } from '@ying/fontend-shared/utils'
+
 import { cn } from '@/client/lib/utils'
 import { Button, ButtonProps } from '@/client/components/ui/button'
 
 interface CopyButtonProps extends ButtonProps {
   value: string
   src?: string
-}
-
-export async function copyToClipboardWithMeta(value: string) {
-  navigator.clipboard.writeText(value)
 }
 
 export function CopyButton({ value, className, src, variant = 'outline', ...props }: CopyButtonProps) {
@@ -30,7 +28,7 @@ export function CopyButton({ value, className, src, variant = 'outline', ...prop
       variant={variant}
       className={cn('relative h-8 w-8', className)}
       onClick={() => {
-        copyToClipboardWithMeta(value)
+        copyText(value)
         setHasCopied(true)
       }}
       {...props}

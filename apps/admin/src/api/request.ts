@@ -3,7 +3,7 @@ import { message as Message } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import _ from 'lodash'
 
-import { storage } from '@ying/utils'
+import { storage } from '@ying/fontend-shared/utils'
 import { UserTokenVo } from '@ying/shared'
 
 import { clearUserInfoAndToken } from '@/admin/store'

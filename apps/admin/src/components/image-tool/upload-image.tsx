@@ -1,65 +1,53 @@
 import { useEffect, useState } from 'react'
-import { PlusOutlined, Loading3QuartersOutlined } from '@ant-design/icons'
+import { PlusOutlined, BorderInnerOutlined, Loading3QuartersOutlined } from '@ant-design/icons'
 import { FileEntity } from '@ying/shared/entities'
-import { SelectFileType, selectFile, useUpload } from '@ying/fontend-shared/hooks'
+import { SelectFileType, selectFile, useUpload, UseUploadOptions } from '@ying/fontend-shared/hooks'
+import { useDialogOpen } from '@ying/fontend-shared/hooks'
 import { cn } from '@/admin/utils/lib'
-import { CropModal, CropModalProps } from '@/admin/components/image-tool/crop-image/crop-modal'
-import { TSaveRes } from '@/admin/components/image-tool/crop-image/crop-image'
+import { CropModal } from '@/admin/components/image-tool/crop-image/crop-modal'
 
-type UploadProps = {
+type UploadProps = UseUploadOptions<FileEntity> & {
   className?: string
-  handleUpload: (file: File) => Promise<FileEntity>
   defaultUrl?: string
-  onSuccess?: (file: FileEntity) => void
-  withCrop?: boolean
+  mustCrop?: boolean
   aspectRatio?: number
   willSetUrl?: boolean
 }
 
+type SelectType = 'direct' | 'crop'
+
 export const UploadImage = ({
+  handleUpload,
+  onSuccess,
+  onError,
   className,
   defaultUrl,
-  withCrop,
+  mustCrop,
   aspectRatio,
-  onSuccess,
-  handleUpload,
   willSetUrl = true
 }: UploadProps) => {
   const [url, setUrl] = useState(defaultUrl)
 
-  const { loading, startUpload } = useUpload({
+  const { loading, startUpload } = useUpload<FileEntity>({
     handleUpload,
     onSuccess: fileEntity => {
       willSetUrl && setUrl(fileEntity.url)
       onSuccess && onSuccess(fileEntity)
-    }
+    },
+    onError
   })
 
   useEffect(() => {
     setUrl(defaultUrl)
   }, [defaultUrl])
 
-  const [cropModalProps, setCropModalProps] = useState<CropModalProps>({
-    open: false,
-    url: '',
-    aspectRatio,
-    onCrop(res: TSaveRes) {
-      startUpload(res.file)
-    },
-    onClose: () => {
-      setCropModalProps(prev => ({ ...prev, open: false, url: '' }))
-    }
-  })
+  const cropModalProps = useDialogOpen<File>()
 
-  const handleSelect = async () => {
+  const handleSelectFile = async (type: SelectType) => {
     const file = await selectFile(SelectFileType.Image)
-    if (withCrop) {
-      const url = URL.createObjectURL(file)
-      setCropModalProps(prev => ({
-        ...prev,
-        url,
-        open: true
-      }))
+
+    if (type === 'crop') {
+      cropModalProps.onOpen(file)
     } else {
       startUpload(file)
     }
@@ -69,24 +57,37 @@ export const UploadImage = ({
     <>
       <div
         className={cn(
-          'inline-block w-[110px] h-[110px] cursor-pointer overflow-hidden rounded-md shadow-sm border border-gray/20',
+          'inline-block w-[110px] h-[110px] overflow-hidden rounded-md shadow-sm border border-gray/20 text-2xl fc bg-hover text-gray relative group',
           className
         )}
-        onClick={handleSelect}
       >
-        {
-          <div className="w-full h-full text-2xl fc bg-hover text-gray border-gray">
-            {loading ? (
-              <Loading3QuartersOutlined className="animate-spin" />
-            ) : url ? (
-              <img className="w-full h-full object-cover" src={url} alt="uploadedimage" />
-            ) : (
-              <PlusOutlined />
-            )}
+        {loading ? (
+          <Loading3QuartersOutlined className="animate-spin" />
+        ) : url ? (
+          <img className="w-full h-full object-cover" src={url} alt="uploadedimage" />
+        ) : (
+          <PlusOutlined className="transition-opacity duration-300 group-hover:opacity-0" />
+        )}
+        <div className="w-full h-full absolute left-0 top-0 bg-black/20 transition-opacity duration-300 opacity-0 group-hover:opacity-100 fc flex-col gap-2">
+          <div
+            className="text-white/90 rounded-md px-2 py-1.5 bg-white/40 hover:bg-white/50 cursor-pointer flex items-center gap-1"
+            onClick={() => handleSelectFile('crop')}
+          >
+            <BorderInnerOutlined className="text-base" />
+            <span className="text-sm">裁剪</span>
           </div>
-        }
+          {!mustCrop && (
+            <div
+              className="text-white/90 rounded-md px-2 py-1.5 bg-white/40 hover:bg-white/50 cursor-pointer flex items-center gap-1"
+              onClick={() => handleSelectFile('direct')}
+            >
+              <PlusOutlined className="text-base" />
+              <span className="text-sm">直传</span>
+            </div>
+          )}
+        </div>
       </div>
-      <CropModal {...cropModalProps} />
+      <CropModal {...cropModalProps} onCrop={res => startUpload(res.file)} aspectRatio={aspectRatio} />
     </>
   )
 }

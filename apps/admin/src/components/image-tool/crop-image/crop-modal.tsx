@@ -1,16 +1,14 @@
 import { useRef } from 'react'
 import { Modal } from 'antd'
+import { useDialogOpen } from '@ying/fontend-shared/hooks'
 import { CropImage, TCropImageHandle, TSaveRes } from './crop-image'
 
-export type CropModalProps = {
-  open: boolean
-  onClose: () => void
-  url?: string
+export type CropModalProps = ReturnType<typeof useDialogOpen<File>> & {
   onCrop?: (res: TSaveRes) => void
   aspectRatio?: number
 }
 
-export const CropModal = ({ open, url, aspectRatio, onClose, onCrop }: CropModalProps) => {
+export const CropModal = ({ open, onClose, formValue: file, aspectRatio, onCrop }: CropModalProps) => {
   const ref = useRef<TCropImageHandle>(null)
 
   const onOk = async () => {
@@ -24,7 +22,13 @@ export const CropModal = ({ open, url, aspectRatio, onClose, onCrop }: CropModal
 
   return (
     <Modal title="裁剪图片" open={open} onCancel={onClose} onOk={onOk}>
-      <CropImage ref={ref} url={url} aspectRatio={aspectRatio} />
+      <CropImage
+        ref={ref}
+        url={file ? URL.createObjectURL(file) : ''}
+        type={file?.type}
+        name={file?.name}
+        aspectRatio={aspectRatio}
+      />
     </Modal>
   )
 }

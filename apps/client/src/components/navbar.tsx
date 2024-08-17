@@ -18,7 +18,7 @@ import { Sheet, SheetTitle, SheetDescription, SheetContent, SheetTrigger } from 
 import { Link } from '@/client/components/link'
 import { Brand } from '@/client/components/brand'
 
-import { LandingPage, MenuItems, ProtectedRoutes } from '@/client/routes'
+import { ArticlePage, FeedbackPage, LandingPage, ProtectedRoutes } from '@/client/routes'
 import { useRouter, useAppPending } from '@/client/store/app-store'
 import { useAuth, useAuthStore } from '@/client/store/auth-store'
 import { useTranslate } from '@/client/i18n/client'
@@ -37,6 +37,17 @@ export const CustomNavbar = () => {
 
   const { logout, getProfile } = useAuth()
   const { t } = useTranslate('auth')
+
+  const MenuItems = [
+    {
+      name: 'article',
+      link: ArticlePage
+    },
+    {
+      name: 'feedback',
+      link: FeedbackPage
+    }
+  ]
 
   useEffect(() => {
     setIsMenuOpen(false)

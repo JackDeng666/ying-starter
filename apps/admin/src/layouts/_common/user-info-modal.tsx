@@ -103,10 +103,10 @@ const ChangeUserInfoForm = ({ onCancel }: ChangeUserInfoFormProps) => {
           render={({ field }) => (
             <UploadImage
               className="rounded-full"
-              withCrop
+              mustCrop
               aspectRatio={1}
               defaultUrl={userInfo?.avatar?.url}
-              handleUpload={file => commonApi.uploadFile(file)}
+              handleUpload={(file, fileInfo) => commonApi.uploadImage(file, fileInfo)}
               onSuccess={file => {
                 field.onChange(file.id)
               }}

@@ -16,7 +16,7 @@ import { useApi } from '@/client/store/app-store'
 import { useTranslate } from '@/client/i18n/client'
 import { ErrorRes } from '@/client/api/client/request'
 
-const ProfilePage = () => {
+export default function ProfilePage() {
   const { getProfile } = useAuth()
   const { commonApi, userApi } = useApi()
   const { t } = useTranslate('auth')
@@ -92,12 +92,9 @@ const ProfilePage = () => {
                         disabled={isSubmitting}
                         withCrop
                         aspectRatio={1}
-                        handleUpload={file => {
-                          if (!commonApi) return
-                          return commonApi.upload(file)
-                        }}
+                        handleUpload={(file, fileInfo) => commonApi?.uploadImage(file, fileInfo)}
                         onSuccess={fileEntity => {
-                          field.onChange(fileEntity.id)
+                          field.onChange(fileEntity?.id)
                           toast.success(t('success.image_uploaded_successfully'))
                         }}
                       />
@@ -117,5 +114,3 @@ const ProfilePage = () => {
     </div>
   )
 }
-
-export default ProfilePage

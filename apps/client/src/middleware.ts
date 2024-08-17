@@ -4,7 +4,7 @@ import { DefaultLoginRedirect, ProtectedRoutes, LoginPage, AllRoutes } from '@/c
 import { AppKey } from '@/client/enum'
 import { languagesWithSlashes } from '@/client/i18n/config'
 import { getLocale } from '@/client/i18n/server'
-import { pathMatchArr } from '@/client/lib/utils'
+import { pathMatchArr, pathMatchRoutes } from '@/client/lib/utils'
 
 type TMatchData = {
   matchLng?: string
@@ -100,7 +100,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = nextUrl
 
   const matchLng = pathMatchArr(pathname, languagesWithSlashes, 'startsWith')
-  const matchRoute = pathMatchArr(pathname, AllRoutes, 'endsWith')
+  const matchRoute = pathMatchRoutes(pathname, AllRoutes)
 
   const lngRes = languagesMiddleware(request, { matchLng, matchRoute })
   if (lngRes) return lngRes

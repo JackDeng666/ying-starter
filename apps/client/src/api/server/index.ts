@@ -1,1 +1,1 @@
-export * as testApi from './test'
+export * as articleApi from './article'

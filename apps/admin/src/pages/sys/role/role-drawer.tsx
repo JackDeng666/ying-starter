@@ -1,26 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { Form, Drawer, Input, InputNumber, Button, App, Radio, TreeSelect } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
 import { BasicStatus, CreateRoleDto, UpdateRoleDto } from '@ying/shared'
 import { SysPermissionEntity } from '@ying/shared/entities'
-import { useFetch } from '@ying/fontend-shared/hooks'
+import { useDialogOpen, useFetch } from '@ying/fontend-shared/hooks'
 
 import { sysRoleApi } from '@/admin/api'
+
+import { defultRoleValues } from './constant'
 
 const createResolver = classValidatorResolver(CreateRoleDto)
 const updateResolver = classValidatorResolver(UpdateRoleDto)
 
-export type RoleDrawerProps = {
-  formValue: Partial<UpdateRoleDto>
-  title: string
-  show: boolean
-  onSuccess: VoidFunction
-  onCancel: VoidFunction
+export type RoleDrawerProps = ReturnType<typeof useDialogOpen<UpdateRoleDto>> & {
+  onSuccess?: VoidFunction
 }
 
-export function RoleDrawer({ title, show, formValue, onSuccess, onCancel }: RoleDrawerProps) {
+export function RoleDrawer({ open, formValue, onSuccess, onClose }: RoleDrawerProps) {
+  const title = formValue ? '编辑系统角色' : '新增系统角色'
   const [form] = Form.useForm()
 
   const { data } = useFetch({
@@ -40,44 +39,41 @@ export function RoleDrawer({ title, show, formValue, onSuccess, onCancel }: Role
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset
   } = useForm<CreateRoleDto & UpdateRoleDto>({
-    resolver: formValue.id ? updateResolver : createResolver,
-    defaultValues: formValue
+    resolver: formValue ? updateResolver : createResolver,
+    defaultValues: defultRoleValues
   })
 
   useEffect(() => {
-    reset(formValue)
+    if (formValue) {
+      reset(formValue)
+    } else {
+      reset(defultRoleValues)
+    }
   }, [formValue, reset])
 
-  const [loading, setLoading] = useState(false)
-
   const handlePost = async (value: CreateRoleDto & UpdateRoleDto) => {
-    try {
-      setLoading(true)
-      if (value.id) {
-        await sysRoleApi.update(value)
-      } else {
-        await sysRoleApi.create(value)
-      }
-      message.success(`${title}成功`)
-      onSuccess()
-    } catch (error) {
-    } finally {
-      setLoading(false)
+    if (value.id) {
+      await sysRoleApi.update(value)
+    } else {
+      await sysRoleApi.create(value)
     }
+    onClose()
+    message.success(`${title}成功`)
+    onSuccess && onSuccess()
   }
 
   return (
     <Drawer
       title={title}
-      open={show}
-      onClose={onCancel}
+      open={open}
+      onClose={onClose}
       width={660}
       footer={
         <div className="flex-1 flex justify-end gap-2">
-          <Button type="primary" onClick={form.submit} loading={loading}>
+          <Button type="primary" onClick={form.submit} loading={isSubmitting}>
             提交
           </Button>
         </div>
@@ -137,10 +133,8 @@ export function RoleDrawer({ title, show, formValue, onSuccess, onCancel }: Role
                 treeCheckStrictly={true}
                 showCheckedStrategy={TreeSelect.SHOW_ALL}
                 treeData={permissionList}
-                {...field}
-                onChange={(value: any[]) => {
-                  field.onChange(value.map(el => el.value))
-                }}
+                value={field.value}
+                onChange={(value: any[]) => field.onChange(value.map(el => el.value))}
               />
             )}
           />

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { TFileExtra } from '@ying/shared/entities'
+
 export enum SelectFileType {
   Image,
   Video
@@ -29,8 +31,30 @@ export const selectFile: (type?: SelectFileType) => Promise<File> = type => {
   })
 }
 
-type UseUploadOptions<T> = {
-  handleUpload: (file: File) => Promise<T> | undefined
+export const getFileInfo = async (file: File) => {
+  if (file.type.includes('image')) {
+    const image = new Image()
+    image.crossOrigin = 'anonymous'
+    image.src = URL.createObjectURL(file)
+    await new Promise(resolve => (image.onload = resolve))
+    const { width, height } = image
+
+    return {
+      size: file.size,
+      type: file.type,
+      width,
+      height
+    }
+  } else {
+    return {
+      size: file.size,
+      type: file.type
+    }
+  }
+}
+
+export type UseUploadOptions<T> = {
+  handleUpload: (file: File, fileInfo: TFileExtra) => Promise<T> | undefined
   onSuccess?: (res: T | undefined) => void
   onError?: (error: Error) => void
 }
@@ -42,7 +66,7 @@ export const useUpload = <T>({ handleUpload, onSuccess, onError }: UseUploadOpti
     selectFile(type).then(async file => {
       try {
         setLoading(true)
-        const res = await handleUpload(file)
+        const res = await handleUpload(file, await getFileInfo(file))
         onSuccess && onSuccess(res)
       } catch (error: unknown) {
         onError && onError(error as Error)
@@ -55,7 +79,7 @@ export const useUpload = <T>({ handleUpload, onSuccess, onError }: UseUploadOpti
   const startUpload = async (file: File) => {
     try {
       setLoading(true)
-      const res = await handleUpload(file)
+      const res = await handleUpload(file, await getFileInfo(file))
       onSuccess && onSuccess(res)
     } catch (error: unknown) {
       onError && onError(error as Error)

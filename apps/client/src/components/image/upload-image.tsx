@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react'
 import { ScaleLoader } from 'react-spinners'
 
-import { SelectFileType, useUpload, selectFile, useDialogOpen } from '@ying/fontend-shared/hooks'
+import { SelectFileType, useUpload, selectFile, useDialogOpen, UseUploadOptions } from '@ying/fontend-shared/hooks'
 import { FileEntity } from '@ying/shared/entities'
 
 import { PlusIcon } from '@/client/components/ui/icons'
 import { cn } from '@/client/lib/utils'
 
 import { CropModal } from './crop-modal'
-import { TSaveRes } from './crop-image'
 
-type UploadProps = {
+type UploadProps = UseUploadOptions<FileEntity> & {
   className?: string
   disabled?: boolean
-  handleUpload: (file: File) => Promise<FileEntity> | undefined
   defaultUrl?: string
-  onSuccess?: (file: FileEntity) => void
   withCrop?: boolean
   aspectRatio?: number
 }
@@ -29,8 +26,6 @@ export const UploadImage = ({
   onSuccess,
   handleUpload
 }: UploadProps) => {
-  const dialogProps = useDialogOpen()
-  const [blobUrl, setBlobUrl] = useState<string>()
   const [url, setUrl] = useState(defaultUrl)
 
   const { loading, startUpload } = useUpload({
@@ -46,20 +41,16 @@ export const UploadImage = ({
     setUrl(defaultUrl)
   }, [defaultUrl])
 
+  const cropModalProps = useDialogOpen<File>()
+
   const handleSelect = async () => {
     if (disabled) return
     const file = await selectFile(SelectFileType.Image)
     if (withCrop) {
-      const url = URL.createObjectURL(file)
-      setBlobUrl(url)
-      dialogProps.onOpen()
+      cropModalProps.onOpen(file)
     } else {
       startUpload(file)
     }
-  }
-
-  const onCrop = (res: TSaveRes) => {
-    startUpload(res.file)
   }
 
   return (
@@ -78,7 +69,7 @@ export const UploadImage = ({
           )}
         </div>
       </div>
-      <CropModal {...dialogProps} url={blobUrl} onCrop={onCrop} aspectRatio={aspectRatio} />
+      <CropModal {...cropModalProps} onCrop={res => startUpload(res.file)} aspectRatio={aspectRatio} />
     </>
   )
 }

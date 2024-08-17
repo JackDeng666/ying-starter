@@ -14,6 +14,7 @@ import { notificationApi } from '@/admin/api'
 import { usePage } from '@/admin/hooks/use-page'
 import { IconButton, Iconify } from '@/admin/components/icon'
 import { PageQuery } from '@/admin/components/page-query'
+import { PageOperations } from '@/admin/components/page-operations'
 
 import {
   DeviceTypeOption,
@@ -105,7 +106,6 @@ export default function Page() {
       title: '推送状态',
       width: 160,
       ellipsis: true,
-
       dataIndex: 'status',
       render(_, record) {
         const label = getOption<PushTaskStatusOption>(PushTaskStatusOptions, record.status)?.label
@@ -169,37 +169,25 @@ export default function Page() {
       width: 120,
       fixed: 'right',
       render: (_, record) => (
-        <div className="flex w-full justify-center gap-1 text-gray">
-          <IconButton
-            onClick={() => pushTaskSetModalProps.onOpen(record)}
-            disabled={record.status >= PushTaskStatus.WaitExecute}
-          >
-            <Iconify icon="solar:upload-twice-square-bold-duotone" size={18} />
-          </IconButton>
-          <IconButton
-            onClick={() => pushTaskModalProps.onOpen(record)}
-            disabled={record.status !== PushTaskStatus.Wait}
-          >
-            <Iconify icon="solar:pen-bold-duotone" size={18} />
-          </IconButton>
-          <Popconfirm
-            title={`确定删除【${record.name}】？`}
-            okText="确定"
-            cancelText="取消"
-            placement="left"
-            onConfirm={async () => {
-              await notificationApi.deletePushTask(record.id)
-              message.success('删除成功！')
-              reload()
-            }}
-          >
+        <PageOperations
+          extra={
             <IconButton
-              disabled={record.status === PushTaskStatus.WaitExecute || record.status === PushTaskStatus.Executing}
+              onClick={() => pushTaskSetModalProps.onOpen(record)}
+              disabled={record.status >= PushTaskStatus.WaitExecute}
             >
-              <Iconify icon="mingcute:delete-2-fill" size={18} className="text-error" />
+              <Iconify icon="solar:upload-twice-square-bold-duotone" size={18} />
             </IconButton>
-          </Popconfirm>
-        </div>
+          }
+          onEdit={() => pushTaskModalProps.onOpen(record)}
+          editDisabled={record.status !== PushTaskStatus.Wait}
+          deleteTitle={`确定删除【${record.name}】？`}
+          onDelete={async () => {
+            await notificationApi.deletePushTask(record.id)
+            message.success('删除成功！')
+            reload()
+          }}
+          deleteDisabled={record.status === PushTaskStatus.WaitExecute || record.status === PushTaskStatus.Executing}
+        />
       )
     }
   ]

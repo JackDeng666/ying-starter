@@ -1,11 +1,11 @@
 import { create } from 'zustand'
 
-import { authApi } from '@/admin/api'
-import { storage } from '@ying/utils'
-
-import { StorageEnum } from '@/admin/types/enum'
 import { UserTokenVo } from '@ying/shared'
 import { SysUserEntity } from '@ying/shared/entities'
+import { storage } from '@ying/fontend-shared/utils'
+
+import { authApi } from '@/admin/api'
+import { StorageEnum } from '@/admin/types/enum'
 
 type UserStore = {
   userInfo: Partial<SysUserEntity>

@@ -5,9 +5,10 @@ import { SysModule } from './sys/sys.module'
 import { UserModule } from './user/user.module'
 import { CommonModule } from './common/common.module'
 import { NotificationModule } from './notification/notification.module'
+import { ArticleModule } from './article/article.module'
 
 @Module({
-  imports: [SysModule, UserModule, CommonModule, NotificationModule],
+  imports: [SysModule, UserModule, CommonModule, NotificationModule, ArticleModule],
   providers: [
     {
       provide: APP_GUARD,

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Image } from 'antd'
 import { EyeFilled, DeleteOutlined, PlusOutlined, DragOutlined } from '@ant-design/icons'
 import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from '@hello-pangea/dnd'
@@ -11,26 +11,24 @@ import { ImageModal } from './image-modal'
 type SelectImageProps = {
   className?: string
   maxLength?: number
-  value: FileEntity[]
+  defaultValue?: FileEntity[] | FileEntity
   onChange: (files: FileEntity[]) => void
 }
 
-export const SelectImage = ({ maxLength = 1, className, value, onChange }: SelectImageProps) => {
+export const SelectImage = ({ maxLength = 5, className, defaultValue, onChange }: SelectImageProps) => {
+  const [previewUrl, setPreviewUrl] = useState('')
   const [open, setOpen] = useState(false)
-
-  const openSelect = async () => {
-    setOpen(true)
-  }
+  const [images, setImages] = useState(
+    defaultValue ? (Array.isArray(defaultValue) ? defaultValue : [defaultValue]) : []
+  )
 
   const onSelect = (files: FileEntity[]) => {
-    onChange(files)
+    setImages(files)
   }
 
   const onDelete = (file: FileEntity) => {
-    onChange(value.filter(el => el.id !== file.id))
+    setImages(images.filter(el => el.id !== file.id))
   }
-
-  const [previewUrl, setPreviewUrl] = useState('')
 
   const onDragEnd: OnDragEndResponder = ({ destination, source }) => {
     // 拖拽到非法非 droppable 区域
@@ -38,12 +36,21 @@ export const SelectImage = ({ maxLength = 1, className, value, onChange }: Selec
     // 原地放下
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
 
-    const items = Array.from(value)
+    const items = Array.from(images)
 
     const [reSortedItem] = items.splice(source.index, 1)
     items.splice(destination.index, 0, reSortedItem)
-    onChange(items)
+
+    setImages(items)
   }
+
+  useEffect(() => {
+    setImages(defaultValue ? (Array.isArray(defaultValue) ? defaultValue : [defaultValue]) : [])
+  }, [defaultValue])
+
+  useEffect(() => {
+    onChange(images)
+  }, [images, onChange])
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -54,7 +61,7 @@ export const SelectImage = ({ maxLength = 1, className, value, onChange }: Selec
             {...provided.droppableProps}
             className={cn('flex flex-wrap', maxLength > 1 && 'gap-4')}
           >
-            {value.map((item, index) => (
+            {images.map((item, index) => (
               <Draggable key={item.id} draggableId={item.id + ''} index={index}>
                 {draggableProvided => (
                   <div
@@ -94,21 +101,19 @@ export const SelectImage = ({ maxLength = 1, className, value, onChange }: Selec
               </Draggable>
             ))}
             {provided.placeholder}
-            {value.length < maxLength && (
+            {images.length < maxLength && (
               <div
                 className={cn(
-                  'w-[110px] h-[110px] cursor-pointer overflow-hidden rounded-md shadow-sm border border-gray/20',
+                  'w-[110px] h-[110px] cursor-pointer overflow-hidden rounded-md shadow-sm border border-gray/20 text-2xl fc bg-hover text-gray',
                   className
                 )}
-                onClick={openSelect}
+                onClick={() => setOpen(true)}
               >
-                <div className="w-full h-full text-2xl fc bg-hover text-gray border-gray">
-                  <PlusOutlined />
-                </div>
+                <PlusOutlined />
               </div>
             )}
             <ImageModal
-              files={value}
+              files={images}
               open={open}
               onCancel={() => setOpen(false)}
               onSelect={onSelect}

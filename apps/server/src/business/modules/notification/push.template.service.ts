@@ -47,6 +47,9 @@ export class PushTemplateService extends BaseService<PushTemplateEntity> {
       take,
       order: {
         createAt: 'DESC'
+      },
+      relations: {
+        image: true
       }
     })
   }

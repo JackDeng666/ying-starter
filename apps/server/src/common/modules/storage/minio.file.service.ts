@@ -1,5 +1,5 @@
 import { ConfigType } from '@nestjs/config'
-import { In, Not, Repository } from 'typeorm'
+import { DataSource, In, Not, Repository } from 'typeorm'
 import { Client } from 'minio'
 import { nanoid } from 'nanoid'
 import { FileType } from '@ying/shared'
@@ -11,13 +11,16 @@ import { AddFileOptions, UploadFileOptions, AbstractFileService } from './abstra
 export class MinioFileService implements AbstractFileService {
   private readonly storageConf: ConfigType<typeof storageConfig>
 
+  private readonly dataSource: DataSource
+
   private readonly fileRepository: Repository<FileEntity>
 
   private minioClient: Client
 
-  constructor(storageConf: ConfigType<typeof storageConfig>, fileRepository: Repository<FileEntity>) {
+  constructor(storageConf: ConfigType<typeof storageConfig>, dataSource: DataSource) {
     this.storageConf = storageConf
-    this.fileRepository = fileRepository
+    this.dataSource = dataSource
+    this.fileRepository = dataSource.getRepository(FileEntity)
     this.getMinioClient()
   }
 
@@ -37,7 +40,7 @@ export class MinioFileService implements AbstractFileService {
     this.minioClient = minioClient
   }
 
-  async uploadFile({ file, fileType, from, userId }: UploadFileOptions) {
+  async uploadFile({ file, fileType, from, userId, extra }: UploadFileOptions) {
     const fileName = nanoid()
     const objectName = `${fileType}/${fileName}`
 
@@ -53,7 +56,8 @@ export class MinioFileService implements AbstractFileService {
       path: objectName,
       url,
       from,
-      userId
+      userId,
+      extra
     })
     await this.fileRepository.save(fileEntity)
 
@@ -79,12 +83,14 @@ export class MinioFileService implements AbstractFileService {
   }
 
   async deleteFiles(files: FileEntity[]) {
-    await this.minioClient.removeObjects(
-      this.storageConf.bucket,
-      files.filter(el => el.type !== FileType.Url).map(el => el.path)
-    )
+    await this.dataSource.transaction(async t => {
+      await t.delete(FileEntity, { id: In(files.map(el => el.id)) })
 
-    await this.fileRepository.delete({ id: In(files.map(el => el.id)) })
+      await this.minioClient.removeObjects(
+        this.storageConf.bucket,
+        files.filter(el => el.type !== FileType.Url).map(el => el.path)
+      )
+    })
   }
 
   async deleteDriftFilesByExcludeIds(excludeIds: number[]) {

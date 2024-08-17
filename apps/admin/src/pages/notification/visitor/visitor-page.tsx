@@ -46,8 +46,7 @@ export default function Page() {
     func: useCallback(async (name: string) => {
       const data = await userApi.list({ name, size: 20 })
       return data.map(el => ({ label: el.name, value: el.id }))
-    }, []),
-    debounceTimeout: 500
+    }, [])
   })
 
   const columns: ColumnsType<VisitorEntity> = [

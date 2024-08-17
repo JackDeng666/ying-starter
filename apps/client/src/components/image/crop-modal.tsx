@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogContent,
   DialogFooter,
   DialogClose
@@ -14,13 +15,12 @@ import {
 import { useTranslate } from '@/client/i18n/client'
 import { CropImage, TCropImageHandle, TSaveRes } from './crop-image'
 
-type CropModalProps = ReturnType<typeof useDialogOpen> & {
-  url?: string
+type CropModalProps = ReturnType<typeof useDialogOpen<File>> & {
   onCrop?: (res: TSaveRes) => void
   aspectRatio?: number
 }
 
-export const CropModal = ({ open, url, aspectRatio, onOpenChange, onClose, onCrop }: CropModalProps) => {
+export const CropModal = ({ open, formValue: file, onOpenChange, onClose, aspectRatio, onCrop }: CropModalProps) => {
   const { t } = useTranslate()
   const ref = useRef<TCropImageHandle>(null)
   const [loading, setLoading] = useState(false)
@@ -45,8 +45,17 @@ export const CropModal = ({ open, url, aspectRatio, onOpenChange, onClose, onCro
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('crop_image')}</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
-        {url && <CropImage url={url} ref={ref} aspectRatio={aspectRatio} />}
+        {file && (
+          <CropImage
+            ref={ref}
+            url={URL.createObjectURL(file)}
+            type={file.type}
+            name={file.name}
+            aspectRatio={aspectRatio}
+          />
+        )}
         <DialogFooter className="gap-2">
           <DialogClose asChild>
             <Button variant="outline">{t('close')}</Button>

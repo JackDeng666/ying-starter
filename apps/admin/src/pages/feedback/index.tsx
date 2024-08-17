@@ -1,4 +1,4 @@
-import { App, Card, Form, Input, Popconfirm } from 'antd'
+import { App, Card, Form, Input } from 'antd'
 import Table, { ColumnsType } from 'antd/es/table'
 import { Controller, useForm } from 'react-hook-form'
 import { useCallback, useEffect } from 'react'
@@ -9,10 +9,10 @@ import { debounce } from '@ying/utils'
 import { ListFeedbackDto } from '@ying/shared'
 import { FeedbackEntity } from '@ying/shared/entities'
 
-import { IconButton, Iconify } from '@/admin/components/icon'
 import { usePage } from '@/admin/hooks/use-page'
 import { commonApi } from '@/admin/api'
 import { PageQuery } from '@/admin/components/page-query'
+import { PageOperations } from '@/admin/components/page-operations'
 
 export default function Page() {
   const { message } = App.useApp()
@@ -75,26 +75,16 @@ export default function Page() {
       title: '操作',
       key: 'operation',
       align: 'center',
-      width: 100,
+      width: 80,
       fixed: 'right',
       render: (_, record) => (
-        <div className="flex w-full justify-center gap-1 text-gray">
-          <Popconfirm
-            title={`确定删除？`}
-            okText="确定"
-            cancelText="取消"
-            placement="left"
-            onConfirm={async () => {
-              await commonApi.deleteFeedback(record.id)
-              message.success('删除成功！')
-              reload()
-            }}
-          >
-            <IconButton>
-              <Iconify icon="mingcute:delete-2-fill" size={18} className="text-error" />
-            </IconButton>
-          </Popconfirm>
-        </div>
+        <PageOperations
+          onDelete={async () => {
+            await commonApi.deleteFeedback(record.id)
+            message.success('删除成功！')
+            reload()
+          }}
+        />
       )
     }
   ]

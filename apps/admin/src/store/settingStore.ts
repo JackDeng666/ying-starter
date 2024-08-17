@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import { storage } from '@ying/utils'
+import { storage } from '@ying/fontend-shared/utils'
 
 import { StorageEnum, ThemeColorPresets, ThemeLayout, ThemeMode } from '@/admin/types/enum'
 
