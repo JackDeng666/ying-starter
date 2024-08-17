@@ -12,7 +12,7 @@ type SelectImageProps = {
   className?: string
   maxLength?: number
   defaultValue?: FileEntity[] | FileEntity
-  onChange: (files: FileEntity[]) => void
+  onChange?: (files: FileEntity[]) => void
 }
 
 export const SelectImage = ({ maxLength = 5, className, defaultValue, onChange }: SelectImageProps) => {
@@ -24,10 +24,13 @@ export const SelectImage = ({ maxLength = 5, className, defaultValue, onChange }
 
   const onSelect = (files: FileEntity[]) => {
     setImages(files)
+    onChange?.(files)
   }
 
   const onDelete = (file: FileEntity) => {
-    setImages(images.filter(el => el.id !== file.id))
+    const newImages = images.filter(el => el.id !== file.id)
+    setImages(newImages)
+    onChange?.(newImages)
   }
 
   const onDragEnd: OnDragEndResponder = ({ destination, source }) => {
@@ -42,15 +45,12 @@ export const SelectImage = ({ maxLength = 5, className, defaultValue, onChange }
     items.splice(destination.index, 0, reSortedItem)
 
     setImages(items)
+    onChange?.(items)
   }
 
   useEffect(() => {
     setImages(defaultValue ? (Array.isArray(defaultValue) ? defaultValue : [defaultValue]) : [])
   }, [defaultValue])
-
-  useEffect(() => {
-    onChange(images)
-  }, [images, onChange])
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
