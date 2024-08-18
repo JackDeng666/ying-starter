@@ -4,7 +4,7 @@ import { DataSource, Repository } from 'typeorm'
 import { ConfigType } from '@nestjs/config'
 import { ListFileDto } from '@ying/shared'
 import { FileEntity } from '@ying/shared/entities'
-import { storageConfig } from '@/server/config'
+import { storageConfig, apiConfig } from '@/server/config'
 import { BaseService } from '@/server/common/service/base.service'
 import { AbstractFileService, AddFileOptions, UploadFileOptions } from './abstract.file.service'
 import { LocalFileService } from './local.file.service'
@@ -17,6 +17,8 @@ export class FileService extends BaseService<FileEntity> implements AbstractFile
   constructor(
     @Inject(storageConfig.KEY)
     private readonly storageConf: ConfigType<typeof storageConfig>,
+    @Inject(apiConfig.KEY)
+    private readonly apiConf: ConfigType<typeof apiConfig>,
     @InjectRepository(FileEntity)
     private readonly fileRepository: Repository<FileEntity>,
     @InjectDataSource()
@@ -24,7 +26,7 @@ export class FileService extends BaseService<FileEntity> implements AbstractFile
   ) {
     super(fileRepository)
     if (storageConf.mode === 'local') {
-      this.fileService = new LocalFileService(this.storageConf, this.dataSource)
+      this.fileService = new LocalFileService(this.dataSource, this.apiConf.url)
     } else if (storageConf.mode === 'minio') {
       this.fileService = new MinioFileService(this.storageConf, this.dataSource)
     }

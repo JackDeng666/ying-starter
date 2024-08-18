@@ -1,7 +1,11 @@
-import { ListFeedbackDto, ListFileDto } from '@ying/shared'
+import { ConfigVo, ListFeedbackDto, ListFileDto } from '@ying/shared'
 import { FeedbackEntity, FileEntity, TFileExtra } from '@ying/shared/entities'
 
 import { request, timeDataTransform } from './request'
+
+export function getConfig(): Promise<ConfigVo> {
+  return request.get('/config')
+}
 
 export function uploadImage(file: File, extra?: TFileExtra): Promise<FileEntity> {
   const form = new FormData()

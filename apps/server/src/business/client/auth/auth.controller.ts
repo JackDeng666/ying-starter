@@ -2,7 +2,7 @@ import { Controller, Post, UseGuards, Get, Req, Res, Inject, Body, UseFilters } 
 import { ApiBody, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import { ConfigType } from '@nestjs/config'
-import { authConfig } from '@/server/config'
+import { apiConfig } from '@/server/config'
 import {
   ClientAuthVo,
   ClientLoginDto,
@@ -22,8 +22,8 @@ import { AuthLoginExceptionFilter } from './auth.login.filter'
 export class AuthController {
   @Inject()
   private readonly authService: AuthService
-  @Inject(authConfig.KEY)
-  private readonly authConf: ConfigType<typeof authConfig>
+  @Inject(apiConfig.KEY)
+  private readonly apiConf: ConfigType<typeof apiConfig>
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -75,7 +75,7 @@ export class AuthController {
   @UseFilters(AuthLoginExceptionFilter)
   async githubCallback(@Req() req: AuthRequest, @Res() res: Response) {
     const { accessToken, refreshToken } = await this.authService.sign(req.user)
-    res.redirect(`${this.authConf.redirectUrl}?access_token=${accessToken}&refresh_token=${refreshToken}`)
+    res.redirect(`${this.apiConf.clientUrl}?access_token=${accessToken}&refresh_token=${refreshToken}`)
   }
 
   @Get('google')
@@ -90,7 +90,7 @@ export class AuthController {
   @UseFilters(AuthLoginExceptionFilter)
   async googleLoginCallback(@Req() req: AuthRequest, @Res() res: Response) {
     const { accessToken, refreshToken } = await this.authService.sign(req.user)
-    res.redirect(`${this.authConf.redirectUrl}?access_token=${accessToken}&refresh_token=${refreshToken}`)
+    res.redirect(`${this.apiConf.clientUrl}?access_token=${accessToken}&refresh_token=${refreshToken}`)
   }
 
   @Get('facebook')
@@ -105,6 +105,6 @@ export class AuthController {
   @UseFilters(AuthLoginExceptionFilter)
   async facebookCallback(@Req() req: AuthRequest, @Res() res: Response) {
     const { accessToken, refreshToken } = await this.authService.sign(req.user)
-    res.redirect(`${this.authConf.redirectUrl}?access_token=${accessToken}&refresh_token=${refreshToken}`)
+    res.redirect(`${this.apiConf.clientUrl}?access_token=${accessToken}&refresh_token=${refreshToken}`)
   }
 }

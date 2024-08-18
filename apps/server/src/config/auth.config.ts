@@ -10,7 +10,6 @@ export const authConfig = registerAs('authConfig', () => {
     refreshSecret: process.env.AUTH_REFRESH_SECRET,
     expiresIn: process.env.AUTH_EXPIRES_IN,
     refreshExpiresIn: process.env.AUTH_REFRESH_EXPIRES_IN,
-    redirectUrl: process.env.AUTH_REDIRECT_URL,
     githubId: process.env.AUTH_GITHUB_ID,
     githubSecret: process.env.AUTH_GITHUB_SECRET,
     googleId: process.env.AUTH_GOOGLE_ID,

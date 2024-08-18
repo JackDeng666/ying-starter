@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { ConfigModule, ConfigType } from '@nestjs/config'
+import { ConfigModule as BaseConfigModule, ConfigType } from '@nestjs/config'
 import { BullModule } from '@nestjs/bull'
 import { ScheduleModule } from '@nestjs/schedule'
 import { AcceptLanguageResolver, HeaderResolver, I18nModule } from 'nestjs-i18n'
@@ -11,12 +11,13 @@ import { DbModule } from '@/server/common/modules/db/db.module'
 import { StorageModule } from '@/server/common/modules/storage/storage.module'
 import { MailModule } from '@/server/common/modules/mail/mail.module'
 import { PushModule } from '@/server/common/modules/push/push.module'
+import { ConfigModule } from '@/server/common/modules/config/config.module'
 import { AdminModule } from '@/server/business/admin/admin.module'
 import { ClientModule } from '@/server/business/client/client.module'
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    BaseConfigModule.forRoot({
       isGlobal: true,
       load: [apiConfig, redisConfig, dbConfig, authConfig, mailConfig, storageConfig, pushConfig],
       envFilePath: ['.env.local', '.env']
@@ -48,6 +49,7 @@ import { ClientModule } from '@/server/business/client/client.module'
     StorageModule,
     MailModule,
     PushModule,
+    ConfigModule,
     AdminModule,
     ClientModule
   ]

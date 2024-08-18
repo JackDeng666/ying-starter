@@ -1,22 +1,20 @@
 import { dirname, join } from 'path'
 import { writeFileSync, unlink, existsSync, mkdirSync, PathLike } from 'fs'
-import { ConfigType } from '@nestjs/config'
 import { DataSource, In, Not, Repository } from 'typeorm'
 import { nanoid } from 'nanoid'
 import { FileEntity } from '@ying/shared/entities'
-import { storageConfig } from '@/server/config'
 import { AddFileOptions, UploadFileOptions, AbstractFileService } from './abstract.file.service'
 
 export class LocalFileService implements AbstractFileService {
-  private readonly storageConf: ConfigType<typeof storageConfig>
-
   private readonly dataSource: DataSource
+
+  private readonly serverUrl: string
 
   private readonly fileRepository: Repository<FileEntity>
 
-  constructor(storageConf: ConfigType<typeof storageConfig>, dataSource: DataSource) {
-    this.storageConf = storageConf
+  constructor(dataSource: DataSource, serverUrl: string) {
     this.dataSource = dataSource
+    this.serverUrl = serverUrl
     this.fileRepository = dataSource.getRepository(FileEntity)
   }
 
@@ -60,7 +58,7 @@ export class LocalFileService implements AbstractFileService {
   }
 
   getPresignedUrl(objectName: string) {
-    return this.storageConf.serverUrl + '/upload/' + objectName
+    return this.serverUrl + '/upload/' + objectName
   }
 
   async deleteFiles(files: FileEntity[]) {

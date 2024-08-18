@@ -5,11 +5,6 @@ import { DataSource } from 'typeorm'
 import { SysUserEntity, UserEntity } from '@ying/shared/entities'
 import { RedisToken, RedisKey } from '@/server/common/modules/redis/constant'
 import { FileService } from '@/server/common/modules/storage/file.service'
-import { SettingDto } from '@ying/shared'
-
-const DEFAULT_SETTING: SettingDto = {
-  debugUserIds: ''
-}
 
 @Injectable()
 export class SysSettingService {
@@ -46,18 +41,5 @@ export class SysSettingService {
     fileIds.push(...users.map(el => el.avatarId))
 
     await this.fileService.deleteDriftFilesByExcludeIds([...new Set(fileIds)])
-  }
-
-  async getSetting() {
-    const settingStr = await this.redisClient.get(RedisKey.Setting)
-    if (!settingStr) {
-      await this.redisClient.set(RedisKey.Setting, JSON.stringify(DEFAULT_SETTING))
-      return DEFAULT_SETTING
-    }
-    return JSON.parse(settingStr)
-  }
-
-  async updateSetting(dto: SettingDto) {
-    await this.redisClient.set(RedisKey.Setting, JSON.stringify(dto))
   }
 }

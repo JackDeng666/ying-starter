@@ -16,7 +16,7 @@ import {
   NewVerificationDto
 } from '@ying/shared'
 import { AccountEntity, FileEntity, UserEntity } from '@ying/shared/entities'
-import { authConfig } from '@/server/config'
+import { authConfig, apiConfig } from '@/server/config'
 import { RedisKey, RedisToken } from '@/server/common/modules/redis/constant'
 import { MailService } from '@/server/common/modules/mail/mail.service'
 import { generatePass } from '@/server/common/utils'
@@ -32,6 +32,8 @@ export class AuthService {
     private readonly redisClient: RedisClientType,
     @Inject(authConfig.KEY)
     private readonly authConf: ConfigType<typeof authConfig>,
+    @Inject(apiConfig.KEY)
+    private readonly apiConf: ConfigType<typeof apiConfig>,
     private readonly mailService: MailService
   ) {}
 
@@ -166,7 +168,7 @@ export class AuthService {
       }
 
       const token = await this.generateVerificationToken(dto.email)
-      const link = `${this.authConf.redirectUrl}/auth/new-verification?token=${token}&email=${dto.email}`
+      const link = `${this.apiConf.clientUrl}/auth/new-verification?token=${token}&email=${dto.email}`
       const i18n = I18nContext.current()
       const title = i18n.t('auth.confirmEmail')
       const content = i18n.t('auth.confirmEmailContent', { args: { link } })
@@ -214,7 +216,7 @@ export class AuthService {
     }
 
     const token = await this.generatePasswordResetToken(dto.email)
-    const link = `${this.authConf.redirectUrl}/auth/new-password?token=${token}&email=${dto.email}`
+    const link = `${this.apiConf.clientUrl}/auth/new-password?token=${token}&email=${dto.email}`
     const i18n = I18nContext.current()
     const title = i18n.t('auth.resetPassword')
     const content = i18n.t('auth.resetContent', { args: { link } })

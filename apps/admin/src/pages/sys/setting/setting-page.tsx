@@ -1,12 +1,13 @@
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Button, Card, App, Space, Form, Input, Spin } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
-import { SettingDto } from '@ying/shared'
-import { useFetch, useSubmit } from '@ying/fontend-shared/hooks'
+import { ConfigDto } from '@ying/shared'
+import { useSubmit } from '@ying/fontend-shared/hooks'
 
 import { sysSettingApi } from '@/admin/api'
+import { useConfig } from '@/admin/store'
 
 export default function SettingPage() {
   const { message } = App.useApp()
@@ -24,31 +25,30 @@ export default function SettingPage() {
     message.success('清除游离文件成功')
   }
 
-  const { loading, data } = useFetch({
-    func: useCallback(() => sysSettingApi.getSetting(), [])
-  })
+  const { config, getConfig } = useConfig()
 
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset
-  } = useForm<SettingDto>({
-    resolver: classValidatorResolver(SettingDto)
+  } = useForm<ConfigDto>({
+    resolver: classValidatorResolver(ConfigDto)
   })
 
   useEffect(() => {
-    reset(data)
-  }, [data, reset])
+    reset(config)
+  }, [config, reset])
 
-  const handlePost = async (value: SettingDto) => {
+  const handlePost = async (value: ConfigDto) => {
     await sysSettingApi.updateSetting(value)
     message.success('更新成功')
+    getConfig()
   }
 
   return (
     <Card title="系统设置" bordered={false} styles={{ body: { padding: 0 } }}>
-      <Spin spinning={loading} wrapperClassName="max-h-[800px] overflow-auto no-scrollbar p-5">
+      <Spin spinning={!config} wrapperClassName="max-h-[800px] overflow-auto no-scrollbar p-5">
         <Space>
           <Button
             type="primary"
@@ -67,11 +67,12 @@ export default function SettingPage() {
             label="debug用户ID"
             validateStatus={errors.debugUserIds ? 'error' : ''}
             help={errors.debugUserIds && errors.debugUserIds.message}
+            extra="请输入需要debug的用户ID，用英文,分隔"
           >
             <Controller
               name="debugUserIds"
               control={control}
-              render={({ field }) => <Input.TextArea placeholder="请输入需要debug的用户ID，用英文,分隔" {...field} />}
+              render={({ field }) => <Input.TextArea placeholder="请输入" {...field} />}
             />
           </Form.Item>
 

@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator'
 
-export class SettingDto {
+export class ConfigDto {
   @IsString()
   debugUserIds: string
 }

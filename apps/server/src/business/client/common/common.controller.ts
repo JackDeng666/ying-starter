@@ -20,7 +20,7 @@ import {
   FileSourceType,
   FileType,
   NoticeSubscribeDto,
-  SettingDto
+  ConfigVo
 } from '@ying/shared'
 
 import { ClientScope, Public, UID } from '@/server/common/decorator'
@@ -45,9 +45,9 @@ export class CommonController {
 
   @Get('check-live-debug')
   async checkLiveDebug(@UID() userId: number) {
-    const settingStr = await this.redisClient.get(RedisKey.Setting)
-    if (!settingStr) return false
-    const setting = JSON.parse(settingStr) as SettingDto
+    const configStr = await this.redisClient.get(RedisKey.Config)
+    if (!configStr) return false
+    const setting = JSON.parse(configStr) as ConfigVo
 
     return setting.debugUserIds.split(',').includes(userId + '')
   }

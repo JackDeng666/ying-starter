@@ -24,7 +24,6 @@ export const storageConfig = registerAs('storageConfig', () => {
 
   return {
     mode: process.env.STORAGE_MODE as 'local' | 'minio',
-    serverUrl: process.env.SERVER_URL || 'http://localhost:3000',
     host: process.env.MINIO_HOST,
     port: +process.env.MINIO_PORT,
     bucket: process.env.MINIO_BUCKET,

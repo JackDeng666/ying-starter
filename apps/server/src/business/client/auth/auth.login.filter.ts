@@ -1,12 +1,12 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Inject } from '@nestjs/common'
 import { Response } from 'express'
 import { ConfigType } from '@nestjs/config'
-import { authConfig } from '@/server/config'
+import { apiConfig } from '@/server/config'
 
 @Catch()
 export class AuthLoginExceptionFilter implements ExceptionFilter {
-  @Inject(authConfig.KEY)
-  private readonly authConf: ConfigType<typeof authConfig>
+  @Inject(apiConfig.KEY)
+  private readonly apiConf: ConfigType<typeof apiConfig>
 
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
@@ -14,6 +14,6 @@ export class AuthLoginExceptionFilter implements ExceptionFilter {
 
     const message = exception.message ? exception.message : exception.toString()
 
-    response.redirect(this.authConf.redirectUrl + '/auth/error?msg=' + message)
+    response.redirect(this.apiConf.clientUrl + '/auth/error?msg=' + message)
   }
 }

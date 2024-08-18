@@ -9,15 +9,16 @@ import { useDialogOpen } from '@ying/fontend-shared/hooks'
 import { ListArticleDto } from '@ying/shared'
 import { ArticleEntity } from '@ying/shared/entities'
 
-import { usePage } from '@/admin/hooks/use-page'
-import { articleApi } from '@/admin/api'
 import { PageQuery } from '@/admin/components/page-query'
 import { PageOperations } from '@/admin/components/page-operations'
+import { PromotionModal, TPromotionData } from '@/admin/components/promotion-modal'
 import { BasicStatusOption, BasicStatusOptions } from '@/admin/constant'
+import { usePage } from '@/admin/hooks/use-page'
+import { articleApi } from '@/admin/api'
 import { useRouter } from '@/admin/router/hooks'
+import { useConfig } from '@/admin/store'
 
 import { ArticleDrawer } from './article-drawer'
-import { ArticlePromotionModal } from './article-promotion-modal'
 
 export default function Page() {
   const router = useRouter()
@@ -48,8 +49,9 @@ export default function Page() {
     return () => subscription.unsubscribe()
   }, [watch, reload])
 
+  const { config } = useConfig()
   const articleDrawerProps = useDialogOpen<ArticleEntity>()
-  const articlePromotionModalProps = useDialogOpen<ArticleEntity>()
+  const articlePromotionModalProps = useDialogOpen<TPromotionData>()
 
   const columns: ColumnsType<ArticleEntity> = [
     {
@@ -126,14 +128,16 @@ export default function Page() {
               {
                 key: 'promotion',
                 label: '单页推广',
-                onClick: () => articlePromotionModalProps.onOpen(record)
+                onClick: () =>
+                  articlePromotionModalProps.onOpen({
+                    title: `推广-${record.name}`,
+                    link: `${config.clientUrl}/article/${record.id}`
+                  })
               },
               {
                 key: 'copy',
                 label: '复制到推送模板',
-                onClick: () => {
-                  router.push('/notification/push-template', { state: { type: 'setArticle', record } })
-                }
+                onClick: () => router.push('/notification/push-template', { state: { type: 'setArticle', record } })
               }
             ]}
           />
@@ -188,7 +192,7 @@ export default function Page() {
       />
 
       <ArticleDrawer {...articleDrawerProps} onSuccess={reload} />
-      <ArticlePromotionModal {...articlePromotionModalProps} />
+      <PromotionModal {...articlePromotionModalProps} />
     </Card>
   )
 }

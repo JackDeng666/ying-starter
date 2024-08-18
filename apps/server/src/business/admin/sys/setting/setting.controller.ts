@@ -1,16 +1,20 @@
 import { Body, Controller, Get, Post } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ConfigDto } from '@ying/shared'
 import { pms } from '@ying/shared/permission'
 import { AdminScope, PermissionDecorator } from '@/server/common/decorator'
+import { ConfigService } from '@/server/common/modules/config/config.service'
 import { SysSettingService } from './setting.service'
-import { SettingDto } from '@ying/shared'
 
 @ApiTags('admin system setting')
 @Controller('admin/sys/setting')
 @AdminScope()
 @PermissionDecorator(pms.sys.setting)
 export class SysSettingController {
-  constructor(private readonly sysSettingService: SysSettingService) {}
+  constructor(
+    private readonly sysSettingService: SysSettingService,
+    private readonly configService: ConfigService
+  ) {}
 
   @ApiOperation({
     summary: 'clear permission cache'
@@ -31,19 +35,11 @@ export class SysSettingController {
   }
 
   @ApiOperation({
-    summary: 'get setting'
-  })
-  @Get()
-  getSetting() {
-    return this.sysSettingService.getSetting()
-  }
-
-  @ApiOperation({
     summary: 'update setting'
   })
   @PermissionDecorator(pms.sys.setting.updateSetting)
   @Post()
-  updateSetting(@Body() settingDto: SettingDto) {
-    return this.sysSettingService.updateSetting(settingDto)
+  updateSetting(@Body() dto: ConfigDto) {
+    return this.configService.setConfig(dto)
   }
 }
