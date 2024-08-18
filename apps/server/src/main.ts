@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core'
 import { ConfigType } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { NestExpressApplication } from '@nestjs/platform-express'
+import { Response } from 'express'
 import { join } from 'path'
 import { apiConfig, storageConfig } from '@/server/config'
 import { ProcessTimeInterceptor, ResponseWrapInterceptor } from '@/server/common/interceptor'
@@ -25,11 +26,18 @@ async function bootstrap() {
       forbidUnknownValues: true
     })
   )
-  app.useStaticAssets(join(__dirname, 'assets'))
+  app.useStaticAssets(join(__dirname, 'assets'), {
+    maxAge: '30d',
+    setHeaders(res: Response, path: string) {
+      if (path.includes('index.html')) {
+        res.setHeader('Cache-Control', 'no-store')
+      }
+    }
+  })
 
   if (storageConf.mode === 'local') {
     // 存储本地模式图片存储的位置，部署后从dist启动刚好也是3层
-    app.useStaticAssets(join(__dirname, '../../../uploadfiles'), { prefix: '/upload' })
+    app.useStaticAssets(join(__dirname, '../../../uploadfiles'), { prefix: '/upload', maxAge: '30d' })
   }
 
   const config = new DocumentBuilder().setTitle('ying app').setDescription('ying app').setVersion('1.0').build()
@@ -39,6 +47,6 @@ async function bootstrap() {
   SwaggerModule.setup('doc', app, document)
 
   await app.listen(apiConf.port)
-  Logger.log(`🚀 Application is running on: http://localhost:${apiConf.port}/api`, 'Main')
+  Logger.log(`🚀 Application is running on: ${apiConf.url}/api`, 'Main')
 }
 bootstrap()
