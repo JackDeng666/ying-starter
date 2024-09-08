@@ -41,13 +41,13 @@ export default function SearchBar() {
     setSelectedItemIndex(0)
   }, [searchQuery, flattenedRoutes])
 
-  const handleMetaK = (event: KeyboardEvent) => {
-    if (event.metaKey && event.key === 'k') {
-      // https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent/metaKey
+  const handleCtrlK = (event: KeyboardEvent) => {
+    event.preventDefault()
+    if (event.ctrlKey && event.key === 'k') {
       handleOpen()
     }
   }
-  useEvent('keydown', handleMetaK)
+  useEvent('keydown', handleCtrlK)
 
   useKeyPressEvent('ArrowUp', event => {
     if (!search) return
@@ -126,7 +126,7 @@ export default function SearchBar() {
         <IconButton className="h-10 w-10" onClick={handleOpen}>
           <SvgIcon icon="ic-search" size="20" />
         </IconButton>
-        <IconButton className="0 h-6 rounded-md bg-hover text-xs font-bold">⌘K</IconButton>
+        <IconButton className="0 h-6 rounded-md bg-hover text-xs font-bold">CTRL+K</IconButton>
       </div>
       <Modal
         centered
@@ -196,7 +196,7 @@ export default function SearchBar() {
                     <div className="flex justify-between">
                       <div>
                         <div className="font-medium">
-                          {partsTitle.map((item: any) => (
+                          {partsTitle.map(item => (
                             <span
                               key={item.text}
                               style={{
@@ -208,7 +208,7 @@ export default function SearchBar() {
                           ))}
                         </div>
                         <div className="text-xs">
-                          {partsKey.map((item: any) => (
+                          {partsKey.map(item => (
                             <span
                               key={item.text}
                               style={{
