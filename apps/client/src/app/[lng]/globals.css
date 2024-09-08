@@ -58,10 +58,6 @@
   }
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
 *::-webkit-scrollbar {
   width: 5px;
   height: 5px;

@@ -42,8 +42,8 @@ export default function SearchBar() {
   }, [searchQuery, flattenedRoutes])
 
   const handleCtrlK = (event: KeyboardEvent) => {
-    event.preventDefault()
     if (event.ctrlKey && event.key === 'k') {
+      event.preventDefault()
       handleOpen()
     }
   }

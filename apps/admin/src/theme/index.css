@@ -3,11 +3,3 @@
 
 /* 第三方库样式 */
 @import './global.css';
-
-.fc {
-  @apply flex justify-center items-center;
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}

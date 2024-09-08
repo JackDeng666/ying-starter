@@ -1,4 +1,5 @@
 const { join } = require('path')
+const plugin = require('tailwindcss/plugin')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -55,5 +56,18 @@ module.exports = {
     // Remove the Tailwind CSS preflight styles so it can use custom base style (src/theme/base.css)
     preflight: false // https://tailwindcss.com/docs/preflight#disabling-preflight
   },
-  plugins: []
+  plugins: [
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.no-scrollbar': {
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          }
+        },
+        '.fc': {
+          '@apply flex justify-center items-center': true
+        }
+      })
+    })
+  ]
 }
