@@ -19,6 +19,10 @@ const SysRole = lazy(() => import('@/admin/pages/sys/role/role-page'))
 const SysUser = lazy(() => import('@/admin/pages/sys/user/user-page'))
 const SysSetting = lazy(() => import('@/admin/pages/sys/setting/setting-page'))
 
+function withLoadingFallback(component: JSX.Element) {
+  return <Suspense fallback={<CircleLoading />}>{component}</Suspense>
+}
+
 export const menuRoutes: AppRouteObject[] = [
   {
     path: 'dashboard',
@@ -28,9 +32,8 @@ export const menuRoutes: AppRouteObject[] = [
       label: '首页',
       permission: pms.dashboard
     },
-    element: <Dashbord />
+    element: withLoadingFallback(<Dashbord />)
   },
-
   {
     path: 'user',
     meta: {
@@ -39,7 +42,7 @@ export const menuRoutes: AppRouteObject[] = [
       label: '用户管理',
       permission: pms.user
     },
-    element: <User />
+    element: withLoadingFallback(<User />)
   },
   {
     path: 'feedback',
@@ -48,7 +51,7 @@ export const menuRoutes: AppRouteObject[] = [
       key: '/feedback',
       label: '反馈管理'
     },
-    element: <Feedback />
+    element: withLoadingFallback(<Feedback />)
   },
   {
     path: 'article',
@@ -57,15 +60,11 @@ export const menuRoutes: AppRouteObject[] = [
       key: '/article',
       label: '文章管理'
     },
-    element: <Article />
+    element: withLoadingFallback(<Article />)
   },
   {
     path: 'notification',
-    element: (
-      <Suspense fallback={<CircleLoading />}>
-        <Outlet />
-      </Suspense>
-    ),
+    element: withLoadingFallback(<Outlet />),
     meta: {
       icon: 'solar:bell-bing-bold-duotone',
       key: '/notification',
@@ -116,11 +115,7 @@ export const menuRoutes: AppRouteObject[] = [
   },
   {
     path: 'sys',
-    element: (
-      <Suspense fallback={<CircleLoading />}>
-        <Outlet />
-      </Suspense>
-    ),
+    element: withLoadingFallback(<Outlet />),
     meta: {
       icon: 'solar:code-scan-bold-duotone',
       key: '/sys',

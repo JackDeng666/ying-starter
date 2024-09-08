@@ -1,18 +1,17 @@
 import { useScroll } from 'framer-motion'
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { CircleLoading } from '@/admin/components/loading'
 import ProgressBar from '@/admin/components/progress-bar'
 import { useSettings } from '@/admin/store/settingStore'
 import { useThemeToken } from '@/admin/theme/hooks'
+
+import { ThemeLayout, ThemeMode } from '@/admin/types/enum'
 
 import Header from './header'
 import Main from './main'
 import Nav from './nav'
 import NavHorizontal from './nav-horizontal'
-
-import { ThemeLayout, ThemeMode } from '@/admin/types/enum'
 
 function DashboardLayout() {
   const { colorBgElevated, colorTextBase } = useThemeToken()
@@ -70,7 +69,7 @@ function DashboardLayout() {
           transition: 'color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, background 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
         }}
       >
-        <Suspense fallback={<CircleLoading />}>{layout}</Suspense>
+        {layout}
       </div>
     </StyleWrapper>
   )

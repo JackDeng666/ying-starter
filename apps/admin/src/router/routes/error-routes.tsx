@@ -17,13 +17,13 @@ import AuthGuard from '../components/auth-guard'
 export const ErrorRoutes: AppRouteObject[] = [
   {
     element: (
-      <AuthGuard>
-        <SimpleLayout>
-          <Suspense fallback={<CircleLoading />}>
+      <Suspense fallback={<CircleLoading className="h-screen" />}>
+        <AuthGuard>
+          <SimpleLayout>
             <Outlet />
-          </Suspense>
-        </SimpleLayout>
-      </AuthGuard>
+          </SimpleLayout>
+        </AuthGuard>
+      </Suspense>
     ),
     children: [
       { path: '403', element: <Page403 /> },

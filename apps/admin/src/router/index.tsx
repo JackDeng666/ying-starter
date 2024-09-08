@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Navigate, RouteObject, RouterProvider, createHashRouter } from 'react-router-dom'
 
 import DashboardLayout from '@/admin/layouts/dashboard'
 import AuthGuard from '@/admin/router/components/auth-guard'
 import Login from '@/admin/pages/login/Login'
+import { CircleLoading } from '@/admin/components/loading'
 import { usePermissionRoutes } from '@/admin/router/hooks'
 import { ErrorRoutes } from '@/admin/router/routes/error-routes'
 import { AppRouteObject } from '@/admin/types/router'
@@ -20,9 +22,11 @@ export default function Router() {
   const menuRoute: AppRouteObject = {
     path: '/',
     element: (
-      <AuthGuard>
-        <DashboardLayout />
-      </AuthGuard>
+      <Suspense fallback={<CircleLoading className="h-screen" />}>
+        <AuthGuard>
+          <DashboardLayout />
+        </AuthGuard>
+      </Suspense>
     ),
     children: [{ index: true, element: <Navigate to={HOMEPAGE} replace /> }, ...routerRoutes]
   }
