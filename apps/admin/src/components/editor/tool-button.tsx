@@ -12,8 +12,8 @@ export const ToolButton = ({ className, children, active, disabled, onClick }: T
   return (
     <div
       className={cn(
-        'w-8 h-8 rounded-md p-2 border border-[#f1f1f1] cursor-pointer hover:bg-[#f1f1f1] fc text-base',
-        active && 'bg-[#f1f1f1]',
+        'w-8 h-8 rounded-md p-2 border border-[#f1f1f1] dark:border-[#424242] cursor-pointer hover:bg-[#f1f1f1] dark:hover:bg-[#424242] fc text-base',
+        active && 'bg-[#f1f1f1] dark:bg-[#424242]',
         disabled && 'text-gray hover:bg-transparent hover:cursor-default',
         className
       )}

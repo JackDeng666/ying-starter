@@ -5,6 +5,8 @@ import { ScheduleModule } from '@nestjs/schedule'
 import { AcceptLanguageResolver, HeaderResolver, I18nModule } from 'nestjs-i18n'
 import { join } from 'path'
 
+import { clientLanguagesConfig } from '@ying/shared'
+
 import { apiConfig, redisConfig, dbConfig, storageConfig, authConfig, mailConfig, pushConfig } from '@/server/config'
 import { RedisModule } from '@/server/common/modules/redis/redis.module'
 import { DbModule } from '@/server/common/modules/db/db.module'
@@ -23,7 +25,7 @@ import { ClientModule } from '@/server/business/client/client.module'
       envFilePath: ['.env.local', '.env']
     }),
     I18nModule.forRoot({
-      fallbackLanguage: 'en',
+      fallbackLanguage: clientLanguagesConfig.fallbackLng,
       loaderOptions: {
         path: join(__dirname, './i18n/'),
         watch: true

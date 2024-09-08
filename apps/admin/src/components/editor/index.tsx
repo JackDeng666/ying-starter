@@ -46,7 +46,7 @@ export default function Editor({ className, value, onChange, placeholder = 'è¯·è
   }, [value, editor])
 
   return (
-    <div className="border border-[#f1f1f1] rounded-lg shadow-sm overflow-hidden">
+    <div className="border border-[#f1f1f1] dark:border-[#424242] rounded-lg shadow-sm overflow-hidden">
       <ToolBar editor={editor} />
       <EditorContent editor={editor} className={cn('h-60 overflow-y-auto bg-[#fcfcfc]', className)} />
     </div>

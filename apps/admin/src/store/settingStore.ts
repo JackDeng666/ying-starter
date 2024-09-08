@@ -21,25 +21,34 @@ type SettingStore = {
   }
 }
 
-const useSettingStore = create<SettingStore>(set => ({
-  settings: storage.getItem<SettingsType>(StorageEnum.Settings) || {
+const useSettingStore = create<SettingStore>(set => {
+  const settings = storage.getItem<SettingsType>(StorageEnum.Settings) || {
     themeColorPresets: ThemeColorPresets.Default,
     themeMode: ThemeMode.Light,
     themeLayout: ThemeLayout.Vertical,
     themeStretch: true,
     breadCrumb: true,
     multiTab: true
-  },
-  actions: {
-    setSettings: settings => {
-      set({ settings })
-      storage.setItem(StorageEnum.Settings, settings)
-    },
-    clearSettings() {
-      storage.removeItem(StorageEnum.Settings)
+  }
+
+  document.documentElement.classList.add(settings.themeMode)
+
+  return {
+    settings,
+    actions: {
+      setSettings: settings => {
+        set({ settings })
+        storage.setItem(StorageEnum.Settings, settings)
+
+        document.documentElement.classList.remove(ThemeMode.Light, ThemeMode.Dark)
+        document.documentElement.classList.add(settings.themeMode)
+      },
+      clearSettings() {
+        storage.removeItem(StorageEnum.Settings)
+      }
     }
   }
-}))
+})
 
 export const useSettings = () => useSettingStore(state => state.settings)
 export const useSettingActions = () => useSettingStore(state => state.actions)

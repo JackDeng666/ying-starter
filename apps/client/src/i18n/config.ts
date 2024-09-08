@@ -1,5 +1,7 @@
-export const fallbackLng = 'en'
-export const languages = [fallbackLng, 'zh']
+import { clientLanguagesConfig } from '@ying/shared'
+
+export const fallbackLng = clientLanguagesConfig.fallbackLng
+export const languages = clientLanguagesConfig.languages
 export const defaultNS = 'basic'
 
 export const languagesWithSlashes = languages.map(l => `/${l}`)

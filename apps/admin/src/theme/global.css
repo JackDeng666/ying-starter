@@ -9,3 +9,49 @@
 
 /* 导入 Tailwind CSS 的实用类，这些类通常用于添加与布局、间距、响应式设计等相关的样式，使得可以快速构建出复杂的页面 */
 @import 'tailwindcss/utilities';
+
+@layer base {
+  :root {
+    --scrollbar-track-bg: #fafafa;
+    --scrollbar-thumb-bg: #c1c1c1;
+    --scrollbar-thumb-hover-bg: #7d7d7d;
+  }
+
+  .dark {
+    --scrollbar-track-bg: #212b36;
+    --scrollbar-thumb-bg: #6b6b6b;
+    --scrollbar-thumb-hover-bg: #939393;
+  }
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background: var(--scrollbar-track-bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: var(--scrollbar-thumb-bg);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-bg);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.ant-table-body {
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+
+.ant-table-cell-scrollbar {
+  width: 8px;
+}

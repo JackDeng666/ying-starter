@@ -177,7 +177,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "express": "^4.19.2",
-    "husky": "8",
+    "husky": "~8.0.3",
     "i18next": "^23.12.2",
     "i18next-fs-backend": "^2.3.2",
     "i18next-resources-to-backend": "^1.2.1",
