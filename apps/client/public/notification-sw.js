@@ -55,6 +55,19 @@ class IndexedDbOperation {
   }
 }
 
+function getContentFromIntlText(intl) {
+  if (!intl) return ''
+
+  for (let i = 0; i < navigator.languages.length; i++) {
+    const lng = navigator.languages[i]
+    if (intl[lng]) {
+      return intl[lng]
+    }
+  }
+
+  return intl[Object.keys(intl)[0]]
+}
+
 async function fetchData(url, method, body) {
   const appInfoStore = await IndexedDbOperation.openDbStore({
     dbName,
@@ -91,10 +104,15 @@ addEventListener('push', event => {
   const data = event.data.json()
   console.log('data:', data)
 
-  self.registration.showNotification(data.title, {
-    body: data.body || '',
+  self.registration.showNotification(getContentFromIntlText(data.title), {
+    body: getContentFromIntlText(data.body),
     image: data.image?.url,
-    actions: data.actions ? data.actions.map(el => ({ action: el.title, title: el.title })) : [],
+    actions: data.actions
+      ? data.actions.map(el => {
+          const title = getContentFromIntlText(el.title)
+          return { action: title, title }
+        })
+      : [],
     data
   })
 })

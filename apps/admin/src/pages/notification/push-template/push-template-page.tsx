@@ -16,6 +16,7 @@ import { usePage } from '@/admin/hooks/use-page'
 import { notificationApi } from '@/admin/api'
 import { PageQuery } from '@/admin/components/page-query'
 import { PageOperations } from '@/admin/components/page-operations'
+import { IntlShow } from '@/admin/components/intl'
 
 import { PushTemplateDrawer } from './push-template-drawer'
 import { SendNotificationModal } from './send-notification-modal'
@@ -79,12 +80,14 @@ export default function Page() {
       title: '通知标题',
       width: 300,
       ellipsis: true,
-      dataIndex: 'title'
+      dataIndex: 'title',
+      render: (_, record) => <IntlShow value={record.title} />
     },
     {
       title: '内容',
       ellipsis: true,
-      dataIndex: 'body'
+      dataIndex: 'body',
+      render: (_, record) => <IntlShow value={record.body} />
     },
     {
       title: '创建时间',
@@ -146,7 +149,7 @@ export default function Page() {
 
       <Table
         rowKey="id"
-        scroll={{ x: 1000, y: 500 }}
+        scroll={{ x: 1000, y: 660 }}
         loading={listLoading}
         pagination={pagination}
         columns={columns}

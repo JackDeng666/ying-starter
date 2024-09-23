@@ -2,14 +2,17 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
 import { BaseEntityWithAutoId } from './base'
 import { BasicStatus } from '../enum'
 import { FileEntity } from './file.entity'
+import type { TIntlText } from '../config'
 
 @Entity({ name: 'article' })
 export class ArticleEntity extends BaseEntityWithAutoId {
   @Column()
   name: string
 
-  @Column()
-  title: string
+  @Column({
+    type: 'json'
+  })
+  title: TIntlText
 
   @Column({
     nullable: true,
@@ -18,10 +21,10 @@ export class ArticleEntity extends BaseEntityWithAutoId {
   keywords?: string[]
 
   @Column({
-    type: 'text',
+    type: 'json',
     nullable: true
   })
-  content?: string
+  content?: TIntlText
 
   @Column()
   coverId: number

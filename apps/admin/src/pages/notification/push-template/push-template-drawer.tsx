@@ -10,6 +10,7 @@ import { useDialogOpen } from '@ying/fontend-shared/hooks'
 import { notificationApi } from '@/admin/api'
 import { SelectImage } from '@/admin/components/image-tool/select-image'
 import { FormList } from '@/admin/components/form/form-list'
+import { IntlInput, IntlTextArea } from '@/admin/components/intl'
 
 const createResolver = classValidatorResolver(CreatePushTemplateDto)
 const updateResolver = classValidatorResolver(UpdatePushTemplateDto)
@@ -27,7 +28,7 @@ const defaultValue: CreatePushTemplateDto = {
   actions: undefined
 }
 
-export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: PushTemplateDrawerProps) {
+export function PushTemplateDrawer({ open, formValue, render, onSuccess, onClose }: PushTemplateDrawerProps) {
   const title = `${formValue?.id ? '编辑' : '新增'}推送模板`
   const [form] = Form.useForm()
   const { message } = App.useApp()
@@ -68,6 +69,8 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
     onClose()
   }
 
+  if (!render) return null
+
   return (
     <Drawer
       title={title}
@@ -104,7 +107,7 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
           <Controller
             name="title"
             control={control}
-            render={({ field }) => <Input allowClear placeholder="请输入通知标题" {...field} />}
+            render={({ field }) => <IntlInput allowClear placeholder="请输入通知标题" {...field} />}
           />
         </Form.Item>
         <Form.Item label="链接" validateStatus={errors.link ? 'error' : ''} help={errors.link && errors.link.message}>
@@ -122,7 +125,7 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
           <Controller
             name="body"
             control={control}
-            render={({ field }) => <Input.TextArea placeholder="请输入推送内容" {...field} />}
+            render={({ field }) => <IntlTextArea placeholder="请输入推送内容" {...field} />}
           />
         </Form.Item>
         <Form.Item
@@ -138,30 +141,34 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
             )}
           />
         </Form.Item>
-        <FormList control={control} name="actions" label="按钮">
-          {register => {
-            const titleReg = register('title')
-            const linkReg = register('link')
+        <FormList control={control} name="actions" label="按钮" defaultValue={{ title: undefined, link: undefined }}>
+          {index => {
             return (
               <>
-                <Form.Item validateStatus={titleReg.error ? 'error' : ''} help={titleReg.error}>
-                  <Input
-                    placeholder="标题"
-                    value={titleReg.value}
-                    onChange={val => {
-                      titleReg.onChange(val.target.value)
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item validateStatus={linkReg.error ? 'error' : ''} help={linkReg.error}>
-                  <Input
-                    placeholder="链接"
-                    value={linkReg.value}
-                    onChange={val => {
-                      linkReg.onChange(val.target.value)
-                    }}
-                  />
-                </Form.Item>
+                <Controller
+                  name={`actions.${index}.title`}
+                  control={control}
+                  render={({ field }) => (
+                    <Form.Item
+                      validateStatus={errors?.actions?.[index]?.title?.message ? 'error' : ''}
+                      help={errors?.actions?.[index]?.title?.message}
+                    >
+                      <IntlInput placeholder="标题" value={field.value} onChange={field.onChange} />
+                    </Form.Item>
+                  )}
+                />
+                <Controller
+                  name={`actions.${index}.link`}
+                  control={control}
+                  render={({ field }) => (
+                    <Form.Item
+                      validateStatus={errors?.actions?.[index]?.link?.message ? 'error' : ''}
+                      help={errors?.actions?.[index]?.link?.message}
+                    >
+                      <Input placeholder="链接" value={field.value} onChange={field.onChange} />
+                    </Form.Item>
+                  )}
+                />
               </>
             )
           }}

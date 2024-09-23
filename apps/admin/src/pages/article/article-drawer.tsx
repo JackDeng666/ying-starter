@@ -8,8 +8,8 @@ import { ArticleEntity } from '@ying/shared/entities'
 import { useDialogOpen } from '@ying/fontend-shared/hooks'
 
 import { TagsEdit } from '@/admin/components/tags'
-import Editor from '@/admin/components/editor'
 import { SelectImage } from '@/admin/components/image-tool/select-image'
+import { IntlInput, IntlEditor } from '@/admin/components/intl'
 import { articleApi } from '@/admin/api'
 import { BasicStatusOptions } from '@/admin/constant'
 import { defaultValues } from './constant'
@@ -21,7 +21,7 @@ type ArticleDrawerProps = ReturnType<typeof useDialogOpen<ArticleEntity>> & {
   onSuccess?: VoidFunction
 }
 
-export function ArticleDrawer({ open, formValue, onSuccess, onClose }: ArticleDrawerProps) {
+export function ArticleDrawer({ open, formValue, render, onSuccess, onClose }: ArticleDrawerProps) {
   const title = `${formValue ? '编辑' : '新增'}文章`
   const [form] = Form.useForm()
   const { message } = App.useApp()
@@ -57,6 +57,8 @@ export function ArticleDrawer({ open, formValue, onSuccess, onClose }: ArticleDr
     onSuccess && onSuccess()
     onClose()
   }
+
+  if (!render) return null
 
   return (
     <Drawer
@@ -96,7 +98,7 @@ export function ArticleDrawer({ open, formValue, onSuccess, onClose }: ArticleDr
           <Controller
             control={control}
             name="title"
-            render={({ field }) => <Input allowClear placeholder="请输入标题" {...field} />}
+            render={({ field }) => <IntlInput allowClear placeholder="请输入标题" {...field} />}
           />
         </Form.Item>
 
@@ -164,7 +166,7 @@ export function ArticleDrawer({ open, formValue, onSuccess, onClose }: ArticleDr
           <Controller
             control={control}
             name="content"
-            render={({ field }) => <Editor className="h-80" value={formValue?.content} onChange={field.onChange} />}
+            render={({ field }) => <IntlEditor className="h-80" value={field.value} onChange={field.onChange} />}
           />
         </Form.Item>
       </Form>

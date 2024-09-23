@@ -2,14 +2,17 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
 import { BaseEntityWithAutoId } from './base'
 import { PushActionDto } from '../dto'
 import { FileEntity } from './file.entity'
+import type { TIntlText } from '../config'
 
 @Entity({ name: 'push_template' })
 export class PushTemplateEntity extends BaseEntityWithAutoId {
   @Column()
   name: string
 
-  @Column()
-  title: string
+  @Column({
+    type: 'json'
+  })
+  title: TIntlText
 
   @Column({
     nullable: true
@@ -17,9 +20,10 @@ export class PushTemplateEntity extends BaseEntityWithAutoId {
   link?: string
 
   @Column({
+    type: 'json',
     nullable: true
   })
-  body?: string
+  body?: TIntlText
 
   @Column({
     nullable: true
@@ -31,7 +35,7 @@ export class PushTemplateEntity extends BaseEntityWithAutoId {
   image?: FileEntity
 
   @Column({
-    type: 'simple-json',
+    type: 'json',
     nullable: true
   })
   actions?: PushActionDto[]

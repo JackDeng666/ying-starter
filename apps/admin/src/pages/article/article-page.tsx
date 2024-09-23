@@ -12,6 +12,7 @@ import { ArticleEntity } from '@ying/shared/entities'
 import { PageQuery } from '@/admin/components/page-query'
 import { PageOperations } from '@/admin/components/page-operations'
 import { PromotionModal, TPromotionData } from '@/admin/components/promotion-modal'
+import { IntlShow } from '@/admin/components/intl'
 import { BasicStatusOption, BasicStatusOptions } from '@/admin/constant'
 import { usePage } from '@/admin/hooks/use-page'
 import { articleApi } from '@/admin/api'
@@ -62,7 +63,8 @@ export default function Page() {
     {
       title: '文章标题',
       ellipsis: true,
-      dataIndex: 'title'
+      dataIndex: 'title',
+      render: (_, record) => <IntlShow value={record.title} />
     },
     {
       title: '封面',

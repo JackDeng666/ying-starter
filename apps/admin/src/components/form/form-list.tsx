@@ -1,79 +1,43 @@
 import { ReactNode } from 'react'
 import { Button, Form } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import { Control, Controller, Path } from 'react-hook-form'
+import { ArrayPath, Control, FieldArray, useFieldArray } from 'react-hook-form'
 
-type TRegister = (name: string) => { error?: string; value: string; onChange: (val: unknown) => void }
-
-type FormListProps<T, TField extends Path<T>> = {
+type FormListProps<T, TField extends ArrayPath<T>> = {
   control: Control<T>
   name: TField
   label: string
-  children: (register: TRegister) => ReactNode
+  children: (index: number) => ReactNode
+  defaultValue: FieldArray<T, TField> | FieldArray<T, TField>[]
 }
 
-export const FormList = <T, TField extends Path<T>>({ control, name, label, children }: FormListProps<T, TField>) => {
+export const FormList = <T, TField extends ArrayPath<T>>({
+  control,
+  name,
+  label,
+  children,
+  defaultValue
+}: FormListProps<T, TField>) => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name
+  })
+
   return (
-    <Controller
-      control={control}
-      name={name}
-      render={({ field, fieldState }) => {
-        if (field.value === null) {
-          field.onChange(undefined)
-        }
-
-        if (field.value && !Array.isArray(field.value)) {
-          throw new Error(`FormList字段数据类型必须为数组，${name}不是数组`)
-        }
-
-        const values = field.value as unknown[]
-        const getRegister = (index: number): TRegister => {
-          return (name: string) => {
-            const value = values.find((_, i) => i === index)
-            return {
-              error: fieldState.error?.[index]?.[name]?.message,
-              value: value[name],
-              onChange: val => {
-                value[name] = val
-                field.onChange(values)
-              }
-            }
-          }
-        }
-        return (
-          <Form.Item label={label}>
-            {values?.map((_, index) => (
-              <div key={index}>
-                {children(getRegister(index))}
-                <Form.Item>
-                  <Button
-                    className="w-full"
-                    type="dashed"
-                    onClick={() => {
-                      field.onChange(values.filter((_, i) => i !== index))
-                    }}
-                    icon={<DeleteOutlined />}
-                  >
-                    删除
-                  </Button>
-                </Form.Item>
-              </div>
-            ))}
-            <Button
-              className="w-full"
-              type="dashed"
-              onClick={() => {
-                const newValue = values ? values : []
-                newValue.push({})
-                field.onChange(newValue)
-              }}
-              icon={<PlusOutlined />}
-            >
-              添加
+    <Form.Item label={label}>
+      {fields.map((field, index) => (
+        <div key={field.id}>
+          {children(index)}
+          <Form.Item>
+            <Button className="w-full" type="dashed" icon={<DeleteOutlined />} onClick={() => remove(index)}>
+              删除
             </Button>
           </Form.Item>
-        )
-      }}
-    />
+        </div>
+      ))}
+      <Button className="w-full" type="dashed" onClick={() => append(defaultValue)} icon={<PlusOutlined />}>
+        添加
+      </Button>
+    </Form.Item>
   )
 }

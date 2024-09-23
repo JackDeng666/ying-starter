@@ -2,6 +2,8 @@ import { Transform, Type } from 'class-transformer'
 import { IsNotEmpty, IsOptional, IsString, ValidateNested, IsEnum, IsNumber } from 'class-validator'
 import { DeviceType, RegisterType } from '../enum'
 import { ListDto } from './list.dto'
+import { IsIntlText } from './intl.validator'
+import type { TIntlText } from '../config'
 
 export class ListVisitorDto extends ListDto {
   @IsOptional()
@@ -28,9 +30,8 @@ export class SendNotificationDto {
 }
 
 export class PushActionDto {
-  @IsString()
-  @IsNotEmpty()
-  title: string
+  @IsIntlText({ minLength: 2, maxLength: 6 })
+  title: TIntlText
 
   @IsString()
   @IsOptional()
@@ -42,17 +43,15 @@ export class CreatePushTemplateDto {
   @IsNotEmpty()
   name: string
 
-  @IsString()
-  @IsNotEmpty()
-  title: string
+  @IsIntlText()
+  title: TIntlText
 
   @IsString()
   @IsOptional()
   link?: string
 
-  @IsString()
-  @IsOptional()
-  body?: string
+  @IsIntlText({ canEmpty: true })
+  body?: TIntlText
 
   @IsNumber()
   @IsOptional()
