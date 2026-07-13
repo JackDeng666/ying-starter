@@ -1,5 +1,5 @@
 import { ApexOptions } from 'apexcharts'
-import { mergeDeepRight } from 'ramda'
+import { merge } from 'lodash-es'
 
 import { useThemeToken } from '@/theme/hooks'
 
@@ -202,5 +202,5 @@ export default function useChart(options: ApexOptions) {
     ]
   }
 
-  return mergeDeepRight(baseOptions, options) as ApexOptions
+  return merge({}, baseOptions, options) as ApexOptions
 }

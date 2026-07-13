@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
-import { getUserInfo, useUserToken } from '@/store'
+import { updateUserInfo, useAuthTokens } from '@/store'
 
 import { useRouter } from '../hooks'
 
@@ -9,7 +9,7 @@ type Props = {
 }
 export default function AuthGuard({ children }: Props) {
   const router = useRouter()
-  const { accessToken } = useUserToken()
+  const { accessToken } = useAuthTokens()
 
   const check = useCallback(() => {
     if (!accessToken) {
@@ -22,7 +22,7 @@ export default function AuthGuard({ children }: Props) {
   }, [check])
 
   useEffect(() => {
-    if (accessToken) getUserInfo()
+    if (accessToken) updateUserInfo()
   }, [accessToken])
 
   return children

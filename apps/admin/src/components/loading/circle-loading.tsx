@@ -1,8 +1,9 @@
 import { Spin } from 'antd'
+import { cn } from '@ying/frontend/ui'
 
-export function CircleLoading() {
+export function CircleLoading({ className }: { className?: string }) {
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className={cn('flex h-full w-full items-center justify-center', className)}>
       <Spin size="large" />
     </div>
   )

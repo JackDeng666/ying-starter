@@ -1,30 +1,62 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import path from 'node:path'
+import { defineConfig, loadEnv } from 'vite'
+import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
-import tsconfigPaths from 'vite-tsconfig-paths'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import babel from '@rolldown/plugin-babel'
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    createSvgIconsPlugin({
-      // 指定需要缓存的图标文件夹
-      iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
-      // 指定symbolId格式
-      symbolId: 'icon-[dir]-[name]'
-    }),
-    tsconfigPaths()
-  ],
-  base: '/admin/',
-  server: {
-    // open: true,
-    host: true,
-    port: 5174,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000'
+// import { dependencies } from './package.json'
+// const dependenciesNotIncluded = ['@ying/frontend', 'autosuggest-highlight']
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), 'APP_')
+  return {
+    envPrefix: 'APP_',
+    resolve: { tsconfigPaths: true },
+    server: {
+      host: true,
+      proxy: {
+        '/api': {
+          target: env.APP_SERVER_URL
+        },
+        '/socket.io': {
+          target: env.APP_SERVER_URL,
+          ws: true
+        }
       }
-    }
+    },
+    plugins: [
+      viteReact(),
+      babel({ presets: [reactCompilerPreset()] }),
+      tailwindcss(),
+      createSvgIconsPlugin({
+        iconDirs: [path.resolve(__dirname, 'src/assets/icons')], // 指定需要缓存的图标文件夹
+        symbolId: 'icon-[dir]-[name]' // 指定symbolId格式
+      }),
+      nodePolyfills()
+    ],
+    base: '/'
+    // optimizeDeps: {
+    //   rolldownOptions: {
+    //     commonjs: {
+    //       transformMixedExports: true
+    //     },
+    //     output: {
+    //       codeSplitting: {
+    //         groups: [
+    //           {
+    //             name(moduleId) {
+    //               if (moduleId.includes('node_modules')) {
+    //                 return 'vendor'
+    //               }
+    //               return null
+    //             }
+    //           }
+    //         ]
+    //       }
+    //     }
+    //   }
+    // }
   }
 })

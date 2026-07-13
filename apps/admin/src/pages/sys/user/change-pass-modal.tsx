@@ -1,54 +1,45 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Form, Modal, Input, message } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
-import { UpdateSysUserPasswordDto } from '@ying/shared'
+import { UpdateSysUserPasswordDto } from '@ying/dto'
+import { useDialogOpen } from '@ying/frontend/hooks'
+
 import { sysUserApi } from '@/api'
 
-const updateResolver = classValidatorResolver(UpdateSysUserPasswordDto)
-
-export type ChangePassModalProps = {
-  formValue: UpdateSysUserPasswordDto
-  title: string
-  show: boolean
-  onSuccess: VoidFunction
-  onCancel: VoidFunction
+type ChangePassModalProps = ReturnType<typeof useDialogOpen<UpdateSysUserPasswordDto>> & {
+  onSuccess?: VoidFunction
 }
 
-export function ChangePassModal({ title, show, formValue, onSuccess, onCancel }: ChangePassModalProps) {
+export function ChangePassModal({ open, formValue, onSuccess, onClose }: ChangePassModalProps) {
   const [form] = Form.useForm()
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset
   } = useForm<UpdateSysUserPasswordDto>({
-    resolver: updateResolver,
+    resolver: classValidatorResolver(UpdateSysUserPasswordDto),
     defaultValues: formValue
   })
 
   useEffect(() => {
-    reset(formValue)
+    if (formValue) {
+      reset(formValue)
+    }
   }, [formValue, reset])
 
-  const [loading, setLoading] = useState(false)
-
   const handlePost = async (value: UpdateSysUserPasswordDto) => {
-    try {
-      setLoading(true)
-      await sysUserApi.updatePassword(value)
-      message.success(`${title}成功`)
-      onSuccess()
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
+    await sysUserApi.updatePassword(value)
+    onClose()
+    message.success('修改密码成功')
+    onSuccess && onSuccess()
   }
 
   return (
-    <Modal title={title} open={show} onOk={form.submit} onCancel={onCancel} confirmLoading={loading}>
+    <Modal title="修改密码" open={open} onOk={form.submit} onCancel={onClose} confirmLoading={isSubmitting}>
       <Form form={form} labelCol={{ span: 2 }} onFinish={handleSubmit(handlePost)}>
         <Form.Item<UpdateSysUserPasswordDto>
           name="password"

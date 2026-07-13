@@ -1,22 +1,18 @@
+import type { PropsWithChildren } from 'react'
 import { StyleProvider } from '@ant-design/cssinjs'
 import { ConfigProvider, theme } from 'antd'
 import locale from 'antd/es/locale/zh_CN'
-import 'antd/dist/reset.css'
 
 import { useSettings } from '@/store/settingStore'
-
-import { customThemeTokenConfig, themeModeToken, colorPrimarys, customComponentConfig } from './theme'
-
 import { ThemeMode } from '@/types/enum'
 
-type Props = {
-  children: React.ReactNode
-}
-export default function AntdConfig({ children }: Props) {
+import { customThemeTokenConfig, customComponentConfig, colorPresets } from './config'
+
+export default function AntdConfig({ children }: PropsWithChildren) {
   const { themeMode, themeColorPresets } = useSettings()
 
   const algorithm = themeMode === ThemeMode.Light ? theme.defaultAlgorithm : theme.darkAlgorithm
-  const colorPrimary = colorPrimarys[themeColorPresets]
+  const colorPrimary = colorPresets[themeColorPresets]
 
   return (
     <ConfigProvider
@@ -24,12 +20,10 @@ export default function AntdConfig({ children }: Props) {
       theme={{
         token: {
           colorPrimary,
-          ...customThemeTokenConfig,
-          ...themeModeToken[themeMode].token
+          ...customThemeTokenConfig
         },
         components: {
-          ...customComponentConfig,
-          ...themeModeToken[themeMode].components
+          ...customComponentConfig
         },
         algorithm
       }}

@@ -1,18 +1,17 @@
 import { BaseType } from 'antd/es/typography/Base'
-import { BasicStatus, PermissionType } from '@ying/shared'
-import { PresetStatusColorType } from 'antd/es/_util/colors'
 
-export type TypeOption = {
+import { BasicStatus, FileType, FileSourceType } from '@ying/shared'
+
+export type TypeOption<T> = {
   label: string
-  value: number
+  value: T
 }
 
-export type BasicStatusOptionsType = TypeOption & {
-  value: BasicStatus
+export type BasicStatusOption = TypeOption<BasicStatus> & {
   color: BaseType
 }
 
-export const BasicStatusOptions: BasicStatusOptionsType[] = [
+export const BasicStatusOptions: BasicStatusOption[] = [
   {
     value: BasicStatus.ENABLE,
     color: 'success',
@@ -25,26 +24,29 @@ export const BasicStatusOptions: BasicStatusOptionsType[] = [
   }
 ]
 
-export type PermissionOptionsType = TypeOption & {
-  value: PermissionType
-  color: PresetStatusColorType
-}
+export type FileTypeOption = TypeOption<FileType>
 
-export const PermissionOptions: PermissionOptionsType[] = [
+export const FileTypeOptions: FileTypeOption[] = [
   {
-    value: PermissionType.CATALOGUE,
-    color: 'success',
-    label: '目录'
+    value: FileType.Image,
+    label: '图片'
   },
   {
-    value: PermissionType.MENU,
-    color: 'processing',
-    label: '菜单'
+    value: FileType.Video,
+    label: '视频'
+  }
+]
+
+export type FileSourceTypeOption = TypeOption<FileSourceType>
+
+export const FileSourceTypeOptions: FileSourceTypeOption[] = [
+  {
+    value: FileSourceType.Admin,
+    label: '后台'
   },
   {
-    value: PermissionType.BUTTON,
-    color: 'default',
-    label: '按钮'
+    value: FileSourceType.Client,
+    label: '客户端'
   }
 ]
 

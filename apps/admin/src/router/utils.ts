@@ -15,6 +15,16 @@ export const menuFilter = (items: AppRouteObject[]) => {
     .sort((a, b) => b.sort - a.sort)
 }
 
+export const routerRoutesFilter = (items: AppRouteObject[]) => {
+  return items.filter(item => {
+    const show = !item.meta?.disabled
+    if (show && item.children?.length) {
+      item.children = routerRoutesFilter(item.children)
+    }
+    return show
+  })
+}
+
 /**
  * 基于 src/router/routes/modules 文件结构动态生成路由
  */
@@ -23,7 +33,7 @@ export function getMenuModules() {
 
   const modules = import.meta.glob('./routes/modules/**/*.tsx', { eager: true })
   Object.keys(modules).forEach(key => {
-    const mod = (modules as any)[key].default || {}
+    const mod = (modules as object)[key].default || {}
     const modList = Array.isArray(mod) ? [...mod] : [mod]
     menuModules.push(...modList)
   })

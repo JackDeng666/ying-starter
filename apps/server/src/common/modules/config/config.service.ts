@@ -1,0 +1,36 @@
+import { Inject, Injectable } from '@nestjs/common'
+import { ConfigType } from '@nestjs/config'
+
+import { ConfigDto } from '@ying/dto'
+import { ConfigVo } from '@ying/vo'
+
+import { RedisKey, RedisObjs, RedisToken } from '@/common/modules/redis/constant'
+import { apiConfig } from '@/config'
+
+const DefaultCustomerConfig = {
+  debugUserIds: ''
+}
+
+@Injectable()
+export class ConfigService {
+  @Inject(RedisToken)
+  private readonly redisObjs: RedisObjs
+  @Inject(apiConfig.KEY)
+  private readonly apiConf: ConfigType<typeof apiConfig>
+
+  async getConfig(): Promise<ConfigVo> {
+    let configStr = await this.redisObjs.redis.get(RedisKey.Config)
+    if (!configStr) {
+      configStr = JSON.stringify(DefaultCustomerConfig)
+      await this.redisObjs.redis.set(RedisKey.Config, configStr)
+    }
+    return {
+      ...JSON.parse(configStr)
+    }
+  }
+
+  async setConfig(dto: ConfigDto) {
+    const config = JSON.parse((await this.redisObjs.redis.get(RedisKey.Config)) ?? '{}')
+    await this.redisObjs.redis.set(RedisKey.Config, JSON.stringify(Object.assign(config, dto)))
+  }
+}

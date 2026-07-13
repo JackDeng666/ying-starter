@@ -1,6 +1,5 @@
-import { Divider, MenuProps } from 'antd'
-import Dropdown, { DropdownProps } from 'antd/es/dropdown/dropdown'
-import React, { useState } from 'react'
+import { Divider, MenuProps, Dropdown, DropdownProps } from 'antd'
+import React, { HTMLAttributes, useState } from 'react'
 
 import { IconButton } from '@/components/icon'
 import { useUserInfo, logout } from '@/store/userStore'
@@ -33,6 +32,7 @@ export default function AccountDropdown() {
   const { colorBgElevated, borderRadiusLG, boxShadowSecondary } = useThemeToken()
 
   const contentStyle: React.CSSProperties = {
+    width: 150,
     backgroundColor: colorBgElevated,
     borderRadius: borderRadiusLG,
     boxShadow: boxShadowSecondary
@@ -42,15 +42,15 @@ export default function AccountDropdown() {
     boxShadow: 'none'
   }
 
-  const dropdownRender: DropdownProps['dropdownRender'] = menu => (
+  const popupRender: DropdownProps['popupRender'] = menu => (
     <div style={contentStyle}>
       <div className="flex flex-col items-start p-2">
-        <span className="text-md">{name}</span>
-        <span className="text-sm">{account}</span>
-        <span className="text-sm">{email}</span>
+        <span className="w-full text-md text-ellipsis overflow-hidden whitespace-nowrap">{name}</span>
+        <span className="w-full text-md text-ellipsis overflow-hidden whitespace-nowrap">{account}</span>
+        <span className="w-full text-md text-ellipsis overflow-hidden whitespace-nowrap">{email}</span>
       </div>
       <Divider style={{ margin: 0 }} />
-      {React.cloneElement(menu as React.ReactElement, { style: menuStyle })}
+      {React.cloneElement<HTMLAttributes<''>>(menu as React.ReactElement, { style: menuStyle })}
     </div>
   )
 
@@ -72,10 +72,12 @@ export default function AccountDropdown() {
 
   return (
     <>
-      <Dropdown menu={{ items }} trigger={['click']} dropdownRender={dropdownRender}>
-        <IconButton className="h-10 w-10 transform-none px-0 hover:scale-105">
-          <img className="h-8 w-8 rounded-full object-cover" src={avatar?.url} alt="avatar" />
-        </IconButton>
+      <Dropdown className="shrink-0" menu={{ items }} trigger={['click']} popupRender={popupRender}>
+        <a onClick={e => e.preventDefault()}>
+          <IconButton className="h-10 w-10 transform-none px-0">
+            <img className="h-8 w-8 rounded-full object-cover" src={avatar?.url} alt="avatar" />
+          </IconButton>
+        </a>
       </Dropdown>
       <UserInfoModal {...userInfoModalProps} />
     </>

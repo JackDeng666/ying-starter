@@ -1,51 +1,64 @@
+import { useCallback } from 'react'
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+import type { SysUserEntity } from '@ying/entity'
+import type { AdminAuthVo } from '@ying/vo'
+import type { TPermission } from '@ying/permission'
 
 import { authApi } from '@/api'
-import { storage } from '@ying/utils'
-
-import { StorageEnum } from '@/types/enum'
-import { UserTokenVo } from '@ying/shared'
-import { SysUserEntity } from '@ying/shared/entities'
 
 type UserStore = {
   userInfo: Partial<SysUserEntity>
-  userToken: UserTokenVo
+  authTokens: Partial<AdminAuthVo>
 }
 
-const useUserStore = create<UserStore>(() => ({
-  userInfo: storage.getItem<SysUserEntity>(StorageEnum.User) || {},
-  userToken: storage.getItem<UserTokenVo>(StorageEnum.Token) || {}
-}))
+export const useUserStore = create<UserStore>()(
+  persist(
+    _ => ({
+      userInfo: {},
+      authTokens: {}
+    }),
+    {
+      name: 'user_store'
+    }
+  )
+)
 
 export const useUserInfo = () => useUserStore(state => state.userInfo)
-export const useUserToken = () => useUserStore(state => state.userToken)
+export const useAuthTokens = () => useUserStore(state => state.authTokens)
 export const useUserPermission = () => useUserStore(state => state.userInfo.permissions)
+
+export const useHasPermission = () => {
+  const permissions = useUserPermission()
+  const hasPermission = useCallback(
+    (pm: typeof TPermission) => {
+      if (!permissions) return false
+      return permissions.map(el => el.code).includes(pm.meta.code)
+    },
+    [permissions]
+  )
+  return hasPermission
+}
 
 export const setUserInfo = (userInfo: Partial<SysUserEntity>) => {
   useUserStore.setState({ userInfo })
-  storage.setItem(StorageEnum.User, userInfo)
 }
 
-export const setUserToken = (userToken: UserTokenVo) => {
-  useUserStore.setState({ userToken })
-  storage.setItem(StorageEnum.Token, userToken)
+export const setAuthTokens = (authTokens: Partial<AdminAuthVo>) => {
+  useUserStore.setState({ authTokens })
 }
 
-export const clearUserInfoAndToken = () => {
-  useUserStore.setState({ userInfo: {}, userToken: {} })
-  storage.removeItem(StorageEnum.User)
-  storage.removeItem(StorageEnum.Token)
+export const clearUserInfoAndAuthTokens = () => {
+  useUserStore.setState({ userInfo: {}, authTokens: {} })
 }
 
-export const getUserInfo = async () => {
+export const updateUserInfo = async () => {
   const userInfo = await authApi.getUserInfo()
-  storage.setItem(StorageEnum.User, userInfo)
-  useUserStore.setState({ userInfo })
-
-  return userInfo
+  setUserInfo(userInfo)
 }
 
 export const logout = async () => {
   await authApi.logout()
-  clearUserInfoAndToken()
+  clearUserInfoAndAuthTokens()
 }

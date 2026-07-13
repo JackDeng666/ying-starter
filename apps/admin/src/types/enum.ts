@@ -1,6 +1,4 @@
 export enum StorageEnum {
-  User = 'user',
-  Token = 'token',
   Settings = 'settings'
 }
 
@@ -32,4 +30,10 @@ export enum MultiTabOperation {
   CLOSEALL = 'closeAll',
   CLOSELEFT = 'closeLeft',
   CLOSERIGHT = 'closeRight'
+}
+
+export enum PermissionType {
+  CATALOGUE = 1,
+  MENU,
+  BUTTON
 }

@@ -1,0 +1,39 @@
+import { useRef, useState } from 'react'
+import { Input } from 'antd'
+import type { TextAreaProps } from 'antd/lib/input'
+
+import { clientLanguagesConfig, LngKeys, type TIntlText } from '@ying/shared'
+
+import { IntlSwitch } from './intl-switch'
+
+const { fallbackLng, languages } = clientLanguagesConfig
+
+type IntlTextAreaProps = Omit<TextAreaProps, 'defaultValue' | 'onChange'> & {
+  defaultValue?: TIntlText
+  onChange?: (val: TIntlText) => void
+}
+
+export const IntlTextArea = ({ value, defaultValue, onChange, ...props }: IntlTextAreaProps) => {
+  const [currentLng, setCurrentLng] = useState<LngKeys>(fallbackLng)
+  const intlText = useRef<TIntlText>(defaultValue ?? {})
+
+  return (
+    <>
+      <IntlSwitch value={currentLng} onChange={setCurrentLng} />
+      {languages.map(
+        lng =>
+          currentLng === lng && (
+            <Input.TextArea
+              {...props}
+              key={lng}
+              defaultValue={intlText.current?.[lng]}
+              onChange={e => {
+                intlText.current[lng] = e.target.value
+                onChange?.(intlText.current)
+              }}
+            />
+          )
+      )}
+    </>
+  )
+}

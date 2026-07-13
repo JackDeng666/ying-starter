@@ -38,7 +38,7 @@ function parse(str: string) {
   if (!match) {
     return
   }
-  const n = parseFloat(match[1])
+  const n = parseFloat(match[1]!)
   const type = (match[2] || 'ms').toLowerCase()
   switch (type) {
     case 'years':
@@ -89,7 +89,7 @@ function parse(str: string) {
  */
 
 function fmtShort(ms: number) {
-  var msAbs = Math.abs(ms)
+  const msAbs = Math.abs(ms)
   if (msAbs >= d) {
     return Math.round(ms / d) + 'd'
   }
@@ -130,6 +130,6 @@ function fmtLong(ms: number) {
  * Pluralization helper.
  */
 function plural(ms: number, msAbs: number, n: number, name: string) {
-  var isPlural = msAbs >= n * 1.5
+  const isPlural = msAbs >= n * 1.5
   return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '')
 }

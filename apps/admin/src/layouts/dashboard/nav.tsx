@@ -1,21 +1,19 @@
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { Menu, MenuProps } from 'antd'
-import { ItemType } from 'antd/es/menu/hooks/useItems'
+import { ItemType } from 'antd/es/menu/interface'
 import Color from 'color'
-import { CSSProperties, useEffect, useState } from 'react'
+import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { useLocation, useMatches } from 'react-router-dom'
 
 import Logo from '@/components/logo'
 import Scrollbar from '@/components/scrollbar'
 import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/router/hooks'
-import { menuFilter } from '@/router/utils'
 import { useSettingActions, useSettings } from '@/store/settingStore'
 import { useThemeToken } from '@/theme/hooks'
-
-import { NAV_COLLAPSED_WIDTH, NAV_WIDTH } from './config'
-
 import { ThemeLayout } from '@/types/enum'
 import { IframeLink } from '@/constant'
+
+import { NAV_COLLAPSED_WIDTH, NAV_WIDTH } from './config'
 
 type Props = {
   closeSideBarDrawer?: () => void
@@ -36,7 +34,7 @@ export default function Nav(props: Props) {
   }
 
   const routeToMenuFn = useRouteToMenuFn()
-  const { permissionRoutes, flattenedRoutes } = usePermissionRoutes()
+  const { navMenuRoutes, flattenedRoutes } = usePermissionRoutes()
 
   /**
    * state
@@ -47,19 +45,24 @@ export default function Nav(props: Props) {
   const [menuList, setMenuList] = useState<ItemType[]>([])
   const [menuMode, setMenuMode] = useState<MenuProps['mode']>('inline')
 
+  const initializedRef = useRef(false)
   useEffect(() => {
-    if (themeLayout === ThemeLayout.Vertical) {
+    if (!initializedRef.current) {
       const openKeys = matches.filter(match => match.pathname !== '/').map(match => match.pathname)
       setOpenKeys(openKeys)
+      setSelectedKeys([pathname])
+      initializedRef.current = true
     }
-    setSelectedKeys([pathname])
-  }, [pathname, matches, collapsed, themeLayout])
+  }, [pathname, matches])
 
   useEffect(() => {
-    const menuRoutes = menuFilter(permissionRoutes)
-    const menus = routeToMenuFn(menuRoutes)
+    setSelectedKeys([pathname])
+  }, [pathname])
+
+  useEffect(() => {
+    const menus = routeToMenuFn(navMenuRoutes)
     setMenuList(menus)
-  }, [permissionRoutes, routeToMenuFn])
+  }, [navMenuRoutes, routeToMenuFn])
 
   useEffect(() => {
     if (themeLayout === ThemeLayout.Vertical) {
@@ -117,11 +120,11 @@ export default function Nav(props: Props) {
         borderRight: `1px dashed ${Color(colorBorder).alpha(0.6).toString()}`
       }}
     >
-      <div className="relative flex h-20 items-center justify-center py-4">
-        {themeLayout === ThemeLayout.Mini ? <Logo className="text-lg" /> : <Logo className="text-4xl" />}
+      <div className="relative flex h-20 items-center justify-center">
+        <Logo className="text-3xl" />
         <button
           onClick={toggleCollapsed}
-          className="absolute right-0 top-7 z-50 hidden h-6 w-6 translate-x-1/2 cursor-pointer select-none rounded-full text-center !text-gray md:block"
+          className="absolute right-0 top-7 z-50 hidden h-6 w-6 translate-x-1/2 cursor-pointer select-none rounded-full text-center text-gray! md:block"
           style={{
             color: colorTextBase,
             borderColor: colorTextBase,
@@ -131,17 +134,15 @@ export default function Nav(props: Props) {
           {collapsed ? <MenuUnfoldOutlined size={20} /> : <MenuFoldOutlined size={20} />}
         </button>
       </div>
-
       <Scrollbar
         style={{
           height: 'calc(100vh - 70px)'
         }}
       >
-        {/* <!-- Sidebar Menu --> */}
         <Menu
           mode={menuMode}
           items={menuList}
-          className="h-full !border-none"
+          className="h-full border-none!"
           defaultOpenKeys={openKeys}
           defaultSelectedKeys={selectedKeys}
           selectedKeys={selectedKeys}

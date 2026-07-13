@@ -28,7 +28,7 @@ export default function BreadCrumb() {
     let items: AppRouteObject[] | undefined = [...menuRoutes]
     const breadCrumbs = pathRouteMetas.map(routeMeta => {
       const { key, label } = routeMeta
-      items = items!.find(item => item.meta?.key === key)?.children?.filter(item => !item.meta?.hideMenu)
+      items = items.find(item => item.meta?.key === key)?.children?.filter(item => !item.meta?.hideMenu)
       const result: ItemType = {
         key,
         title: label
@@ -40,14 +40,14 @@ export default function BreadCrumb() {
             label: (
               <span
                 onClick={() => {
-                  if (item.meta.frameSrc && item.meta.component !== IframeLink) {
+                  if (item.meta?.frameSrc && item.meta.component !== IframeLink) {
                     window.open(item.meta.frameSrc, '_black')
                     return
                   }
-                  push(item.meta?.key)
+                  push(item.meta?.key || '')
                 }}
               >
-                {item.meta!.label}
+                {item.meta.label}
               </span>
             )
           }))
@@ -58,5 +58,5 @@ export default function BreadCrumb() {
     setBreadCrumbs(breadCrumbs)
   }, [matches, flattenedRoutes, permissionRoutes, push])
 
-  return <Breadcrumb items={breadCrumbs} className="!text-sm" />
+  return <Breadcrumb items={breadCrumbs} className="text-sm!" />
 }

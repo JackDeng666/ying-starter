@@ -3,10 +3,10 @@ import { Form, Modal, Input, message, Segmented, Button } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
-import { UpdateSysUserSelfUserInfoDto, UpdateSysUserSelfPasswordDto } from '@ying/shared'
-import { fileApi, sysUserApi } from '@/api'
-import { UploadImage } from '@/components/upload-image'
-import { getUserInfo, logout, useUserInfo } from '@/store'
+import { UpdateSysUserSelfUserInfoDto, UpdateSysUserSelfPasswordDto } from '@ying/dto'
+import { commonApi, sysUserApi } from '@/api'
+import { UploadImage } from '@/components/image/upload-image'
+import { updateUserInfo, logout, useUserInfo } from '@/store'
 
 export type UserInfoModalProps = {
   title: string
@@ -67,9 +67,10 @@ const ChangeUserInfoForm = ({ onCancel }: ChangeUserInfoFormProps) => {
       setLoading(true)
       await sysUserApi.updateSelfInfo(value)
       message.success('修改用户信息成功')
-      getUserInfo()
+      updateUserInfo()
       onCancel()
     } catch (error) {
+      //
     } finally {
       setLoading(false)
     }
@@ -103,8 +104,10 @@ const ChangeUserInfoForm = ({ onCancel }: ChangeUserInfoFormProps) => {
           render={({ field }) => (
             <UploadImage
               className="rounded-full"
+              mustCrop
+              aspectRatio={1}
               defaultUrl={userInfo?.avatar?.url}
-              handleUpload={file => fileApi.upload(file)}
+              handleUpload={(file, fileInfo) => commonApi.uploadImage(file, fileInfo)}
               onSuccess={file => {
                 field.onChange(file.id)
               }}
@@ -147,6 +150,7 @@ const ChangePasswordForm = () => {
       message.success(`修改密码成功`)
       logout()
     } catch (error) {
+      //
     } finally {
       setLoading(false)
     }

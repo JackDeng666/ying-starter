@@ -1,14 +1,13 @@
 import { Menu, MenuProps } from 'antd'
-import { ItemType } from 'antd/es/menu/hooks/useItems'
+import { ItemType } from 'antd/es/menu/interface'
 import { useState, useEffect, CSSProperties } from 'react'
 import { useMatches, useLocation } from 'react-router-dom'
 
 import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/router/hooks'
-import { menuFilter } from '@/router/utils'
 import { useThemeToken } from '@/theme/hooks'
+import { IframeLink } from '@/constant'
 
 import { NAV_HORIZONTAL_HEIGHT } from './config'
-import { IframeLink } from '@/constant'
 
 export default function NavHorizontal() {
   const { push } = useRouter()
@@ -18,7 +17,7 @@ export default function NavHorizontal() {
   const { colorBgElevated } = useThemeToken()
 
   const routeToMenuFn = useRouteToMenuFn()
-  const { permissionRoutes, flattenedRoutes } = usePermissionRoutes()
+  const { navMenuRoutes, flattenedRoutes } = usePermissionRoutes()
 
   /**
    * state
@@ -32,10 +31,9 @@ export default function NavHorizontal() {
   }, [pathname, matches])
 
   useEffect(() => {
-    const menuRoutes = menuFilter(permissionRoutes)
-    const menus = routeToMenuFn(menuRoutes)
+    const menus = routeToMenuFn(navMenuRoutes)
     setMenuList(menus)
-  }, [permissionRoutes, routeToMenuFn])
+  }, [navMenuRoutes, routeToMenuFn])
 
   /**
    * events
@@ -65,7 +63,7 @@ export default function NavHorizontal() {
       <Menu
         mode="horizontal"
         items={menuList}
-        className="!z-10 !border-none"
+        className="z-10! border-none!"
         defaultOpenKeys={openKeys}
         defaultSelectedKeys={selectedKeys}
         selectedKeys={selectedKeys}

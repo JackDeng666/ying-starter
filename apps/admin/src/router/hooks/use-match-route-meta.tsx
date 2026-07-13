@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useMatches, useOutlet } from 'react-router-dom'
+import { useMatches, useOutlet, matchPath } from 'react-router-dom'
 
 import { usePermissionRoutes } from './use-permission-routes'
 import { useRouter } from './use-router'
@@ -10,7 +10,7 @@ import { RouteMeta } from '@/types/router'
  * 返回当前路由Meta信息
  */
 export function useMatchRouteMeta() {
-  const { VITE_APP_HOMEPAGE: HOMEPAGE } = import.meta.env
+  const { APP_HOMEPAGE: HOMEPAGE } = import.meta.env
   const [matchRouteMeta, setMatchRouteMeta] = useState<RouteMeta>()
 
   // 获取路由组件实例
@@ -30,13 +30,27 @@ export function useMatchRouteMeta() {
     // console.log('matchs1', matchs, flattenedRoutes)
     const lastRoute = matchs.at(-1)
 
-    const currentRouteMeta = flattenedRoutes.find(
-      item => item.key === lastRoute?.pathname || `${item.key}/` === lastRoute?.pathname
-    )
+    let key: string | undefined = undefined
+
+    const currentRouteMeta = flattenedRoutes.find(item => {
+      const matchedPath = matchPath(item.key, lastRoute?.pathname)
+      if (matchedPath && matchedPath.pathname !== matchedPath.pattern.path) {
+        key = matchedPath.pathname
+      }
+      return !!matchedPath
+    })
+
     if (currentRouteMeta) {
       if (!currentRouteMeta.hideTab) {
-        currentRouteMeta.outlet = children
-        setMatchRouteMeta(currentRouteMeta)
+        if (key) {
+          const routeMeta: RouteMeta = JSON.parse(JSON.stringify(currentRouteMeta))
+          routeMeta.outlet = children
+          routeMeta.key = key
+          setMatchRouteMeta(routeMeta)
+        } else {
+          currentRouteMeta.outlet = children
+          setMatchRouteMeta(currentRouteMeta)
+        }
       }
     } else {
       push(HOMEPAGE)

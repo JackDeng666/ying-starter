@@ -5,7 +5,7 @@ import useChart from '@/components/chart/useChart'
 
 export default function CurrentDownload() {
   return (
-    <Card title="Current Download" bordered={false} type="inner">
+    <Card title="Current Download" variant="borderless" type="inner">
       <ChartDonut />
     </Card>
   )

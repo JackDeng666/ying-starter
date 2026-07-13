@@ -1,28 +1,17 @@
-import { useAppContext } from '@/components/app-provider'
-
-export type AuthProvider = 'google' | 'github' | 'facebook'
-
-type SignInProps = {
-  provider: AuthProvider
-}
+type AuthProvider = 'google' | 'github'
 
 export const useSignIn = () => {
-  const { apiUrl } = useAppContext()
-
-  const signIn = ({ provider }: SignInProps) => {
+  const signIn = (provider: AuthProvider) => {
     let url = ''
     switch (provider) {
-      case 'github':
-        url = apiUrl + '/auth/github'
-        break
       case 'google':
-        url = apiUrl + '/auth/google'
+        url = '/api/client/auth/google'
         break
-      case 'facebook':
-        url = apiUrl + '/auth/facebook'
+      case 'github':
+        url = '/api/client/auth/github'
         break
     }
-    window.location.href = url
+    window.location.replace(url)
   }
   return signIn
 }

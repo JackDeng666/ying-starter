@@ -2,14 +2,13 @@ import { Empty, GlobalToken, Input, InputRef, Modal } from 'antd'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
 import Color from 'color'
-import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { useBoolean, useEvent, useKeyPressEvent } from 'react-use'
 import styled from 'styled-components'
 
 import { IconButton, SvgIcon } from '@/components/icon'
 import Scrollbar from '@/components/scrollbar'
 import { usePermissionRoutes, useRouter } from '@/router/hooks'
-import ProTag from '@/theme/antd/components/tag'
 import { useThemeToken } from '@/theme/hooks'
 
 export default function SearchBar() {
@@ -21,6 +20,10 @@ export default function SearchBar() {
   const themeToken = useThemeToken()
 
   const { flattenedRoutes } = usePermissionRoutes()
+  const routes = useMemo(
+    () => flattenedRoutes.filter(route => !route.disabled && !route.hideMenu && !route.hideTab),
+    [flattenedRoutes]
+  )
 
   const activeStyle: CSSProperties = {
     border: `1px dashed ${themeToken.colorPrimary}`,
@@ -28,26 +31,26 @@ export default function SearchBar() {
   }
 
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchResult, setSearchResult] = useState(flattenedRoutes)
+  const [searchResult, setSearchResult] = useState(routes)
   const [selectedItemIndex, setSelectedItemIndex] = useState(0)
 
   useEffect(() => {
-    const result = flattenedRoutes.filter(
+    const result = routes.filter(
       item =>
         item.label.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1 ||
         item.key.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
     )
     setSearchResult(result)
     setSelectedItemIndex(0)
-  }, [searchQuery, flattenedRoutes])
+  }, [searchQuery, routes])
 
-  const handleMetaK = (event: KeyboardEvent) => {
-    if (event.metaKey && event.key === 'k') {
-      // https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent/metaKey
+  const handleCtrlK = (event: KeyboardEvent) => {
+    if (event.ctrlKey && event.key === 'k') {
+      event.preventDefault()
       handleOpen()
     }
   }
-  useEvent('keydown', handleMetaK)
+  useEvent('keydown', handleCtrlK)
 
   useKeyPressEvent('ArrowUp', event => {
     if (!search) return
@@ -120,13 +123,18 @@ export default function SearchBar() {
     handleCancel()
   }
 
+  const tagStyle: CSSProperties = {
+    color: themeToken.colorPrimary,
+    backgroundColor: `${Color(themeToken.colorPrimary).alpha(0.2).toString()}`
+  }
+
   return (
     <>
       <div className="flex items-center justify-center">
         <IconButton className="h-10 w-10" onClick={handleOpen}>
           <SvgIcon icon="ic-search" size="20" />
         </IconButton>
-        <IconButton className="0 h-6 rounded-md bg-hover text-xs font-bold">⌘K</IconButton>
+        <IconButton className="0 h-6 rounded-md bg-hover text-xs font-bold">CTRL+K</IconButton>
       </div>
       <Modal
         centered
@@ -162,16 +170,24 @@ export default function SearchBar() {
         footer={
           <div className="flex flex-wrap">
             <div className="flex">
-              <ProTag color="cyan">↑</ProTag>
-              <ProTag color="cyan">↓</ProTag>
+              <div className="h-6 rounded-md min-w-6 px-1.5 mx-1.5 fc" style={tagStyle}>
+                ↑
+              </div>
+              <div className="h-6 rounded-md min-w-6 px-1.5 mx-1.5 fc" style={tagStyle}>
+                ↓
+              </div>
               <span>to navigate</span>
             </div>
             <div className="flex">
-              <ProTag color="cyan">↵</ProTag>
+              <div className="h-6 rounded-md min-w-6 px-1.5 mx-1.5 fc" style={tagStyle}>
+                ↵
+              </div>
               <span>to select</span>
             </div>
             <div className="flex">
-              <ProTag color="cyan">ESC</ProTag>
+              <div className="h-6 rounded-md min-w-6 px-1.5 mx-1.5 fc" style={tagStyle}>
+                ESC
+              </div>
               <span>to close</span>
             </div>
           </div>
@@ -196,7 +212,7 @@ export default function SearchBar() {
                     <div className="flex justify-between">
                       <div>
                         <div className="font-medium">
-                          {partsTitle.map((item: any) => (
+                          {partsTitle.map(item => (
                             <span
                               key={item.text}
                               style={{
@@ -208,7 +224,7 @@ export default function SearchBar() {
                           ))}
                         </div>
                         <div className="text-xs">
-                          {partsKey.map((item: any) => (
+                          {partsKey.map(item => (
                             <span
                               key={item.text}
                               style={{

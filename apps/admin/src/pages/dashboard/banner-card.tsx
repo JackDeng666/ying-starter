@@ -2,12 +2,15 @@ import { Col, Row } from 'antd'
 import Color from 'color'
 
 import Character3 from '@/assets/images/characters/character_3.png'
-// import { useUserInfo } from '@/store/userStore'
+
 import { useThemeToken } from '@/theme/hooks'
 
+import { useUserInfo } from '@/store/userStore'
+
 export default function BannerCard() {
-  // const { name } = useUserInfo()
   const themeToken = useThemeToken()
+
+  const { name } = useUserInfo()
 
   const bg = `linear-gradient(135deg, ${Color(themeToken.colorPrimaryHover).alpha(0.2)}, ${Color(
     themeToken.colorPrimary
@@ -15,20 +18,12 @@ export default function BannerCard() {
 
   return (
     <Row className="!mx-0 rounded-2xl p-6 h-full" gutter={[16, 16]} justify="space-between" style={{ background: bg }}>
-      <Col span={24} className="!md:max-w-[320px] mx-auto !max-w-[270px] flex-none items-center justify-center">
+      <Col span={24} md={12} xl={12} className="mx-auto !max-w-[300px] flex-none items-center justify-center">
         <BannerSvg />
       </Col>
 
-      {/* <Col
-        span={24}
-        md={12}
-        xl={16}
-        className="flex-1 text-center md:text-right"
-      >
-        <div
-          className="mt-4 text-lg font-semibold md:text-xl"
-          style={{ color: themeToken.colorPrimaryActive }}
-        >
+      <Col span={24} md={12} xl={12} className="flex-1 text-center md:text-right">
+        <div className="mt-4 text-lg font-semibold md:text-xl" style={{ color: themeToken.colorPrimaryActive }}>
           <h4>欢迎回来数据面板 👋 </h4>
           <h4>{name}</h4>
         </div>
@@ -36,7 +31,7 @@ export default function BannerCard() {
           style={{ color: themeToken.colorPrimaryTextActive }}
           className="mx-auto mb-6 mt-4 max-w-sm text-sm opacity-80 md:mx-0"
         ></p>
-      </Col> */}
+      </Col>
     </Row>
   )
 }

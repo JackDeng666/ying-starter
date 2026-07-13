@@ -1,8 +1,6 @@
 import { Typography, Upload as AntdUpload } from 'antd'
 import { ItemRender } from 'antd/es/upload/interface'
 
-import { useThemeToken } from '@/theme/hooks'
-
 import { StyledUpload } from './styles'
 import UploadIllustration from './upload-illustration'
 import UploadListItem from './upload-list-item'
@@ -24,7 +22,6 @@ const itemRender: (thumbnail: boolean) => ItemRender = thumbnail => {
   }
 }
 export function Upload({ thumbnail = false, ...other }: Props) {
-  const { colorPrimary } = useThemeToken()
   return (
     <StyledUpload $thumbnail={thumbnail}>
       <Dragger {...other} itemRender={itemRender(thumbnail)}>
@@ -34,15 +31,9 @@ export function Upload({ thumbnail = false, ...other }: Props) {
           </p>
           <Typography>
             <Title level={5} className="mt-4">
-              Drop or Select file
+              拖放或选择文件
             </Title>
-            <Text type="secondary">
-              Drop files here or click
-              <Text style={{ color: colorPrimary }} className="mx-2" underline>
-                browse
-              </Text>
-              thorough your machine
-            </Text>
+            <Text type="secondary">将文件拖放到此处或单击浏览文件</Text>
           </Typography>
         </div>
       </Dragger>

@@ -1,0 +1,86 @@
+@import 'simplebar-react/dist/simplebar.min.css';
+@import '@ying/frontend/styles';
+@source "../node_modules/@ying/frontend/src";
+
+:root {
+  --primary: #00a76f;
+  --white: #ffffff;
+  --black: #000000;
+  --green: #00a76f;
+  --blue: #1fb6ff;
+  --purple: #7e5bef;
+  --pink: #ff49db;
+  --orange: #ff7849;
+  --yellow: #ffc82c;
+  --gray: #637381;
+  --border: #f1f1f1;
+  --hover: #63738114;
+  --success: #22c55e;
+  --warning: #ff7849;
+  --error: #ff5630;
+  --code: #d63384;
+  --scrollbar-thumb-bg: #c1c1c1;
+  --scrollbar-thumb-hover-bg: #7d7d7d;
+}
+
+.dark {
+  --border: #424242;
+  --scrollbar-thumb-bg: #6b6b6b;
+  --scrollbar-thumb-hover-bg: #939393;
+}
+
+@theme inline {
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1400px;
+  --breakpoint-3xl: 1600px;
+  --color-white: var(--white);
+  --color-black: var(--black);
+  --color-green: var(--green);
+  --color-blue: var(--blue);
+  --color-purple: var(--purple);
+  --color-pink: var(--pink);
+  --color-orange: var(--orange);
+  --color-yellow: var(--yellow);
+  --color-gray: var(--gray);
+  --color-hover: var(--hover);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-code: var(--code);
+  --animate-spin-slow: spin 8s linear infinite;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* *::-webkit-scrollbar-track {
+  background: transparent;
+} */
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: var(--scrollbar-thumb-bg);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-bg);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.ant-table-body {
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+
+.ant-table-cell-scrollbar {
+  width: 8px;
+}

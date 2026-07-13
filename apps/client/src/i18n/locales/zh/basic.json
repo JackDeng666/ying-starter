@@ -1,0 +1,40 @@
+{
+  "app_title": "Ying",
+  "article": "文章",
+  "feedback": "反馈",
+  "terms": "条款",
+  "something_went_wrong": "出错了！",
+  "crop_image": "裁剪图片",
+  "close": "关闭",
+  "cancel": "取消",
+  "confirm": "确认",
+  "pull_down_and_refresh": "下拉并刷新",
+  "load_success": "加载成功",
+  "pull_up_and_load_more": "上拉并加载更多",
+  "no_more": "没有更多了",
+  "no_data": "暂无数据",
+  "operate_success": "操作成功",
+  "operate_fail": "操作失败",
+  "delete_success": "删除成功",
+  "submit_success": "提交成功！",
+  "language": "语言",
+  "prev": "上一页",
+  "next": "下一页",
+  "items_per_page": "条/页",
+  "text": {
+    "first_name": "名称",
+    "please_enter_first_name": "请输入您的名称",
+    "last_name": "姓名",
+    "please_enter_last_name": "请输入您的姓名",
+    "email": "邮箱",
+    "please_enter_email": "请输入您的邮箱",
+    "content": "反馈内容",
+    "please_enter_content": "请输入你的反馈内容",
+    "send": "发送"
+  },
+  "validation": {
+    "email_should_not_be_empty": "邮箱不能为空",
+    "incorrect_email_format": "邮箱格式不正确",
+    "content_should_not_be_empty": "反馈内容不能为空"
+  }
+}

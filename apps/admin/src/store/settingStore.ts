@@ -1,8 +1,9 @@
 import { create } from 'zustand'
 
-import { storage } from '@ying/utils'
+import { storage } from '@ying/frontend/utils'
 
 import { StorageEnum, ThemeColorPresets, ThemeLayout, ThemeMode } from '@/types/enum'
+import { colorPresets } from '@/theme/antd/config'
 
 type SettingsType = {
   themeColorPresets: ThemeColorPresets
@@ -21,25 +22,40 @@ type SettingStore = {
   }
 }
 
-const useSettingStore = create<SettingStore>(set => ({
-  settings: storage.getItem<SettingsType>(StorageEnum.Settings) || {
-    themeColorPresets: ThemeColorPresets.Default,
+const useSettingStore = create<SettingStore>(set => {
+  const settings = storage.getItem<SettingsType>(StorageEnum.Settings) || {
+    themeColorPresets: ThemeColorPresets.Purple,
     themeMode: ThemeMode.Light,
     themeLayout: ThemeLayout.Vertical,
     themeStretch: true,
     breadCrumb: true,
     multiTab: true
-  },
-  actions: {
-    setSettings: settings => {
-      set({ settings })
-      storage.setItem(StorageEnum.Settings, settings)
-    },
-    clearSettings() {
-      storage.removeItem(StorageEnum.Settings)
+  }
+
+  document.documentElement.classList.add(settings.themeMode)
+
+  const colorPrimary = colorPresets[settings.themeColorPresets]
+  document.documentElement.style.setProperty('--primary', colorPrimary)
+
+  return {
+    settings,
+    actions: {
+      setSettings: settings => {
+        set({ settings })
+        storage.setItem(StorageEnum.Settings, settings)
+
+        const colorPrimary = colorPresets[settings.themeColorPresets]
+        document.documentElement.style.setProperty('--primary', colorPrimary)
+
+        document.documentElement.classList.remove(ThemeMode.Light, ThemeMode.Dark)
+        document.documentElement.classList.add(settings.themeMode)
+      },
+      clearSettings() {
+        storage.removeItem(StorageEnum.Settings)
+      }
     }
   }
-}))
+})
 
 export const useSettings = () => useSettingStore(state => state.settings)
 export const useSettingActions = () => useSettingStore(state => state.actions)

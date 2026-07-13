@@ -1,76 +1,38 @@
-FROM node:18-alpine AS base
+FROM node:22-alpine AS base
 
-FROM base AS nestjsbuilder
-
-RUN corepack enable && corepack prepare pnpm@8 --activate
-
+FROM base AS dep
 WORKDIR /app
+ENV TURBO_DAEMON=false
+ENV TURBO_TELEMETRY_DISABLED=1
+RUN corepack enable && corepack prepare pnpm --activate
+COPY out/json  ./
+## 先复制整体 package.json 并执行下载文件作为一层，这样只要依赖不更新下次打包都不会需要重新下载
+RUN pnpm config set registry https://registry.npmmirror.com
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --no-frozen-lockfile
+# 再把项目文件复制过去打包
+COPY out/full/packages ./packages
+COPY out/full/turbo.json ./turbo.json
+RUN pnpm build:pkgs
 
-COPY package.json pnpm-workspace.yaml ./
+FROM dep AS server-builder
+COPY out/full/apps/server ./apps/server
+RUN pnpm build:server
+RUN pnpm deploy --filter=server --prod --no-optional --legacy prune-server
 
-COPY packages/hooks/package.json packages/hooks/package.json
-COPY packages/utils/package.json packages/utils/package.json
-COPY apps/admin/package.json apps/admin/package.json
-COPY apps/server/package.json apps/server/package.json
-
-RUN pnpm i
-
-COPY ./apps/admin ./apps/admin
-COPY ./apps/server ./apps/server
-COPY ./packages ./packages
-COPY .prettierrc .prettierrc
-COPY .prettierignore .prettierignore
-
-RUN pnpm -r build
-
-RUN mkdir /app/apps/server/static
-
-RUN cp -r /app/apps/admin/dist/ /app/apps/server/static/admin/
-
-RUN pnpm prune --prod
-
-FROM base AS nextjsbuilder
-
-RUN corepack enable && corepack prepare pnpm@8 --activate
-
+FROM base AS server
 WORKDIR /app
+COPY --from=server-builder /app/prune-server/node_modules ./node_modules
+COPY --from=server-builder /app/apps/server/dist ./dist
+CMD ["node", "dist/main.js"]
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+FROM dep AS monitor-builder
+COPY out/full/apps/monitor ./apps/monitor
+RUN pnpm build:monitor
+RUN pnpm deploy --filter=monitor --prod --no-optional --legacy prune-monitor
 
-COPY packages/hooks/package.json packages/hooks/package.json
-COPY packages/utils/package.json packages/utils/package.json
-COPY apps/client/package.json apps/client/package.json
-
-RUN pnpm i
-
-COPY ./apps/client ./apps/client
-COPY ./apps/server/src/shared ./apps/server/src/shared
-COPY ./packages ./packages
-COPY .prettierrc .prettierrc
-COPY .prettierignore .prettierignore
-
-RUN pnpm -r build
-
-FROM base AS runner
-
+FROM base AS monitor
 WORKDIR /app
-
-COPY --from=nestjsbuilder /app/apps/server ./apps/server
-COPY --from=nestjsbuilder /app/node_modules ./node_modules
-COPY --from=nestjsbuilder /app/packages ./packages
-
-COPY --from=nextjsbuilder /app/apps/client/.next/standalone ./
-COPY --from=nextjsbuilder /app/apps/client/public ./apps/client/public
-COPY --from=nextjsbuilder /app/apps/client/.next/static ./apps/client/.next/static
-
-COPY ./prod.sh ./prod.sh
-
-ENV NODE_ENV prod
-
-ENV PORT 3256
-EXPOSE 3256
-
-ENV SERVER_PORT 3000
-EXPOSE 3000
-
-CMD source ./prod.sh
+COPY --from=monitor-builder /app/prune-monitor/node_modules ./node_modules
+COPY --from=monitor-builder /app/apps/monitor/dist ./dist
+RUN mkdir data
+CMD ["node", "dist/index.js"]

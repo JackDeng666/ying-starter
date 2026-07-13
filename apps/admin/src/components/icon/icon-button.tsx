@@ -1,20 +1,44 @@
-import { ButtonProps } from 'antd'
-import { CSSProperties, ReactNode } from 'react'
+import { useState } from 'react'
+import type { CSSProperties, Ref, MouseEventHandler, MouseEvent, ReactNode } from 'react'
+import type { IconProps } from '@iconify/react'
+import { cn } from '@ying/frontend/ui'
+import Iconify from './iconify-icon'
 
 type Props = {
+  ref?: Ref<HTMLButtonElement>
   children: ReactNode
   className?: string
   style?: CSSProperties
-} & ButtonProps
-export default function IconButton({ children, className, style, onClick, disabled }: Props) {
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void | Promise<void>
+  disabled?: boolean
+  iconSize?: IconProps['width']
+}
+export default function IconButton({ ref, children, className, style, onClick, disabled, iconSize }: Props) {
+  const [loading, setLoading] = useState(false)
+  const handleClick: MouseEventHandler<HTMLButtonElement> = async e => {
+    if (!onClick) return
+    setLoading(true)
+    try {
+      await Promise.resolve(onClick(e))
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <button
+      ref={ref}
+      type="button"
       style={style}
-      className={`flex cursor-pointer items-center justify-center rounded-full p-2 disabled:grayscale disabled:bg-hover hover:bg-hover ${className}`}
-      onClick={onClick}
+      className={cn(
+        'flex cursor-pointer items-center justify-center rounded-full p-2 disabled:grayscale disabled:bg-hover hover:bg-hover',
+        className
+      )}
+      onClick={handleClick}
       disabled={disabled}
     >
-      {children}
+      {loading ? <Iconify icon="eos-icons:loading" size={iconSize} /> : children}
     </button>
   )
 }

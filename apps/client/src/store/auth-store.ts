@@ -1,45 +1,69 @@
 import { create } from 'zustand'
-import Cookies from 'js-cookie'
-import { ClientUserVo } from '@ying/shared'
-import { AppKey } from '@/enum'
-import { useApi } from './api-store'
-import { useAppContext } from '@/components/app-provider'
+import type { ClientUserVo, ClientAuthVo } from '@ying/vo'
+import { authAPI, userAPI } from '@/api'
+import { CookieEnum } from '@/enum'
+import { getCookie, setCookie, removeCookie } from '@/cookie'
+import { useMemo } from 'react'
 
-interface AuthStore {
+type AuthStore = {
   userInfo?: ClientUserVo
-  userToken?: string
-  setUserInfo: (userInfo: ClientUserVo) => void
-  setUserToken: (token: string) => void
+  accessToken?: ClientAuthVo['accessToken']
+  refreshToken?: ClientAuthVo['refreshToken']
 }
 
-export const useAuthStore = create<AuthStore>(set => ({
+export const useAuthStore = create<AuthStore>(() => ({
   userInfo: undefined,
-  userToken: Cookies.get(AppKey.CookieTokenKey),
-  setUserInfo: userInfo => set({ userInfo }),
-  setUserToken: userToken => set({ userToken })
+  accessToken: getCookie(CookieEnum.AccessToken),
+  refreshToken: getCookie(CookieEnum.RefreshToken)
 }))
 
-export const clearUserInfoAndToken = (domain: string) => {
-  useAuthStore.setState({ userInfo: undefined, userToken: undefined })
-  Cookies.remove(AppKey.CookieTokenKey, { domain })
+export const useHasAuth = () => {
+  const accessToken = useAuthStore(state => state.accessToken)
+  return !!accessToken
 }
 
-export const useAuth = () => {
-  const { domain } = useAppContext()
-  const { authApi, userApi } = useApi()
+export const useUserAvatar = () => {
+  const userInfo = useAuthStore(state => state.userInfo)
+  const avatar = useMemo(() => {
+    const customAvatar = userInfo?.avatar?.url
+    if (customAvatar) return customAvatar
+    const oauthAvatar = userInfo?.oauthAccounts?.[0]?.avatar
+    if (oauthAvatar) return oauthAvatar
+  }, [userInfo])
+  return avatar
+}
 
-  const logout = async () => {
-    await authApi.logout()
-    clearUserInfoAndToken(domain)
-  }
+export const hasAuth = () => {
+  return !!getCookie(CookieEnum.AccessToken)
+}
 
-  const getProfile = async () => {
-    const userInfo = await userApi.getProfile()
-    useAuthStore.setState({ userInfo })
-  }
+export function setUserInfo(userInfo: ClientUserVo) {
+  useAuthStore.setState({ userInfo })
+}
 
-  return {
-    logout,
-    getProfile
-  }
+export function setAuthTokens(authTokens: ClientAuthVo) {
+  setCookie(CookieEnum.AccessToken, authTokens.accessToken)
+  setCookie(CookieEnum.RefreshToken, authTokens.refreshToken)
+  useAuthStore.setState({ ...authTokens })
+}
+
+export const clearUserInfoAndAuthTokens = () => {
+  removeCookie(CookieEnum.AccessToken)
+  removeCookie(CookieEnum.RefreshToken)
+  useAuthStore.setState({ userInfo: undefined, accessToken: undefined, refreshToken: undefined })
+}
+
+export const updateAccessToken = (accessToken: string) => {
+  setCookie(CookieEnum.AccessToken, accessToken)
+  useAuthStore.setState({ accessToken })
+}
+
+export const updateUserInfo = async () => {
+  const userInfo = await userAPI.getInfo()
+  setUserInfo(userInfo)
+}
+
+export const logout = async () => {
+  await authAPI.logout()
+  clearUserInfoAndAuthTokens()
 }

@@ -1,8 +1,8 @@
 import { App, Button, Form, Input } from 'antd'
 import { useCallback, useState } from 'react'
-import { AdminLoginDto } from '@ying/shared'
+import type { AdminLoginDto } from '@ying/dto'
 
-import { getUserInfo, setUserToken } from '@/store'
+import { setAuthTokens, setUserInfo } from '@/store'
 import { authApi } from '@/api'
 
 import { LoginStateEnum, useLoginStateContext } from './providers/LoginStateProvider'
@@ -12,17 +12,18 @@ const useSignIn = () => {
 
   const signIn = useCallback(
     async (data: AdminLoginDto) => {
-      const res = await authApi.login(data)
-      const { accessToken, refreshToken } = res
-      setUserToken({ accessToken, refreshToken })
+      const authTokens = await authApi.login(data)
+      setAuthTokens(authTokens)
+      const userInfo = await authApi.getUserInfo()
+      setUserInfo(userInfo)
 
-      const userInfo = await getUserInfo()
-
-      notification.success({
-        message: '登录成功',
-        description: `欢迎回来: ${userInfo.name}`,
-        duration: 2
-      })
+      setTimeout(() => {
+        notification.success({
+          message: '登录成功',
+          description: `欢迎回来: ${userInfo.name}`,
+          duration: 2
+        })
+      }, 300)
     },
     [notification]
   )
@@ -49,16 +50,16 @@ function LoginForm() {
 
   return (
     <>
-      <div className="mb-4 text-2xl font-bold xl:text-3xl">登录</div>
-      <Form name="login" size="large" onFinish={handleFinish}>
-        <Form.Item name="username" rules={[{ required: true, message: '请输入账号' }]}>
+      <div className="mb-8 text-xl font-bold xl:text-2xl text-center">登录</div>
+      <Form name="login" layout="vertical" onFinish={handleFinish}>
+        <Form.Item label="账号" name="username" rules={[{ required: true, message: '请输入账号' }]}>
           <Input placeholder="账号" />
         </Form.Item>
-        <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
+        <Form.Item label="密码" name="password" rules={[{ required: true, message: '请输入密码' }]}>
           <Input.Password type="password" placeholder="密码" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="w-full" loading={loading}>
+          <Button type="primary" htmlType="submit" className="w-full mt-4" loading={loading}>
             登录
           </Button>
         </Form.Item>

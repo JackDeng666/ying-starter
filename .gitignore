@@ -1,6 +1,33 @@
-node_modules
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Build Outputs
+build
+out
 dist
-static
+
+# Dependencies
+node_modules
+
+# Turbo
+.turbo
+
+# Local env files
 .env.local
-local.README.md
-pnpm-lock.yaml
+.env.development.local
+.env.test.local
+.env.production.local
+
+.tanstack
+
+# Misc
+.DS_Store
+*.pem
+
+# server
+logs
+uploadfiles

@@ -6,6 +6,7 @@ import { IconButton, SvgIcon } from '@/components/icon'
 import Logo from '@/components/logo'
 import { useSettings } from '@/store/settingStore'
 import { useResponsive, useThemeToken } from '@/theme/hooks'
+import { ThemeLayout } from '@/types/enum'
 
 import AccountDropdown from '../_common/account-dropdown'
 import BreadCrumb from '../_common/bread-crumb'
@@ -14,8 +15,6 @@ import SettingButton from '../_common/setting-button'
 
 import { NAV_COLLAPSED_WIDTH, NAV_WIDTH, HEADER_HEIGHT, OFFSET_HEADER_HEIGHT } from './config'
 import Nav from './nav'
-
-import { ThemeLayout } from '@/types/enum'
 
 type Props = {
   className?: string
@@ -48,24 +47,24 @@ export default function Header({ className = '', offsetTop = false }: Props) {
     <>
       <header className={`z-20 w-full ${className}`} style={headerStyle}>
         <div
-          className="flex flex-grow items-center justify-between px-4 text-gray backdrop-blur xl:px-6 2xl:px-10"
+          className="flex grow items-center justify-between px-4 text-gray backdrop-blur xl:px-6 2xl:px-10"
           style={{
             height: offsetTop ? OFFSET_HEADER_HEIGHT : HEADER_HEIGHT,
             transition: 'height 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
           }}
         >
-          <div className="flex items-baseline">
+          <div className="flex items-center">
             {themeLayout !== ThemeLayout.Horizontal ? (
               <IconButton onClick={() => setDrawerOpen(true)} className="h-10 w-10 md:hidden">
                 <SvgIcon icon="ic-menu" size="24" />
               </IconButton>
             ) : (
-              <Logo className="mr-2 text-xl" />
+              <Logo className="mr-4 text-xl" />
             )}
             <div className="hidden md:block">{breadCrumb ? <BreadCrumb /> : null}</div>
           </div>
 
-          <div className="flex">
+          <div className="flex items-center gap-x-2">
             <SearchBar />
             <SettingButton />
             <AccountDropdown />

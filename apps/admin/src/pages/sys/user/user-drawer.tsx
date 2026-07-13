@@ -1,87 +1,83 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Form, Drawer, Input, Button, Radio, Select, App } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
-import { BasicStatus, CreateSysUserDto, UpdateSysUserDto } from '@ying/shared'
-import { roleApi, sysUserApi } from '@/api'
-import { useApi } from '@ying/hooks'
-import { debounce } from '@ying/utils'
+
+import { BasicStatus } from '@ying/shared'
+import { CreateSysUserDto, UpdateSysUserDto, type ListRoleDto } from '@ying/dto'
+import { useDialogOpen } from '@ying/frontend/hooks'
+
+import { useQueryWithParams } from '@/hooks/use-query-with-params'
+import { sysRoleApi, sysUserApi } from '@/api'
+
+import { defaultUserValues } from './constant'
+import { SysRoleEntity } from '@ying/entity'
 
 const createResolver = classValidatorResolver(CreateSysUserDto)
 const updateResolver = classValidatorResolver(UpdateSysUserDto)
 
-export type UserDrawerProps = {
-  formValue: Partial<UpdateSysUserDto>
-  title: string
-  show: boolean
-  onSuccess: VoidFunction
-  onCancel: VoidFunction
+export type UserDrawerProps = ReturnType<typeof useDialogOpen<UpdateSysUserDto>> & {
+  onSuccess?: VoidFunction
 }
 
-export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: UserDrawerProps) {
+export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerProps) {
+  const title = formValue ? '编辑系统用户' : '新增系统用户'
   const { message } = App.useApp()
   const [form] = Form.useForm()
-  const { data: roles, run: loadRoles } = useApi({
-    func: useCallback(async name => {
-      const data = await roleApi.list({ name })
-      return data.map(el => ({ ...el, disabled: el.name === 'Super Admin' }))
-    }, [])
-  })
 
-  const handleSearch = debounce(value => {
-    loadRoles(value)
-  }, 500)
+  const { data: roles, debounceSetParams } = useQueryWithParams<ListRoleDto, SysRoleEntity[]>({
+    key: 'role-select-list-drawer',
+    queryFn: async params => {
+      const list = await sysRoleApi.list(params)
+      return list.map(el => ({ ...el, disabled: el.systemic }))
+    },
+    initialParams: { size: 100 }
+  })
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset
   } = useForm<CreateSysUserDto & UpdateSysUserDto>({
-    resolver: formValue.id ? updateResolver : createResolver,
-    defaultValues: formValue
+    resolver: formValue ? updateResolver : createResolver,
+    defaultValues: defaultUserValues
   })
 
   useEffect(() => {
-    reset(formValue)
+    if (formValue) {
+      reset(formValue)
+    } else {
+      reset(defaultUserValues)
+    }
   }, [formValue, reset])
 
-  const [loading, setLoading] = useState(false)
-
   const handlePost = async (value: CreateSysUserDto & UpdateSysUserDto) => {
-    try {
-      setLoading(true)
-      if (value.id) {
-        await sysUserApi.update(value)
-      } else {
-        await sysUserApi.create(value)
-      }
-      message.success(`${title}成功`)
-      onSuccess()
-    } catch (error) {
-    } finally {
-      setLoading(false)
+    if (value.id) {
+      await sysUserApi.update(value)
+    } else {
+      await sysUserApi.create(value)
     }
+    onClose()
+    message.success(`${title}成功`)
+    onSuccess && onSuccess()
   }
 
   return (
     <Drawer
       title={title}
-      open={show}
-      onClose={onCancel}
+      open={open}
+      onClose={onClose}
       width={660}
-      footer={
-        <div className="flex-1 flex justify-end gap-2">
-          <Button type="primary" onClick={form.submit} loading={loading}>
-            提交
-          </Button>
-        </div>
+      extra={
+        <Button type="primary" onClick={form.submit} loading={isSubmitting}>
+          提交
+        </Button>
       }
     >
-      <Form onFinish={handleSubmit(handlePost)} form={form} labelCol={{ span: 2 }}>
-        <Form.Item<CreateSysUserDto>
+      <Form onFinish={handleSubmit(handlePost)} form={form} layout="vertical">
+        <Form.Item
           label="昵称"
-          name="name"
           required
           validateStatus={errors.name ? 'error' : ''}
           help={errors.name && errors.name.message}
@@ -92,10 +88,8 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
             render={({ field }) => <Input allowClear placeholder="请输入昵称" {...field} />}
           />
         </Form.Item>
-
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="账号"
-          name="account"
           required
           validateStatus={errors.account ? 'error' : ''}
           help={errors.account && errors.account.message}
@@ -106,11 +100,9 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
             render={({ field }) => <Input allowClear placeholder="请输入账号" {...field} />}
           />
         </Form.Item>
-
-        {!formValue.id && (
-          <Form.Item<CreateSysUserDto>
+        {!formValue && (
+          <Form.Item
             label="密码"
-            name="password"
             required
             validateStatus={errors.password ? 'error' : ''}
             help={errors.password && errors.password.message}
@@ -124,10 +116,8 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
             />
           </Form.Item>
         )}
-
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="邮箱"
-          name="email"
           validateStatus={errors.email ? 'error' : ''}
           help={errors.email && errors.email.message}
         >
@@ -137,10 +127,8 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
             render={({ field }) => <Input allowClear placeholder="请输入邮箱" {...field} autoComplete="new-password" />}
           />
         </Form.Item>
-
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="状态"
-          name="status"
           required
           validateStatus={errors.status ? 'error' : ''}
           help={errors.status && errors.status.message}
@@ -156,10 +144,8 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
             )}
           />
         </Form.Item>
-
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="角色"
-          name="roleIds"
           validateStatus={errors.roleIds ? 'error' : ''}
           help={errors.roleIds && errors.roleIds.message}
         >
@@ -176,19 +162,15 @@ export function UserDrawer({ title, show, formValue, onSuccess, onCancel }: User
                 mode="multiple"
                 placeholder="请选择角色"
                 options={roles}
-                onSearch={value => {
-                  handleSearch(value)
-                }}
+                onSearch={name => debounceSetParams({ name, size: 100 })}
                 allowClear
                 {...field}
               />
             )}
           />
         </Form.Item>
-
-        <Form.Item<CreateSysUserDto>
+        <Form.Item
           label="备注"
-          name="remark"
           validateStatus={errors.remark ? 'error' : ''}
           help={errors.remark && errors.remark.message}
         >

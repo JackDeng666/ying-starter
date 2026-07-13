@@ -1,37 +1,51 @@
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { ConfigType } from '@nestjs/config'
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { NestExpressApplication } from '@nestjs/platform-express'
-import { apiConfig } from '@/config'
-import { ProcessTimeInterceptor, ResponseWrapInterceptor } from '@/common/interceptor'
+import { join } from 'path'
+import qs from 'qs'
+import { apiConfig, storageConfig } from '@/config'
 import { OtherExceptionFilter, HttpExceptionFilter } from '@/common/filter'
+import { AppInterceptor } from './app.interceptor'
 import { AppModule } from './app.module'
+import { AppLogger } from './app.logger'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
   const apiConf = app.get<ConfigType<typeof apiConfig>>(apiConfig.KEY)
+  const storageConf = app.get<ConfigType<typeof storageConfig>>(storageConfig.KEY)
   app.enableCors()
   app.setGlobalPrefix('/api')
-  app.useGlobalInterceptors(new ProcessTimeInterceptor())
-  app.useGlobalInterceptors(new ResponseWrapInterceptor())
   app.useGlobalFilters(new OtherExceptionFilter())
   app.useGlobalFilters(new HttpExceptionFilter())
+  app.useGlobalInterceptors(new AppInterceptor())
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidUnknownValues: true
+      forbidUnknownValues: true,
+      transform: true
     })
   )
-  app.useStaticAssets('static')
+  app.set('query parser', (queryString: string) => qs.parse(queryString))
 
-  const config = new DocumentBuilder().setTitle('ying app').setDescription('ying app').setVersion('1.0').build()
-  const document = SwaggerModule.createDocument(app, config, {
-    ignoreGlobalPrefix: true
-  })
-  SwaggerModule.setup('doc', app, document)
+  if (storageConf.mode === 'local') {
+    // 存储本地模式图片存储的位置
+    app.useStaticAssets(join(__dirname, '../uploadfiles'), { prefix: '/upload', maxAge: '30d' })
+  }
 
   await app.listen(apiConf.port)
-  Logger.log(`Application running on: http://localhost:${apiConf.port}/api`, 'Main')
+
+  Logger.log(`🚀 Application is running on port: ${apiConf.port}`, 'App')
+
+  const appLogger = new AppLogger()
+  appLogger.setSaveLogLevels(['error', 'verbose'])
+  app.useLogger(appLogger)
+
+  process.on('uncaughtException', error => {
+    Logger.error('未捕获的异常：', error.stack, 'App')
+  })
+  process.on('unhandledRejection', reason => {
+    Logger.error('未处理的拒绝：', reason, 'App')
+  })
 }
 bootstrap()

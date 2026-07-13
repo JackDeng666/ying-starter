@@ -1,24 +1,57 @@
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { apiConfig, redisConfig, dbConfig, minioConfig, authConfig, mailConfig } from '@/config'
-import { RedisModule } from '@/modules/redis/redis.module'
-import { DbModule } from '@/modules/db/db.module'
-import { FileModule } from '@/modules/file/file.module'
-import { MailModule } from '@/modules/mail/mail.module'
-import { AdminModule } from '@/admin/admin.module'
-import { ClientModule } from '@/client/client.module'
+import { ConfigModule as BaseConfigModule, ConfigType } from '@nestjs/config'
+import { BullModule } from '@nestjs/bullmq'
+import { ScheduleModule } from '@nestjs/schedule'
+import { AcceptLanguageResolver, CookieResolver, I18nModule } from 'nestjs-i18n'
+import { join } from 'path'
+
+import { clientLanguagesConfig } from '@ying/shared'
+
+import { apiConfig, redisConfig, dbConfig, storageConfig, authConfig, mailConfig, pushConfig } from '@/config'
+import { RedisModule } from '@/common/modules/redis/redis.module'
+import { DbModule } from '@/common/modules/db/db.module'
+import { StorageModule } from '@/common/modules/storage/storage.module'
+import { MailModule } from '@/common/modules/mail/mail.module'
+import { PushModule } from '@/common/modules/push/push.module'
+import { ConfigModule } from '@/common/modules/config/config.module'
+import { AdminModule } from '@/business/admin/admin.module'
+import { ClientModule } from '@/business/client/client.module'
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    BaseConfigModule.forRoot({
       isGlobal: true,
-      load: [apiConfig, redisConfig, dbConfig, minioConfig, authConfig, mailConfig],
-      envFilePath: ['.env.local', '.env']
+      load: [apiConfig, redisConfig, dbConfig, authConfig, mailConfig, storageConfig, pushConfig]
     }),
+    I18nModule.forRoot({
+      fallbackLanguage: clientLanguagesConfig.fallbackLng,
+      loaderOptions: {
+        path: join(__dirname, './i18n/'),
+        watch: true
+      },
+      resolvers: [
+        CookieResolver, // 默认读取 lang
+        AcceptLanguageResolver
+      ]
+    }),
+    ScheduleModule.forRoot(),
     RedisModule,
+    BullModule.forRootAsync({
+      useFactory: (redisConf: ConfigType<typeof redisConfig>) => ({
+        connection: {
+          host: redisConf.host,
+          port: redisConf.port,
+          password: redisConf.pass,
+          db: redisConf.db
+        }
+      }),
+      inject: [redisConfig.KEY]
+    }),
     DbModule,
-    FileModule,
+    StorageModule,
     MailModule,
+    PushModule,
+    ConfigModule,
     AdminModule,
     ClientModule
   ]

@@ -1,18 +1,25 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ESNext",
-    "moduleResolution": "Node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "composite": false,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
     "esModuleInterop": true,
-    "outDir": "./dist",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "forceConsistentCasingInFileNames": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": "src"
   },
-  "exclude": ["dist", "es"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

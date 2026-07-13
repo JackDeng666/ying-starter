@@ -1,3 +1,17 @@
 {
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "search.exclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "tailwindCSS.experimental.configFile": {
+    "apps/admin/src/styles.css": "apps/admin/src/**/*",
+    "apps/client/src/styles.css": "apps/client/src/**/*",
+    "packages/frontend/src/styles.css": "packages/frontend/src/**/*"
+  }
 }

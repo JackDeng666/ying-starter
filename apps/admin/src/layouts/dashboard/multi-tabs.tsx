@@ -1,7 +1,7 @@
 import { Dropdown, MenuProps, Tabs, TabsProps } from 'antd'
 import Color from 'color'
 import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from '@hello-pangea/dnd'
 import { useToggle, useFullscreen } from 'react-use'
 import styled from 'styled-components'
 
@@ -32,7 +32,7 @@ export default function MultiTabs({ offsetTop = false }: Props) {
   const [openDropdownTabKey, setopenDropdownTabKey] = useState('')
   const themeToken = useThemeToken()
 
-  const tabContentRef = useRef(null)
+  const tabContentRef = useRef<Element>()
   const [fullScreen, toggleFullScreen] = useToggle(false)
   useFullscreen(tabContentRef, fullScreen, {
     onClose: () => toggleFullScreen(false)
@@ -99,7 +99,7 @@ export default function MultiTabs({ offsetTop = false }: Props) {
    * tab dropdown click
    */
   const menuClick = useCallback(
-    (menuInfo: any, tab: KeepAliveTab) => {
+    (menuInfo: Parameters<MenuProps['onClick']>[0], tab: KeepAliveTab) => {
       const { key, domEvent } = menuInfo
       domEvent.stopPropagation()
       switch (key) {
@@ -153,12 +153,12 @@ export default function MultiTabs({ offsetTop = false }: Props) {
         borderWidth: '1px',
         borderStyle: 'solid',
         borderColor: themeToken.colorBorderSecondary,
-        backgroundColor: themeToken.colorBgLayout,
+        backgroundColor: themeToken.colorBgContainer,
         transition: 'color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, background 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
       }
 
       if (isActive) {
-        result.backgroundColor = themeToken.colorBgContainer
+        result.backgroundColor = themeToken.colorBgLayout
         result.color = themeToken.colorPrimaryText
       }
       return result
@@ -283,7 +283,7 @@ export default function MultiTabs({ offsetTop = false }: Props) {
               <div ref={provided.innerRef} {...provided.droppableProps} className="flex w-full">
                 <div ref={scrollContainer} className="hide-scrollbar flex w-full px-2">
                   {tabs.map((tab, index) => (
-                    <div id={`tab-${index}`} className="flex-shrink-0" key={tab.key} onClick={() => push(tab.key)}>
+                    <div id={`tab-${index}`} className="shrink-0" key={tab.key} onClick={() => push(tab.key)}>
                       <Draggable key={tab.key} draggableId={tab.key} index={index}>
                         {provided => (
                           <div
@@ -331,15 +331,23 @@ export default function MultiTabs({ offsetTop = false }: Props) {
   useEffect(() => {
     function handleMouseWheel(event: WheelEvent) {
       event.preventDefault()
-      scrollContainer.current!.scrollLeft += event.deltaY
+      scrollContainer.current.scrollLeft += event.deltaY
     }
 
-    scrollContainer.current!.addEventListener('mouseenter', () => {
-      scrollContainer.current!.addEventListener('wheel', handleMouseWheel)
-    })
-    scrollContainer.current!.addEventListener('mouseleave', () => {
-      scrollContainer.current!.removeEventListener('wheel', handleMouseWheel)
-    })
+    scrollContainer.current.addEventListener(
+      'mouseenter',
+      () => {
+        scrollContainer.current.addEventListener('wheel', handleMouseWheel, { passive: false })
+      },
+      { passive: false }
+    )
+    scrollContainer.current.addEventListener(
+      'mouseleave',
+      () => {
+        scrollContainer.current.removeEventListener('wheel', handleMouseWheel)
+      },
+      { passive: false }
+    )
   }, [])
 
   return (
