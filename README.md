@@ -1,12 +1,10 @@
 <h1 align="center">Ying Starter</h1>
 
-- [简体中文](README.zh_CN.md)
+## 简介
 
-## Introduction
+这是一个使用 pnpm 的 monorepo 架构的全栈项目，基于 React 和 NestJS 实现了基本的后台管理系统的角色权限控制逻辑，包含一个 TanStack Start 的客户端，集成了基本的注册登录逻辑和谷歌、github 的 oauth 登录。
 
-This is a monorepo full-stack project that uses pnpm + turborepo for management. It implements the basic role permission control logic of the backend management system based on React and NestJS. It includes a TanStack Start client that integrates basic registration login logic and oauth login from Google and Github.
-
-Backend Management
+后台管理端
 
 - Vite
 - React
@@ -15,7 +13,7 @@ Backend Management
 - Zustand
 - React Hook Form
 
-Client
+客户端
 
 - Vite
 - TanStack Start
@@ -25,7 +23,7 @@ Client
 - Zustand
 - React Hook Form
 
-Server
+服务端
 
 - Nestjs
 - TypeORM
@@ -33,39 +31,46 @@ Server
 - Redis
 - MinIO
 
-## Development environment version
+## 开发环境版本
 
 - node v24.15.0
 - pnpm v10.33.4
 
-## Startup of development environment
+## 开发环境启动
 
-Refer to the `apps\server\.env` file, add a `.env.local` file (which has been ignored by git), and modify the environment variables accordingly.
+安装依赖并打包所有子包
 
-```shell
+```bash
 pnpm i
 pnpm build:pkgs
-pnpm dev
 ```
 
-## docker deploy
+根据[服务端README](./apps/server/README.md)的初始化操作配置好服务端环境
 
-First use turbo to generate clean dependency files for docker cache.
+启动应用
+
+```bash
+pnpm dev:apps
+```
+
+## docker 部署
+
+先使用 turbo 生成干净的依赖项文件用于 docker 缓存。
 
 ```bash
 rm -rf out
 pnpm turbo-prune
 ```
 
-A Dockerfile is written in the project root directory, and the server image can be packaged using docker's packaging command.
+项目根目录写了 Dockerfile 文件，可使用 docker 的打包命令打包服务端镜像。
 
-```shell
+```bash
 docker build --platform=linux/amd64 --target server -t ying-server:1.0.0 .
 ```
 
-Start the server container reference.
+启动服务端容器参考。
 
-```shell
+```bash
 docker run --name ying-server -d \
   -p 5090:5090 \
   -e APP_ENV=prod \
@@ -84,4 +89,4 @@ docker run --name ying-server -d \
   ying-server:1.0.0
 ```
 
-If object storage uses local mode and needs to save files within the container, you can add a mapping to `/app/uploadfiles` within the container.
+如果对象存储使用本地模式，并需要保存容器内的文件，可以添加映射到容器内的 `/app/storage`。

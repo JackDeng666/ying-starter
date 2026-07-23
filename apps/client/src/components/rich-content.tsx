@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useMounted } from '@ying/frontend/hooks'
 import {
   type EditorRootContextValue,
@@ -14,9 +15,12 @@ type RichContentProps = Pick<EditorRootContextValue, 'associatedFiles'> & {
 export const RichContent = ({ htmlText, associatedFiles }: RichContentProps) => {
   const editor = useEditor({
     extensions: defaultExtensions,
-    content: htmlText,
     editable: false
   })
+
+  useEffect(() => {
+    if (htmlText && editor) editor.commands.setContent(htmlText)
+  }, [htmlText, editor])
 
   const mounted = useMounted()
 

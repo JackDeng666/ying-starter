@@ -21,7 +21,8 @@ import { ClientModule } from '@/business/client/client.module'
   imports: [
     BaseConfigModule.forRoot({
       isGlobal: true,
-      load: [apiConfig, redisConfig, dbConfig, authConfig, mailConfig, storageConfig, pushConfig]
+      load: [apiConfig, redisConfig, dbConfig, authConfig, mailConfig, storageConfig, pushConfig],
+      envFilePath: ['.env.local', '.env']
     }),
     I18nModule.forRoot({
       fallbackLanguage: clientLanguagesConfig.fallbackLng,

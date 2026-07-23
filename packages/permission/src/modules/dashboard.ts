@@ -1,8 +1,3 @@
-import { TMeta } from '../type'
+import { genneratePermission as GP } from '../type'
 
-export class dashboard {
-  static meta: TMeta = {
-    label: '首页',
-    code: 'dashboard'
-  }
-}
+export const dashboard = GP('首页')

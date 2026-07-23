@@ -24,15 +24,3 @@ WORKDIR /app
 COPY --from=server-builder /app/prune-server/node_modules ./node_modules
 COPY --from=server-builder /app/apps/server/dist ./dist
 CMD ["node", "dist/main.js"]
-
-FROM dep AS monitor-builder
-COPY out/full/apps/monitor ./apps/monitor
-RUN pnpm build:monitor
-RUN pnpm deploy --filter=monitor --prod --no-optional --legacy prune-monitor
-
-FROM base AS monitor
-WORKDIR /app
-COPY --from=monitor-builder /app/prune-monitor/node_modules ./node_modules
-COPY --from=monitor-builder /app/apps/monitor/dist ./dist
-RUN mkdir data
-CMD ["node", "dist/index.js"]

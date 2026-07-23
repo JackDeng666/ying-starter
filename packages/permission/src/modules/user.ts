@@ -1,8 +1,5 @@
-import { TMeta } from '../type'
+import { genneratePermission as GP } from '../type'
 
-export class user {
-  static meta: TMeta = {
-    label: '用户管理',
-    code: 'user'
-  }
-}
+export const user = GP('用户管理', {
+  export: GP('导出用户')
+})

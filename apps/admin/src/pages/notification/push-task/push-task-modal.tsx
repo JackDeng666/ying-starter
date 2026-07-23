@@ -41,10 +41,9 @@ export function PushTaskModal({ open, formValue, onSuccess, onClose }: PushTaskM
     }
   })
 
-  const updateForm = useCallback(async () => {
+  const updateForm = useCallback(() => {
     if (formValue) {
-      const data = await notificationApi.getPushTask(formValue.id)
-      reset(data)
+      reset(formValue)
     } else {
       reset(defaultValues)
     }

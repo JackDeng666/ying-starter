@@ -5,9 +5,9 @@ import { AdminScope, PermissionDecorator } from '@/common/decorator'
 import { ConfigService } from '@/common/modules/config/config.service'
 import { SysSettingService } from './setting.service'
 
-@Controller('admin/sys/setting')
-@AdminScope()
 @PermissionDecorator(pms.sys.setting)
+@AdminScope()
+@Controller('admin/sys/setting')
 export class SysSettingController {
   constructor(
     private readonly sysSettingService: SysSettingService,

@@ -4,7 +4,7 @@ import {
   CreatePushTemplateDto,
   UpdatePushTemplateDto,
   ListPushTemplateDto,
-  SendNotificationDto,
+  SendPushTemplateDto,
   CreatePushTaskDto,
   UpdatePushTaskDto,
   ListPushTaskDto,
@@ -23,9 +23,6 @@ export default function (http: HttpRequest) {
     updatePushTemplate(data: UpdatePushTemplateDto) {
       return http.put('/push-template', { data })
     },
-    getPushTemplate(id: number) {
-      return http.get<PushTemplateEntity>(`/push-template/${id}`)
-    },
     deletePushTemplate(id: number) {
       return http.delete(`/push-template/${id}`)
     },
@@ -35,17 +32,14 @@ export default function (http: HttpRequest) {
     listPushTemplateCount(query: ListPushTemplateDto) {
       return http.get<number>('/push-template/list-count', { query: timeDataTransform(query, 'date') })
     },
-    sendNotice(data: SendNotificationDto) {
-      return http.post('/notice/send', { data })
+    sendPushTemplate(data: SendPushTemplateDto) {
+      return http.post('/push-template/send', { data })
     },
     createPushTask(data: CreatePushTaskDto) {
       return http.post('/push-task', { data })
     },
     updatePushTask(data: UpdatePushTaskDto) {
       return http.put('/push-task', { data })
-    },
-    getPushTask(id: number) {
-      return http.get<PushTaskEntity>(`/push-task/${id}`)
     },
     deletePushTask(id: number) {
       return http.delete(`/push-task/${id}`)
@@ -57,7 +51,7 @@ export default function (http: HttpRequest) {
       return http.get<number>('/push-task/list-count', { query: timeDataTransform(query, 'date') })
     },
     setPushTask(data: SetPushTaskDto) {
-      return http.post('/push-task/set', { data: timeDataTransform(data, 'time') })
+      return http.post('/push-task/set-up', { data: timeDataTransform(data, 'time') })
     },
     stopTimingPushTask(id: number) {
       return http.get(`/push-task/${id}/stop-timing`)

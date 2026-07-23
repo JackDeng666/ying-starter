@@ -15,7 +15,7 @@ export class ListVisitorDto extends ListDto {
   deviceType?: DeviceType
 }
 
-export class SendNotificationDto {
+export class SendPushTemplateDto {
   @IsString()
   @IsNotEmpty()
   visitorId: string

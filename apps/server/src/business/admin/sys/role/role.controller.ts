@@ -4,9 +4,9 @@ import { pms } from '@ying/permission'
 import { AdminScope, PermissionDecorator } from '@/common/decorator'
 import { SysRoleService } from './role.service'
 
-@Controller('admin/sys/role')
-@AdminScope()
 @PermissionDecorator(pms.sys.role)
+@AdminScope()
+@Controller('admin/sys/role')
 export class SysRoleController {
   constructor(private readonly sysRoleService: SysRoleService) {}
 

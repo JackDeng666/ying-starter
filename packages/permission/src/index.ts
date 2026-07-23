@@ -1,39 +1,16 @@
-import { SysPermissionEntity } from '@ying/entity'
-import { dashboard } from './modules/dashboard'
-import { sys } from './modules/sys'
-import { user } from './modules/user'
+import { genneratePermission, gennerateCodeToPermission } from './type'
+import { dashboard, sys, file, feedback, user, article, notification } from './modules'
 
 export * from './type'
 
-export const pms = {
+const root = genneratePermission('root', {
   dashboard,
+  sys,
+  file,
+  feedback,
   user,
-  sys
-}
+  article,
+  notification
+})
 
-let sortId = 1
-
-export function gennerate(permission: typeof pms, parentCode: string | null) {
-  const arr: SysPermissionEntity[] = []
-  Object.keys(permission).forEach(key => {
-    if (key !== 'meta') {
-      const ob = {
-        ...permission[key].meta,
-        sortId,
-        parentCode
-      }
-      sortId++
-      const children = gennerate(permission[key], permission[key].meta.code)
-      if (children.length) {
-        ob.children = children
-      }
-      arr.push(ob)
-    }
-  })
-  return arr
-}
-
-export function getPermissionTree(): SysPermissionEntity[] {
-  sortId = 1
-  return gennerate(pms, null)
-}
+export const pms = gennerateCodeToPermission(root)

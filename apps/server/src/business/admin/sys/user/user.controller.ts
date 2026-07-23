@@ -12,9 +12,9 @@ import { pms } from '@ying/permission'
 import { AdminScope, PermissionDecorator, UID } from '@/common/decorator'
 import { SysUserService } from './user.service'
 
-@Controller('admin/sys/user')
-@AdminScope()
 @PermissionDecorator(pms.sys.user)
+@AdminScope()
+@Controller('admin/sys/user')
 export class SysUserController {
   constructor(private readonly sysUserService: SysUserService) {}
 

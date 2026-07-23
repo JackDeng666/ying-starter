@@ -8,7 +8,7 @@ import { match as langMatch } from '@formatjs/intl-localematcher'
 
 import { PushTaskStatus, clientLanguagesConfig } from '@ying/shared'
 import { VisitorEntity, PushTemplateEntity, PushTaskEntity, PushRecordEntity, PushData } from '@ying/entity'
-import { SetPushTaskDto, SendNotificationDto } from '@ying/dto'
+import { SetPushTaskDto, SendPushTemplateDto } from '@ying/dto'
 
 import { PushService } from '@/common/modules/push/push.service'
 import { RedisToken, RedisObjs } from '@/common/modules/redis/constant'
@@ -58,7 +58,7 @@ export class NotificationService {
     return pushData
   }
 
-  async sendNotification(dto: SendNotificationDto) {
+  async sendNotification(dto: SendPushTemplateDto) {
     const visitor = await this.visitorRepository.findOneBy({
       visitorId: dto.visitorId
     })

@@ -55,7 +55,7 @@ export type RouteMeta = {
   /**
    * the permission class
    */
-  permission?: typeof TPermission
+  permission?: TPermission
 }
 export type AppRouteObject = {
   sort?: number

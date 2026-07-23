@@ -30,4 +30,4 @@ node_modules
 
 # server
 logs
-uploadfiles
+storage

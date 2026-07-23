@@ -5,11 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "dev:test": "vite --mode test",
     "build": "vite build",
-    "build:prod": "vite build --mode prod",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^1.23.0",

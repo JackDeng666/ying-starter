@@ -18,7 +18,7 @@ export class SysPermissionEntity extends BaseEntityWithoutId {
   @Column({
     nullable: true
   })
-  parentCode?: string
+  parentCode: string | null
 
   @ManyToOne(() => SysPermissionEntity, sysPermission => sysPermission.children, {
     nullable: true,

@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common'
 import { FeedbackModule } from '@/business/modules/feedback'
-import { CommonController } from './common.controller'
+import { FileController } from './file.controller'
+import { FeedbackController } from './feedback.controller'
 
 @Module({
   imports: [FeedbackModule],
-  controllers: [CommonController]
+  controllers: [FileController, FeedbackController]
 })
 export class CommonModule {}

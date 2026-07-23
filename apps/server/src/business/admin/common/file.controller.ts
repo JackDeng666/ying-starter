@@ -16,22 +16,41 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express'
 
 import { FileSourceType, FileType } from '@ying/shared'
-import { ListFileDto, ListFeedbackDto } from '@ying/dto'
+import { ListFileDto } from '@ying/dto'
+import { pms } from '@ying/permission'
 
-import { AdminScope, UID } from '@/common/decorator'
+import { AdminScope, PermissionDecorator, UID } from '@/common/decorator'
 import { FileServiceToken, AbstractFileService } from '@/common/modules/storage'
 import { FeedbackService } from '@/business/modules/feedback'
 
-@Controller('admin')
+@PermissionDecorator(pms.file)
 @AdminScope()
-export class CommonController {
+@Controller('admin/file')
+export class FileController {
   constructor(
     @Inject(FileServiceToken)
     readonly fileService: AbstractFileService,
     readonly feedbackService: FeedbackService
   ) {}
 
-  @Post('file/image')
+  @Get('list')
+  fileList(@Query() dto: ListFileDto) {
+    return this.fileService.list(dto)
+  }
+
+  @Get('list-count')
+  fileListCount(@Query() dto: ListFileDto) {
+    return this.fileService.listCount(dto)
+  }
+
+  @PermissionDecorator(pms.file.delete)
+  @Delete(':id')
+  deleteFile(@Param('id') id: number) {
+    return this.fileService.deleteFileById(id)
+  }
+
+  @PermissionDecorator(pms.file.create)
+  @Post('image')
   @UseInterceptors(FileInterceptor('file'))
   upload(
     @UploadedFile(
@@ -56,35 +75,5 @@ export class CommonController {
       userId,
       extra: JSON.parse(body.extra)
     })
-  }
-
-  @Get('file/list')
-  fileList(@Query() dto: ListFileDto) {
-    return this.fileService.list(dto)
-  }
-
-  @Get('file/list-count')
-  fileListCount(@Query() dto: ListFileDto) {
-    return this.fileService.listCount(dto)
-  }
-
-  @Delete('file/:id')
-  deleteFile(@Param('id') id: number) {
-    return this.fileService.deleteFileById(id)
-  }
-
-  @Get('feedback/list')
-  feedbackList(@Query() dto: ListFeedbackDto) {
-    return this.feedbackService.list(dto)
-  }
-
-  @Get('feedback/list-count')
-  feedbackListCount(@Query() dto: ListFeedbackDto) {
-    return this.feedbackService.listCount(dto)
-  }
-
-  @Delete('feedback/:id')
-  deleteFeedback(@Param('id') id: number) {
-    return this.feedbackService.delete(id)
   }
 }

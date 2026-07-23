@@ -19,14 +19,14 @@ export class AdminPermissionGuard implements CanActivate {
     const handler = context.getHandler()
     const classContext = context.getClass()
 
-    const handlerPermission = this.reflector.get<typeof TPermission | undefined>(PERMISSION_SIGN, handler)
-    const classPermission = this.reflector.get<typeof TPermission | undefined>(PERMISSION_SIGN, classContext)
-    const permissions: (typeof TPermission)[] = []
+    const handlerPermission = this.reflector.get<TPermission | undefined>(PERMISSION_SIGN, handler)
+    const classPermission = this.reflector.get<TPermission | undefined>(PERMISSION_SIGN, classContext)
+    const permissions: TPermission[] = []
     if (handlerPermission) permissions.push(handlerPermission)
     if (classPermission) permissions.push(classPermission)
     if (!permissions.length) return true
 
-    const permissionCodes = permissions.map(el => el.meta.code)
+    const permissionCodes = permissions.map(el => el.code).filter(code => typeof code === 'string')
 
     const request = context.switchToHttp().getRequest<Request>()
     const userId = request.user?.id
