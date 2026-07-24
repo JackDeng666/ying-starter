@@ -10,6 +10,10 @@
     "lint": "eslint",
     "build:sw": "vite build --config vite.sw.config.ts"
   },
+  "lint-staged": {
+    "*.ts": "eslint",
+    "*.tsx": "eslint"
+  },
   "dependencies": {
     "@better-scroll/core": "^2.5.1",
     "@better-scroll/mouse-wheel": "^2.5.1",

@@ -9,6 +9,10 @@
     "preview": "vite preview",
     "lint": "eslint"
   },
+  "lint-staged": {
+    "*.ts": "eslint",
+    "*.tsx": "eslint"
+  },
   "dependencies": {
     "@ant-design/cssinjs": "^1.23.0",
     "@ant-design/icons": "^5.6.1",
