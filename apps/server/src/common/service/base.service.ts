@@ -6,7 +6,6 @@ import {
   Repository,
   SelectQueryBuilder,
   ObjectId,
-  FindOptionsSelect,
   FindOptionsSelectByString
 } from 'typeorm'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'

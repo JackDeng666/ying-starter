@@ -12,7 +12,11 @@ import { SysPermissionEntity, SysUserEntity } from '@ying/entity'
 import { authConfig } from '@/config'
 import { comparePass } from '@/common/utils'
 import { RedisKey, RedisObjs, RedisToken } from '@/common/modules/redis/constant'
-import { TAdminPayload } from './guard'
+
+type VerifiedData = TAdminPayload & {
+  iat?: any
+  exp?: any
+}
 
 @Injectable()
 export class SysAuthService {
@@ -83,13 +87,13 @@ export class SysAuthService {
   }
 
   verifyAccessToken(token: string) {
-    return this.jwtService.verifyAsync(token, {
+    return this.jwtService.verifyAsync<VerifiedData>(token, {
       secret: this.authConf.adminAccessTokenSecret
     })
   }
 
   verifyRefreshToken(token: string) {
-    return this.jwtService.verifyAsync(token, {
+    return this.jwtService.verifyAsync<VerifiedData>(token, {
       secret: this.authConf.adminRefreshTokenSecret
     })
   }
@@ -116,7 +120,7 @@ export class SysAuthService {
         ms(this.authConf.adminAccessTokenExpiresIn) / 1000
       )
       return accessToken
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException()
     }
   }

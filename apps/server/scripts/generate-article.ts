@@ -1,4 +1,4 @@
-import { en, faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 import { getRandomInRange } from '@ying/utils'
 import { ArticleEntity } from '@ying/entity'
 import dataSource from '../typeorm.config'
@@ -23,7 +23,7 @@ function generateBlogPost() {
 </article>`.trim()
 }
 
-;(async function () {
+void (async function () {
   await dataSource.initialize()
   const articleRepository = dataSource.getRepository(ArticleEntity)
   console.log('正在生成文章中')

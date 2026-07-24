@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ConsoleLogger, Injectable, LogLevel } from '@nestjs/common'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -12,7 +16,7 @@ dayjs.tz.setDefault('Asia/Shanghai')
 
 const isString = (val: unknown): val is string => typeof val === 'string'
 const isUndefined = (obj: unknown): obj is undefined => typeof obj === 'undefined'
-const isFunction = (val: unknown): val is Function => typeof val === 'function'
+const isFunction = (val: unknown): val is CallableFunction => typeof val === 'function'
 const isNil = (val: unknown): val is null | undefined => isUndefined(val) || val === null
 const isObject = (fn: unknown): fn is object => !isNil(fn) && typeof fn === 'object'
 const isPlainObject = (fn: unknown): fn is object => {
@@ -145,7 +149,7 @@ export class AppLogger extends ConsoleLogger {
 
     try {
       await access(logDir)
-    } catch (error) {
+    } catch {
       await mkdir(logDir, { recursive: true })
     } finally {
       await appendFile(logFilePath, logMessage)
@@ -154,31 +158,31 @@ export class AppLogger extends ConsoleLogger {
 
   log(message: unknown, ...optionalParams: unknown[]) {
     super.log(message, ...optionalParams)
-    this.saveLog('log', message, ...optionalParams)
+    void this.saveLog('log', message, ...optionalParams)
   }
 
   error(message: unknown, ...optionalParams: unknown[]) {
     super.error(message, ...optionalParams)
-    this.saveLog('error', message, ...optionalParams)
+    void this.saveLog('error', message, ...optionalParams)
   }
 
   warn(message: unknown, ...optionalParams: unknown[]) {
     super.warn(message, ...optionalParams)
-    this.saveLog('warn', message, ...optionalParams)
+    void this.saveLog('warn', message, ...optionalParams)
   }
 
   debug(message: unknown, ...optionalParams: unknown[]) {
     super.debug(message, ...optionalParams)
-    this.saveLog('debug', message, ...optionalParams)
+    void this.saveLog('debug', message, ...optionalParams)
   }
 
   verbose(message: unknown, ...optionalParams: unknown[]) {
     super.verbose(message, ...optionalParams)
-    this.saveLog('verbose', message, ...optionalParams)
+    void this.saveLog('verbose', message, ...optionalParams)
   }
 
   fatal(message: unknown, ...optionalParams: unknown[]) {
     super.fatal(message, ...optionalParams)
-    this.saveLog('fatal', message, ...optionalParams)
+    void this.saveLog('fatal', message, ...optionalParams)
   }
 }

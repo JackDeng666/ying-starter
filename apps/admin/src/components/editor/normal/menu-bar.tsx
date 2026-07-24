@@ -17,17 +17,6 @@ import { useEditorContext, useEditorState, editorBaseStateSelector, MenuButton }
 
 import { MenuText, MenuTextColor, MenuBgColor, MenuLink, MenuImage, MenuImages } from '../menu'
 
-const TextOptions = [
-  { label: 'H1', value: 'h1' },
-  { label: 'H2', value: 'h2' },
-  { label: 'H3', value: 'h3' },
-  { label: 'H4', value: 'h4' },
-  { label: 'H5', value: 'h5' },
-  { label: 'H6', value: 'h6' },
-  { label: 'P', value: 'p' },
-  { label: '-', value: '-' }
-]
-
 export const MenuBar = () => {
   const { editor } = useEditorContext()
   const state = useEditorState({

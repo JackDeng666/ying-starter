@@ -2,7 +2,6 @@ import { DataSource, EntitySubscriberInterface, EventSubscriber, Repository } fr
 import { InjectRepository } from '@nestjs/typeorm'
 import { ConfigType } from '@nestjs/config'
 import { Inject } from '@nestjs/common'
-import { FileType } from '@ying/shared'
 import { FileEntity } from '@ying/entity'
 import { storageConfig } from '@/config'
 import { FileServiceToken, ExpirSeconds } from './constant'
@@ -34,7 +33,7 @@ export class FileSubscriber implements EntitySubscriberInterface<FileEntity> {
       if (Date.now() - new Date(entity.updateAt).getTime() > ExpirSeconds * 1000) {
         const newUrl = await this.fileService.getPresignedUrl(entity.path)
         entity.url = newUrl
-        this.fileRepository.update({ id: entity.id }, { url: newUrl })
+        await this.fileRepository.update({ id: entity.id }, { url: newUrl })
       }
     } catch (error) {
       console.error(error)

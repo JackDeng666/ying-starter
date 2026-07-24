@@ -13,6 +13,7 @@ type IntlTextAreaProps = Omit<TextAreaProps, 'defaultValue' | 'onChange'> & {
   onChange?: (val: TIntlText) => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const IntlTextArea = ({ value, defaultValue, onChange, ...props }: IntlTextAreaProps) => {
   const [currentLng, setCurrentLng] = useState<LngKeys>(fallbackLng)
   const intlText = useRef<TIntlText>(defaultValue ?? {})

@@ -8,10 +8,6 @@ import { IS_PUBLIC_KEY, ADMIN_SCOPE } from '@/common/decorator'
 
 import { SysAuthService } from '../auth.service'
 
-export type TAdminPayload = {
-  id: number
-}
-
 @Injectable()
 export class AdminAuthGuard implements CanActivate {
   @Inject()
@@ -50,7 +46,7 @@ export class AdminAuthGuard implements CanActivate {
       if (!refreshToken) throw new UnauthorizedException()
       request.user = payload
       return true
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException()
     }
   }

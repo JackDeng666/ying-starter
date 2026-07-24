@@ -4,7 +4,7 @@ import { App } from 'antd'
 
 import DashboardLayout from '@/layouts/dashboard'
 import AuthGuard from '@/router/components/auth-guard'
-import Login from '@/pages/login/Login'
+import Login from '@/pages/login'
 import { CircleLoading } from '@/components/loading'
 import { usePermissionRoutes } from '@/router/hooks'
 import { ErrorRoutes } from '@/router/routes/error-routes'

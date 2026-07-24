@@ -39,11 +39,11 @@ export class AdminPermissionGuard implements CanActivate {
         const userInfo = await this.authService.getUserInfo(userId)
         if (userInfo.permissions) {
           userPermissionCodes = userInfo.permissions.map(el => el.code)
-          this.redisObjs.redis.set(KEY, JSON.stringify(userPermissionCodes))
+          await this.redisObjs.redis.set(KEY, JSON.stringify(userPermissionCodes))
         }
       }
     } else {
-      userPermissionCodes = JSON.parse(userPermissionCodesStr)
+      userPermissionCodes = JSON.parse(userPermissionCodesStr) as string[]
     }
 
     if (!permissionCodes.every(el => userPermissionCodes.includes(el))) return false

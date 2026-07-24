@@ -23,7 +23,7 @@ function pmsToTree(permission: TPermission, sortId: number, parentCode: string |
   return arr
 }
 
-;(async function () {
+void (async function () {
   console.log('同步权限中...')
   await dataSource.initialize()
   const sysPermissionRepository = dataSource.getRepository(SysPermissionEntity)

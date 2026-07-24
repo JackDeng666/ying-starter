@@ -73,7 +73,7 @@ export class FileController {
       fileType: FileType.Image,
       from: FileSourceType.Admin,
       userId,
-      extra: JSON.parse(body.extra)
+      extra: JSON.parse(body.extra) as object
     })
   }
 }

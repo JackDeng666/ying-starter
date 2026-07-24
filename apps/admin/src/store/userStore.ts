@@ -15,7 +15,7 @@ type UserStore = {
 
 export const useUserStore = create<UserStore>()(
   persist(
-    _ => ({
+    () => ({
       userInfo: {},
       authTokens: {}
     }),
@@ -32,9 +32,9 @@ export const useUserPermission = () => useUserStore(state => state.userInfo.perm
 export const useHasPermission = () => {
   const permissions = useUserPermission()
   const hasPermission = useCallback(
-    (pm: typeof TPermission) => {
-      if (!permissions) return false
-      return permissions.map(el => el.code).includes(pm.meta.code)
+    (pm: TPermission) => {
+      if (!permissions || !pm.code) return false
+      return permissions.map(el => el.code).includes(pm.code)
     },
     [permissions]
   )

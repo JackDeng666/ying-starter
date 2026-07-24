@@ -24,7 +24,7 @@ export class WSGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private _clientEvents: ClientEvent[] = []
 
   async handleConnection(client: ServerSocket) {
-    const token = client.handshake.auth.token
+    const token = client.handshake.auth.token as string | undefined
     if (!token) {
       this.authFail(client)
       return

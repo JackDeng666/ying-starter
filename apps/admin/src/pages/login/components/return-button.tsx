@@ -1,7 +1,7 @@
 import { Button } from 'antd'
 import { MdArrowBackIosNew } from 'react-icons/md'
 
-interface ReturnButtonProps {
+type ReturnButtonProps = {
   onClick?: () => void
 }
 export function ReturnButton({ onClick }: ReturnButtonProps) {

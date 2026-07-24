@@ -5,7 +5,7 @@ import type { AdminLoginDto } from '@ying/dto'
 import { setAuthTokens, setUserInfo } from '@/store'
 import { authApi } from '@/api'
 
-import { LoginStateEnum, useLoginStateContext } from './providers/LoginStateProvider'
+import { LoginStateEnum, useLoginStateContext } from './provider'
 
 const useSignIn = () => {
   const { notification } = App.useApp()
@@ -31,7 +31,7 @@ const useSignIn = () => {
   return signIn
 }
 
-function LoginForm() {
+export function LoginForm() {
   const [loading, setLoading] = useState(false)
 
   const { loginState } = useLoginStateContext()
@@ -67,5 +67,3 @@ function LoginForm() {
     </>
   )
 }
-
-export default LoginForm

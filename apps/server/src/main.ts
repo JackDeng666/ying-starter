@@ -48,4 +48,4 @@ async function bootstrap() {
     Logger.error('未处理的拒绝：', reason, 'App')
   })
 }
-bootstrap()
+void bootstrap()

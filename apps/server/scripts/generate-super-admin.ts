@@ -4,7 +4,8 @@ import { FileSourceType, FileType } from '@ying/shared'
 import { SysRoleEntity, SysUserEntity, FileEntity } from '@ying/entity'
 import { generatePass } from '../src/common/utils'
 import dataSource from '../typeorm.config'
-;(async function () {
+
+void (async function () {
   const { values } = parseArgs({
     options: {
       account: { type: 'string', short: 'a', default: 'admin' },

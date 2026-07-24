@@ -1,4 +1,4 @@
-import { useEffect, useState, version } from 'react'
+import { useEffect, useState } from 'react'
 import { FaImages } from 'react-icons/fa'
 import { Modal } from 'antd'
 

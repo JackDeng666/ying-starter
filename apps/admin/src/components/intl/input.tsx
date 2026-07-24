@@ -13,6 +13,7 @@ type IntlInputProps = Omit<InputProps, 'defaultValue' | 'onChange'> & {
   onChange?: (val: TIntlText) => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const IntlInput = ({ value, defaultValue, onChange, ...props }: IntlInputProps) => {
   const [currentLng, setCurrentLng] = useState<LngKeys>(fallbackLng)
   const intlText = useRef<TIntlText>(defaultValue ?? {})

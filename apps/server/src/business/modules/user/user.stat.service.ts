@@ -27,6 +27,7 @@ export class UserStatService extends StatService {
           .createQueryBuilder('user')
           .leftJoinAndSelect('user.oauthAccounts', 'oauthAccounts')
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         builder.where('user.createAt BETWEEN :start AND :end', { start: between.value[0], end: between.value[1] })
 
         if (name) {

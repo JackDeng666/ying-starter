@@ -23,13 +23,13 @@ export class MinioFileService extends AbstractFileService {
       accessKey: this.storageConf.accessKey,
       secretKey: this.storageConf.secretKey
     })
-    this.initMinioClient()
+    void this.initMinioClient()
   }
 
   private async initMinioClient() {
     const bucketExists = await this.minioClient.bucketExists(this.storageConf.bucket)
     if (!bucketExists) {
-      this.minioClient.makeBucket(this.storageConf.bucket)
+      await this.minioClient.makeBucket(this.storageConf.bucket)
     }
   }
 

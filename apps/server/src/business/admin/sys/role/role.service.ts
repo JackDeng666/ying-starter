@@ -87,7 +87,7 @@ export class SysRoleService extends BaseService<SysRoleEntity> {
       })
 
       role.users.forEach(el => {
-        this.redisObjs.redis.del(`${RedisKey.AdminAuthPermission}:${el.id}`)
+        void this.redisObjs.redis.del(`${RedisKey.AdminAuthPermission}:${el.id}`)
       })
     }
 

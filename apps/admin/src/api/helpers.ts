@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { get, set } from 'lodash-es'
 
 import { doDownload } from '@ying/frontend/utils'

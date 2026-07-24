@@ -2,8 +2,8 @@ import { Navigate } from 'react-router-dom'
 import { useThemeToken } from '@/theme/hooks'
 import PlaceholderImg from '@/assets/images/background/placeholder.svg'
 import { useUserInfo, useAuthTokens } from '@/store'
-import LoginForm from './LoginForm'
-import { LoginStateProvider } from './providers/LoginStateProvider'
+import { LoginForm } from './login-form'
+import { LoginStateProvider } from './provider'
 
 const { APP_HOMEPAGE: HOMEPAGE } = import.meta.env
 

@@ -90,7 +90,7 @@ export class NotificationConsumer extends WorkerHost {
           await this.visitorRepository.update(pushRecord.visitorId, { pushSubscription: null })
         }
       } else {
-        pushRecord.pushResult = error + ''
+        pushRecord.pushResult = String(error)
       }
       pushRecord.status = PushRecordStatus.Fail
       await this.pushRecordRepository.save(pushRecord)

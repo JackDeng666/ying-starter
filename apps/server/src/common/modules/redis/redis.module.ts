@@ -9,7 +9,7 @@ import { RedisToken } from './constant'
   providers: [
     {
       provide: RedisToken,
-      async useFactory(redisConf: ConfigType<typeof redisConfig>) {
+      useFactory(redisConf: ConfigType<typeof redisConfig>) {
         const redis = new Redis({
           host: redisConf.host,
           port: redisConf.port,

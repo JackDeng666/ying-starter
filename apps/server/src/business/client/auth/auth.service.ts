@@ -21,9 +21,13 @@ import { authConfig } from '@/config'
 import { RedisKey, RedisObjs, RedisToken } from '@/common/modules/redis/constant'
 import { MailService } from '@/common/modules/mail/mail.service'
 import { generatePass } from '@/common/utils'
-import { TClientPayload } from './client.auth.guard'
 
 const randomCode = customAlphabet('0123456789', 6)
+
+type VerifiedData = TClientPayload & {
+  iat?: any
+  exp?: any
+}
 
 @Injectable()
 export class AuthService {
@@ -160,13 +164,13 @@ export class AuthService {
   }
 
   verifyAccessToken(token: string) {
-    return this.jwtService.verifyAsync(token, {
+    return this.jwtService.verifyAsync<VerifiedData>(token, {
       secret: this.authConf.clientAccessTokenSecret
     })
   }
 
   verifyRefreshToken(token: string) {
-    return this.jwtService.verifyAsync(token, {
+    return this.jwtService.verifyAsync<VerifiedData>(token, {
       secret: this.authConf.clientRefreshTokenSecret
     })
   }
@@ -193,7 +197,7 @@ export class AuthService {
         ms(this.authConf.clientAccessTokenExpiresIn) / 1000
       )
       return accessToken
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException()
     }
   }

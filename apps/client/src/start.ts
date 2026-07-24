@@ -1,6 +1,7 @@
 import { createMiddleware, createStart } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
 import langParser from 'accept-language-parser'
+import type { LngKeys } from '@ying/shared'
 import { languagesWithSlashes, languages, fallbackLng } from '@/i18n/config'
 
 const langMiddleware = createMiddleware({ type: 'request' }).server(({ request, next }) => {
@@ -8,7 +9,7 @@ const langMiddleware = createMiddleware({ type: 'request' }).server(({ request, 
   const hasLang = languagesWithSlashes.some(el => url.pathname.startsWith(el))
   if (!hasLang) {
     const acceptLanguageHeader = request.headers.get('Accept-Language')
-    let lang = fallbackLng
+    let lang: LngKeys = fallbackLng
     if (acceptLanguageHeader) {
       const matchedLanguage = langParser.pick(languages, acceptLanguageHeader, {
         loose: true

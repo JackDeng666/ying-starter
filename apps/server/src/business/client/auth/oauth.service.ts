@@ -141,7 +141,7 @@ export class OAuthService {
         }
       })
     ])
-    const [info, emails]: [
+    const [info, emails] = (await Promise.all([responses[0].json(), responses[1].json()])) as [
       {
         id: number
         name: string
@@ -151,7 +151,7 @@ export class OAuthService {
         email: string
         verified: boolean
       }[]
-    ] = await Promise.all([responses[0].json(), responses[1].json()])
+    ]
     return {
       providerAccountId: String(info.id),
       email: emails[0].email,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown, MenuProps, Popconfirm, Space } from 'antd'
+import { Dropdown, MenuProps, Popconfirm } from 'antd'
 
 import { IconButton, Iconify } from '@/components/icon'
 

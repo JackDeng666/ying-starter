@@ -69,8 +69,6 @@ const ChangeUserInfoForm = ({ onCancel }: ChangeUserInfoFormProps) => {
       message.success('修改用户信息成功')
       updateUserInfo()
       onCancel()
-    } catch (error) {
-      //
     } finally {
       setLoading(false)
     }
@@ -149,8 +147,6 @@ const ChangePasswordForm = () => {
       await sysUserApi.updateSelfPassword(value)
       message.success(`修改密码成功`)
       logout()
-    } catch (error) {
-      //
     } finally {
       setLoading(false)
     }

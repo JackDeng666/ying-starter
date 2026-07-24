@@ -14,12 +14,11 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express'
 
 import { FileSourceType, FileType } from '@ying/shared'
-import { ClientLoginDto, CreateFeedbackDto, CreateVisitorDto, NoticeSubscribeDto } from '@ying/dto'
-import { ConfigVo } from '@ying/vo'
+import { CreateFeedbackDto, CreateVisitorDto, NoticeSubscribeDto } from '@ying/dto'
 
 import { ClientScope, Public, UID } from '@/common/decorator'
 import { FileServiceToken, AbstractFileService } from '@/common/modules/storage'
-import { RedisKey, RedisObjs, RedisToken } from '@/common/modules/redis/constant'
+import { RedisObjs, RedisToken } from '@/common/modules/redis/constant'
 
 import { FeedbackService } from '@/business/modules/feedback'
 import { VisitorService } from '@/business/modules/notification'
@@ -67,7 +66,7 @@ export class CommonController {
       fileType: FileType.Image,
       from: FileSourceType.Client,
       userId,
-      extra: JSON.parse(body.extra)
+      extra: JSON.parse(body.extra) as object
     })
   }
 

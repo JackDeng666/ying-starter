@@ -1,17 +1,18 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus, Logger } from '@nestjs/common'
 import { Request, Response } from 'express'
 import type { ErrorVo } from '@ying/vo'
+import { getErrorMessage } from './get-error-message'
 
 @Catch()
 export class OtherExceptionFilter implements ExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
+  catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
 
     const request = ctx.getRequest<Request>()
 
     const res: ErrorVo = {
       status: HttpStatus.INTERNAL_SERVER_ERROR,
-      message: exception.message ?? exception.toString(),
+      message: getErrorMessage(exception),
       path: request.url,
       timestamp: new Date().toISOString()
     }

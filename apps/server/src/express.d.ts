@@ -1,5 +1,4 @@
-import { TAdminPayload } from '@/business/admin/sys/auth/guard'
-import { TClientPayload } from '@/business/client/auth/strategy/client.jwt.strategy'
+import 'express'
 
 declare global {
   interface MulterFile {

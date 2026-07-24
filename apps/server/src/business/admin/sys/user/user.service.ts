@@ -104,7 +104,7 @@ export class SysUserService extends BaseService<SysUserEntity> {
       userId: newSysUser.id
     })
 
-    this.sysUserRepository.update(
+    void this.sysUserRepository.update(
       {
         id: newSysUser.id
       },
@@ -115,14 +115,14 @@ export class SysUserService extends BaseService<SysUserEntity> {
     return newSysUser
   }
 
-  update(dto: UpdateSysUserDto) {
+  async update(dto: UpdateSysUserDto) {
     const sysUser = this.sysUserRepository.create(dto)
     sysUser.roles = dto.roleIds.map(id => {
       const entity = new SysRoleEntity()
       entity.id = id
       return entity
     })
-    this.redisObjs.redis.del(`${RedisKey.AdminAuthPermission}:${sysUser.id}`)
+    await this.redisObjs.redis.del(`${RedisKey.AdminAuthPermission}:${sysUser.id}`)
     return this.sysUserRepository.save(sysUser)
   }
 
