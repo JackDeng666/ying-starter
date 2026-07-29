@@ -10,15 +10,15 @@ import { useUserInfo } from '@/store/userStore'
 export default function BannerCard() {
   const themeToken = useThemeToken()
 
-  const { name } = useUserInfo()
+  const { name } = useUserInfo() ?? {}
 
   const bg = `linear-gradient(135deg, ${Color(themeToken.colorPrimaryHover).alpha(0.2)}, ${Color(
     themeToken.colorPrimary
   ).alpha(0.2)}) rgb(255, 255, 255)`
 
   return (
-    <Row className="!mx-0 rounded-2xl p-6 h-full" gutter={[16, 16]} justify="space-between" style={{ background: bg }}>
-      <Col span={24} md={12} xl={12} className="mx-auto !max-w-[300px] flex-none items-center justify-center">
+    <Row className="mx-0! rounded-2xl p-6 h-full" gutter={[16, 16]} justify="space-between" style={{ background: bg }}>
+      <Col span={24} md={12} xl={12} className="mx-auto max-w-75! flex-none items-center justify-center">
         <BannerSvg />
       </Col>
 

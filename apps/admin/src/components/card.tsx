@@ -1,6 +1,6 @@
 import { CSSProperties, ReactNode } from 'react'
 
-import { useSettings } from '@/store/settingStore'
+import { useSettings } from '@/store'
 import { useThemeToken } from '@/theme/hooks'
 
 import { ThemeMode } from '@/types/enum'

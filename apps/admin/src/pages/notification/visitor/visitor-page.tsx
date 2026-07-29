@@ -1,5 +1,5 @@
-import { App, Card, Input, Select, Space, Tooltip, Typography } from 'antd'
-import Table, { ColumnsType } from 'antd/es/table'
+import { App, Input, Select, Space, Tooltip, Typography } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
@@ -7,15 +7,14 @@ import { useDialogOpen } from '@ying/frontend/hooks'
 import { ListVisitorDto } from '@ying/dto'
 import { VisitorEntity } from '@ying/entity'
 
-import { notificationApi } from '@/api'
 import { useTable } from '@/hooks'
-import { PageQuery } from '@/components/page-query'
-import { PageOperations } from '@/components/page-operations'
+import { notificationApi } from '@/api'
+import { Page, PageQuery, PageOperations } from '@/layouts/page'
 import { JsonViewModal } from '@/components/json-view-modal'
 
 import { DeviceTypeOptions } from './constant'
 
-export default function Page() {
+export default function VisitorPage() {
   const { control, resetParams, list, listLoading, pagination, reload } = useTable<ListVisitorDto, VisitorEntity>({
     key: 'visitor',
     getList: notificationApi.listVisitor,
@@ -112,47 +111,45 @@ export default function Page() {
   ]
 
   return (
-    <Card variant="borderless">
-      <PageQuery control={control} reset={resetParams}>
-        <Controller
-          control={control}
-          name="language"
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">语言</Space.Addon>
-              <Input allowClear placeholder="请输入语言" {...field} />
-            </Space.Compact>
-          )}
-        />
-        <Controller
-          control={control}
-          name="deviceType"
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon>设备类型</Space.Addon>
-              <Select
-                allowClear
-                style={{ width: 160 }}
-                placeholder="请选择设备类型"
-                options={DeviceTypeOptions}
-                {...field}
-              />
-            </Space.Compact>
-          )}
-        />
-      </PageQuery>
-
-      <Table
-        rowKey="visitorId"
-        size="middle"
-        scroll={{ x: 1000, y: 660 }}
-        loading={listLoading}
-        pagination={pagination}
-        columns={columns}
-        dataSource={list}
-      />
-
-      <JsonViewModal {...jsonViewModalProps} />
-    </Card>
+    <Page
+      header={
+        <PageQuery control={control} reset={resetParams}>
+          <Controller
+            control={control}
+            name="language"
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">语言</Space.Addon>
+                <Input allowClear placeholder="请输入语言" {...field} />
+              </Space.Compact>
+            )}
+          />
+          <Controller
+            control={control}
+            name="deviceType"
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon>设备类型</Space.Addon>
+                <Select
+                  allowClear
+                  style={{ width: 160 }}
+                  placeholder="请选择设备类型"
+                  options={DeviceTypeOptions}
+                  {...field}
+                />
+              </Space.Compact>
+            )}
+          />
+        </PageQuery>
+      }
+      table={{
+        rowKey: 'visitorId',
+        loading: listLoading,
+        dataSource: list,
+        columns
+      }}
+      body={<JsonViewModal {...jsonViewModalProps} />}
+      pagination={pagination}
+    />
   )
 }

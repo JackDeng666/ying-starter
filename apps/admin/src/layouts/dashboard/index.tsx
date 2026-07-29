@@ -1,69 +1,45 @@
-import { useScroll } from 'framer-motion'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useSettings } from '@/store/settingStore'
+import { Outlet } from 'react-router-dom'
+import { useSettings } from '@/store'
 import { useThemeToken } from '@/theme/hooks'
-import { ThemeLayout } from '@/types/enum'
+import { NavContextProvider, NavVertical, NavHorizontal } from './nav'
+import { Header } from './header'
+import { Main } from './main'
+import { MultiTabs } from './multi-tabs'
 
-import Header from './header'
-import Main from './main'
-import Nav from './nav'
-import NavHorizontal from './nav-horizontal'
-
-function DashboardLayout() {
-  const { colorBgElevated, colorTextBase } = useThemeToken()
-  const { themeLayout } = useSettings()
-
-  const mainEl = useRef(null)
-  const { scrollY } = useScroll({ container: mainEl })
-  /**
-   * y轴是否滚动
-   */
-  const [offsetTop, setOffsetTop] = useState(false)
-  const onOffSetTop = useCallback(() => {
-    scrollY.on('change', scrollHeight => {
-      if (scrollHeight > 0) {
-        setOffsetTop(true)
-      } else {
-        setOffsetTop(false)
-      }
-    })
-  }, [scrollY])
-
-  useEffect(() => {
-    onOffSetTop()
-  }, [onOffSetTop])
-
-  const verticalLayout = (
-    <>
-      <Header offsetTop={offsetTop} />
-      <div className="z-50 hidden h-full shrink-0 md:block">
-        <Nav />
-      </div>
-      <Main ref={mainEl} offsetTop={offsetTop} />
-    </>
-  )
-
-  const horizontalLayout = (
-    <div className="relative flex flex-1 flex-col">
-      <Header />
-      <NavHorizontal />
-      <Main ref={mainEl} offsetTop={offsetTop} />
-    </div>
-  )
-
-  const layout = themeLayout !== ThemeLayout.Horizontal ? verticalLayout : horizontalLayout
+export default function DashboardLayout() {
+  const { colorBgElevated, colorTextBase, colorBgContainerDisabled } = useThemeToken()
+  const { multiTab } = useSettings()
 
   return (
-    <div
-      className="flex h-screen w-screen overflow-hidden"
-      style={{
-        color: colorTextBase,
-        background: colorBgElevated,
-        transition: 'color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, background 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
-      }}
-    >
-      {layout}
-    </div>
+    <NavContextProvider>
+      <div
+        className="flex h-screen w-screen overflow-hidden relative"
+        style={{
+          color: colorTextBase,
+          background: colorBgElevated,
+          transition: 'color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, background 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
+        }}
+      >
+        <NavVertical />
+        <div className="flex-auto flex flex-col overflow-auto">
+          <Header />
+          <NavHorizontal />
+          <div
+            className="w-full flex-auto overflow-auto"
+            style={{
+              backgroundColor: colorBgContainerDisabled
+            }}
+          >
+            {multiTab ? (
+              <MultiTabs />
+            ) : (
+              <Main>
+                <Outlet />
+              </Main>
+            )}
+          </div>
+        </div>
+      </div>
+    </NavContextProvider>
   )
 }
-export default DashboardLayout

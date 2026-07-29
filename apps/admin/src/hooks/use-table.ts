@@ -25,13 +25,13 @@ export const useTable = <TParams extends ListDto, TData>(props: UsePaginationDat
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const rowSelection: TableRowSelection<TData> = {
+    columnWidth: 50,
     fixed: 'left',
     selectedRowKeys,
     onChange: keys => {
       setSelectedRowKeys(keys)
     }
   }
-
   return {
     control,
     resetParams,

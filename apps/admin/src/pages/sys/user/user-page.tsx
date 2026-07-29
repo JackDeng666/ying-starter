@@ -1,5 +1,5 @@
-import { Button, Card, Input, Select, Space, Tag, Typography, message } from 'antd'
-import Table, { ColumnsType } from 'antd/es/table'
+import { Button, Input, Select, Space, Tag, Typography, message } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
@@ -8,12 +8,11 @@ import type { ListSysUserDto, UpdateSysUserDto, UpdateSysUserPasswordDto } from 
 import type { SysUserEntity } from '@ying/entity'
 import { useDialogOpen } from '@ying/frontend/hooks'
 
-import { IconButton, Iconify } from '@/components/icon'
-import { PageQuery } from '@/components/page-query'
-import { PageOperations } from '@/components/page-operations'
 import { useThemeToken } from '@/theme/hooks'
 import { useQueryWithParams, useTable } from '@/hooks'
 import { sysRoleApi, sysUserApi } from '@/api'
+import { Page, PageQuery, PageOperations } from '@/layouts/page'
+import { IconButton, Iconify } from '@/components/icon'
 import { BasicStatusOptions, BasicStatusOption } from '@/constant'
 
 import { UserDrawer } from './user-drawer'
@@ -39,7 +38,7 @@ export default function UserPage() {
   const columns: ColumnsType<SysUserEntity> = [
     {
       title: '用户',
-      width: 240,
+      width: 180,
       fixed: 'left',
       render: (_, record) => {
         return (
@@ -68,6 +67,7 @@ export default function UserPage() {
     {
       title: '角色',
       dataIndex: 'role',
+      minWidth: 240,
       render: (_, record) => (
         <>
           {record.roles.map(el => (
@@ -78,7 +78,7 @@ export default function UserPage() {
         </>
       )
     },
-    { title: '备注', dataIndex: 'remark' },
+    { title: '备注', dataIndex: 'remark', minWidth: 240 },
     {
       title: '创建时间',
       dataIndex: 'createAt',
@@ -121,89 +121,91 @@ export default function UserPage() {
   ]
 
   return (
-    <Card variant="borderless">
-      <PageQuery
-        control={control}
-        reset={resetParams}
-        extras={
-          <Button type="primary" onClick={() => userDrawerProps.onOpen()}>
-            新增
-          </Button>
-        }
-      >
-        <Controller
-          name="name"
+    <Page
+      header={
+        <PageQuery
           control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">昵称</Space.Addon>
-              <Input allowClear placeholder="昵称" autoComplete="off" {...field} />
-            </Space.Compact>
-          )}
-        />
-        <Controller
-          name="name"
-          control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">账号</Space.Addon>
-              <Input allowClear placeholder="账号" autoComplete="off" {...field} />
-            </Space.Compact>
-          )}
-        />
-        <Controller
-          name="status"
-          control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">状态</Space.Addon>
-              <Select style={{ width: 120 }} placeholder="选择状态" allowClear {...field}>
-                {BasicStatusOptions.map(el => (
-                  <Select.Option value={el.value} key={el.value}>
-                    <Typography.Text type={el.color}>{el.label}</Typography.Text>
-                  </Select.Option>
-                ))}
-              </Select>
-            </Space.Compact>
-          )}
-        />
-        <Controller
-          name="roleIds"
-          control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">角色</Space.Addon>
-              <Select
-                style={{ width: 280 }}
-                fieldNames={{
-                  value: 'id',
-                  label: 'name'
-                }}
-                filterOption={false}
-                mode="multiple"
-                placeholder="请选择角色"
-                options={roles}
-                onSearch={name => debounceSetParams({ name, size: 100 })}
-                allowClear
-                {...field}
-              />
-            </Space.Compact>
-          )}
-        />
-      </PageQuery>
-
-      <Table
-        rowKey="id"
-        size="small"
-        scroll={{ x: 1000, y: 500 }}
-        loading={listLoading}
-        pagination={pagination}
-        columns={columns}
-        dataSource={list}
-      />
-
-      <ChangePassModal {...changePassModalPros} />
-      <UserDrawer {...userDrawerProps} onSuccess={reload} />
-    </Card>
+          reset={resetParams}
+          extras={
+            <Button type="primary" onClick={() => userDrawerProps.onOpen()}>
+              新增
+            </Button>
+          }
+        >
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">昵称</Space.Addon>
+                <Input allowClear placeholder="昵称" autoComplete="off" {...field} />
+              </Space.Compact>
+            )}
+          />
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">账号</Space.Addon>
+                <Input allowClear placeholder="账号" autoComplete="off" {...field} />
+              </Space.Compact>
+            )}
+          />
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">状态</Space.Addon>
+                <Select style={{ width: 120 }} placeholder="选择状态" allowClear {...field}>
+                  {BasicStatusOptions.map(el => (
+                    <Select.Option value={el.value} key={el.value}>
+                      <Typography.Text type={el.color}>{el.label}</Typography.Text>
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Space.Compact>
+            )}
+          />
+          <Controller
+            name="roleIds"
+            control={control}
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">角色</Space.Addon>
+                <Select
+                  style={{ width: 280 }}
+                  fieldNames={{
+                    value: 'id',
+                    label: 'name'
+                  }}
+                  filterOption={false}
+                  mode="multiple"
+                  placeholder="请选择角色"
+                  options={roles}
+                  onSearch={name => debounceSetParams({ name, size: 100 })}
+                  allowClear
+                  {...field}
+                />
+              </Space.Compact>
+            )}
+          />
+        </PageQuery>
+      }
+      table={{
+        rowKey: 'id',
+        loading: listLoading,
+        dataSource: list,
+        columns
+      }}
+      body={
+        <>
+          <ChangePassModal {...changePassModalPros} />
+          <UserDrawer {...userDrawerProps} onSuccess={reload} />
+        </>
+      }
+      pagination={pagination}
+    />
   )
 }

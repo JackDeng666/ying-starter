@@ -1,33 +1,33 @@
 import { useCallback } from 'react'
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import cookie from 'js-cookie'
 
 import type { SysUserEntity } from '@ying/entity'
-import type { AdminAuthVo } from '@ying/vo'
 import type { TPermission } from '@ying/permission'
+import { storage } from '@ying/frontend/utils'
 
 import { authApi } from '@/api'
+import { CookieEnum, StorageEnum } from '@/types/enum'
 
 type UserStore = {
-  userInfo: Partial<SysUserEntity>
-  authTokens: Partial<AdminAuthVo>
+  accessToken?: string
+  refreshToken?: string
+  userInfo?: SysUserEntity
 }
 
-export const useUserStore = create<UserStore>()(
-  persist(
-    () => ({
-      userInfo: {},
-      authTokens: {}
-    }),
-    {
-      name: 'user_store'
-    }
-  )
-)
+export const useUserStore = create<UserStore>()(() => {
+  const userInfo = storage.getItem<SysUserEntity>(StorageEnum.UserInfo)
 
+  return {
+    accessToken: cookie.get(CookieEnum.AccessToken),
+    refreshToken: cookie.get(CookieEnum.RefreshToken),
+    userInfo
+  }
+})
+
+export const useAccessToken = () => useUserStore(state => state.accessToken)
 export const useUserInfo = () => useUserStore(state => state.userInfo)
-export const useAuthTokens = () => useUserStore(state => state.authTokens)
-export const useUserPermission = () => useUserStore(state => state.userInfo.permissions)
+export const useUserPermission = () => useUserStore(state => state.userInfo?.permissions)
 
 export const useHasPermission = () => {
   const permissions = useUserPermission()
@@ -41,16 +41,26 @@ export const useHasPermission = () => {
   return hasPermission
 }
 
-export const setUserInfo = (userInfo: Partial<SysUserEntity>) => {
+export const setAccessToken = (accessToken: string) => {
+  useUserStore.setState({ accessToken })
+  cookie.set(CookieEnum.AccessToken, accessToken, { expires: 365 })
+}
+
+export const setRefreshToken = (refreshToken: string) => {
+  useUserStore.setState({ refreshToken })
+  cookie.set(CookieEnum.RefreshToken, refreshToken, { expires: 365 })
+}
+
+export const setUserInfo = (userInfo: SysUserEntity) => {
   useUserStore.setState({ userInfo })
+  storage.setItem(StorageEnum.UserInfo, userInfo)
 }
 
-export const setAuthTokens = (authTokens: Partial<AdminAuthVo>) => {
-  useUserStore.setState({ authTokens })
-}
-
-export const clearUserInfoAndAuthTokens = () => {
-  useUserStore.setState({ userInfo: {}, authTokens: {} })
+export const clearUserStore = () => {
+  useUserStore.setState({ userInfo: undefined, accessToken: undefined, refreshToken: undefined })
+  storage.removeItem(StorageEnum.UserInfo)
+  cookie.remove(CookieEnum.AccessToken)
+  cookie.remove(CookieEnum.RefreshToken)
 }
 
 export const updateUserInfo = async () => {
@@ -60,5 +70,5 @@ export const updateUserInfo = async () => {
 
 export const logout = async () => {
   await authApi.logout()
-  clearUserInfoAndAuthTokens()
+  clearUserStore()
 }

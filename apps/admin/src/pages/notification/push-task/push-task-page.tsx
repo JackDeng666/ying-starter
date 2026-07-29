@@ -1,5 +1,5 @@
-import { App, Button, Card, Input, Popconfirm, Space, Typography } from 'antd'
-import Table, { ColumnsType } from 'antd/es/table'
+import { App, Button, Input, Popconfirm, Space, Typography } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
@@ -10,17 +10,16 @@ import { PushTaskStatus } from '@ying/shared'
 import { ListPushTaskDto } from '@ying/dto'
 import { PushTaskEntity } from '@ying/entity'
 
-import { notificationApi } from '@/api'
 import { useTable } from '@/hooks'
+import { notificationApi } from '@/api'
+import { Page, PageQuery, PageOperations } from '@/layouts/page'
 import { IconButton, Iconify } from '@/components/icon'
-import { PageQuery } from '@/components/page-query'
-import { PageOperations } from '@/components/page-operations'
 
 import { DeviceTypeOption, DeviceTypeOptions, PushTaskStatusOption, PushTaskStatusOptions } from './constant'
 import { PushTaskModal } from './push-task-modal'
 import { PushTaskSetModal } from './push-task-set-modal'
 
-export default function Page() {
+export default function PushTaskPage() {
   const { message } = App.useApp()
   const { control, resetParams, list, listLoading, pagination, reload } = useTable<ListPushTaskDto, PushTaskEntity>({
     key: 'push-task',
@@ -34,6 +33,7 @@ export default function Page() {
   const columns: ColumnsType<PushTaskEntity> = [
     {
       title: '任务名称',
+      fixed: 'left',
       width: 200,
       ellipsis: true,
       dataIndex: 'name'
@@ -144,40 +144,42 @@ export default function Page() {
   ]
 
   return (
-    <Card variant="borderless">
-      <PageQuery
-        control={control}
-        reset={resetParams}
-        extras={
-          <Button type="primary" onClick={() => pushTaskModalProps.onOpen()}>
-            新增
-          </Button>
-        }
-      >
-        <Controller
-          name="name"
+    <Page
+      header={
+        <PageQuery
           control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">任务名称</Space.Addon>
-              <Input allowClear placeholder="请输入任务名称" {...field} />
-            </Space.Compact>
-          )}
-        />
-      </PageQuery>
-
-      <Table
-        rowKey="id"
-        size="middle"
-        scroll={{ x: 1000, y: 660 }}
-        loading={listLoading}
-        pagination={pagination}
-        columns={columns}
-        dataSource={list}
-      />
-
-      <PushTaskModal {...pushTaskModalProps} onSuccess={reload} />
-      <PushTaskSetModal {...pushTaskSetModalProps} onSuccess={reload} />
-    </Card>
+          reset={resetParams}
+          extras={
+            <Button type="primary" onClick={() => pushTaskModalProps.onOpen()}>
+              新增
+            </Button>
+          }
+        >
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">任务名称</Space.Addon>
+                <Input allowClear placeholder="请输入任务名称" {...field} />
+              </Space.Compact>
+            )}
+          />
+        </PageQuery>
+      }
+      table={{
+        rowKey: 'id',
+        loading: listLoading,
+        dataSource: list,
+        columns
+      }}
+      body={
+        <>
+          <PushTaskModal {...pushTaskModalProps} onSuccess={reload} />
+          <PushTaskSetModal {...pushTaskSetModalProps} onSuccess={reload} />
+        </>
+      }
+      pagination={pagination}
+    />
   )
 }

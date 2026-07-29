@@ -6,14 +6,14 @@ import { Controller } from 'react-hook-form'
 import type { ListFileDto } from '@ying/dto'
 import type { FileEntity } from '@ying/entity'
 import { FileType } from '@ying/shared'
+import { cn } from '@ying/frontend/ui'
 
 import { commonApi } from '@/api'
 import { useTable } from '@/hooks/use-table'
 import { useThemeToken } from '@/theme/hooks'
-import { PageQuery } from '@/components/page-query'
+import { PageQuery } from '@/layouts/page'
 import { FileSourceTypeOptions } from '@/constant'
 import { UploadImage } from './upload-image'
-import { cn } from '@ying/frontend/ui'
 
 type ImageListProps = {
   selectedFiles?: FileEntity[]

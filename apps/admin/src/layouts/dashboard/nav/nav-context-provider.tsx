@@ -1,43 +1,43 @@
-import { Menu, MenuProps } from 'antd'
+import { PropsWithChildren, useEffect, useRef, useState } from 'react'
+import { MenuProps } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
-import { useState, useEffect, CSSProperties } from 'react'
-import { useMatches, useLocation } from 'react-router-dom'
+import { useLocation, useMatches } from 'react-router-dom'
 
 import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/router/hooks'
-import { useThemeToken } from '@/theme/hooks'
 import { IframeLink } from '@/constant'
 
-import { NAV_HORIZONTAL_HEIGHT } from './config'
+import { NavContext } from './nav-context'
 
-export default function NavHorizontal() {
+export const NavContextProvider = ({ children }: PropsWithChildren) => {
   const { push } = useRouter()
   const matches = useMatches()
   const { pathname } = useLocation()
-
-  const { colorBgElevated } = useThemeToken()
-
   const routeToMenuFn = useRouteToMenuFn()
   const { navMenuRoutes, flattenedRoutes } = usePermissionRoutes()
 
-  /**
-   * state
-   */
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([''])
   const [menuList, setMenuList] = useState<ItemType[]>([])
 
+  const initializedRef = useRef(false)
+  useEffect(() => {
+    if (!initializedRef.current) {
+      const openKeys = matches.filter(match => match.pathname !== '/').map(match => match.pathname)
+      setOpenKeys(openKeys)
+      setSelectedKeys([pathname])
+      initializedRef.current = true
+    }
+  }, [pathname, matches])
+
   useEffect(() => {
     setSelectedKeys([pathname])
-  }, [pathname, matches])
+  }, [pathname])
 
   useEffect(() => {
     const menus = routeToMenuFn(navMenuRoutes)
     setMenuList(menus)
   }, [navMenuRoutes, routeToMenuFn])
 
-  /**
-   * events
-   */
   const onOpenChange: MenuProps['onOpenChange'] = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1)
     if (latestOpenKey) {
@@ -48,30 +48,24 @@ export default function NavHorizontal() {
   }
   const onClick: MenuProps['onClick'] = ({ key }) => {
     const currentRoute = flattenedRoutes.find(el => el.key === key)
-    if (currentRoute.frameSrc && currentRoute.component !== IframeLink) {
+    if (currentRoute?.frameSrc && currentRoute.component !== IframeLink) {
       window.open(currentRoute.frameSrc, '_black')
       return
     }
     push(key)
   }
 
-  const menuStyle: CSSProperties = {
-    background: colorBgElevated
-  }
   return (
-    <div className="w-screen" style={{ height: NAV_HORIZONTAL_HEIGHT }}>
-      <Menu
-        mode="horizontal"
-        items={menuList}
-        className="z-10! border-none!"
-        defaultOpenKeys={openKeys}
-        defaultSelectedKeys={selectedKeys}
-        selectedKeys={selectedKeys}
-        openKeys={openKeys}
-        onOpenChange={onOpenChange}
-        onClick={onClick}
-        style={menuStyle}
-      />
-    </div>
+    <NavContext.Provider
+      value={{
+        openKeys,
+        selectedKeys,
+        menuList,
+        onOpenChange,
+        onClick
+      }}
+    >
+      {children}
+    </NavContext.Provider>
   )
 }

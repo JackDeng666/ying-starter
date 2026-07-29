@@ -7,7 +7,7 @@ import { useThemeToken } from '@/theme/hooks'
 import { UserInfoModal, UserInfoModalProps } from './user-info-modal'
 
 export default function AccountDropdown() {
-  const { name, email, account, avatar } = useUserInfo()
+  const { name, email, account, avatar } = useUserInfo() ?? {}
 
   const [userInfoModalProps, setUserInfoModalProps] = useState<UserInfoModalProps>({
     title: '',

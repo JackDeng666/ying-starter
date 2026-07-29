@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly APP_ENV: 'dev' | 'test' | 'prod'
   readonly APP_API_BASE: string
   readonly APP_HOMEPAGE: string
   readonly APP_SERVER_URL: string

@@ -1,5 +1,5 @@
-import { App, Card, Input, Select, Typography, Image, Button, Tag, Space } from 'antd'
-import Table, { ColumnsType } from 'antd/es/table'
+import { App, Input, Select, Typography, Image, Button, Tag, Space } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
@@ -8,8 +8,7 @@ import { ListArticleDto } from '@ying/dto'
 import { ArticleEntity } from '@ying/entity'
 import { useDialogOpen } from '@ying/frontend/hooks'
 
-import { PageQuery } from '@/components/page-query'
-import { PageOperations } from '@/components/page-operations'
+import { Page, PageQuery, PageOperations } from '@/layouts/page'
 import { PromotionModal, TPromotionData } from '@/components/promotion-modal'
 import { IntlShow } from '@/components/intl'
 import { IconButton, Iconify } from '@/components/icon'
@@ -51,13 +50,10 @@ export default function ArticlePage() {
   const columns: ColumnsType<ArticleEntity> = [
     {
       title: '文章名称',
-      ellipsis: true,
-      dataIndex: 'name'
-    },
-    {
-      title: '文章标题',
-      dataIndex: 'title',
-      render: (_, record) => <IntlShow value={record.title} />
+      dataIndex: 'name',
+      width: 120,
+      fixed: 'left',
+      ellipsis: true
     },
     {
       title: '封面',
@@ -65,6 +61,12 @@ export default function ArticlePage() {
       align: 'center',
       width: 120,
       render: (_, record) => <Image src={record.cover.url} className="rounded-sm w-15! h-15! object-cover" />
+    },
+    {
+      title: '文章标题',
+      dataIndex: 'title',
+      minWidth: 200,
+      render: (_, record) => <IntlShow value={record.title} />
     },
     {
       title: '排序',
@@ -76,6 +78,7 @@ export default function ArticlePage() {
       title: '关键字',
       ellipsis: true,
       dataIndex: 'keywords',
+      minWidth: 200,
       render: (_, record) => <div>{record.keywords?.join('，')}</div>
     },
     {
@@ -167,63 +170,65 @@ export default function ArticlePage() {
   }
 
   return (
-    <Card variant="borderless">
-      <PageQuery
-        control={control}
-        reset={resetParams}
-        extras={
-          <>
-            <Button type="primary" onClick={() => articleModalProps.onOpen()}>
-              新增
-            </Button>
-            {!!selectedRowKeys.length && (
-              <Button type="dashed" onClick={batchDelete}>
-                批量删除
-              </Button>
-            )}
-          </>
+    <>
+      <Page
+        header={
+          <PageQuery
+            control={control}
+            reset={resetParams}
+            extras={
+              <>
+                <Button type="primary" onClick={() => articleModalProps.onOpen()}>
+                  新增
+                </Button>
+                {!!selectedRowKeys.length && (
+                  <Button type="dashed" onClick={batchDelete}>
+                    批量删除
+                  </Button>
+                )}
+              </>
+            }
+          >
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <Space.Compact>
+                  <Space.Addon className="whitespace-nowrap">文章名称</Space.Addon>
+                  <Input allowClear placeholder="请输入文章名称" autoComplete="off" {...field} />
+                </Space.Compact>
+              )}
+            />
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <Space.Compact>
+                  <Space.Addon className="whitespace-nowrap">状态</Space.Addon>
+                  <Select style={{ width: 120 }} placeholder="选择状态" allowClear {...field}>
+                    {BasicStatusOptions.map(el => (
+                      <Select.Option value={el.value} key={el.value}>
+                        <Typography.Text type={el.color}>{el.label}</Typography.Text>
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Space.Compact>
+              )}
+            />
+          </PageQuery>
         }
-      >
-        <Controller
-          name="name"
-          control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">文章名称</Space.Addon>
-              <Input allowClear placeholder="请输入文章名称" autoComplete="off" {...field} />
-            </Space.Compact>
-          )}
-        />
-        <Controller
-          name="status"
-          control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">状态</Space.Addon>
-              <Select style={{ width: 120 }} placeholder="选择状态" allowClear {...field}>
-                {BasicStatusOptions.map(el => (
-                  <Select.Option value={el.value} key={el.value}>
-                    <Typography.Text type={el.color}>{el.label}</Typography.Text>
-                  </Select.Option>
-                ))}
-              </Select>
-            </Space.Compact>
-          )}
-        />
-      </PageQuery>
-      <Table
-        rowKey="id"
-        size="middle"
-        scroll={{ x: 1000, y: 500 }}
-        columns={columns}
-        dataSource={list}
-        loading={listLoading}
+        table={{
+          rowKey: 'id',
+          loading: listLoading,
+          dataSource: list,
+          columns,
+          rowSelection
+        }}
         pagination={pagination}
-        rowSelection={rowSelection}
       />
       <ArticleModal {...articleModalProps} onSuccess={reload} />
       <ArticleContentDrawer {...articleDrawerProps} onSuccess={reloadCurrent} />
       <PromotionModal {...articlePromotionModalProps} />
-    </Card>
+    </>
   )
 }

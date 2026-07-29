@@ -1,6 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req } from '@nestjs/common'
+import { Request } from 'express'
 import { AdminLoginDto } from '@ying/dto'
+import { omit } from '@ying/utils'
 import { AdminScope, Public, Token, UID } from '@/common/decorator'
+import { getRefreshTokenFromRequest } from '@/common/utils'
+
 import { SysAuthService } from './auth.service'
 
 @Controller('admin/sys/auth')
@@ -16,8 +20,8 @@ export class SysAuthController {
 
   @Get('refresh')
   @Public()
-  refresh(@Token() token: string) {
-    return this.authService.refreshToken(token)
+  refresh(@Req() req: Request) {
+    return this.authService.refreshToken(getRefreshTokenFromRequest(req) ?? '')
   }
 
   @Get('logout')
@@ -26,7 +30,8 @@ export class SysAuthController {
   }
 
   @Get('user')
-  getUserInfo(@UID() uid: number) {
-    return this.authService.getUserInfo(uid)
+  async getUserInfo(@UID() uid: number) {
+    const user = await this.authService.getUserInfo(uid)
+    return omit(user, 'password')
   }
 }

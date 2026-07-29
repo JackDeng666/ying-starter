@@ -2,41 +2,29 @@ import { Dropdown, MenuProps, Tabs, TabsProps } from 'antd'
 import Color from 'color'
 import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from '@hello-pangea/dnd'
-import { useToggle, useFullscreen } from 'react-use'
-import styled from 'styled-components'
+// import { useToggle, useFullscreen } from 'react-use'
 
 import { Iconify } from '@/components/icon'
 import useKeepAlive, { KeepAliveTab } from '@/hooks/use-keepalive'
 import { useRouter } from '@/router/hooks'
-import { useSettings } from '@/store/settingStore'
-import { useResponsive, useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/theme/hooks'
+import { MultiTabOperation } from '@/types/enum'
 
-import {
-  NAV_WIDTH,
-  NAV_COLLAPSED_WIDTH,
-  HEADER_HEIGHT,
-  OFFSET_HEADER_HEIGHT,
-  MULTI_TABS_HEIGHT,
-  NAV_HORIZONTAL_HEIGHT
-} from './config'
+import { MULTI_TABS_HEIGHT } from './constant'
+import { Main } from './main'
 
-import { MultiTabOperation, ThemeLayout } from '@/types/enum'
-
-type Props = {
-  offsetTop?: boolean
-}
-export default function MultiTabs({ offsetTop = false }: Props) {
+export function MultiTabs() {
   const { push } = useRouter()
   const scrollContainer = useRef<HTMLDivElement>(null)
   const [hoveringTabKey, setHoveringTabKey] = useState('')
   const [openDropdownTabKey, setopenDropdownTabKey] = useState('')
   const themeToken = useThemeToken()
 
-  const tabContentRef = useRef<Element>()
-  const [fullScreen, toggleFullScreen] = useToggle(false)
-  useFullscreen(tabContentRef, fullScreen, {
-    onClose: () => toggleFullScreen(false)
-  })
+  // const tabContentRef = useRef<HTMLDivElement>(null)
+  // const [fullScreen, toggleFullScreen] = useToggle(false)
+  // useFullscreen(tabContentRef, fullScreen, {
+  //   onClose: () => toggleFullScreen(false)
+  // })
 
   const { tabs, activeTabRoutePath, setTabs, closeTab, refreshTab, closeOthersTab, closeAll, closeLeft, closeRight } =
     useKeepAlive()
@@ -46,11 +34,11 @@ export default function MultiTabs({ offsetTop = false }: Props) {
    */
   const menuItems = useMemo<MenuProps['items']>(
     () => [
-      {
-        label: '内容全屏',
-        key: MultiTabOperation.FULLSCREEN,
-        icon: <Iconify icon="material-symbols:fullscreen" size={18} />
-      },
+      // {
+      //   label: '内容全屏',
+      //   key: MultiTabOperation.FULLSCREEN,
+      //   icon: <Iconify icon="material-symbols:fullscreen" size={18} />
+      // },
       {
         label: '刷新',
         key: MultiTabOperation.REFRESH,
@@ -121,14 +109,14 @@ export default function MultiTabs({ offsetTop = false }: Props) {
         case MultiTabOperation.CLOSEALL:
           closeAll()
           break
-        case MultiTabOperation.FULLSCREEN:
-          toggleFullScreen()
-          break
+        // case MultiTabOperation.FULLSCREEN:
+        //   toggleFullScreen()
+        //   break
         default:
           break
       }
     },
-    [refreshTab, closeTab, closeOthersTab, closeLeft, closeRight, closeAll, toggleFullScreen]
+    [refreshTab, closeTab, closeOthersTab, closeLeft, closeRight, closeAll]
   )
 
   /**
@@ -215,17 +203,12 @@ export default function MultiTabs({ offsetTop = false }: Props) {
   /**
    * 所有tab
    */
-
   const tabItems = useMemo(() => {
     return tabs?.map(tab => ({
       label: renderTabLabel(tab),
       key: tab.key,
       closable: tabs.length > 1, // 保留一个
-      children: (
-        <div ref={tabContentRef} key={tab.timeStamp}>
-          {tab.children}
-        </div>
-      )
+      children: <Main key={tab.timeStamp}>{tab.children}</Main>
     }))
   }, [tabs, renderTabLabel])
 
@@ -251,37 +234,23 @@ export default function MultiTabs({ offsetTop = false }: Props) {
   /**
    * 渲染 tabbar
    */
-  const { themeLayout } = useSettings()
   const { colorBorder, colorBgElevated } = useThemeToken()
-  const { screenMap } = useResponsive()
 
   const multiTabsStyle: CSSProperties = {
-    position: 'fixed',
-    top: offsetTop ? OFFSET_HEADER_HEIGHT : HEADER_HEIGHT,
-    left: 0,
     height: MULTI_TABS_HEIGHT,
+    paddingTop: 4,
     backgroundColor: Color(colorBgElevated).alpha(1).toString(),
-    borderBottom: `1px dashed ${Color(colorBorder).alpha(0.6).toString()}`,
-    transition: 'top 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
+    borderBottom: `1px dashed ${Color(colorBorder).alpha(0.6).toString()}`
   }
 
-  if (themeLayout === ThemeLayout.Horizontal) {
-    multiTabsStyle.top = HEADER_HEIGHT + NAV_HORIZONTAL_HEIGHT - 2
-  } else if (screenMap.md) {
-    multiTabsStyle.right = '0px'
-    multiTabsStyle.left = 'auto'
-    multiTabsStyle.width = `calc(100% - ${themeLayout === ThemeLayout.Vertical ? NAV_WIDTH : NAV_COLLAPSED_WIDTH}px`
-  } else {
-    multiTabsStyle.width = '100vw'
-  }
   const renderTabBar: TabsProps['renderTabBar'] = () => {
     return (
-      <div style={multiTabsStyle} className="z-20 w-full">
+      <div style={multiTabsStyle} className="z-20 sticky top-0 w-full">
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="tabsDroppable" direction="horizontal">
             {provided => (
               <div ref={provided.innerRef} {...provided.droppableProps} className="flex w-full">
-                <div ref={scrollContainer} className="hide-scrollbar flex w-full px-2">
+                <div ref={scrollContainer} className="overflow-scroll shrink-0 no-scrollbar! flex w-full px-2">
                   {tabs.map((tab, index) => (
                     <div id={`tab-${index}`} className="shrink-0" key={tab.key} onClick={() => push(tab.key)}>
                       <Draggable key={tab.key} draggableId={tab.key} index={index}>
@@ -351,47 +320,13 @@ export default function MultiTabs({ offsetTop = false }: Props) {
   }, [])
 
   return (
-    <StyledMultiTabs>
-      <Tabs
-        size="small"
-        type="card"
-        tabBarGutter={4}
-        activeKey={activeTabRoutePath}
-        items={tabItems}
-        renderTabBar={renderTabBar}
-      />
-    </StyledMultiTabs>
+    <Tabs
+      size="small"
+      type="card"
+      tabBarGutter={4}
+      activeKey={activeTabRoutePath}
+      items={tabItems}
+      renderTabBar={renderTabBar}
+    />
   )
 }
-
-const StyledMultiTabs = styled.div`
-  height: 100%;
-  margin-top: 2px;
-  .anticon {
-    margin: 0px !important;
-  }
-  .ant-tabs {
-    height: 100%;
-    .ant-tabs-content {
-      height: 100%;
-    }
-    .ant-tabs-tabpane {
-      height: 100%;
-      & > div {
-        height: 100%;
-      }
-    }
-  }
-
-  /* 隐藏滚动条 */
-  .hide-scrollbar {
-    overflow: scroll;
-    flex-shrink: 0;
-    scrollbar-width: none; /* 隐藏滚动条 Firefox */
-    -ms-overflow-style: none; /* 隐藏滚动条 IE/Edge */
-  }
-
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none; /* 隐藏滚动条 Chrome/Safari/Opera */
-  }
-`

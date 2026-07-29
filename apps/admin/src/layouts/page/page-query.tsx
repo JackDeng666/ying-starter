@@ -16,7 +16,7 @@ type PageQueryProps = {
 
 export const PageQuery = ({ control, reset, children, extras, createTimeHide }: PageQueryProps) => {
   return (
-    <div className="mb-4 w-full flex flex-wrap gap-2">
+    <div className="w-full flex flex-wrap gap-2">
       {children}
       {!createTimeHide && (
         <Controller
@@ -30,8 +30,8 @@ export const PageQuery = ({ control, reset, children, extras, createTimeHide }: 
                 onChange={date => {
                   if (!date) return field.onChange(undefined)
                   field.onChange([
-                    date[0].startOf('D').format('YYYY-MM-DD HH:mm:ss'),
-                    date[1].endOf('D').format('YYYY-MM-DD HH:mm:ss')
+                    date[0]?.startOf('D').format('YYYY-MM-DD HH:mm:ss'),
+                    date[1]?.endOf('D').format('YYYY-MM-DD HH:mm:ss')
                   ])
                 }}
               />

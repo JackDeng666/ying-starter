@@ -1,6 +1,6 @@
 import { HttpRequest, type BeforeRequestHookOptions } from '@ying/http'
 import { isBaseVo } from '@ying/vo'
-import { useUserStore, clearUserInfoAndAuthTokens, setAuthTokens } from '@/store'
+import { clearUserStore, setAccessToken } from '@/store'
 import { globalEvent } from '@/event-emitter'
 
 import { HttpError } from './http-error'
@@ -14,16 +14,12 @@ async function refreshToken(http: HttpRequest) {
   refreshTokenPromise = new Promise(resolve => {
     async function refresh() {
       try {
-        const authTokens = useUserStore.getState().authTokens
         const accessToken = await http.get<string>('/sys/auth/refresh', {
-          headers: {
-            authorization: `Bearer ${authTokens.refreshToken}`
-          },
           additional: {
             __isRefreshToken: true
           }
         })
-        setAuthTokens({ ...authTokens, accessToken })
+        setAccessToken(accessToken)
         resolve(accessToken)
       } catch (error) {
         console.log(error)
@@ -44,30 +40,20 @@ export const http = new HttpRequest({
 })
 
 http.addHooks({
-  beforeRequest: options => {
-    const { accessToken } = useUserStore.getState().authTokens
-    if (accessToken && !options.headers['authorization']) {
-      options.headers['authorization'] = `Bearer ${accessToken}`
-    }
-    return options
-  },
   afterResponse: ({ type, data }) => {
     if (type === 'json' && isBaseVo(data)) return data.data
     return data
   },
   beforeError: async (fetchRes, options) => {
     if (fetchRes.status === 401 && !isRefreshRequest(options)) {
-      const accessToken = await refreshToken(http)
+      await refreshToken(http)
       refreshTokenPromise = undefined
-      if (accessToken) {
-        options.headers['authorization'] = `Bearer ${accessToken}`
-        return http.request({ ...options, responseType: 'raw' })
-      }
+      return http.request({ ...options, responseType: 'raw' })
     }
     return fetchRes
   },
   afterError: async fetchRes => {
-    if (fetchRes.status === 401) clearUserInfoAndAuthTokens()
+    if (fetchRes.status === 401) clearUserStore()
     const errRes = await fetchRes.json()
     const httpError = new HttpError(errRes, {
       status: fetchRes.status,

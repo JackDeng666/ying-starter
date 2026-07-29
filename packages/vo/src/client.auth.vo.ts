@@ -1,7 +1,7 @@
 import type { UserEntity } from '@ying/entity'
 import { BaseVo } from './base.vo'
 
-export type ClientUserVo = UserEntity & {
+export type ClientUserVo = Omit<UserEntity, 'password'> & {
   hasPassword: boolean
 }
 

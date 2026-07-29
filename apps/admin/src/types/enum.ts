@@ -1,5 +1,11 @@
 export enum StorageEnum {
-  Settings = 'settings'
+  Settings = 'settings',
+  UserInfo = 'userInfo'
+}
+
+export enum CookieEnum {
+  AccessToken = 'accessToken',
+  RefreshToken = 'refreshToken'
 }
 
 export enum ThemeMode {
@@ -7,10 +13,9 @@ export enum ThemeMode {
   Dark = 'dark'
 }
 
-export enum ThemeLayout {
+export enum ThemeNavLayout {
   Vertical = 'vertical',
-  Horizontal = 'horizontal',
-  Mini = 'mini'
+  Horizontal = 'horizontal'
 }
 
 export enum ThemeColorPresets {

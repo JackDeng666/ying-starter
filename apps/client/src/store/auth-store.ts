@@ -7,8 +7,8 @@ import { useMemo } from 'react'
 
 type AuthStore = {
   userInfo?: ClientUserVo
-  accessToken?: ClientAuthVo['accessToken']
-  refreshToken?: ClientAuthVo['refreshToken']
+  accessToken?: string
+  refreshToken?: string
 }
 
 export const useAuthStore = create<AuthStore>(() => ({

@@ -3,6 +3,7 @@ import { Request as TRequest } from 'express'
 
 import { UpdateUserInfoDto, ResetPasswordDto } from '@ying/dto'
 import { ClientUserVo } from '@ying/vo'
+import { omit } from '@ying/utils'
 
 import { ClientScope } from '@/common/decorator'
 import { UserService } from '@/business/modules/user'
@@ -17,8 +18,7 @@ export class UserController {
     const user = await this.userService.findById(req.user!.id)
     if (!user) throw new UnauthorizedException()
     return {
-      ...user,
-      password: undefined,
+      ...omit(user, 'password'),
       hasPassword: Boolean(user.password)
     }
   }

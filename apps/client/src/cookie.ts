@@ -8,10 +8,10 @@ import Cookie from 'js-cookie'
 
 export const setCookie = createIsomorphicFn()
   .server((name: string, value: string) => {
-    return serverSetCookie(name, value)
+    return serverSetCookie(name, value, { maxAge: 365 * 24 * 60 * 60 })
   })
   .client((name: string, value: string) => {
-    return Cookie.set(name, value)
+    return Cookie.set(name, value, { expires: 365 })
   })
 
 export const getCookie = createIsomorphicFn()

@@ -4,6 +4,7 @@ import { devtools } from '@tanstack/devtools-vite'
 import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import babel from '@rolldown/plugin-babel'
+import { customLogger } from './vite.logger'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'APP_')
@@ -12,7 +13,6 @@ export default defineConfig(({ mode }) => {
     resolve: { tsconfigPaths: true },
     server: {
       host: true,
-      // allowedHosts: ['unpainted-catwalk-headache.ngrok-free.dev'],
       proxy: {
         '/api': {
           target: env.APP_SERVER_URL
@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
+    customLogger,
     plugins: [
       tanstackStart(),
       devtools({
@@ -30,8 +31,8 @@ export default defineConfig(({ mode }) => {
           enabled: false
         }
       }),
-      viteReact(),
       babel({ presets: [reactCompilerPreset()] }),
+      viteReact(),
       tailwindcss()
     ]
   }

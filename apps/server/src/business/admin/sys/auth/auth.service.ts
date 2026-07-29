@@ -132,7 +132,7 @@ export class SysAuthService {
     await this.redisObjs.redis.del(`${RedisKey.AdminAuthRefreshToken}:${userId}:${refreshToken}`)
   }
 
-  async getUserInfo(uid: number): Promise<SysUserEntity> {
+  async getUserInfo(uid: number) {
     const sysUserEntity = await this.sysUserRepository.findOne({
       where: {
         id: uid

@@ -1,6 +1,7 @@
 import { BaseType } from 'antd/es/typography/Base'
 
 import { BasicStatus, FileType, FileSourceType } from '@ying/shared'
+import { getScrollbarThickness } from '@ying/frontend/utils'
 
 export type TypeOption<T> = {
   label: string
@@ -53,3 +54,5 @@ export const FileSourceTypeOptions: FileSourceTypeOption[] = [
 export const IframeLink = '/iframe/index.tsx'
 
 export const ExternalLink = '/iframe/external-link.tsx'
+
+export const ScrollbarThickness = getScrollbarThickness()

@@ -54,33 +54,6 @@
   --animate-spin-slow: spin 8s linear infinite;
 }
 
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-/* *::-webkit-scrollbar-track {
-  background: transparent;
-} */
-
-*::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: var(--scrollbar-thumb-bg);
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover-bg);
-}
-
-*::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-.ant-table-body {
-  scrollbar-width: auto;
-  scrollbar-color: auto;
-}
-
-.ant-table-cell-scrollbar {
-  width: 8px;
+* {
+  scrollbar-color: rgba(0, 0, 0, 0.25) rgba(5, 5, 5, 0.06);
 }

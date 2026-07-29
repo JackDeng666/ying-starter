@@ -240,3 +240,15 @@ export function getMinBigInt(array: bigint[]) {
 export function getObjectKeys<T extends object>(obj: T): (keyof T)[] {
   return Object.keys(obj) as (keyof T)[]
 }
+
+export function omit<T extends Record<string, any>, K extends keyof T>(obj: T, ...keys: K[]): Omit<T, K> {
+  const result = { ...obj }
+  keys.forEach(key => {
+    delete result[key]
+  })
+  return result as Omit<T, K>
+}
+
+export function omitArray<T extends Record<string, any>, K extends keyof T>(arr: T[], ...keys: K[]): Omit<T, K>[] {
+  return arr.map(obj => omit(obj, ...keys))
+}

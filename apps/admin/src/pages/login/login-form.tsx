@@ -2,7 +2,7 @@ import { App, Button, Form, Input } from 'antd'
 import { useCallback, useState } from 'react'
 import type { AdminLoginDto } from '@ying/dto'
 
-import { setAuthTokens, setUserInfo } from '@/store'
+import { setAccessToken, setRefreshToken, setUserInfo } from '@/store'
 import { authApi } from '@/api'
 
 import { LoginStateEnum, useLoginStateContext } from './provider'
@@ -13,7 +13,8 @@ const useSignIn = () => {
   const signIn = useCallback(
     async (data: AdminLoginDto) => {
       const authTokens = await authApi.login(data)
-      setAuthTokens(authTokens)
+      setAccessToken(authTokens.accessToken)
+      setRefreshToken(authTokens.refreshToken)
       const userInfo = await authApi.getUserInfo()
       setUserInfo(userInfo)
 

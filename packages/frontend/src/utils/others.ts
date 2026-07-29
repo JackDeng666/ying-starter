@@ -30,6 +30,19 @@ export function doDownload(url: string, fileName: string) {
   document.body.removeChild(a)
 }
 
+export function getScrollbarThickness() {
+  const div = document.createElement('div')
+  div.style.width = '100px'
+  div.style.height = '100px'
+  div.style.overflow = 'scroll'
+  div.style.position = 'absolute'
+  div.style.top = '-9999px'
+  document.body.appendChild(div)
+  const scrollbarWidth = div.offsetWidth - div.clientWidth
+  div.remove()
+  return scrollbarWidth
+}
+
 export function selectFile(accept?: string, multiple?: false): Promise<File>
 export function selectFile(accept?: string, multiple?: true): Promise<File[]>
 export function selectFile(accept = '*', multiple = false): Promise<File[] | File> {

@@ -2,9 +2,9 @@ import { ItemType } from 'antd/es/menu/interface'
 import { useCallback } from 'react'
 
 import { Iconify, SvgIcon } from '@/components/icon'
-import { useSettings } from '@/store/settingStore'
+import { useSettings } from '@/store'
 
-import { ThemeLayout } from '@/types/enum'
+import { ThemeNavLayout } from '@/types/enum'
 import { AppRouteObject } from '@/types/router'
 
 /**
@@ -26,7 +26,7 @@ export function useRouteToMenuFn() {
             menuItem.label = (
               <div
                 className={`inline-flex items-center ${
-                  themeLayout === ThemeLayout.Horizontal ? 'justify-start' : 'justify-between'
+                  themeLayout === ThemeNavLayout.Horizontal ? 'justify-start' : 'justify-between'
                 } `}
               >
                 <div className="">{label}</div>

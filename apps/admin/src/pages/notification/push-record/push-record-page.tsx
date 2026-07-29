@@ -1,5 +1,5 @@
-import { Card, Input, Select, Space, Tag, Typography } from 'antd'
-import Table, { ColumnsType } from 'antd/es/table'
+import { Input, Select, Space, Tag, Typography } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
@@ -8,14 +8,14 @@ import { useDialogOpen } from '@ying/frontend/hooks'
 import { ListPushRecordDto, ListPushTaskDto } from '@ying/dto'
 import type { PushRecordEntity } from '@ying/entity'
 
-import { notificationApi } from '@/api'
 import { useQueryWithParams, useTable } from '@/hooks'
-import { PageQuery } from '@/components/page-query'
+import { notificationApi } from '@/api'
+import { Page, PageQuery } from '@/layouts/page'
 import { JsonViewModal } from '@/components/json-view-modal'
 
 import { PushRecordStatusOption, PushRecordStatusOptions } from './constant'
 
-export default function Page() {
+export default function PushRecordPage() {
   const { control, resetParams, list, listLoading, pagination } = useTable<ListPushRecordDto, PushRecordEntity>({
     key: 'push-record',
     getList: notificationApi.listPushRecord,
@@ -35,9 +35,10 @@ export default function Page() {
   const columns: ColumnsType<PushRecordEntity> = [
     {
       title: '推送任务',
-      width: 200,
-      ellipsis: true,
       dataIndex: 'pushTask',
+      width: 150,
+      fixed: 'left',
+      ellipsis: true,
       render: (_, record) => record.pushTask.name
     },
     {
@@ -94,71 +95,70 @@ export default function Page() {
       title: '创建时间',
       dataIndex: 'createAt',
       width: 160,
+      fixed: 'right',
       render: (_, record) => dayjs(record.createAt).format('YYYY-MM-DD HH:mm:ss')
     }
   ]
 
   return (
-    <Card variant="borderless">
-      <PageQuery control={control} reset={resetParams}>
-        <Controller
-          control={control}
-          name="visitorId"
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">浏览用户ID</Space.Addon>
-              <Input allowClear placeholder="请输入浏览用户ID" {...field} />
-            </Space.Compact>
-          )}
-        />
-        <Controller
-          control={control}
-          name="pushTaskId"
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon>推送任务</Space.Addon>
-              <Select
-                style={{ width: 160 }}
-                allowClear
-                placeholder="请选择推送任务"
-                filterOption={false}
-                showSearch
-                onSearch={name => debounceSetParams({ name, size: 100 })}
-                options={pushTasks}
-                {...field}
-              />
-            </Space.Compact>
-          )}
-        />
-        <Controller
-          control={control}
-          name="status"
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon>推送状态</Space.Addon>
-              <Select
-                style={{ width: 160 }}
-                allowClear
-                placeholder="请选择推送状态"
-                options={PushRecordStatusOptions}
-                {...field}
-              />
-            </Space.Compact>
-          )}
-        />
-      </PageQuery>
-
-      <Table
-        rowKey="id"
-        size="middle"
-        scroll={{ x: 1000, y: 660 }}
-        loading={listLoading}
-        pagination={pagination}
-        columns={columns}
-        dataSource={list}
-      />
-
-      <JsonViewModal {...jsonViewModalProps} />
-    </Card>
+    <Page
+      header={
+        <PageQuery control={control} reset={resetParams}>
+          <Controller
+            control={control}
+            name="visitorId"
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">浏览用户ID</Space.Addon>
+                <Input allowClear placeholder="请输入浏览用户ID" {...field} />
+              </Space.Compact>
+            )}
+          />
+          <Controller
+            control={control}
+            name="pushTaskId"
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon>推送任务</Space.Addon>
+                <Select
+                  style={{ width: 160 }}
+                  allowClear
+                  placeholder="请选择推送任务"
+                  filterOption={false}
+                  showSearch
+                  onSearch={name => debounceSetParams({ name, size: 100 })}
+                  options={pushTasks}
+                  {...field}
+                />
+              </Space.Compact>
+            )}
+          />
+          <Controller
+            control={control}
+            name="status"
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon>推送状态</Space.Addon>
+                <Select
+                  style={{ width: 160 }}
+                  allowClear
+                  placeholder="请选择推送状态"
+                  options={PushRecordStatusOptions}
+                  {...field}
+                />
+              </Space.Compact>
+            )}
+          />
+        </PageQuery>
+      }
+      table={{
+        rowKey: 'id',
+        loading: listLoading,
+        dataSource: list,
+        columns
+      }}
+      body={<JsonViewModal {...jsonViewModalProps} />}
+      pagination={pagination}
+    />
   )
 }

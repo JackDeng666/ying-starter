@@ -1,5 +1,5 @@
-import { App, Button, Card, Input, Space } from 'antd'
-import Table, { ColumnsType } from 'antd/es/table'
+import { App, Button, Input, Space } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import { useEffect } from 'react'
 import dayjs from 'dayjs'
@@ -9,17 +9,16 @@ import { useDialogOpen } from '@ying/frontend/hooks'
 import { ListPushTemplateDto } from '@ying/dto'
 import { ArticleEntity, PushTemplateEntity } from '@ying/entity'
 
-import { IconButton, Iconify } from '@/components/icon'
-import { PageQuery } from '@/components/page-query'
-import { PageOperations } from '@/components/page-operations'
-import { IntlShow } from '@/components/intl'
 import { useTable } from '@/hooks'
 import { notificationApi } from '@/api'
+import { Page, PageQuery, PageOperations } from '@/layouts/page'
+import { IconButton, Iconify } from '@/components/icon'
+import { IntlShow } from '@/components/intl'
 
 import { PushTemplateDrawer } from './push-template-drawer'
 import { SendNotificationModal } from './send-notification-modal'
 
-export default function Page() {
+export default function PushTemplatePage() {
   const { message } = App.useApp()
 
   const { control, resetParams, list, listLoading, pagination, reload } = useTable<
@@ -54,7 +53,8 @@ export default function Page() {
   const columns: ColumnsType<PushTemplateEntity> = [
     {
       title: '模板名称',
-      width: 200,
+      width: 150,
+      fixed: 'left',
       ellipsis: true,
       dataIndex: 'name'
     },
@@ -67,6 +67,7 @@ export default function Page() {
     },
     {
       title: '内容',
+      minWidth: 300,
       ellipsis: true,
       dataIndex: 'body',
       render: (_, record) => <IntlShow value={record.body} />
@@ -103,51 +104,53 @@ export default function Page() {
   ]
 
   return (
-    <Card variant="borderless">
-      <PageQuery
-        control={control}
-        reset={resetParams}
-        extras={
-          <Button type="primary" onClick={() => pushTemplateDrawerProps.onOpen()}>
-            新增
-          </Button>
-        }
-      >
-        <Controller
-          name="name"
+    <Page
+      header={
+        <PageQuery
           control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">模板名称</Space.Addon>
-              <Input allowClear placeholder="请输入模板名称" {...field} />
-            </Space.Compact>
-          )}
-        />
+          reset={resetParams}
+          extras={
+            <Button type="primary" onClick={() => pushTemplateDrawerProps.onOpen()}>
+              新增
+            </Button>
+          }
+        >
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">模板名称</Space.Addon>
+                <Input allowClear placeholder="请输入模板名称" {...field} />
+              </Space.Compact>
+            )}
+          />
 
-        <Controller
-          name="title"
-          control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">通知标题</Space.Addon>
-              <Input allowClear placeholder="请输入通知标题" {...field} />
-            </Space.Compact>
-          )}
-        />
-      </PageQuery>
-
-      <Table
-        rowKey="id"
-        size="middle"
-        scroll={{ x: 1000, y: 660 }}
-        loading={listLoading}
-        pagination={pagination}
-        columns={columns}
-        dataSource={list}
-      />
-
-      <PushTemplateDrawer {...pushTemplateDrawerProps} onSuccess={reload} />
-      <SendNotificationModal {...sendNotificationModalProps} />
-    </Card>
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">通知标题</Space.Addon>
+                <Input allowClear placeholder="请输入通知标题" {...field} />
+              </Space.Compact>
+            )}
+          />
+        </PageQuery>
+      }
+      table={{
+        rowKey: 'id',
+        loading: listLoading,
+        dataSource: list,
+        columns
+      }}
+      body={
+        <>
+          <PushTemplateDrawer {...pushTemplateDrawerProps} onSuccess={reload} />
+          <SendNotificationModal {...sendNotificationModalProps} />
+        </>
+      }
+      pagination={pagination}
+    />
   )
 }

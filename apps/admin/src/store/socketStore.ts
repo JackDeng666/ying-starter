@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client'
 
 // import { ClientToServerEvents, ServerToClientEvents } from '@ying/shared'
 
-import { useAuthTokens } from './userStore'
+import { useAccessToken } from './userStore'
 
 type SocketStore = {
   socket?: Socket
@@ -16,7 +16,7 @@ export const useSocketStore = create<SocketStore>(() => ({
 }))
 
 export const useSocketIo = () => {
-  const { accessToken } = useAuthTokens()
+  const accessToken = useAccessToken()
 
   useEffect(() => {
     if (!accessToken) return

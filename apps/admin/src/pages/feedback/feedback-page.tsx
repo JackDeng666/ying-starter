@@ -1,5 +1,5 @@
-import { App, Card, Input, Space } from 'antd'
-import Table, { ColumnsType } from 'antd/es/table'
+import { App, Input, Space } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
@@ -8,8 +8,7 @@ import { FeedbackEntity } from '@ying/entity'
 
 import { commonApi } from '@/api'
 import { useTable } from '@/hooks'
-import { PageQuery } from '@/components/page-query'
-import { PageOperations } from '@/components/page-operations'
+import { Page, PageQuery, PageOperations } from '@/layouts/page'
 
 export default function FeedbackPage() {
   const { message } = App.useApp()
@@ -22,10 +21,17 @@ export default function FeedbackPage() {
 
   const columns: ColumnsType<FeedbackEntity> = [
     {
+      title: '邮箱',
+      dataIndex: 'email',
+      width: 200,
+      fixed: 'left',
+      ellipsis: true
+    },
+    {
       title: '用户名称',
+      dataIndex: 'name',
       width: 150,
       ellipsis: true,
-      dataIndex: 'name',
       render: (_, record) => (
         <div>
           {record.lastName} {record.firstName}
@@ -33,15 +39,10 @@ export default function FeedbackPage() {
       )
     },
     {
-      title: '邮箱',
-      width: 200,
-      ellipsis: true,
-      dataIndex: 'email'
-    },
-    {
       title: '内容',
-      ellipsis: true,
-      dataIndex: 'content'
+      dataIndex: 'content',
+      minWidth: 240,
+      ellipsis: true
     },
     {
       title: '创建时间',
@@ -69,29 +70,28 @@ export default function FeedbackPage() {
   ]
 
   return (
-    <Card variant="borderless">
-      <PageQuery control={control} reset={resetParams}>
-        <Controller
-          name="email"
-          control={control}
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">邮箱</Space.Addon>
-              <Input allowClear placeholder="请输入邮箱" autoComplete="off" {...field} />
-            </Space.Compact>
-          )}
-        />
-      </PageQuery>
-
-      <Table
-        rowKey="id"
-        size="middle"
-        scroll={{ x: 1000, y: 500 }}
-        loading={listLoading}
-        pagination={pagination}
-        columns={columns}
-        dataSource={list}
-      />
-    </Card>
+    <Page
+      header={
+        <PageQuery control={control} reset={resetParams}>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">邮箱</Space.Addon>
+                <Input allowClear placeholder="请输入邮箱" autoComplete="off" {...field} />
+              </Space.Compact>
+            )}
+          />
+        </PageQuery>
+      }
+      table={{
+        rowKey: 'id',
+        loading: listLoading,
+        dataSource: list,
+        columns
+      }}
+      pagination={pagination}
+    />
   )
 }

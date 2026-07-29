@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import babel from '@rolldown/plugin-babel'
+import { customLogger } from './vite.logger'
 
 // import { dependencies } from './package.json'
 // const dependenciesNotIncluded = ['@ying/frontend', 'autosuggest-highlight']
@@ -26,17 +27,17 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
+    customLogger,
     plugins: [
-      viteReact(),
       babel({ presets: [reactCompilerPreset()] }),
+      viteReact(),
       tailwindcss(),
       createSvgIconsPlugin({
         iconDirs: [path.resolve(__dirname, 'src/assets/icons')], // 指定需要缓存的图标文件夹
         symbolId: 'icon-[dir]-[name]' // 指定symbolId格式
       }),
       nodePolyfills()
-    ],
-    base: '/'
+    ]
     // optimizeDeps: {
     //   rolldownOptions: {
     //     commonjs: {

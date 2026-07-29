@@ -73,7 +73,6 @@ docker build --platform=linux/amd64 --target server -t ying-server:1.0.0 .
 ```bash
 docker run --name ying-server -d \
   -p 5090:5090 \
-  -e APP_ENV=prod \
   -e SERVER_PORT=5090 \
   -e REDIS_HOST=host.docker.internal \
   -e REDIS_PORT=6379 \

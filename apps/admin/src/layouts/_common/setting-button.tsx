@@ -10,11 +10,11 @@ import CyanBlur from '@/assets/images/background/cyan-blur.png'
 import RedBlur from '@/assets/images/background/red-blur.png'
 import { varHover } from '@/components/animate/variants/action'
 import { IconButton, SvgIcon } from '@/components/icon'
-import { useSettingActions, useSettings } from '@/store/settingStore'
+import { useSettings, setSettings } from '@/store'
 import { colorPresets } from '@/theme/antd/config'
 import { useThemeToken } from '@/theme/hooks'
 
-import { ThemeColorPresets, ThemeLayout, ThemeMode } from '@/types/enum'
+import { ThemeColorPresets, ThemeNavLayout, ThemeMode } from '@/types/enum'
 
 /**
  * App Setting
@@ -25,7 +25,6 @@ export default function SettingButton() {
 
   const settings = useSettings()
   const { themeMode, themeColorPresets, themeLayout, themeStretch, breadCrumb, multiTab } = settings
-  const { setSettings } = useSettingActions()
 
   const setThemeMode = (themeMode: ThemeMode) => {
     setSettings({
@@ -41,7 +40,7 @@ export default function SettingButton() {
     })
   }
 
-  const setThemeLayout = (themeLayout: ThemeLayout) => {
+  const setThemeLayout = (themeLayout: ThemeNavLayout) => {
     setSettings({
       ...settings,
       themeLayout
@@ -77,9 +76,6 @@ export default function SettingButton() {
     backgroundPosition: 'right top, left bottom',
     backgroundSize: '50, 50%'
   }
-  const bodyStyle: CSSProperties = {
-    padding: 0
-  }
 
   const [isFullscreen, setIsFullscreen] = useState(screenfull.isFullscreen)
   const toggleFullScreen = () => {
@@ -89,7 +85,7 @@ export default function SettingButton() {
     }
   }
 
-  const layoutBackground = (layout: ThemeLayout) =>
+  const layoutBackground = (layout: ThemeNavLayout) =>
     themeLayout === layout ? `linear-gradient(135deg, ${colorBgBase} 0%, ${colorPrimary} 100%)` : '#919eab'
 
   return (
@@ -122,7 +118,7 @@ export default function SettingButton() {
         closable={false}
         width={280}
         style={style}
-        styles={{ body: bodyStyle, mask: { backgroundColor: 'transparent' } }}
+        styles={{ body: { padding: 0 }, mask: { background: 'transparent' } }}
         extra={
           <IconButton onClick={() => setDrawerOpen(false)} className="h-9 w-9 hover:scale-105">
             <CloseOutlined className="text-gray-400" />
@@ -181,10 +177,10 @@ export default function SettingButton() {
             <div className="mb-3 text-base font-semibold" style={{ color: colorTextSecondary }}>
               Layout
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <Card
-                onClick={() => setThemeLayout(ThemeLayout.Vertical)}
-                className="h-14 cursor-pointer"
+                onClick={() => setThemeLayout(ThemeNavLayout.Vertical)}
+                className="h-20 cursor-pointer"
                 style={{ flexGrow: 1, flexShrink: 0 }}
                 styles={{
                   body: {
@@ -200,19 +196,19 @@ export default function SettingButton() {
                   <div
                     className="h-2 w-2 shrink-0 rounded"
                     style={{
-                      background: layoutBackground(ThemeLayout.Vertical)
+                      background: layoutBackground(ThemeNavLayout.Vertical)
                     }}
                   />
                   <div
                     className="h-1 w-full shrink-0 rounded opacity-50"
                     style={{
-                      background: layoutBackground(ThemeLayout.Vertical)
+                      background: layoutBackground(ThemeNavLayout.Vertical)
                     }}
                   />
                   <div
                     className="h-1 max-w-3 shrink-0 rounded opacity-20"
                     style={{
-                      background: layoutBackground(ThemeLayout.Vertical)
+                      background: layoutBackground(ThemeNavLayout.Vertical)
                     }}
                   />
                 </div>
@@ -220,14 +216,14 @@ export default function SettingButton() {
                   <div
                     className="h-full w-full rounded opacity-20"
                     style={{
-                      background: layoutBackground(ThemeLayout.Vertical)
+                      background: layoutBackground(ThemeNavLayout.Vertical)
                     }}
                   />
                 </div>
               </Card>
               <Card
-                onClick={() => setThemeLayout(ThemeLayout.Horizontal)}
-                className="h-14 cursor-pointer"
+                onClick={() => setThemeLayout(ThemeNavLayout.Horizontal)}
+                className="h-20 cursor-pointer"
                 style={{ flexGrow: 1, flexShrink: 0 }}
                 styles={{
                   body: {
@@ -244,19 +240,19 @@ export default function SettingButton() {
                   <div
                     className="h-2 w-2 shrink-0 rounded"
                     style={{
-                      background: layoutBackground(ThemeLayout.Horizontal)
+                      background: layoutBackground(ThemeNavLayout.Horizontal)
                     }}
                   />
                   <div
                     className="h-1 w-4 shrink-0 rounded opacity-50"
                     style={{
-                      background: layoutBackground(ThemeLayout.Horizontal)
+                      background: layoutBackground(ThemeNavLayout.Horizontal)
                     }}
                   />
                   <div
                     className="h-1 w-3 shrink-0 rounded opacity-20"
                     style={{
-                      background: layoutBackground(ThemeLayout.Horizontal)
+                      background: layoutBackground(ThemeNavLayout.Horizontal)
                     }}
                   />
                 </div>
@@ -264,43 +260,8 @@ export default function SettingButton() {
                   <div
                     className="h-full w-full rounded opacity-20"
                     style={{
-                      background: layoutBackground(ThemeLayout.Horizontal)
+                      background: layoutBackground(ThemeNavLayout.Horizontal)
                     }}
-                  />
-                </div>
-              </Card>
-              <Card
-                onClick={() => setThemeLayout(ThemeLayout.Mini)}
-                className="h-14 cursor-pointer"
-                style={{ flexGrow: 1, flexShrink: 0 }}
-                styles={{
-                  body: {
-                    padding: 0,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100%'
-                  }
-                }}
-              >
-                <div className="flex h-full shrink-0 flex-col gap-1 p-1">
-                  <div
-                    className="h-2 w-2 shrink-0 rounded"
-                    style={{ background: layoutBackground(ThemeLayout.Mini) }}
-                  />
-                  <div
-                    className="h-1 w-full shrink-0 rounded opacity-50"
-                    style={{ background: layoutBackground(ThemeLayout.Mini) }}
-                  />
-                  <div
-                    className="h-1 max-w-3 shrink-0 rounded opacity-20"
-                    style={{ background: layoutBackground(ThemeLayout.Mini) }}
-                  />
-                </div>
-                <div className="h-full w-full flex-1 grow p-1">
-                  <div
-                    className="h-full w-full rounded opacity-20"
-                    style={{ background: layoutBackground(ThemeLayout.Mini) }}
                   />
                 </div>
               </Card>

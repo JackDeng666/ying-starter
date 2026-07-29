@@ -1,5 +1,5 @@
-export const getItem = <T>(key: string): T | null => {
-  let value = null
+export const getItem = <T>(key: string): T | undefined => {
+  let value: T | undefined
   try {
     const result = localStorage.getItem(key)
     if (result) {

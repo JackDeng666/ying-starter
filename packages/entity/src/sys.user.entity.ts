@@ -1,5 +1,4 @@
 import { Column, Entity, JoinColumn, ManyToMany, OneToOne } from 'typeorm'
-import { Exclude, instanceToPlain } from 'class-transformer'
 import { BasicStatus } from '@ying/shared'
 import { BaseEntityWithAutoId } from './base'
 import { SysRoleEntity } from './sys.role.entity'
@@ -22,7 +21,6 @@ export class SysUserEntity extends BaseEntityWithAutoId {
   email?: string
 
   @Column()
-  @Exclude()
   password: string
 
   @Column({
@@ -49,8 +47,4 @@ export class SysUserEntity extends BaseEntityWithAutoId {
   roles: SysRoleEntity[]
 
   permissions?: SysPermissionEntity[]
-
-  toJSON() {
-    return instanceToPlain(this)
-  }
 }

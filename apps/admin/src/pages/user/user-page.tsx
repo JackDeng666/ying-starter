@@ -1,5 +1,5 @@
-import { App, Button, Card, Input, Space, Tag } from 'antd'
-import Table, { ColumnsType } from 'antd/es/table'
+import { App, Button, Input, Space, Tag } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 import { Controller, type UseFormGetValues } from 'react-hook-form'
 import { useState } from 'react'
 import dayjs from 'dayjs'
@@ -9,7 +9,7 @@ import type { UserEntity } from '@ying/entity'
 
 import { downloadExcel, userApi } from '@/api'
 import { useTable } from '@/hooks'
-import { PageQuery } from '@/components/page-query'
+import { Page, PageQuery } from '@/layouts/page'
 import { useThemeToken } from '@/theme/hooks'
 
 function ExportButton({ getParams }: { getParams: UseFormGetValues<ListUserDto> }) {
@@ -48,12 +48,6 @@ export default function UserPage() {
   const { colorTextSecondary } = useThemeToken()
   const columns: ColumnsType<UserEntity> = [
     {
-      title: 'ID',
-      width: 100,
-      align: 'center',
-      dataIndex: 'id'
-    },
-    {
       title: '用户',
       width: 350,
       render: (_, record) => {
@@ -80,10 +74,11 @@ export default function UserPage() {
     {
       title: '三方账号',
       dataIndex: 'account',
+      minWidth: 350,
       render: (_, record) => {
         if (!record.oauthAccounts?.length) return '-'
         return (
-          <div className="flex gap-2">
+          <div className="flex gap-2 overflow-x-auto">
             {record.oauthAccounts.map(el => (
               <div key={el.id} className="flex gap-x-2">
                 <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray/10 border border-gray/10 shadow-sm">
@@ -109,44 +104,44 @@ export default function UserPage() {
       title: '创建时间',
       dataIndex: 'createAt',
       width: 180,
+      fixed: 'right',
       render: (_, record) => <div>{dayjs(record.createAt).format('YYYY-MM-DD HH:mm:ss')}</div>
     }
   ]
 
   return (
-    <Card variant="borderless">
-      <PageQuery control={control} reset={resetParams} extras={<ExportButton getParams={getParams} />}>
-        <Controller
-          control={control}
-          name="name"
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">昵称</Space.Addon>
-              <Input allowClear placeholder="请输入昵称" autoComplete="off" {...field} />
-            </Space.Compact>
-          )}
-        />
-        <Controller
-          control={control}
-          name="email"
-          render={({ field }) => (
-            <Space.Compact>
-              <Space.Addon className="whitespace-nowrap">邮箱</Space.Addon>
-              <Input allowClear placeholder="请输入邮箱" autoComplete="off" {...field} />
-            </Space.Compact>
-          )}
-        />
-      </PageQuery>
-
-      <Table
-        rowKey="id"
-        size="middle"
-        scroll={{ x: 1000, y: 500 }}
-        loading={listLoading}
-        pagination={pagination}
-        columns={columns}
-        dataSource={list}
-      />
-    </Card>
+    <Page
+      header={
+        <PageQuery control={control} reset={resetParams} extras={<ExportButton getParams={getParams} />}>
+          <Controller
+            control={control}
+            name="name"
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">昵称</Space.Addon>
+                <Input allowClear placeholder="请输入昵称" autoComplete="off" {...field} />
+              </Space.Compact>
+            )}
+          />
+          <Controller
+            control={control}
+            name="email"
+            render={({ field }) => (
+              <Space.Compact>
+                <Space.Addon className="whitespace-nowrap">邮箱</Space.Addon>
+                <Input allowClear placeholder="请输入邮箱" autoComplete="off" {...field} />
+              </Space.Compact>
+            )}
+          />
+        </PageQuery>
+      }
+      table={{
+        rowKey: 'id',
+        loading: listLoading,
+        dataSource: list,
+        columns
+      }}
+      pagination={pagination}
+    />
   )
 }

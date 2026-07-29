@@ -1,6 +1,7 @@
 import { Controller, Get, Query, Res } from '@nestjs/common'
 import { Response } from 'express'
 import { ListUserDto } from '@ying/dto'
+import { omitArray } from '@ying/utils'
 import { pms } from '@ying/permission'
 import { AdminScope, PermissionDecorator } from '@/common/decorator'
 import { UserService } from '@/business/modules/user'
@@ -12,8 +13,9 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('list')
-  list(@Query() dto: ListUserDto) {
-    return this.userService.list(dto)
+  async list(@Query() dto: ListUserDto) {
+    const users = await this.userService.list(dto)
+    return omitArray(users, 'password')
   }
 
   @Get('list-count')

@@ -128,9 +128,3 @@
   justify-content: center;
   align-items: center;
 }
-
-@utility no-scrollbar {
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}

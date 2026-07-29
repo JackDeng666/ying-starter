@@ -8,7 +8,9 @@ import {
   UpdateSysUserSelfPasswordDto,
   UpdateSysUserSelfUserInfoDto
 } from '@ying/dto'
+import { omitArray } from '@ying/utils'
 import { pms } from '@ying/permission'
+
 import { AdminScope, PermissionDecorator, UID } from '@/common/decorator'
 import { SysUserService } from './user.service'
 
@@ -19,8 +21,9 @@ export class SysUserController {
   constructor(private readonly sysUserService: SysUserService) {}
 
   @Get('list')
-  list(@Query() dto: ListSysUserDto) {
-    return this.sysUserService.list(dto)
+  async list(@Query() dto: ListSysUserDto) {
+    const users = await this.sysUserService.list(dto)
+    return omitArray(users, 'password')
   }
 
   @Get('list-count')

@@ -3,7 +3,7 @@ import { StyleProvider } from '@ant-design/cssinjs'
 import { ConfigProvider, theme } from 'antd'
 import locale from 'antd/es/locale/zh_CN'
 
-import { useSettings } from '@/store/settingStore'
+import { useSettings } from '@/store'
 import { ThemeMode } from '@/types/enum'
 
 import { customThemeTokenConfig, customComponentConfig, colorPresets } from './config'
