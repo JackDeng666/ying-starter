@@ -20,7 +20,7 @@ const useSignIn = () => {
 
       setTimeout(() => {
         notification.success({
-          message: '登录成功',
+          title: '登录成功',
           description: `欢迎回来: ${userInfo.name}`,
           duration: 2
         })

@@ -1,7 +1,7 @@
 import { ApexOptions } from 'apexcharts'
 import { merge } from 'lodash-es'
 
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 
 export default function useChart(options: ApexOptions) {
   const theme = useThemeToken()

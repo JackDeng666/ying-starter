@@ -32,7 +32,7 @@ export default function IconButton({ ref, children, className, style, onClick, d
       type="button"
       style={style}
       className={cn(
-        'flex cursor-pointer items-center justify-center rounded-full p-2 disabled:grayscale disabled:bg-hover hover:bg-hover',
+        'cursor-pointer fc rounded-full p-2 disabled:grayscale disabled:bg-hover hover:bg-hover',
         className
       )}
       onClick={handleClick}

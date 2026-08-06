@@ -1,24 +1,24 @@
+import { CSSProperties } from 'react'
 import { NavLink } from 'react-router-dom'
-
-import LogoImg from '@/assets/images/logo.png'
-import { useThemeToken } from '@/theme/hooks'
-
 import { cn } from '@ying/frontend/ui'
+import LogoImg from '@/assets/images/logo.png'
+import { useThemeToken } from '@/hooks'
 
 type LogoProps = {
   className?: string
   showName?: boolean
+  style?: CSSProperties
 }
-function Logo({ className, showName = true }: LogoProps) {
+function Logo({ className, showName = true, style }: LogoProps) {
   const { colorPrimary } = useThemeToken()
 
   return (
-    <NavLink to="/" className="no-underline flex items-center gap-x-1">
-      <img className="w-14 h-14" src={LogoImg} alt="logo" />
+    <NavLink to="/" className={cn('no-underline flex items-center gap-x-0.75', className)} style={style}>
+      <img className="w-12 h-12" src={LogoImg} alt="logo" />
       {showName && (
-        <button className={cn('font-semibold', className)} style={{ color: colorPrimary }}>
+        <span className="font-semibold" style={{ color: colorPrimary }}>
           Ying
-        </button>
+        </span>
       )}
     </NavLink>
   )

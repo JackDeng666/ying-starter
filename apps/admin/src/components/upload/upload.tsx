@@ -15,9 +15,7 @@ interface Props extends UploadProps {
 }
 
 const itemRender: (thumbnail: boolean) => ItemRender = thumbnail => {
-  return function temp() {
-    // eslint-disable-next-line prefer-rest-params
-    const [, file, , actions] = arguments
+  return function temp(_, file, __, actions) {
     return <UploadListItem file={file} actions={actions} thumbnail={thumbnail} />
   }
 }
@@ -26,9 +24,9 @@ export function Upload({ thumbnail = false, ...other }: Props) {
     <StyledUpload $thumbnail={thumbnail}>
       <Dragger {...other} itemRender={itemRender(thumbnail)}>
         <div className="opacity-100 hover:opacity-80">
-          <p className="m-auto max-w-[200px]">
+          <div className="m-auto max-w-50">
             <UploadIllustration />
-          </p>
+          </div>
           <Typography>
             <Title level={5} className="mt-4">
               拖放或选择文件

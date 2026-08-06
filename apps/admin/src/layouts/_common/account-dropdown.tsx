@@ -3,7 +3,7 @@ import React, { HTMLAttributes, useState } from 'react'
 
 import { IconButton } from '@/components/icon'
 import { useUserInfo, logout } from '@/store/userStore'
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 import { UserInfoModal, UserInfoModalProps } from './user-info-modal'
 
 export default function AccountDropdown() {
@@ -29,17 +29,13 @@ export default function AccountDropdown() {
     }))
   }
 
-  const { colorBgElevated, borderRadiusLG, boxShadowSecondary } = useThemeToken()
+  const { colorBgElevated, borderRadius, boxShadowSecondary } = useThemeToken()
 
   const contentStyle: React.CSSProperties = {
     width: 150,
     backgroundColor: colorBgElevated,
-    borderRadius: borderRadiusLG,
+    borderRadius: borderRadius,
     boxShadow: boxShadowSecondary
-  }
-
-  const menuStyle: React.CSSProperties = {
-    boxShadow: 'none'
   }
 
   const popupRender: DropdownProps['popupRender'] = menu => (
@@ -50,22 +46,25 @@ export default function AccountDropdown() {
         <span className="w-full text-md text-ellipsis overflow-hidden whitespace-nowrap">{email}</span>
       </div>
       <Divider style={{ margin: 0 }} />
-      {React.cloneElement<HTMLAttributes<''>>(menu as React.ReactElement, { style: menuStyle })}
+      {React.cloneElement(
+        menu as React.ReactElement<{
+          style: React.CSSProperties
+        }>,
+        { style: { boxShadow: 'none' } }
+      )}
     </div>
   )
 
   const items: MenuProps['items'] = [
     {
-      label: <button className="font-bold">修改信息</button>,
-      key: '2',
+      label: '修改信息',
+      key: '1',
       onClick: openUserInfo
     },
     {
-      type: 'divider'
-    },
-    {
-      label: <button className="font-bold text-warning">退出登录</button>,
-      key: '3',
+      label: '退出登录',
+      danger: true,
+      key: '2',
       onClick: logout
     }
   ]
@@ -73,11 +72,11 @@ export default function AccountDropdown() {
   return (
     <>
       <Dropdown className="shrink-0" menu={{ items }} trigger={['click']} popupRender={popupRender}>
-        <a onClick={e => e.preventDefault()}>
-          <IconButton className="h-10 w-10 transform-none px-0">
-            <img className="h-8 w-8 rounded-full object-cover" src={avatar?.url} alt="avatar" />
-          </IconButton>
-        </a>
+        <img
+          className="h-9 w-9 border-border/50 hover:border-border border-2 rounded-full object-cover cursor-pointer"
+          src={avatar?.url}
+          alt="avatar"
+        />
       </Dropdown>
       <UserInfoModal {...userInfoModalProps} />
     </>

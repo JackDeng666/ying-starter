@@ -3,7 +3,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import type { InputRef } from 'antd'
 import { Input, Tag, Tooltip } from 'antd'
 import { ControllerRenderProps } from 'react-hook-form'
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 
 const tagInputStyle: CSSProperties = {
   width: 64,

@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Menu, MenuProps } from 'antd'
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 import { useSettings } from '@/store'
 import { ThemeNavLayout } from '@/types/enum'
 import { NAV_HORIZONTAL_HEIGHT } from '../constant'
 import { useNavContext } from './use-nav-context'
 
 export function NavHorizontal() {
-  const { colorBgElevated } = useThemeToken()
+  const { colorBgLayout } = useThemeToken()
   const { themeLayout } = useSettings()
   const isHorizontal = themeLayout === ThemeNavLayout.Horizontal
   const [openKeys, setOpenKeys] = useState<string[]>([])
@@ -30,9 +30,8 @@ export function NavHorizontal() {
       }}
     >
       <Menu
-        className="border-none!"
         style={{
-          background: colorBgElevated
+          background: colorBgLayout
         }}
         mode="horizontal"
         items={menuList}

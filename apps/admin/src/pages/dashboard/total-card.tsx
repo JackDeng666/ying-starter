@@ -54,9 +54,9 @@ export function TotalCard({ title, increase, count, percent, categories, chartDa
           <h3 className="text-xl font-bold">{count}</h3>
           <div className="flex flex-col items-center">
             {increase ? (
-              <SvgIcon icon="ic_rise" size={24} color="rgb(34, 197, 94)" />
+              <SvgIcon icon="rise" size={24} color="rgb(34, 197, 94)" />
             ) : (
-              <SvgIcon icon="ic_decline" size={24} color="rgb(255, 86, 48)" />
+              <SvgIcon icon="decline" size={24} color="rgb(255, 86, 48)" />
             )}
             <div className="-mt-1">
               <span>{increase ? '+' : '-'}</span>

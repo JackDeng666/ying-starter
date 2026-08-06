@@ -51,8 +51,4 @@ export const FileSourceTypeOptions: FileSourceTypeOption[] = [
   }
 ]
 
-export const IframeLink = '/iframe/index.tsx'
-
-export const ExternalLink = '/iframe/external-link.tsx'
-
 export const ScrollbarThickness = getScrollbarThickness()

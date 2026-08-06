@@ -43,7 +43,7 @@ export default function PushRecordPage() {
     },
     {
       title: '浏览用户ID',
-      width: 300,
+      minWidth: 300,
       ellipsis: true,
       dataIndex: 'visitorId'
     },

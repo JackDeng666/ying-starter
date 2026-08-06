@@ -1,4 +1,4 @@
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 import { useSettings } from '@/store'
 import { NAV_HORIZONTAL_HEIGHT, HEADER_HEIGHT, MULTI_TABS_HEIGHT } from '@/layouts/dashboard/constant'
 import { ThemeNavLayout } from '@/types/enum'

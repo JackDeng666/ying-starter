@@ -12,12 +12,12 @@ import {
   LuAlignCenter,
   LuAlignRight
 } from 'react-icons/lu'
-
 import { useEditorContext, useEditorState, editorBaseStateSelector, MenuButton } from '@ying/frontend/editor'
-
+import { useThemeToken } from '@/hooks'
 import { MenuText, MenuTextColor, MenuBgColor, MenuLink, MenuImage, MenuImages } from '../menu'
 
 export const MenuBar = () => {
+  const { colorBgContainer } = useThemeToken()
   const { editor } = useEditorContext()
   const state = useEditorState({
     editor,
@@ -25,9 +25,9 @@ export const MenuBar = () => {
   })
 
   return (
-    <div className="flex flex-col items-center gap-2 rounded-md shadow-xs p-2 bg-white">
+    <div className="flex flex-col items-center gap-2 rounded-md shadow-xs p-2" style={{ background: colorBgContainer }}>
       <div>编辑</div>
-      <MenuText />
+      <MenuText className="w-full" />
       <div className="flex flex-wrap gap-2">
         <MenuButton
           onClick={() => editor.chain().focus().toggleBold().run()}

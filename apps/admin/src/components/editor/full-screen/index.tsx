@@ -1,28 +1,31 @@
-import { useImperativeHandle, useState, type ReactNode } from 'react'
+import { useImperativeHandle, useRef, useState, type ReactNode } from 'react'
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu'
 
 import { useEditor, EditorRootContext, EditorContent, defaultExtensions, editorEmitter } from '@ying/frontend/editor'
 import { cn } from '@ying/frontend/ui'
 
+import { useThemeToken } from '@/hooks'
+
 import { EditorProps } from '../type'
 import { MenuBar } from './menu-bar'
 
 type FullScreenEditorProps = EditorProps & {
-  extra?: ReactNode
+  leftToolExtra?: ReactNode
+  rightToolExtra?: ReactNode
 }
 
 const previewClassMap = {
   1: {
     w: 'w-1/3',
-    mx: 'mx-40'
+    mw: 'max-w-screen-sm'
   },
   2: {
     w: 'w-2/3',
-    mx: 'mx-20'
+    mw: 'max-w-screen-lg'
   },
   3: {
     w: 'w-full',
-    mx: 'mx-0'
+    mw: 'max-w-screen-2xl'
   }
 }
 
@@ -36,17 +39,19 @@ export const FullScreenEditor = ({
   placeholder = '请输入内容',
   associatedFiles,
   emitter,
-  extra
+  leftToolExtra,
+  rightToolExtra
 }: FullScreenEditorProps) => {
-  const [dataEmpty, setDataEmpty] = useState(false)
+  const { colorBgContainer } = useThemeToken()
   const editor = useEditor({
     extensions: defaultExtensions,
     content: defaultValue,
     onUpdate: ({ editor }) => {
       setDataEmpty(editor.isEmpty)
-      onChange(editor.getHTML())
+      onChange?.(editor.getHTML())
     }
   })
+  const [dataEmpty, setDataEmpty] = useState(editor.isEmpty)
 
   useImperativeHandle(ref, () => ({
     setContent: val => {
@@ -58,25 +63,46 @@ export const FullScreenEditor = ({
   }))
 
   const [previewSize, setPreviewSize] = useState(3)
+  const directionRef = useRef(true)
+  const togglePreviewSize = () => {
+    setPreviewSize(prevSize => {
+      let newSize = 1
+      if (directionRef.current) {
+        newSize = prevSize - 1
+      } else {
+        newSize = prevSize + 1
+      }
+      if (newSize === 3) directionRef.current = true
+      if (newSize === 1) directionRef.current = false
+      return newSize
+    })
+  }
   return (
     <EditorRootContext.Provider value={{ editor, emitter: emitter ?? editorEmitter, associatedFiles }}>
-      <div className="relative h-full ml-39 mr-3 xl:mx-50 2xl:mx-60">
+      <div className={cn('h-full flex justify-center gap-2', className)}>
+        <div className="w-33 shrink-0 flex flex-col gap-2">
+          <MenuBar />
+          {leftToolExtra}
+        </div>
         <EditorContent
           editor={editor}
           data-empty={dataEmpty}
           data-placeholder={placeholder}
           className={cn(
-            'bg-white shadow-xs rounded-md h-180 p-3 overflow-y-auto text-base data-[empty=true]:first:before:content-[attr(data-placeholder)] data-[empty=true]:first:before:ml-1 data-[empty=true]:first:before:pointer-events-none data-[empty=true]:first:before:float-left data-[empty=true]:first:before:h-0',
-            previewClassMap[previewSize as PreviewKeys].mx,
-            className
+            'w-full shadow-xs rounded-md p-3 overflow-y-auto text-base',
+            'data-[empty=true]:before:content-[attr(data-placeholder)] data-[empty=true]:before:ml-1 data-[empty=true]:before:pointer-events-none data-[empty=true]:before:float-left data-[empty=true]:before:h-0',
+            previewClassMap[previewSize as PreviewKeys].mw
           )}
           style={{
-            transition: 'margin 300ms 0ms'
+            transition: 'max-width 300ms 0ms',
+            background: colorBgContainer
           }}
         />
-        <div className="absolute top-0 -left-36 w-33 flex flex-col gap-2 ">
-          <MenuBar />
-          <div className="rounded-md shadow-xs p-2 bg-white flex flex-col items-center gap-1">
+        <div className="w-33 shrink-0 flex flex-col gap-2">
+          <div
+            className="rounded-md shadow-xs p-2 flex flex-col items-center gap-1"
+            style={{ background: colorBgContainer }}
+          >
             <div>预览窗口大小</div>
             <div
               className={cn(
@@ -86,22 +112,14 @@ export const FullScreenEditor = ({
               style={{
                 transition: 'width 300ms 0ms'
               }}
-              onClick={() => {
-                setPreviewSize(s => {
-                  if (s - 1 < 1) {
-                    return 3
-                  } else {
-                    return s - 1
-                  }
-                })
-              }}
+              onClick={togglePreviewSize}
             >
               <LuArrowLeft />
               <div className="flex grow border-b border-dashed" />
               <LuArrowRight />
             </div>
           </div>
-          {extra}
+          {rightToolExtra}
         </div>
       </div>
     </EditorRootContext.Provider>

@@ -70,7 +70,7 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
       title={title}
       open={open}
       onClose={onClose}
-      width={660}
+      size={660}
       extra={
         <Button type="primary" disabled={!isDirty} loading={isSubmitting} onClick={form.submit}>
           提交

@@ -7,12 +7,12 @@ import { usePermissionRoutes, useRouter } from '@/router/hooks'
 import { menuFilter } from '@/router/utils'
 
 import { AppRouteObject } from '@/types/router'
-import { IframeLink } from '@/constant'
+import { PropsWithClassName } from '@/types'
 
 /**
  * 动态面包屑解决方案：https://github.com/MinjieChang/myblog/issues/29
  */
-export default function BreadCrumb() {
+export default function BreadCrumb({ className }: PropsWithClassName) {
   const matches = useMatches()
   const [breadCrumbs, setBreadCrumbs] = useState<ItemType[]>([])
   const { push } = useRouter()
@@ -40,7 +40,7 @@ export default function BreadCrumb() {
             label: (
               <span
                 onClick={() => {
-                  if (item.meta?.frameSrc && item.meta.component !== IframeLink) {
+                  if (item.meta?.frameSrc) {
                     window.open(item.meta.frameSrc, '_black')
                     return
                   }
@@ -58,5 +58,5 @@ export default function BreadCrumb() {
     setBreadCrumbs(breadCrumbs)
   }, [matches, flattenedRoutes, permissionRoutes, push])
 
-  return <Breadcrumb items={breadCrumbs} className="text-sm!" />
+  return <Breadcrumb className={className} items={breadCrumbs} />
 }

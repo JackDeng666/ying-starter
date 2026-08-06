@@ -17,10 +17,6 @@ export type RouteMeta = {
    */
   icon?: ReactNode
   /**
-   * menu suffix icon
-   */
-  suffix?: ReactNode
-  /**
    * hide in menu
    */
   hideMenu?: boolean
@@ -45,15 +41,11 @@ export type RouteMeta = {
    */
   frameSrc?: string
   /**
-   * component string
-   */
-  component?: string
-  /**
    * do not cache in multi tab
    */
   noCache?: boolean
   /**
-   * the permission class
+   * the permission object
    */
   permission?: TPermission
 }

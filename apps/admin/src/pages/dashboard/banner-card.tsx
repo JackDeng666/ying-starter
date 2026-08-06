@@ -3,7 +3,7 @@ import Color from 'color'
 
 import Character3 from '@/assets/images/characters/character_3.png'
 
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 
 import { useUserInfo } from '@/store/userStore'
 

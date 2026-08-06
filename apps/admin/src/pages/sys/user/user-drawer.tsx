@@ -68,7 +68,7 @@ export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerPr
       title={title}
       open={open}
       onClose={onClose}
-      width={660}
+      size={660}
       extra={
         <Button type="primary" onClick={form.submit} loading={isSubmitting}>
           提交

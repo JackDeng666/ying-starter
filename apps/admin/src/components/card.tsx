@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode } from 'react'
 
 import { useSettings } from '@/store'
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 
 import { ThemeMode } from '@/types/enum'
 

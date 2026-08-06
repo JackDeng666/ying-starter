@@ -4,29 +4,20 @@
 
 :root {
   --primary: #00a76f;
-  --white: #ffffff;
-  --black: #000000;
-  --green: #00a76f;
-  --blue: #1fb6ff;
-  --purple: #7e5bef;
-  --pink: #ff49db;
-  --orange: #ff7849;
-  --yellow: #ffc82c;
-  --gray: #637381;
-  --border: #f1f1f1;
-  --hover: #63738114;
   --success: #22c55e;
   --warning: #ff7849;
   --error: #ff5630;
-  --code: #d63384;
-  --scrollbar-thumb-bg: #c1c1c1;
-  --scrollbar-thumb-hover-bg: #7d7d7d;
+  --info: #1677ff;
+
+  --border: #d9d9d9;
+  --hover: #63738115;
+  --scrollbar: rgba(0, 0, 0, 0.25);
 }
 
 .dark {
   --border: #424242;
-  --scrollbar-thumb-bg: #6b6b6b;
-  --scrollbar-thumb-hover-bg: #939393;
+  --hover: #f4f4f420;
+  --scrollbar: rgba(255, 255, 255, 0.25);
 }
 
 @theme inline {
@@ -37,23 +28,22 @@
   --breakpoint-xl: 1200px;
   --breakpoint-2xl: 1400px;
   --breakpoint-3xl: 1600px;
-  --color-white: var(--white);
-  --color-black: var(--black);
-  --color-green: var(--green);
-  --color-blue: var(--blue);
-  --color-purple: var(--purple);
-  --color-pink: var(--pink);
-  --color-orange: var(--orange);
-  --color-yellow: var(--yellow);
-  --color-gray: var(--gray);
-  --color-hover: var(--hover);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
-  --color-code: var(--code);
+  --color-info: var(--info);
+  --color-border: var(--border);
+  --color-hover: var(--hover);
   --animate-spin-slow: spin 8s linear infinite;
 }
 
-* {
-  scrollbar-color: rgba(0, 0, 0, 0.25) rgba(5, 5, 5, 0.06);
+@layer base {
+  * {
+    scrollbar-color: var(--scrollbar) transparent;
+    outline: none;
+  }
+}
+
+.simplebar-scrollbar::before {
+  background: var(--scrollbar);
 }

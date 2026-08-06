@@ -12,9 +12,9 @@ import { useDialogOpen, useRemount } from '@ying/frontend/hooks'
 import { editorEmitter } from '@ying/frontend/editor'
 
 import { EditorHandle, FullScreenEditor } from '@/components/editor'
-import { articleApi } from '@/api'
-import { useThemeToken } from '@/theme/hooks'
 import { IntlSwitch } from '@/components/intl'
+import { articleApi } from '@/api'
+import { useThemeToken } from '@/hooks'
 
 const { fallbackLng } = clientLanguagesConfig
 
@@ -25,7 +25,7 @@ type ArticleContentDrawerProps = ReturnType<typeof useDialogOpen<number>> & {
 export function ArticleContentDrawer({ open, formValue, onSuccess, onClose }: ArticleContentDrawerProps) {
   const title = `编辑文章内容`
   const { message } = App.useApp()
-  const themeToken = useThemeToken()
+  const { colorBgLayout, colorBgContainer } = useThemeToken()
   const {
     handleSubmit,
     formState: { isDirty, isSubmitting },
@@ -96,10 +96,11 @@ export function ArticleContentDrawer({ open, formValue, onSuccess, onClose }: Ar
   const editorRef = useRef<EditorHandle>(null)
   const [currentLng, setCurrentLng] = useState<LngKeys>(fallbackLng)
   const onChangeLng = (val: LngKeys) => {
+    if (!editorRef.current) return
     const { content } = getValues()
     const targetContent = content?.[val]
-    if (!targetContent || !editorRef.current) return
-    editorRef.current.setContent(targetContent)
+    if (targetContent) editorRef.current.setContent(targetContent)
+    else editorRef.current.setContent('')
     setCurrentLng(val)
   }
 
@@ -110,13 +111,12 @@ export function ArticleContentDrawer({ open, formValue, onSuccess, onClose }: Ar
       closeIcon={null}
       onClose={onClose}
       loading={loading}
-      height="100%"
+      size="100%"
       placement="top"
       styles={{
         body: {
-          paddingBlock: 16,
-          paddingInline: 0,
-          backgroundColor: themeToken.colorBgContainerDisabled
+          padding: 12,
+          background: colorBgLayout
         }
       }}
       extra={
@@ -135,15 +135,15 @@ export function ArticleContentDrawer({ open, formValue, onSuccess, onClose }: Ar
         onChange={val => setValue(`content.${currentLng}`, val, { shouldDirty: true })}
         associatedFiles={associatedFiles}
         emitter={editorEmitter}
-        extra={
-          <div className="rounded-md shadow-xs p-2 bg-white flex flex-col items-center gap-1">
+        rightToolExtra={
+          <div
+            className="rounded-md shadow-xs p-2 flex flex-col items-center gap-1"
+            style={{
+              background: colorBgContainer
+            }}
+          >
             <div>语言</div>
-            <IntlSwitch
-              className="flex! flex-col! mb-0!"
-              optionType="default"
-              value={currentLng}
-              onChange={onChangeLng}
-            />
+            <IntlSwitch className="gap-y-0!" vertical optionType="default" value={currentLng} onChange={onChangeLng} />
           </div>
         }
       />

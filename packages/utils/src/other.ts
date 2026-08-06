@@ -24,12 +24,15 @@ export function flattenTrees<T extends { children?: T[] }>(trees: T[] = []): T[]
   }, [])
 }
 
-export function debounce<T>(callback: (params: T) => void, delay = 200): (params: T) => void {
+export function debounce<T extends (...args: any[]) => void>(
+  callback: T,
+  delay = 200
+): (...args: Parameters<T>) => void {
   let timer = 0
-  return function (params: T) {
+  return function (...params: Parameters<T>) {
     if (timer) clearTimeout(timer)
     timer = window.setTimeout(() => {
-      callback(params)
+      callback(...params)
     }, delay)
   }
 }

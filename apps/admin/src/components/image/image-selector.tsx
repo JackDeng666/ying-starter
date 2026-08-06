@@ -54,7 +54,7 @@ export const ImageSelector = ({ maxLength = 5, defaultValue, onChange }: ImageSe
           ))}
           {images.length < maxLength && (
             <div
-              className="w-27.5 h-27.5 cursor-pointer overflow-hidden rounded-md shadow-xs border border-gray/20 text-2xl fc bg-hover text-gray"
+              className="w-27.5 h-27.5 cursor-pointer overflow-hidden rounded-md shadow-xs border border-border text-2xl fc bg-hover text-gray"
               onClick={() => setOpen(true)}
             >
               <PlusOutlined />
@@ -69,11 +69,11 @@ export const ImageSelector = ({ maxLength = 5, defaultValue, onChange }: ImageSe
           />
           {previewUrl && (
             <Image
-              src={previewUrl}
               style={{ display: 'none' }}
+              src={previewUrl}
               preview={{
-                visible: !!previewUrl,
-                onVisibleChange: value => {
+                open: !!previewUrl,
+                onOpenChange: value => {
                   if (!value) setPreviewUrl('')
                 }
               }}
@@ -91,17 +91,17 @@ type SortableImageItemProps = {
   onDelete: (item: FileEntity) => void
 }
 const SortableImageItem = ({ item, onPreview, onDelete }: SortableImageItemProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.id })
-  const style = { transform: CSS.Transform.toString(transform), transition }
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id })
+  const style = { transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 99 : 'auto' }
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="inline-block w-27.5 h-27.5 overflow-hidden rounded-md shadow-xs border border-gray/20"
+      className="inline-block w-27.5 h-27.5 overflow-hidden rounded-md shadow-xs border border-border"
     >
       <div className="w-full h-full fc bg-hover relative">
-        <Image src={item.url} preview={false} />
+        <Image src={item.url} />
         <div className="w-full h-full absolute left-0 top-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity text-white/90">
           <EyeFilled
             className="text-base absolute right-2 top-2 rounded-md p-1 bg-white/40 hover:bg-white/60"

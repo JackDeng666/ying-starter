@@ -15,7 +15,7 @@ export const MenuButton = ({ className, children, active, disabled, onClick, ...
       className={cn(
         'w-8 h-8 rounded-md p-2 bg-background border border-border cursor-pointer hover:bg-border fc text-base',
         active && 'bg-border',
-        disabled && 'text-black/20 dark:text-white/20 hover:bg-transparent cursor-not-allowed',
+        disabled && 'opacity-40 hover:bg-transparent cursor-not-allowed',
         className
       )}
       disabled={disabled}

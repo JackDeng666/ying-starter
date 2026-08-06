@@ -3,8 +3,8 @@ import { MenuProps } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
 import { useLocation, useMatches } from 'react-router-dom'
 
-import { useRouteToMenuFn, usePermissionRoutes, useRouter } from '@/router/hooks'
-import { IframeLink } from '@/constant'
+import { usePermissionRoutes, useRouter } from '@/router/hooks'
+import { routeToMenu } from '@/router/route-to-menu'
 
 import { NavContext } from './nav-context'
 
@@ -12,7 +12,6 @@ export const NavContextProvider = ({ children }: PropsWithChildren) => {
   const { push } = useRouter()
   const matches = useMatches()
   const { pathname } = useLocation()
-  const routeToMenuFn = useRouteToMenuFn()
   const { navMenuRoutes, flattenedRoutes } = usePermissionRoutes()
 
   const [openKeys, setOpenKeys] = useState<string[]>([])
@@ -34,9 +33,9 @@ export const NavContextProvider = ({ children }: PropsWithChildren) => {
   }, [pathname])
 
   useEffect(() => {
-    const menus = routeToMenuFn(navMenuRoutes)
+    const menus = routeToMenu(navMenuRoutes)
     setMenuList(menus)
-  }, [navMenuRoutes, routeToMenuFn])
+  }, [navMenuRoutes])
 
   const onOpenChange: MenuProps['onOpenChange'] = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1)
@@ -48,7 +47,7 @@ export const NavContextProvider = ({ children }: PropsWithChildren) => {
   }
   const onClick: MenuProps['onClick'] = ({ key }) => {
     const currentRoute = flattenedRoutes.find(el => el.key === key)
-    if (currentRoute?.frameSrc && currentRoute.component !== IframeLink) {
+    if (currentRoute?.frameSrc) {
       window.open(currentRoute.frameSrc, '_black')
       return
     }

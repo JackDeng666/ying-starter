@@ -10,7 +10,7 @@ import type { UserEntity } from '@ying/entity'
 import { downloadExcel, userApi } from '@/api'
 import { useTable } from '@/hooks'
 import { Page, PageQuery } from '@/layouts/page'
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 
 function ExportButton({ getParams }: { getParams: UseFormGetValues<ListUserDto> }) {
   const { message } = App.useApp()
@@ -53,7 +53,7 @@ export default function UserPage() {
       render: (_, record) => {
         return (
           <div className="flex gap-x-2">
-            <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray/10 border border-gray/10 shadow-sm">
+            <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray/10 border border-border/60 shadow-xs">
               {record.avatar?.url && <img alt="avatar" src={record.avatar.url} className="object-cover" />}
             </div>
             <div className="flex flex-col">
@@ -81,7 +81,7 @@ export default function UserPage() {
           <div className="flex gap-2 overflow-x-auto">
             {record.oauthAccounts.map(el => (
               <div key={el.id} className="flex gap-x-2">
-                <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray/10 border border-gray/10 shadow-sm">
+                <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray/20 border border-border/60">
                   <img alt="avatar" src={el.avatar} className="object-cover" />
                 </div>
                 <div className="flex flex-col justify-between">
@@ -103,7 +103,7 @@ export default function UserPage() {
     {
       title: '创建时间',
       dataIndex: 'createAt',
-      width: 180,
+      width: 160,
       fixed: 'right',
       render: (_, record) => <div>{dayjs(record.createAt).format('YYYY-MM-DD HH:mm:ss')}</div>
     }

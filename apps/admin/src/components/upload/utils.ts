@@ -1,7 +1,6 @@
 import { message } from 'antd'
 import { RcFile } from 'antd/es/upload'
 
-// Define more types here
 const FORMAT_PDF = ['pdf']
 const FORMAT_TEXT = ['txt']
 const FORMAT_PHOTOSHOP = ['psd']
@@ -19,7 +18,7 @@ const FORMAT_VIDEO = ['m4v', 'avi', 'mpg', 'mp4', 'webm']
  * @param fileName
  */
 export function getFileFormat(fileName: string | undefined) {
-  let format
+  let format: string
   switch (true) {
     case FORMAT_PDF.includes(fileTypeByName(fileName)):
       format = 'pdf'
@@ -61,51 +60,51 @@ export function getFileFormat(fileName: string | undefined) {
 }
 
 /**
- * 获取文件缩略图
+ * 获取文件图标
  * @param fileName
  */
-export function getFileThumb(fileName: string | undefined) {
-  let thumb
+export function getFileIcon(fileName: string | undefined) {
+  let thumb: string
   const format = getFileFormat(fileName)
   switch (format) {
     case 'txt':
-      thumb = 'ic_file_txt'
+      thumb = 'file-txt'
       break
     case 'zip':
-      thumb = 'ic_file_zip'
+      thumb = 'file-zip'
       break
     case 'audio':
-      thumb = 'ic_file_audio'
+      thumb = 'file-audio'
       break
     case 'video':
-      thumb = 'ic_file_video'
+      thumb = 'file-video'
       break
     case 'word':
-      thumb = 'ic_file_word'
+      thumb = 'file-word'
       break
     case 'excel':
-      thumb = 'ic_file_excel'
+      thumb = 'file-excel'
       break
     case 'ppt':
-      thumb = 'ic_file_ppt'
+      thumb = 'file-ppt'
       break
     case 'pdf':
-      thumb = 'ic_file_pdf'
+      thumb = 'file-pdf'
       break
     case 'psd':
-      thumb = 'ic_file_psd'
+      thumb = 'file-psd'
       break
     case 'ai':
-      thumb = 'ic_file_ai'
+      thumb = 'file-ai'
       break
     case 'img':
-      thumb = 'ic_file_img'
+      thumb = 'file-img'
       break
     case 'folder':
-      thumb = 'ic_folder'
+      thumb = 'file-folder'
       break
     default:
-      thumb = 'ic_file'
+      thumb = 'file-default'
   }
   return thumb
 }
@@ -126,14 +125,13 @@ export function beforeAvatarUpload(file: RcFile) {
   return isJpgOrPng && isLt2M
 }
 
-export function getBase64(img: RcFile, callback: (url: string) => void) {
+export function getBase64(file: RcFile, callback: (url: string) => void) {
   const reader = new FileReader()
   reader.addEventListener('load', () => callback(reader.result as string))
-  reader.readAsDataURL(img)
+  reader.readAsDataURL(file)
 }
 
-export function getBlobUrl(imgFile: RcFile) {
-  const fileBlob = new Blob([imgFile])
-  const thumbnailUrl = URL.createObjectURL(fileBlob)
-  return thumbnailUrl
+export function getBlobUrl(file: RcFile) {
+  const fileBlob = new Blob([file])
+  return URL.createObjectURL(fileBlob)
 }

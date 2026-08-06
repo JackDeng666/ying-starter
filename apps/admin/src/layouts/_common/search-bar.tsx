@@ -6,10 +6,10 @@ import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { useBoolean, useEvent, useKeyPressEvent } from 'react-use'
 import styled from 'styled-components'
 
-import { IconButton, SvgIcon } from '@/components/icon'
-import Scrollbar from '@/components/scrollbar'
+import { IconButton, Iconify } from '@/components/icon'
+import { Scrollbar } from '@/components/scrollbar'
 import { usePermissionRoutes, useRouter } from '@/router/hooks'
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 
 export default function SearchBar() {
   const { replace } = useRouter()
@@ -98,7 +98,6 @@ export default function SearchBar() {
   }
   const handleAfterOpenChange = (open: boolean) => {
     if (open) {
-      // auto focus
       inputRef.current?.focus()
     }
   }
@@ -130,11 +129,11 @@ export default function SearchBar() {
 
   return (
     <>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center gap-x-1">
         <IconButton className="h-10 w-10" onClick={handleOpen}>
-          <SvgIcon icon="ic-search" size="20" />
+          <Iconify icon="akar-icons:search" size={20} />
         </IconButton>
-        <IconButton className="0 h-6 rounded-md bg-hover text-xs font-bold">CTRL+K</IconButton>
+        <div className="rounded-md bg-hover text-xs font-bold p-1 fc">CTRL+K</div>
       </div>
       <Modal
         centered
@@ -158,8 +157,6 @@ export default function SearchBar() {
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search..."
             variant="borderless"
-            autoFocus
-            prefix={<SvgIcon icon="ic-search" size="20" />}
             suffix={
               <IconButton className="h-6 rounded-md bg-hover text-xs" onClick={handleCancel}>
                 Esc

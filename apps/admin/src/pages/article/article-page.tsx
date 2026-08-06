@@ -51,7 +51,7 @@ export default function ArticlePage() {
     {
       title: '文章名称',
       dataIndex: 'name',
-      width: 120,
+      minWidth: 120,
       fixed: 'left',
       ellipsis: true
     },
@@ -60,7 +60,7 @@ export default function ArticlePage() {
       dataIndex: 'cover',
       align: 'center',
       width: 120,
-      render: (_, record) => <Image src={record.cover.url} className="rounded-sm w-15! h-15! object-cover" />
+      render: (_, record) => <Image src={record.cover.url} className="rounded-sm w-13! h-13! object-cover" />
     },
     {
       title: '文章标题',
@@ -69,17 +69,17 @@ export default function ArticlePage() {
       render: (_, record) => <IntlShow value={record.title} />
     },
     {
-      title: '排序',
-      width: 80,
-      align: 'center',
-      dataIndex: 'sort'
-    },
-    {
       title: '关键字',
       ellipsis: true,
       dataIndex: 'keywords',
       minWidth: 200,
       render: (_, record) => <div>{record.keywords?.join('，')}</div>
+    },
+    {
+      title: '排序',
+      width: 80,
+      align: 'center',
+      dataIndex: 'sort'
     },
     {
       title: '状态',
@@ -98,7 +98,7 @@ export default function ArticlePage() {
     {
       title: '创建时间',
       dataIndex: 'createAt',
-      width: 200,
+      width: 160,
       render: (_, record) => <div>{dayjs(record.createAt).format('YYYY-MM-DD HH:mm:ss')}</div>
     },
     {

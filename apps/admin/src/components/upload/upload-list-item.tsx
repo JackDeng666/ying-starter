@@ -2,12 +2,10 @@ import { Card, Tooltip, Typography, Image } from 'antd'
 import { ItemRender } from 'antd/es/upload/interface'
 import { m } from 'framer-motion'
 import { useEffect, useState } from 'react'
-
-import { varFade } from '@/components/animate/variants'
-import { Iconify, SvgIcon } from '@/components/icon'
 import { formatNumber } from '@ying/utils'
-
-import { getBlobUrl, getFileFormat, getFileThumb } from './utils'
+import { varFade } from '@/components/animate/variants'
+import { IconButton, Iconify, SvgIcon } from '@/components/icon'
+import { getBlobUrl, getFileFormat, getFileIcon } from './utils'
 
 type Props = {
   file: Parameters<ItemRender>['1']
@@ -17,7 +15,7 @@ type Props = {
 
 export default function UploadListItem({ file, actions, thumbnail = false }: Props) {
   const { name, size } = file
-  const thumb = getFileThumb(name)
+  const thumb = getFileIcon(name)
   const format = getFileFormat(name)
   const [imgThumbUrl, setImgThumbUrl] = useState('')
 
@@ -29,12 +27,9 @@ export default function UploadListItem({ file, actions, thumbnail = false }: Pro
   }, [file, format])
 
   const closeButton = (
-    <button
-      className="ml-auto h-6 w-6 cursor-pointer rounded-full text-center hover:bg-gray-400 hover:bg-opacity-20"
-      onClick={actions.remove}
-    >
+    <IconButton className="ml-auto" onClick={actions.remove}>
       <Iconify icon="mingcute:close-line" size={14} className="text-gray-600" />
-    </button>
+    </IconButton>
   )
 
   const thumbList = (
@@ -65,8 +60,8 @@ export default function UploadListItem({ file, actions, thumbnail = false }: Pro
         <SvgIcon icon={thumb} size={32} />
       )}
       <div className="ml-4 flex flex-col">
-        <Typography.Text className="!text-sm !font-medium">{name}</Typography.Text>
-        <Typography.Text type="secondary" className="!text-xs">
+        <Typography.Text className="text-sm! font-medium!">{name}</Typography.Text>
+        <Typography.Text type="secondary" className="text-xs!">
           {formatNumber.fBytes(size)}
         </Typography.Text>
       </div>

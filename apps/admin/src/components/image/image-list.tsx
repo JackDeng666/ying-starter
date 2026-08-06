@@ -10,7 +10,7 @@ import { cn } from '@ying/frontend/ui'
 
 import { commonApi } from '@/api'
 import { useTable } from '@/hooks/use-table'
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 import { PageQuery } from '@/layouts/page'
 import { FileSourceTypeOptions } from '@/constant'
 import { UploadImage } from './upload-image'
@@ -111,7 +111,7 @@ export const ImageList = ({ selectedFiles, setSelectedFiles, maxLength = 1 }: Im
         />
       </PageQuery>
       <Spin spinning={listLoading}>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 mt-3">
           <UploadImage
             handleUpload={(file, fileInfo) => commonApi.uploadImage(file, fileInfo)}
             onSuccess={reload}
@@ -123,7 +123,7 @@ export const ImageList = ({ selectedFiles, setSelectedFiles, maxLength = 1 }: Im
               <div
                 key={el.id}
                 className={cn(
-                  'relative w-27.5 h-27.5 rounded-md transition-colors duration-300 outline outline-transparent border border-gray/20 cursor-pointer overflow-hidden fc bg-hover',
+                  'relative w-27.5 h-27.5 rounded-md transition-colors duration-300 outline-1 outline-transparent border border-border cursor-pointer overflow-hidden fc bg-hover',
                   isSelected && 'outline-primary border-primary'
                 )}
               >
@@ -176,8 +176,8 @@ export const ImageList = ({ selectedFiles, setSelectedFiles, maxLength = 1 }: Im
             style={{ display: 'none' }}
             src={previewUrl}
             preview={{
-              visible: !!previewUrl,
-              onVisibleChange: value => {
+              open: !!previewUrl,
+              onOpenChange: value => {
                 if (!value) setPreviewUrl('')
               }
             }}

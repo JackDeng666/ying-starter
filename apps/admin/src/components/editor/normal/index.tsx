@@ -3,7 +3,7 @@ import { useImperativeHandle, useState } from 'react'
 import { useEditor, EditorRootContext, EditorContent, defaultExtensions, editorEmitter } from '@ying/frontend/editor'
 import { cn } from '@ying/frontend/ui'
 
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 
 import { EditorProps } from '../type'
 import { MenuBar } from './menu-bar'
@@ -17,15 +17,16 @@ export const NormalEditor = ({
   associatedFiles,
   emitter
 }: EditorProps) => {
-  const [dataEmpty, setDataEmpty] = useState(false)
+  const { colorBgLayout } = useThemeToken()
   const editor = useEditor({
     extensions: defaultExtensions,
     content: defaultValue,
     onUpdate: ({ editor }) => {
       setDataEmpty(editor.isEmpty)
-      onChange(editor.getHTML())
+      onChange?.(editor.getHTML())
     }
   })
+  const [dataEmpty, setDataEmpty] = useState(editor.isEmpty)
 
   useImperativeHandle(ref, () => ({
     setContent: val => {
@@ -36,22 +37,20 @@ export const NormalEditor = ({
     }
   }))
 
-  const themeToken = useThemeToken()
-
   return (
     <EditorRootContext.Provider value={{ editor, emitter: emitter ?? editorEmitter, associatedFiles }}>
-      <div className="border border-border rounded-md overflow-hidden relative ">
+      <div className={cn('border border-border rounded-md overflow-hidden relative', className)}>
         <MenuBar />
         <EditorContent
           editor={editor}
           data-empty={dataEmpty}
           data-placeholder={placeholder}
           className={cn(
-            'h-140 p-3 overflow-y-auto data-[empty=true]:first:before:content-[attr(data-placeholder)] data-[empty=true]:first:before:ml-1 data-[empty=true]:first:before:pointer-events-none data-[empty=true]:first:before:float-left data-[empty=true]:first:before:h-0',
-            className
+            'h-140 p-3 overflow-y-auto',
+            'data-[empty=true]:before:content-[attr(data-placeholder)] data-[empty=true]:before:ml-1 data-[empty=true]:before:pointer-events-none data-[empty=true]:before:float-left data-[empty=true]:before:h-0'
           )}
           style={{
-            backgroundColor: themeToken.colorBgContainerDisabled
+            background: colorBgLayout
           }}
         />
       </div>

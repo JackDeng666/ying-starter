@@ -11,7 +11,7 @@ export type EditorProps = {
   className?: string
   placeholder?: string
   defaultValue?: string
-  onChange: (text: string) => void
+  onChange?: (text: string) => void
   associatedFiles?: FileEntity[]
   emitter?: TEditorEmitter
 }

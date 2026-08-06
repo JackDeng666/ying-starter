@@ -1,24 +1,19 @@
 import { CloseOutlined, LeftOutlined, QuestionCircleOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Card, Drawer, Switch, Tooltip } from 'antd'
 import Color from 'color'
-import { m } from 'framer-motion'
 import { CSSProperties, useState } from 'react'
 import { MdCircle } from 'react-icons/md'
 import screenfull from 'screenfull'
 
 import CyanBlur from '@/assets/images/background/cyan-blur.png'
 import RedBlur from '@/assets/images/background/red-blur.png'
-import { varHover } from '@/components/animate/variants/action'
-import { IconButton, SvgIcon } from '@/components/icon'
+import { IconButton, Iconify } from '@/components/icon'
 import { useSettings, setSettings } from '@/store'
-import { colorPresets } from '@/theme/antd/config'
-import { useThemeToken } from '@/theme/hooks'
+import { colorPresets } from '@/theme/config'
+import { useThemeToken } from '@/hooks'
 
 import { ThemeColorPresets, ThemeNavLayout, ThemeMode } from '@/types/enum'
 
-/**
- * App Setting
- */
 export default function SettingButton() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { colorPrimary, colorBgBase, colorTextSecondary, colorTextTertiary, colorBgContainer } = useThemeToken()
@@ -90,38 +85,21 @@ export default function SettingButton() {
 
   return (
     <>
-      <div className="flex items-center justify-center">
-        <m.div
-          animate={{
-            rotate: [0, drawerOpen ? 0 : 360]
-          }}
-          transition={{
-            duration: 12,
-            ease: 'linear',
-            repeat: Infinity
-          }}
-          whileTap="tap"
-          whileHover="hover"
-          variants={varHover(1.05)}
-          onClick={() => setDrawerOpen(true)}
-        >
-          <IconButton className="h-10 w-10">
-            <SvgIcon icon="ic-setting" size="24" />
-          </IconButton>
-        </m.div>
-      </div>
+      <IconButton className="h-10 w-10 animate-spin-slow" onClick={() => setDrawerOpen(true)}>
+        <Iconify icon="solar:settings-bold-duotone" size="24" />
+      </IconButton>
       <Drawer
         placement="right"
         title="Settings"
         onClose={() => setDrawerOpen(false)}
         open={drawerOpen}
         closable={false}
-        width={280}
+        size={280}
         style={style}
         styles={{ body: { padding: 0 }, mask: { background: 'transparent' } }}
         extra={
           <IconButton onClick={() => setDrawerOpen(false)} className="h-9 w-9 hover:scale-105">
-            <CloseOutlined className="text-gray-400" />
+            <CloseOutlined />
           </IconButton>
         }
         footer={
@@ -129,12 +107,12 @@ export default function SettingButton() {
             <div className="flex items-center justify-center">
               {isFullscreen ? (
                 <>
-                  <SvgIcon icon="ic-settings-exit-fullscreen" color={colorPrimary} className="m-0!" />
+                  <Iconify icon="solar:quit-full-screen-bold-duotone" />
                   <span className="ml-2">Exit FullScreen</span>
                 </>
               ) : (
                 <>
-                  <SvgIcon icon="ic-settings-fullscreen" className="m-0!" />
+                  <Iconify icon="solar:full-screen-bold-duotone" />
                   <span className="ml-2 text-gray">FullScreen</span>
                 </>
               )}
@@ -153,8 +131,8 @@ export default function SettingButton() {
                 onClick={() => setThemeMode(ThemeMode.Light)}
                 className="flex h-20 w-full cursor-pointer items-center justify-center"
               >
-                <SvgIcon
-                  icon="ic-settings-mode-sun"
+                <Iconify
+                  icon="solar:sun-2-bold-duotone"
                   size="24"
                   color={themeMode === ThemeMode.Light ? colorPrimary : ''}
                 />
@@ -163,8 +141,8 @@ export default function SettingButton() {
                 onClick={() => setThemeMode(ThemeMode.Dark)}
                 className="flex h-20 w-full cursor-pointer items-center justify-center"
               >
-                <SvgIcon
-                  icon="ic-settings-mode-moon"
+                <Iconify
+                  icon="solar:cloudy-moon-bold-duotone"
                   size="24"
                   color={themeMode === ThemeMode.Dark ? colorPrimary : ''}
                 />

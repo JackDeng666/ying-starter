@@ -56,7 +56,7 @@ export const UploadImage = ({
     <>
       <div
         className={cn(
-          'fc inline-flex w-27.5 h-27.5 overflow-hidden rounded-md shadow-xs border border-gray/20 text-2xl bg-hover text-gray relative group',
+          'fc inline-flex w-27.5 h-27.5 overflow-hidden rounded-md shadow-xs border border-border text-2xl bg-hover relative group',
           className
         )}
       >

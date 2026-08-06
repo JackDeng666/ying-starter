@@ -40,7 +40,7 @@ export default function VisitorPage() {
     },
     {
       title: '关联用户',
-      width: 200,
+      width: 240,
       ellipsis: true,
       dataIndex: 'users',
       render(_, record) {
@@ -65,7 +65,7 @@ export default function VisitorPage() {
     },
     {
       title: 'UserAgent',
-      width: 160,
+      minWidth: 160,
       ellipsis: true,
       dataIndex: 'userAgent',
       render: _ => (

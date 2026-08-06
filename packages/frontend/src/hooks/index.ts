@@ -1,5 +1,6 @@
 export * from './use-mounted'
 export * from './use-remount'
+export * from './use-latest'
 export * from './use-fetch'
 export * from './use-update'
 export * from './use-upload'

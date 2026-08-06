@@ -47,7 +47,7 @@ export default function FeedbackPage() {
     {
       title: '创建时间',
       dataIndex: 'createAt',
-      width: 200,
+      width: 160,
       render: (_, record) => <div>{dayjs(record.createAt).format('YYYY-MM-DD HH:mm:ss')}</div>
     },
     {

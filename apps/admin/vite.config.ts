@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       createSvgIconsPlugin({
         iconDirs: [path.resolve(__dirname, 'src/assets/icons')], // 指定需要缓存的图标文件夹
-        symbolId: 'icon-[dir]-[name]' // 指定symbolId格式
+        symbolId: 'ic-[dir]-[name]' // 指定symbolId格式
       }),
       nodePolyfills()
     ]

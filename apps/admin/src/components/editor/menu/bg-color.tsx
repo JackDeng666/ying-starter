@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ColorPicker } from 'antd'
 import { Color } from 'antd/es/color-picker'
 import { FaFillDrip } from 'react-icons/fa'
-import { AiOutlineClear } from 'react-icons/ai'
+import { LuCircleX, LuPipette } from 'react-icons/lu'
 import { useEditorContext, useEditorState, MenuButton } from '@ying/frontend/editor'
 
 export const MenuBgColor = () => {
@@ -17,34 +17,32 @@ export const MenuBgColor = () => {
     })
   })
 
-  useEffect(() => {
-    if (focusColor) {
-      setColor(focusColor)
-    }
-  }, [focusColor, setColor])
-
   const toggleColor = () => {
-    editor.chain().focus().setBackgroundColor(color).run()
-  }
-
-  const unsetColor = () => {
-    editor.chain().focus().unsetBackgroundColor().run()
+    if (focusColor) {
+      editor.chain().focus().unsetBackgroundColor().run()
+    } else {
+      editor.chain().focus().setBackgroundColor(color).run()
+    }
   }
 
   const onChangeComplete = (color: Color) => {
     setColor(color.toHexString())
   }
 
+  const getCurrentColor = () => {
+    if (focusColor) setColor(focusColor)
+  }
+
   return (
     <div className="flex">
       <MenuButton className="rounded-r-none" disabled={!canBgColor} onClick={toggleColor}>
-        <FaFillDrip />
+        {focusColor ? <LuCircleX /> : <FaFillDrip />}
       </MenuButton>
       <MenuButton className="rounded-none border-l-0 border-r-0" disabled={!canBgColor}>
         <ColorPicker size="small" disabled={!canBgColor} allowClear value={color} onChangeComplete={onChangeComplete} />
       </MenuButton>
-      <MenuButton className="rounded-l-none" disabled={!canBgColor} onClick={unsetColor}>
-        <AiOutlineClear />
+      <MenuButton className="rounded-l-none" disabled={!canBgColor} onClick={getCurrentColor}>
+        <LuPipette />
       </MenuButton>
     </div>
   )

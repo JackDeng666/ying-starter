@@ -90,7 +90,7 @@ export default function PushTaskPage() {
     },
     {
       title: '任务状态',
-      width: 200,
+      minWidth: 200,
       ellipsis: true,
       render(_, record) {
         return (

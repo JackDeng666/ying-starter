@@ -19,7 +19,6 @@ export const IntlShow = ({ value }: IntlShowProps) => {
   return (
     <>
       <IntlSwitch value={currentLng} onChange={setCurrentLng} size="small" />
-      <br />
       {languages.map(
         lng =>
           currentLng === lng && (
@@ -28,7 +27,7 @@ export const IntlShow = ({ value }: IntlShowProps) => {
               title={<div className="truncate whitespace-pre-wrap">{value[lng]}</div>}
               placement="topLeft"
             >
-              <div className="truncate whitespace-pre-wrap line-clamp-2">{value[lng]}</div>
+              <div className="truncate whitespace-pre-wrap line-clamp-1">{value[lng]}</div>
             </Tooltip>
           )
       )}

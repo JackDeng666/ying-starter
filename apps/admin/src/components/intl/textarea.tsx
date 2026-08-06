@@ -26,6 +26,7 @@ export const IntlTextArea = ({ value, defaultValue, onChange, ...props }: IntlTe
           currentLng === lng && (
             <Input.TextArea
               {...props}
+              className="mt-1.5"
               key={lng}
               defaultValue={intlText.current?.[lng]}
               onChange={e => {

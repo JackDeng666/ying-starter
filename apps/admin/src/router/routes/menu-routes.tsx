@@ -27,7 +27,7 @@ export const menuRoutes: AppRouteObject[] = [
   {
     path: 'dashboard',
     meta: {
-      icon: 'ic-analysis',
+      icon: 'solar:graph-bold-duotone',
       key: '/dashboard',
       label: '首页'
     },
@@ -72,7 +72,7 @@ export const menuRoutes: AppRouteObject[] = [
     children: [
       {
         index: true,
-        element: <Navigate to="role" replace />
+        element: <Navigate to="push-template" replace />
       },
       {
         path: 'push-template',
@@ -149,7 +149,7 @@ export const menuRoutes: AppRouteObject[] = [
       {
         path: 'setting',
         meta: {
-          icon: 'ic-setting',
+          icon: 'solar:settings-bold-duotone',
           key: '/sys/setting',
           label: '系统设置',
           permission: pms.sys.setting

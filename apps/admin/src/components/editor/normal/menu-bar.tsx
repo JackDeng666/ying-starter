@@ -16,8 +16,10 @@ import {
 import { useEditorContext, useEditorState, editorBaseStateSelector, MenuButton } from '@ying/frontend/editor'
 
 import { MenuText, MenuTextColor, MenuBgColor, MenuLink, MenuImage, MenuImages } from '../menu'
+import { useThemeToken } from '@/hooks'
 
 export const MenuBar = () => {
+  const { colorBgContainer } = useThemeToken()
   const { editor } = useEditorContext()
   const state = useEditorState({
     editor,
@@ -25,8 +27,8 @@ export const MenuBar = () => {
   })
 
   return (
-    <div className="flex flex-wrap gap-2 border-b border-border p-2">
-      <MenuText />
+    <div className="flex flex-wrap gap-2 border-b border-border p-2" style={{ background: colorBgContainer }}>
+      <MenuText className="w-16" />
       <MenuButton
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!state.canBold}

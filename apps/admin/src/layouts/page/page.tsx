@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { TableProps, Table, PaginationProps, Pagination } from 'antd'
 import { cn } from '@ying/frontend/ui'
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 import { ScrollbarThickness } from '@/constant'
 import { useViewportRemainingHeight } from './use-viewport-remaining-height'
 import { getTableX } from './get-table-x'
@@ -41,19 +41,24 @@ export const Page = <T,>({
   const heightRef = useRef(0)
 
   const x = getTableX(table?.columns, table?.rowSelection?.columnWidth)
-  const y = recommendedBodyHeight - 46 - ScrollbarThickness // 减去表头和可能出现的表格的横向滚动条的高度
+  const y = recommendedBodyHeight - 47 - ScrollbarThickness // 减去表头和可能出现的表格的横向滚动条的高度
 
+  // 在Page组件的父容器出现滚动条的情况下，这里的计算在某些位置可能会导致无限变化，尽量不要让滚动条出现
   useEffect(() => {
-    const rb = new ResizeObserver(entries => {
-      let height = 0
-      for (const entry of entries) {
-        height += entry.target.clientHeight
-      }
+    const setHeight = (height: number) => {
       if (heightRef.current !== height) {
         heightRef.current = height
         // 减去 header footer 高度, body上下内边距
         setRecommendedBodyHeight(pageHeight - height - 12 * 2)
       }
+    }
+    heightRef.current = 0
+    const rb = new ResizeObserver(entries => {
+      let height = 0
+      for (const entry of entries) {
+        height += entry.target.clientHeight
+      }
+      setHeight(height)
     })
     if (headerRef.current) rb.observe(headerRef.current)
     if (footerRef.current) rb.observe(footerRef.current)
@@ -63,7 +68,7 @@ export const Page = <T,>({
   return (
     <div className={cn('rounded-md shadow-xs', classNames?.wrapper)} style={{ backgroundColor: colorBgContainer }}>
       {header && (
-        <div ref={headerRef} className={cn('border-b border-border p-3', classNames?.header)}>
+        <div ref={headerRef} className={cn('border-b border-border/60 p-3', classNames?.header)}>
           {header}
         </div>
       )}
@@ -71,9 +76,10 @@ export const Page = <T,>({
         {table && (
           <Table
             size="middle"
+            bordered
             scroll={{
               x,
-              y
+              y: y > 0 ? y : 0
             }}
             pagination={false}
             {...table}
@@ -82,7 +88,7 @@ export const Page = <T,>({
         {typeof body === 'function' ? body(recommendedBodyHeight) : body}
       </div>
       {(footer || pagination) && (
-        <div ref={footerRef} className={cn('border-t border-border p-3 flex justify-end', classNames?.footer)}>
+        <div ref={footerRef} className={cn('border-t border-border/60 p-3 flex justify-end', classNames?.footer)}>
           {footer}
           {pagination && <Pagination size="small" {...pagination} />}
         </div>

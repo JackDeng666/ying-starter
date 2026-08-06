@@ -20,7 +20,7 @@ export function UserTrend() {
 
   const [date, setDate] = useState(dayjs())
   const onDateChange: DatePickerProps['onChange'] = date => {
-    setDate(date)
+    setDate(date as dayjs.Dayjs)
   }
 
   const rangePresets = getPreset()

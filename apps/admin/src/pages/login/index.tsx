@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 import PlaceholderImg from '@/assets/images/background/placeholder.svg'
 import { useUserInfo, useAccessToken } from '@/store'
 import { LoginForm } from './login-form'

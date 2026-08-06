@@ -21,11 +21,13 @@ export const IntlInput = ({ value, defaultValue, onChange, ...props }: IntlInput
   return (
     <>
       <IntlSwitch value={currentLng} onChange={setCurrentLng} />
+
       {languages.map(
         lng =>
           currentLng === lng && (
             <Input
               {...props}
+              className="mt-1.5"
               key={lng}
               defaultValue={intlText.current?.[lng]}
               onChange={e => {

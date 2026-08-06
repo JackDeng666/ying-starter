@@ -1,13 +1,18 @@
-import { Modal } from 'antd'
 import { useRef, useState } from 'react'
+import { Drawer, Tabs, TabsProps } from 'antd'
 import { useEvent } from 'react-use'
-import './full-screen-modal.css'
 
-const Components: React.FC[] = []
+const tabs: TabsProps['items'] = []
 const initComponents = () => {
   const modules = import.meta.glob('./modules/*.tsx', { eager: true })
-  Object.keys(modules).forEach(key => {
-    Components.push((modules as object)[key].default as React.FC)
+  Object.keys(modules).forEach(moduleKey => {
+    const Component = (modules[moduleKey] as any).default as React.FC
+    const key = moduleKey.split('/').at(-1)
+    tabs.push({
+      label: key,
+      key,
+      children: <Component />
+    })
   })
 }
 initComponents()
@@ -33,12 +38,8 @@ export const DevModal = () => {
   useEvent('keyup', handleKeyUp)
 
   return (
-    <Modal title="开发" open={open} onCancel={() => setOpen(false)} footer={null} className="full-screen-modal">
-      <div className="h-[calc(100vh-72px)] overflow-y-auto">
-        {Components.map((Com, index) => (
-          <Com key={index} />
-        ))}
-      </div>
-    </Modal>
+    <Drawer title="开发" open={open} closeIcon={null} onClose={() => setOpen(false)} size="100%" placement="bottom">
+      <Tabs items={tabs} />
+    </Drawer>
   )
 }

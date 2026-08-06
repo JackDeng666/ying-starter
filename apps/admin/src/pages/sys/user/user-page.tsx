@@ -8,7 +8,7 @@ import type { ListSysUserDto, UpdateSysUserDto, UpdateSysUserPasswordDto } from 
 import type { SysUserEntity } from '@ying/entity'
 import { useDialogOpen } from '@ying/frontend/hooks'
 
-import { useThemeToken } from '@/theme/hooks'
+import { useThemeToken } from '@/hooks'
 import { useQueryWithParams, useTable } from '@/hooks'
 import { sysRoleApi, sysUserApi } from '@/api'
 import { Page, PageQuery, PageOperations } from '@/layouts/page'

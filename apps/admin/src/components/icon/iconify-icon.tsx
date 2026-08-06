@@ -1,22 +1,9 @@
 import { Icon } from '@iconify/react'
 import type { IconProps } from '@iconify/react'
-import styled from 'styled-components'
 
 interface Props extends IconProps {
   size?: IconProps['width']
 }
 export default function Iconify({ icon, size = '1em', className = '', ...other }: Props) {
-  return (
-    <StyledIconify className="anticon">
-      <Icon icon={icon} width={size} height={size} className={`m-auto ${className}`} {...other} />
-    </StyledIconify>
-  )
+  return <Icon icon={icon} width={size} height={size} className={className} {...other} />
 }
-
-const StyledIconify = styled.div`
-  display: inline-flex;
-  vertical-align: middle;
-  svg {
-    display: inline-block;
-  }
-`

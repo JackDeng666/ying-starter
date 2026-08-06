@@ -1,0 +1,18 @@
+export const getColors = () => {
+  const CSS = getComputedStyle(document.documentElement)
+  const success = CSS.getPropertyValue('--success')
+  const warning = CSS.getPropertyValue('--warning')
+  const error = CSS.getPropertyValue('--error')
+  const info = CSS.getPropertyValue('--info')
+  const border = CSS.getPropertyValue('--border')
+  const scrollbar = CSS.getPropertyValue('--scrollbar')
+
+  return {
+    success,
+    warning,
+    error,
+    info,
+    border,
+    scrollbar
+  }
+}

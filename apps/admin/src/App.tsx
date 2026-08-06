@@ -2,7 +2,7 @@ import { App as AntdApp } from 'antd'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import Router from '@/router/index'
-import AntdConfig from '@/theme/antd'
+import AntdConfig from '@/theme'
 
 import { MotionLazy } from './components/animate/motion-lazy'
 

@@ -1,13 +1,5 @@
-import { Drawer } from 'antd'
-import Color from 'color'
-import { CSSProperties } from 'react'
-
-import { useDialogOpen } from '@ying/frontend/hooks'
-
-import { IconButton, SvgIcon } from '@/components/icon'
 import Logo from '@/components/logo'
 import { useSettings } from '@/store'
-import { useThemeToken } from '@/theme/hooks'
 import { ThemeNavLayout } from '@/types/enum'
 
 import AccountDropdown from '../_common/account-dropdown'
@@ -15,59 +7,40 @@ import BreadCrumb from '../_common/bread-crumb'
 import SearchBar from '../_common/search-bar'
 import SettingButton from '../_common/setting-button'
 
-import { HEADER_HEIGHT } from './constant'
-import { NavVertical } from './nav'
+import { HEADER_HEIGHT, NAV_WIDTH, NAV_COLLAPSED_WIDTH } from './constant'
+import { NavDrawer } from './nav'
+import { useResponsive } from '@/hooks'
 
 export function Header() {
-  const drawerProps = useDialogOpen()
-  const { themeLayout, breadCrumb } = useSettings()
-  const { colorBgElevated, colorBorder } = useThemeToken()
-
-  const headerStyle: CSSProperties = {
-    width: '100%',
-    borderBottom: `1px dashed ${Color(colorBorder).alpha(0.6).toString()}`,
-    backgroundColor: Color(colorBgElevated).alpha(1).toString()
-  }
+  const { themeLayout, breadCrumb, navCollapsed } = useSettings()
+  const { screenMap } = useResponsive()
+  const isVertical = themeLayout === ThemeNavLayout.Vertical
+  const isLogoFull = isVertical && screenMap.md && !navCollapsed
 
   return (
-    <>
-      <header className="z-20 w-full" style={headerStyle}>
-        <div
-          className="flex grow items-center justify-between text-gray backdrop-blur px-4 xl:px-6 2xl:px-10"
+    <header
+      className="z-20 shrink-0 w-full border-b border-border/60 flex items-center justify-between text-gray px-4"
+      style={{
+        height: HEADER_HEIGHT
+      }}
+    >
+      <div className="flex items-center">
+        {isVertical && <NavDrawer />}
+        <Logo
+          className="text-xl justify-center"
           style={{
-            height: HEADER_HEIGHT
+            transition: 'width 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+            width: isLogoFull ? `calc(${NAV_WIDTH}px - var(--spacing) * 4 * 2)` : NAV_COLLAPSED_WIDTH,
+            marginRight: isLogoFull ? 'calc(var(--spacing) * 8)' : 'calc(var(--spacing) * 4)'
           }}
-        >
-          <div className="flex items-center">
-            {themeLayout !== ThemeNavLayout.Horizontal ? (
-              <IconButton onClick={() => drawerProps.onOpen(true)} className="h-10 w-10 md:hidden">
-                <SvgIcon icon="ic-menu" size="24" />
-              </IconButton>
-            ) : (
-              <Logo className="mr-4 text-xl" />
-            )}
-            <div className="hidden md:block">{breadCrumb ? <BreadCrumb /> : null}</div>
-          </div>
-
-          <div className="flex items-center gap-x-2">
-            <SearchBar />
-            <SettingButton />
-            <AccountDropdown />
-          </div>
-        </div>
-      </header>
-      <Drawer
-        placement="left"
-        width="auto"
-        styles={{
-          header: { display: 'none' },
-          body: { padding: 0, overflow: 'hidden' }
-        }}
-        closeIcon={false}
-        {...drawerProps}
-      >
-        <NavVertical show onMenuClick={() => drawerProps.onClose()} />
-      </Drawer>
-    </>
+        />
+        {breadCrumb && <BreadCrumb className="hidden sm:block" />}
+      </div>
+      <div className="flex items-center gap-x-2">
+        <SearchBar />
+        <SettingButton />
+        <AccountDropdown />
+      </div>
+    </header>
   )
 }

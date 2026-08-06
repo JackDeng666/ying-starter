@@ -1,12 +1,9 @@
-import { useToggle } from 'react-use'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
-import Color from 'color'
 import { cn } from '@ying/frontend/ui'
-import Logo from '@/components/logo'
-import Scrollbar from '@/components/scrollbar'
-import { useResponsive, useThemeToken } from '@/theme/hooks'
-import { useSettings } from '@/store'
+import { Scrollbar } from '@/components/scrollbar'
+import { useResponsive, useThemeToken } from '@/hooks'
+import { useSettings, setSettings } from '@/store'
 import { ThemeNavLayout } from '@/types/enum'
 import { NAV_COLLAPSED_WIDTH, NAV_WIDTH } from '../constant'
 import { useNavContext } from './use-nav-context'
@@ -16,55 +13,45 @@ type NavProps = {
   onMenuClick?: () => void
 }
 export function NavVertical({ show, onMenuClick }: NavProps) {
-  const { colorTextBase, colorBgElevated, colorBorder } = useThemeToken()
-  const { themeLayout } = useSettings()
+  const { colorBgLayout } = useThemeToken()
+  const settings = useSettings()
+  const { themeLayout, navCollapsed } = settings
   const isVertical = themeLayout === ThemeNavLayout.Vertical
-  const [collapsed, toggleCollapsed] = useToggle(false)
   const { screenMap } = useResponsive()
   const { openKeys, selectedKeys, menuList, onOpenChange, onClick } = useNavContext()
 
+  const toggleCollapsed = () => {
+    setSettings({
+      ...settings,
+      navCollapsed: !navCollapsed
+    })
+  }
+
   return (
     <div
-      className="flex flex-col z-50 shrink-0 h-full"
+      className="flex flex-col z-50 h-full border-r border-border/60 relative"
       style={{
-        background: colorBgElevated,
-        width: (screenMap.md || show) && isVertical ? (collapsed ? NAV_COLLAPSED_WIDTH : NAV_WIDTH) : 0,
-        borderRight: `1px dashed ${Color(colorBorder).alpha(0.6).toString()}`,
+        width: (screenMap.md || show) && isVertical ? (navCollapsed ? NAV_COLLAPSED_WIDTH : NAV_WIDTH) : 0,
         transition: 'width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
       }}
     >
-      <div
+      <button
+        onClick={toggleCollapsed}
         className={cn(
-          'relative hidden md:flex items-center justify-center h-20',
-          show && 'flex',
-          !isVertical && 'hidden!'
+          'hidden md:block w-6 h-6 absolute right-0 top-8 z-50 translate-x-1/2 cursor-pointer select-none text-center text-base opacity-0 transition-opacity',
+          isVertical && 'opacity-100'
         )}
       >
-        <Logo className="text-3xl" showName={!collapsed} />
-        <button
-          onClick={toggleCollapsed}
-          className="absolute right-0 top-7 z-50 h-6 w-6 translate-x-1/2 cursor-pointer select-none rounded-full text-center text-gray! hidden md:block"
-          style={{
-            color: colorTextBase,
-            borderColor: colorTextBase,
-            fontSize: 16
-          }}
-        >
-          {collapsed ? <MenuUnfoldOutlined size={20} /> : <MenuFoldOutlined size={20} />}
-        </button>
-      </div>
-      <Scrollbar
-        style={{
-          height: 'calc(100vh - 70px)'
-        }}
-      >
+        {navCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+      </button>
+      <Scrollbar>
         <Menu
-          className="h-full border-none!"
+          className="border-none!"
           style={{
-            background: colorBgElevated
+            background: colorBgLayout
           }}
           mode="inline"
-          inlineCollapsed={collapsed}
+          inlineCollapsed={navCollapsed}
           items={menuList}
           defaultOpenKeys={openKeys}
           openKeys={openKeys}

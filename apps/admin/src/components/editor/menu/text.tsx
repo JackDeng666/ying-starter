@@ -1,6 +1,7 @@
 import { Select } from 'antd'
 
 import { useEditorContext, useEditorState } from '@ying/frontend/editor'
+import { PropsWithClassName } from '@/types'
 
 const TextOptions = [
   { label: 'H1', value: 'h1' },
@@ -13,7 +14,7 @@ const TextOptions = [
   { label: '-', value: '-' }
 ]
 
-export const MenuText = () => {
+export const MenuText = ({ className }: PropsWithClassName) => {
   const { editor } = useEditorContext()
   const state = useEditorState({
     editor,
@@ -72,7 +73,7 @@ export const MenuText = () => {
 
   return (
     <Select
-      className="w-full"
+      className={className}
       options={TextOptions}
       value={activeText}
       onChange={selectText}
