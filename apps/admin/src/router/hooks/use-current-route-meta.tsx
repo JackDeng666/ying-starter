@@ -12,8 +12,8 @@ export function useCurrentRouteMeta() {
   outletRef.current = outlet
   // 获取所有匹配的路由
   const matchs = useMatches()
-  // 获取拍平后的路由菜单
-  const { flattenedRoutes } = usePermissionRoutes()
+  // 获取拍平后的所有路由信息
+  const { routeMetas } = usePermissionRoutes()
   const { push } = useRouter()
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function useCurrentRouteMeta() {
     let matchedRouteMeta: RouteMeta | undefined = undefined
     let realKey: string | undefined = undefined
 
-    flattenedRoutes.find(item => {
+    routeMetas.find(item => {
       const matchedPath = matchPath(item.key, lastRoute?.pathname)
       if (matchedPath) {
         matchedRouteMeta = deepCopy(item)
@@ -42,7 +42,7 @@ export function useCurrentRouteMeta() {
     } else {
       push(import.meta.env.APP_HOMEPAGE)
     }
-  }, [matchs, flattenedRoutes, push])
+  }, [matchs, routeMetas, push])
 
   return currentRouteMeta
 }

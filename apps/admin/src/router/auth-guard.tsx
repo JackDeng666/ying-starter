@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 
 import { updateUserInfo, useAccessToken } from '@/store'
 
-import { useRouter } from '../hooks'
+import { useRouter } from './hooks'
 
 type Props = {
   children: React.ReactNode

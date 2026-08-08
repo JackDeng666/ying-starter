@@ -1,14 +1,14 @@
-import { Suspense } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
-
+import { lazy, Suspense } from 'react'
+import { Navigate } from 'react-router-dom'
+import { AppRouteObject } from '@/types/router'
 import { CircleLoading } from '@/components/loading'
 import SimpleLayout from '@/layouts/simple'
-import Page403 from '@/pages/error/Page403'
-import Page404 from '@/pages/error/Page404'
-import Page500 from '@/pages/error/Page500'
-import { AppRouteObject } from '@/types/router'
 
-import AuthGuard from '../components/auth-guard'
+import AuthGuard from '../auth-guard'
+
+const Page403 = lazy(() => import('@/pages/error/Page403'))
+const Page404 = lazy(() => import('@/pages/error/Page404'))
+const Page500 = lazy(() => import('@/pages/error/Page500'))
 
 /**
  * error routes
@@ -19,9 +19,7 @@ export const ErrorRoutes: AppRouteObject[] = [
     element: (
       <Suspense fallback={<CircleLoading className="h-screen" />}>
         <AuthGuard>
-          <SimpleLayout>
-            <Outlet />
-          </SimpleLayout>
+          <SimpleLayout />
         </AuthGuard>
       </Suspense>
     ),

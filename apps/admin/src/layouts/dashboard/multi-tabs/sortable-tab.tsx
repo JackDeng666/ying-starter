@@ -1,7 +1,6 @@
 import { Dropdown, MenuProps } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
 import { CSSProperties, useState } from 'react'
-// import { useToggle, useFullscreen } from 'react-use'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { cn } from '@ying/frontend/ui'
@@ -66,12 +65,6 @@ export const SortableTab = ({ tab, index }: SortableTabProps) => {
     useKeepaliveContext()
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: tab.key })
   const [isHover, setIsHover] = useState(false)
-
-  // const tabContentRef = useRef<HTMLDivElement>(null)
-  // const [fullScreen, toggleFullScreen] = useToggle(false)
-  // useFullscreen(tabContentRef, fullScreen, {
-  //   onClose: () => toggleFullScreen(false)
-  // })
 
   const items = menuItems.map(el => {
     let disabled = false

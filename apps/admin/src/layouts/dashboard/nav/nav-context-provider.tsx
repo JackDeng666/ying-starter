@@ -1,18 +1,52 @@
 import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { MenuProps } from 'antd'
-import { ItemType } from 'antd/es/menu/interface'
+import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import { useLocation, useMatches } from 'react-router-dom'
 
+import { Iconify, SvgIcon } from '@/components/icon'
 import { usePermissionRoutes, useRouter } from '@/router/hooks'
-import { routeToMenu } from '@/router/route-to-menu'
+import { AppRouteObject } from '@/types/router'
 
 import { NavContext } from './nav-context'
+
+const routeToMenu = (items: AppRouteObject[]) => {
+  return items
+    .filter(item => !item.meta?.hideMenu)
+    .map(item => {
+      const menuItem: ItemType<MenuItemType> = {
+        key: undefined,
+        children: undefined
+      }
+      const { meta, children } = item
+      if (meta) {
+        const { key, label, icon, disabled } = meta
+        menuItem.key = key
+        menuItem.disabled = disabled
+        menuItem.label = label
+        if (icon) {
+          if (typeof icon === 'string') {
+            if (icon.startsWith('ic')) {
+              menuItem.icon = <SvgIcon prefix={null} icon={icon} />
+            } else {
+              menuItem.icon = <Iconify icon={icon} />
+            }
+          } else {
+            menuItem.icon = icon
+          }
+        }
+      }
+      if (children) {
+        menuItem.children = routeToMenu(children)
+      }
+      return menuItem
+    })
+}
 
 export const NavContextProvider = ({ children }: PropsWithChildren) => {
   const { push } = useRouter()
   const matches = useMatches()
   const { pathname } = useLocation()
-  const { navMenuRoutes, flattenedRoutes } = usePermissionRoutes()
+  const { navMenuRoutes, routeMetas } = usePermissionRoutes()
 
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([''])
@@ -46,7 +80,7 @@ export const NavContextProvider = ({ children }: PropsWithChildren) => {
     }
   }
   const onClick: MenuProps['onClick'] = ({ key }) => {
-    const currentRoute = flattenedRoutes.find(el => el.key === key)
+    const currentRoute = routeMetas.find(el => el.key === key)
     if (currentRoute?.frameSrc) {
       window.open(currentRoute.frameSrc, '_black')
       return

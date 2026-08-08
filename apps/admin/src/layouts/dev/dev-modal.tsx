@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Drawer, Tabs, TabsProps } from 'antd'
-import { useEvent } from 'react-use'
+import { useEvent } from '@ying/frontend/hooks'
 
 const tabs: TabsProps['items'] = []
 const initComponents = () => {
@@ -22,20 +22,18 @@ export const DevModal = () => {
 
   const pressedKeys = useRef(new Set())
 
-  const handleDev = (event: KeyboardEvent) => {
+  useEvent('keydown', event => {
     if (!event.key) return
     pressedKeys.current.add(event.key.toLowerCase())
     if (pressedKeys.current.has('d') && pressedKeys.current.has('e') && pressedKeys.current.has('v')) {
       setOpen(true)
     }
-  }
-  const handleKeyUp = (event: KeyboardEvent) => {
+  })
+
+  useEvent('keyup', event => {
     if (!event.key) return
     pressedKeys.current.delete(event.key.toLowerCase())
-  }
-
-  useEvent('keydown', handleDev)
-  useEvent('keyup', handleKeyUp)
+  })
 
   return (
     <Drawer title="开发" open={open} closeIcon={null} onClose={() => setOpen(false)} size="100%" placement="bottom">

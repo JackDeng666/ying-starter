@@ -3,19 +3,17 @@ import { Navigate, RouteObject, RouterProvider, createHashRouter } from 'react-r
 import { App } from 'antd'
 
 import DashboardLayout from '@/layouts/dashboard'
-import AuthGuard from '@/router/components/auth-guard'
 import Login from '@/pages/login'
 import { CircleLoading } from '@/components/loading'
 import { usePermissionRoutes } from '@/router/hooks'
 import { ErrorRoutes } from '@/router/routes/error-routes'
 import { AppRouteObject } from '@/types/router'
 import { globalEvent } from '@/event-emitter'
-
-const { APP_HOMEPAGE: HOMEPAGE } = import.meta.env
+import AuthGuard from './auth-guard'
 
 const LoginRoute: AppRouteObject = {
   path: '/login',
-  Component: Login
+  element: <Login />
 }
 
 export default function Router() {
@@ -40,7 +38,7 @@ export default function Router() {
 
   const { routerRoutes } = usePermissionRoutes()
 
-  const menuRoute: AppRouteObject = {
+  const MenuRoute: AppRouteObject = {
     path: '/',
     element: (
       <Suspense fallback={<CircleLoading className="h-screen" />}>
@@ -49,10 +47,10 @@ export default function Router() {
         </AuthGuard>
       </Suspense>
     ),
-    children: [{ index: true, element: <Navigate to={HOMEPAGE} replace /> }, ...routerRoutes]
+    children: [{ index: true, element: <Navigate to={import.meta.env.APP_HOMEPAGE} replace /> }, ...routerRoutes]
   }
 
-  const routes = [LoginRoute, menuRoute, ...ErrorRoutes]
+  const routes = [LoginRoute, MenuRoute, ...ErrorRoutes]
 
   const router = createHashRouter(routes as unknown as RouteObject[])
   return <RouterProvider router={router} />

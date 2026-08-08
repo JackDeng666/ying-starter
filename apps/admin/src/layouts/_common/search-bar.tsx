@@ -1,11 +1,10 @@
+import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { Empty, GlobalToken, Input, InputRef, Modal } from 'antd'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
 import Color from 'color'
-import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
-import { useBoolean, useEvent, useKeyPressEvent } from 'react-use'
 import styled from 'styled-components'
-
+import { useEvent, useKeyPressEvent, useLatest } from '@ying/frontend/hooks'
 import { IconButton, Iconify } from '@/components/icon'
 import { Scrollbar } from '@/components/scrollbar'
 import { usePermissionRoutes, useRouter } from '@/router/hooks'
@@ -13,93 +12,57 @@ import { useThemeToken } from '@/hooks'
 
 export default function SearchBar() {
   const { replace } = useRouter()
+  const panelRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<InputRef>(null)
   const listRef = useRef<HTMLDivElement>(null)
 
-  const [search, toggle] = useBoolean(false)
+  const [open, setOpen] = useState(false)
   const themeToken = useThemeToken()
 
-  const { flattenedRoutes } = usePermissionRoutes()
+  const { routeMetas } = usePermissionRoutes()
   const routes = useMemo(
-    () => flattenedRoutes.filter(route => !route.disabled && !route.hideMenu && !route.hideTab),
-    [flattenedRoutes]
+    () => routeMetas.filter(route => !route.disabled && !route.hideMenu && !route.hideTab),
+    [routeMetas]
   )
+
+  const [searchQuery, setSearchQuery] = useState('')
+  const searchResult = useMemo(
+    () =>
+      routes.filter(
+        item =>
+          item.label.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1 ||
+          item.key.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
+      ),
+    [routes, searchQuery]
+  )
+  const searchResultRef = useLatest(searchResult)
+
+  const [selectedItemIndex, setSelectedItemIndex] = useState(0)
+  const selectedItemIndexRef = useLatest(selectedItemIndex)
+
+  useEffect(() => {
+    setSelectedItemIndex(0)
+  }, [searchResult])
+
+  const tagStyle: CSSProperties = {
+    color: themeToken.colorPrimary,
+    backgroundColor: `${Color(themeToken.colorPrimary).alpha(0.2).toString()}`
+  }
 
   const activeStyle: CSSProperties = {
     border: `1px dashed ${themeToken.colorPrimary}`,
     backgroundColor: `${Color(themeToken.colorPrimary).alpha(0.2).toString()}`
   }
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchResult, setSearchResult] = useState(routes)
-  const [selectedItemIndex, setSelectedItemIndex] = useState(0)
-
-  useEffect(() => {
-    const result = routes.filter(
-      item =>
-        item.label.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1 ||
-        item.key.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
-    )
-    setSearchResult(result)
-    setSelectedItemIndex(0)
-  }, [searchQuery, routes])
-
-  const handleCtrlK = (event: KeyboardEvent) => {
-    if (event.ctrlKey && event.key === 'k') {
-      event.preventDefault()
-      handleOpen()
-    }
-  }
-  useEvent('keydown', handleCtrlK)
-
-  useKeyPressEvent('ArrowUp', event => {
-    if (!search) return
-    event.preventDefault()
-    let nextIndex = selectedItemIndex - 1
-    if (nextIndex < 0) {
-      nextIndex = searchResult.length - 1
-    }
-    setSelectedItemIndex(nextIndex)
-    scrollSelectedItemIntoView(nextIndex)
-  })
-
-  useKeyPressEvent('ArrowDown', event => {
-    if (!search) return
-    event.preventDefault()
-    let nextIndex = selectedItemIndex + 1
-    if (nextIndex > searchResult.length - 1) {
-      nextIndex = 0
-    }
-    setSelectedItemIndex(nextIndex)
-    scrollSelectedItemIntoView(nextIndex)
-  })
-
-  useKeyPressEvent('Enter', event => {
-    if (!search || searchResult.length === 0) return
-    event.preventDefault()
-    const selectItem = searchResult[selectedItemIndex].key
-    if (selectItem) {
-      handleSelect(selectItem)
-      toggle(false)
-    }
-  })
-
-  useKeyPressEvent('Escape', () => {
-    handleCancel()
-  })
-
   const handleOpen = () => {
-    toggle(true)
+    setOpen(true)
     setSearchQuery('')
-    setSelectedItemIndex(0)
   }
   const handleCancel = () => {
-    toggle(false)
+    setOpen(false)
   }
   const handleAfterOpenChange = (open: boolean) => {
-    if (open) {
-      inputRef.current?.focus()
-    }
+    if (open) inputRef.current?.focus()
   }
 
   const scrollSelectedItemIntoView = (index: number) => {
@@ -112,20 +75,52 @@ export default function SearchBar() {
     }
   }
 
-  const handleHover = (index: number) => {
-    if (index === selectedItemIndex) return
-    setSelectedItemIndex(index)
-  }
-
   const handleSelect = (key: string) => {
     replace(key)
     handleCancel()
   }
 
-  const tagStyle: CSSProperties = {
-    color: themeToken.colorPrimary,
-    backgroundColor: `${Color(themeToken.colorPrimary).alpha(0.2).toString()}`
-  }
+  useEvent('keydown', event => {
+    if (event.ctrlKey && event.key === 'k') {
+      event.preventDefault()
+      handleOpen()
+    }
+  })
+
+  useKeyPressEvent(
+    'ArrowUp',
+    event => {
+      event.preventDefault()
+      let nextIndex = selectedItemIndexRef.current - 1
+      if (nextIndex < 0) nextIndex = searchResultRef.current.length - 1
+      setSelectedItemIndex(nextIndex)
+      scrollSelectedItemIntoView(nextIndex)
+    },
+    { targetRef: panelRef }
+  )
+
+  useKeyPressEvent(
+    'ArrowDown',
+    event => {
+      event.preventDefault()
+      let nextIndex = selectedItemIndexRef.current + 1
+      if (nextIndex > searchResultRef.current.length - 1) nextIndex = 0
+      setSelectedItemIndex(nextIndex)
+      scrollSelectedItemIntoView(nextIndex)
+    },
+    { targetRef: panelRef }
+  )
+
+  useKeyPressEvent(
+    'Enter',
+    event => {
+      event.preventDefault()
+      if (searchResultRef.current.length === 0) return
+      const selectItem = searchResultRef.current[selectedItemIndexRef.current]?.key
+      if (selectItem) handleSelect(selectItem)
+    },
+    { targetRef: panelRef }
+  )
 
   return (
     <>
@@ -136,12 +131,12 @@ export default function SearchBar() {
         <div className="rounded-md bg-hover text-xs font-bold p-1 fc">CTRL+K</div>
       </div>
       <Modal
-        centered
-        keyboard
-        open={search}
+        panelRef={panelRef}
+        open={open}
         onCancel={handleCancel}
         closeIcon={false}
         afterOpenChange={handleAfterOpenChange}
+        centered
         styles={{
           body: {
             height: '400px',
@@ -204,7 +199,7 @@ export default function SearchBar() {
                     $themetoken={themeToken}
                     style={index === selectedItemIndex ? activeStyle : {}}
                     onClick={() => handleSelect(key)}
-                    onMouseMove={() => handleHover(index)}
+                    onMouseMove={() => setSelectedItemIndex(index)}
                   >
                     <div className="flex justify-between">
                       <div>

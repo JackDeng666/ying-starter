@@ -1,8 +1,7 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 export const useUpdate = () => {
   const [, updateState] = useState({})
-  const forceUpdate = useCallback(() => updateState({}), [])
-
+  const forceUpdate = () => updateState({})
   return forceUpdate
 }

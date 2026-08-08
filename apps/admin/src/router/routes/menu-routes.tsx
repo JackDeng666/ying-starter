@@ -1,5 +1,5 @@
 import { JSX, Suspense, lazy } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 import { pms } from '@ying/permission'
 
@@ -23,13 +23,14 @@ function withLoadingFallback(component: JSX.Element) {
   return <Suspense fallback={<CircleLoading />}>{component}</Suspense>
 }
 
-export const menuRoutes: AppRouteObject[] = [
+export const MenuRoutes: AppRouteObject[] = [
   {
     path: 'dashboard',
     meta: {
       icon: 'solar:graph-bold-duotone',
       key: '/dashboard',
-      label: '首页'
+      label: '首页',
+      permission: pms.dashboard
     },
     element: withLoadingFallback(<Dashboard />)
   },
@@ -48,7 +49,8 @@ export const menuRoutes: AppRouteObject[] = [
     meta: {
       icon: 'solar:chat-line-bold-duotone',
       key: '/feedback',
-      label: '反馈管理'
+      label: '反馈管理',
+      permission: pms.feedback
     },
     element: withLoadingFallback(<Feedback />)
   },
@@ -57,7 +59,8 @@ export const menuRoutes: AppRouteObject[] = [
     meta: {
       icon: 'solar:book-bookmark-bold-duotone',
       key: '/article',
-      label: '文章管理'
+      label: '文章管理',
+      permission: pms.article
     },
     element: withLoadingFallback(<Article />)
   },
@@ -67,19 +70,18 @@ export const menuRoutes: AppRouteObject[] = [
     meta: {
       icon: 'solar:bell-bing-bold-duotone',
       key: '/notification',
-      label: '通知管理'
+      label: '通知管理',
+      hideTab: true,
+      permission: pms.notification
     },
     children: [
-      {
-        index: true,
-        element: <Navigate to="push-template" replace />
-      },
       {
         path: 'push-template',
         meta: {
           icon: 'solar:document-bold-duotone',
           key: '/notification/push-template',
-          label: '推送模板'
+          label: '推送模板',
+          permission: pms.notification.pushTemplate
         },
         element: <PushTemplate />
       },
@@ -88,7 +90,8 @@ export const menuRoutes: AppRouteObject[] = [
         meta: {
           icon: 'solar:siren-bold-duotone',
           key: '/notification/push-task',
-          label: '推送任务'
+          label: '推送任务',
+          permission: pms.notification.pushTask
         },
         element: <PushTask />
       },
@@ -97,7 +100,8 @@ export const menuRoutes: AppRouteObject[] = [
         meta: {
           icon: 'solar:record-square-bold-duotone',
           key: '/notification/push-record',
-          label: '推送记录'
+          label: '推送记录',
+          permission: pms.notification.pushRecord
         },
         element: <PushRecord />
       },
@@ -106,7 +110,8 @@ export const menuRoutes: AppRouteObject[] = [
         meta: {
           icon: 'solar:user-hand-up-bold-duotone',
           key: '/notification/visitor',
-          label: '浏览用户'
+          label: '浏览用户',
+          permission: pms.notification.visitor
         },
         element: <Visitor />
       }
@@ -119,13 +124,10 @@ export const menuRoutes: AppRouteObject[] = [
       icon: 'solar:code-scan-bold-duotone',
       key: '/sys',
       label: '系统管理',
+      hideTab: true,
       permission: pms.sys
     },
     children: [
-      {
-        index: true,
-        element: <Navigate to="role" replace />
-      },
       {
         path: 'role',
         meta: {

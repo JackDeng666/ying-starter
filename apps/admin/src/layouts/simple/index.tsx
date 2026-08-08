@@ -1,13 +1,8 @@
-import React from 'react'
-
+import { Outlet } from 'react-router-dom'
 import { useThemeToken } from '@/hooks'
-
 import HeaderSimple from '../_common/header-simple'
 
-type Props = {
-  children: React.ReactNode
-}
-export default function SimpleLayout({ children }: Props) {
+export default function SimpleLayout() {
   const { colorBgElevated, colorTextBase } = useThemeToken()
   return (
     <div
@@ -18,7 +13,7 @@ export default function SimpleLayout({ children }: Props) {
       }}
     >
       <HeaderSimple />
-      {children}
+      <Outlet />
     </div>
   )
 }
