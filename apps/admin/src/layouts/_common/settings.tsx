@@ -12,7 +12,7 @@ import { colorPresets } from '@/theme/config'
 import { useThemeToken } from '@/hooks'
 import { ThemeColorPresets, ThemeNavLayout, ThemeMode } from '@/types/enum'
 
-export function SettingButton() {
+export function Settings() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { colorPrimary, colorBgBase, colorTextSecondary, colorTextTertiary, colorBgContainer } = useThemeToken()
 
@@ -82,7 +82,7 @@ export function SettingButton() {
       </IconButton>
       <Drawer
         placement="right"
-        title="Settings"
+        title="设置"
         onClose={() => setDrawerOpen(false)}
         open={drawerOpen}
         closable={false}
@@ -100,12 +100,12 @@ export function SettingButton() {
               {isFullscreen ? (
                 <>
                   <Iconify icon="solar:quit-full-screen-bold-duotone" />
-                  <span className="ml-2">Exit FullScreen</span>
+                  <span className="ml-2">退出全屏</span>
                 </>
               ) : (
                 <>
                   <Iconify icon="solar:full-screen-bold-duotone" />
-                  <span className="ml-2 text-gray">FullScreen</span>
+                  <span className="ml-2 text-gray">进入全屏</span>
                 </>
               )}
             </div>
@@ -116,7 +116,7 @@ export function SettingButton() {
           {/* theme mode */}
           <div>
             <div className="mb-3 text-base font-semibold" style={{ color: colorTextSecondary }}>
-              Mode
+              主题
             </div>
             <div className="flex flex-row gap-4">
               <Card
@@ -145,7 +145,7 @@ export function SettingButton() {
           {/* theme layout */}
           <div>
             <div className="mb-3 text-base font-semibold" style={{ color: colorTextSecondary }}>
-              Layout
+              布局
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Card
@@ -241,8 +241,8 @@ export function SettingButton() {
           {/* theme stretch */}
           <div>
             <div className="mb-3 text-base font-semibold" style={{ color: colorTextSecondary }}>
-              <span className="mr-2">Stretch</span>
-              <Tooltip title="Only available at large resolutions > 1600px (xl)">
+              <span className="mr-2">页面拉伸</span>
+              <Tooltip title="仅适用于页面大于 1600 像素 (xl)">
                 <QuestionCircleOutlined />
               </Tooltip>
             </div>
@@ -290,7 +290,7 @@ export function SettingButton() {
           {/* theme presets */}
           <div>
             <div className="mb-3 text-base font-semibold" style={{ color: colorTextSecondary }}>
-              Presets
+              预设
             </div>
             <div className="grid grid-cols-3 gap-x-4 gap-y-3">
               {Object.entries(colorPresets).map(([preset, color]) => (
@@ -317,15 +317,15 @@ export function SettingButton() {
           {/* Page config */}
           <div>
             <div className="mb-3 text-base font-semibold" style={{ color: colorTextSecondary }}>
-              Page
+              页面
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between" style={{ color: colorTextTertiary }}>
-                <div>BreadCrumb</div>
+                <div>面包屑</div>
                 <Switch size="small" checked={breadCrumb} onChange={checked => setBreadCrumn(checked)} />
               </div>
               <div className="flex items-center justify-between" style={{ color: colorTextTertiary }}>
-                <div>Multi Tab</div>
+                <div>多标签页缓存</div>
                 <Switch size="small" checked={multiTab} onChange={checked => setMultiTab(checked)} />
               </div>
             </div>

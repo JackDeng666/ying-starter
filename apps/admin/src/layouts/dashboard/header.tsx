@@ -5,7 +5,7 @@ import { useResponsive } from '@/hooks'
 import { AccountDropdown } from '../_common/account-dropdown'
 import { BreadCrumb } from '../_common/bread-crumb'
 import { SearchBar } from '../_common/search-bar'
-import { SettingButton } from '../_common/setting-button'
+import { Settings } from '../_common/settings'
 import { HEADER_HEIGHT, NAV_WIDTH, NAV_COLLAPSED_WIDTH } from './constant'
 import { NavDrawer } from './nav'
 
@@ -36,7 +36,7 @@ export function Header() {
       </div>
       <div className="flex items-center gap-x-2">
         <SearchBar />
-        <SettingButton />
+        <Settings />
         <AccountDropdown />
       </div>
     </header>

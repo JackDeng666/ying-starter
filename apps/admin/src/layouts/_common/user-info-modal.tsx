@@ -1,53 +1,48 @@
 import { useEffect, useState } from 'react'
-import { Form, Modal, Input, message, Segmented, Button } from 'antd'
+import { App, Form, Modal, Input, Segmented, Button } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
-
+import { useDialogOpen } from '@ying/frontend/hooks'
 import { UpdateSysUserSelfUserInfoDto, UpdateSysUserSelfPasswordDto } from '@ying/dto'
 import { commonApi, sysUserApi } from '@/api'
-import { UploadImage } from '@/components/image/upload-image'
+import { UploadImage } from '@/components/image'
 import { updateUserInfo, logout, useUserInfo } from '@/store'
 
-export type UserInfoModalProps = {
-  title: string
-  show: boolean
-  onCancel: VoidFunction
-}
+export type UserInfoModalProps = ReturnType<typeof useDialogOpen>
 
-type TSegmented = '个人信息' | '密码'
+type TSegmented = '修改信息' | '修改密码'
 
-export function UserInfoModal({ title, show, onCancel }: UserInfoModalProps) {
-  const [segmented, setSegmented] = useState<TSegmented>('个人信息')
+export function UserInfoModal({ open, onClose }: UserInfoModalProps) {
+  const [segmented, setSegmented] = useState<TSegmented>('修改信息')
 
   return (
-    <Modal title={title} open={show} onCancel={onCancel} footer={null}>
-      <div className="w-full flex flex-col items-center">
-        <div className="mb-6">
-          <Segmented<TSegmented>
-            options={['个人信息', '密码']}
-            onChange={value => {
-              setSegmented(value)
-            }}
-          />
-        </div>
-        {segmented === '个人信息' && <ChangeUserInfoForm onCancel={onCancel} />}
-        {segmented === '密码' && <ChangePasswordForm />}
-      </div>
+    <Modal
+      open={open}
+      onCancel={onClose}
+      title={
+        <Segmented<TSegmented>
+          options={['修改信息', '修改密码']}
+          onChange={value => {
+            setSegmented(value)
+          }}
+        />
+      }
+      footer={null}
+    >
+      {segmented === '修改信息' && <ChangeUserInfoForm />}
+      {segmented === '修改密码' && <ChangePasswordForm />}
     </Modal>
   )
 }
 
-type ChangeUserInfoFormProps = {
-  onCancel: VoidFunction
-}
-
-const ChangeUserInfoForm = ({ onCancel }: ChangeUserInfoFormProps) => {
+const ChangeUserInfoForm = () => {
+  const { message } = App.useApp()
   const userInfo = useUserInfo()
-  const [form] = Form.useForm()
+
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { isSubmitting, isDirty, errors },
     reset
   } = useForm<UpdateSysUserSelfUserInfoDto>({
     resolver: classValidatorResolver(UpdateSysUserSelfUserInfoDto)
@@ -61,24 +56,16 @@ const ChangeUserInfoForm = ({ onCancel }: ChangeUserInfoFormProps) => {
     }
   }, [userInfo, reset])
 
-  const [loading, setLoading] = useState(false)
   const handlePost = async (value: UpdateSysUserSelfUserInfoDto) => {
-    try {
-      setLoading(true)
-      await sysUserApi.updateSelfInfo(value)
-      message.success('修改用户信息成功')
-      updateUserInfo()
-      onCancel()
-    } finally {
-      setLoading(false)
-    }
+    await sysUserApi.updateSelfInfo(value)
+    message.success('修改用户信息成功')
+    updateUserInfo()
   }
 
   return (
-    <Form className="w-full" form={form} labelCol={{ flex: '4em' }} onFinish={handleSubmit(handlePost)}>
-      <Form.Item<UpdateSysUserSelfUserInfoDto>
+    <Form layout="vertical" onFinish={handleSubmit(handlePost)}>
+      <Form.Item
         label="昵称"
-        name="name"
         required
         validateStatus={errors.name ? 'error' : ''}
         help={errors.name && errors.name.message}
@@ -89,9 +76,8 @@ const ChangeUserInfoForm = ({ onCancel }: ChangeUserInfoFormProps) => {
           render={({ field }) => <Input allowClear placeholder="请输入新昵称" {...field} />}
         />
       </Form.Item>
-      <Form.Item<UpdateSysUserSelfUserInfoDto>
+      <Form.Item
         label="头像"
-        name="avatarId"
         required
         validateStatus={errors.avatarId ? 'error' : ''}
         help={errors.avatarId && errors.avatarId.message}
@@ -106,31 +92,27 @@ const ChangeUserInfoForm = ({ onCancel }: ChangeUserInfoFormProps) => {
               aspectRatio={1}
               defaultUrl={userInfo?.avatar?.url}
               handleUpload={(file, fileInfo) => commonApi.uploadImage(file, fileInfo)}
-              onSuccess={file => {
-                field.onChange(file.id)
-              }}
+              onSuccess={file => field.onChange(file.id)}
             />
           )}
         />
       </Form.Item>
-      <Form.Item>
-        <div className="flex justify-end">
-          <Button type="primary" htmlType="submit" loading={loading}>
-            确认修改
-          </Button>
-        </div>
-      </Form.Item>
+      <div className="flex justify-end">
+        <Button type="primary" htmlType="submit" disabled={!isDirty} loading={isSubmitting}>
+          确认修改
+        </Button>
+      </div>
     </Form>
   )
 }
 
 const ChangePasswordForm = () => {
-  const [form] = Form.useForm()
+  const { message } = App.useApp()
 
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { isSubmitting, errors }
   } = useForm<UpdateSysUserSelfPasswordDto>({
     resolver: classValidatorResolver(UpdateSysUserSelfPasswordDto),
     defaultValues: {
@@ -139,24 +121,16 @@ const ChangePasswordForm = () => {
     }
   })
 
-  const [loading, setLoading] = useState(false)
-
   const handlePost = async (value: UpdateSysUserSelfPasswordDto) => {
-    try {
-      setLoading(true)
-      await sysUserApi.updateSelfPassword(value)
-      message.success(`修改密码成功`)
-      logout()
-    } finally {
-      setLoading(false)
-    }
+    await sysUserApi.updateSelfPassword(value)
+    message.success(`修改密码成功`)
+    logout()
   }
 
   return (
-    <Form className="w-full" form={form} labelCol={{ flex: '5em' }} onFinish={handleSubmit(handlePost)}>
-      <Form.Item<UpdateSysUserSelfPasswordDto>
+    <Form layout="vertical" onFinish={handleSubmit(handlePost)}>
+      <Form.Item
         label="旧密码"
-        name="oldPass"
         required
         validateStatus={errors.oldPass ? 'error' : ''}
         help={errors.oldPass && errors.oldPass.message}
@@ -169,9 +143,8 @@ const ChangePasswordForm = () => {
           )}
         />
       </Form.Item>
-      <Form.Item<UpdateSysUserSelfPasswordDto>
+      <Form.Item
         label="新密码"
-        name="newPass"
         required
         validateStatus={errors.newPass ? 'error' : ''}
         help={errors.newPass && errors.newPass.message}
@@ -184,13 +157,11 @@ const ChangePasswordForm = () => {
           )}
         />
       </Form.Item>
-      <Form.Item>
-        <div className="flex justify-end">
-          <Button type="primary" htmlType="submit" loading={loading}>
-            确认修改
-          </Button>
-        </div>
-      </Form.Item>
+      <div className="flex justify-end">
+        <Button type="primary" htmlType="submit" loading={isSubmitting}>
+          确认修改
+        </Button>
+      </div>
     </Form>
   )
 }

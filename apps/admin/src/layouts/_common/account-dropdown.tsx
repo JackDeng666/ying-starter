@@ -1,31 +1,16 @@
-import { CSSProperties, useState, cloneElement, ReactElement } from 'react'
+import { CSSProperties, cloneElement, ReactElement } from 'react'
 import { Divider, MenuProps, Dropdown, DropdownProps } from 'antd'
-
+import { useDialogOpen } from '@ying/frontend/hooks'
 import { useUserInfo, logout } from '@/store/userStore'
 import { useThemeToken } from '@/hooks'
-import { UserInfoModal, UserInfoModalProps } from './user-info-modal'
+import { UserInfoModal } from './user-info-modal'
 
 export function AccountDropdown() {
   const { name, email, account, avatar } = useUserInfo() ?? {}
 
-  const [userInfoModalProps, setUserInfoModalProps] = useState<UserInfoModalProps>({
-    title: '',
-    show: false,
-    onCancel: () => {
-      setUserInfoModalProps(prev => ({ ...prev, show: false }))
-    }
-  })
-
+  const userInfoModalProps = useDialogOpen()
   const openUserInfo = () => {
-    setUserInfoModalProps(prev => ({
-      ...prev,
-      show: true,
-      title: '修改信息',
-      formValue: {
-        oldPass: '',
-        newPass: ''
-      }
-    }))
+    userInfoModalProps.onOpen()
   }
 
   const { colorBgElevated, borderRadius, boxShadowSecondary } = useThemeToken()

@@ -150,7 +150,7 @@ export function SearchBar() {
             ref={inputRef}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            placeholder="Search..."
+            placeholder="搜索..."
             variant="borderless"
             suffix={
               <IconButton className="h-6 rounded-md bg-hover text-xs" onClick={handleCancel}>
@@ -168,19 +168,19 @@ export function SearchBar() {
               <div className="h-6 rounded-md min-w-6 px-1.5 mx-1.5 fc" style={tagStyle}>
                 ↓
               </div>
-              <span>to navigate</span>
+              <span>导航</span>
             </div>
             <div className="flex">
               <div className="h-6 rounded-md min-w-6 px-1.5 mx-1.5 fc" style={tagStyle}>
                 ↵
               </div>
-              <span>to select</span>
+              <span>选择</span>
             </div>
             <div className="flex">
               <div className="h-6 rounded-md min-w-6 px-1.5 mx-1.5 fc" style={tagStyle}>
                 ESC
               </div>
-              <span>to close</span>
+              <span>关闭</span>
             </div>
           </div>
         }
