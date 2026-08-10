@@ -10,7 +10,7 @@ type Props = {
   className?: string
   style?: CSSProperties
 }
-export default function Card({ children, ...other }: Props) {
+export function Card({ children, ...other }: Props) {
   const { colorBgContainer } = useThemeToken()
   const { themeMode } = useSettings()
 

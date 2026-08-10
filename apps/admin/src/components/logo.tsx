@@ -9,7 +9,7 @@ type LogoProps = {
   showName?: boolean
   style?: CSSProperties
 }
-function Logo({ className, showName = true, style }: LogoProps) {
+export function Logo({ className, showName = true, style }: LogoProps) {
   const { colorPrimary } = useThemeToken()
 
   return (
@@ -23,5 +23,3 @@ function Logo({ className, showName = true, style }: LogoProps) {
     </NavLink>
   )
 }
-
-export default Logo

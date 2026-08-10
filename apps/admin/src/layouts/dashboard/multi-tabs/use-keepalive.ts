@@ -1,26 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
-import { useCurrentRouteMeta, useRouter } from '@/router/hooks'
-import { RouteMeta } from '@/types/router'
+import { useRouter } from '@/router/hooks'
+import { useCurrentKeepAliveRoute } from './use-current-route-meta'
+import { KeepAliveRoute } from './type'
 
 function getKey() {
   return new Date().getTime().toString()
 }
 
-export type KeepAliveTab = RouteMeta & {
-  children: any
-}
 export function useKeepAlive() {
   const { push } = useRouter()
-  const [tabs, setTabs] = useState<KeepAliveTab[]>([])
+  const [tabs, setTabs] = useState<KeepAliveRoute[]>([])
   const tabsRef = useRef(tabs)
   tabsRef.current = tabs
-  const currentRouteMeta = useCurrentRouteMeta()
-  const activeTabKey = currentRouteMeta?.key
+  const currentKeepAliveRoute = useCurrentKeepAliveRoute()
+  const activeTabKey = currentKeepAliveRoute?.key
+  const [fullscreenTabKey, setFullscreenTabKey] = useState<string>()
+  const currentFullscreenTab = tabs.find(tab => tab.key === fullscreenTabKey)
 
-  /**
-   * Close specified tab
-   */
-  const closeTab = (path = activeTabKey) => {
+  const closeTab = (path: string) => {
     setTabs(prevTabs => {
       if (prevTabs.length === 1) return prevTabs
       const deleteTabIndex = prevTabs.findIndex(item => item.key === path)
@@ -35,24 +32,15 @@ export function useKeepAlive() {
     })
   }
 
-  /**
-   * Close other tabs besides the specified tab
-   */
-  const closeOthersTab = (path = activeTabKey) => {
+  const closeOthersTab = (path: string) => {
     setTabs(prevTabs => prevTabs.filter(item => item.key === path))
   }
 
-  /**
-   * Close all tabs then navigate to the home page
-   */
   const closeAll = () => {
     setTabs([])
     push(import.meta.env.APP_HOMEPAGE)
   }
 
-  /**
-   * Close all tabs in the left of specified tab
-   */
   const closeLeft = (path: string) => {
     push(path)
     setTabs(prevTabs => {
@@ -61,9 +49,6 @@ export function useKeepAlive() {
     })
   }
 
-  /**
-   * Close all tabs in the right of specified tab
-   */
   const closeRight = (path: string) => {
     push(path)
     setTabs(prevTabs => {
@@ -72,10 +57,7 @@ export function useKeepAlive() {
     })
   }
 
-  /**
-   * Refresh specified tab
-   */
-  const refreshTab = (path = activeTabKey) => {
+  const refreshTab = (path: string) => {
     setTabs(prevTabs => {
       const currentTabIndex = prevTabs.findIndex(item => item.key === path)
       if (currentTabIndex >= 0) {
@@ -85,39 +67,54 @@ export function useKeepAlive() {
     })
   }
 
+  const fullscreenTab = (path: string) => {
+    setTabs(prevTabs => {
+      const currentTabIndex = prevTabs.findIndex(item => item.key === path)
+      if (currentTabIndex >= 0) {
+        prevTabs[currentTabIndex].hideInFullscreen = true
+      }
+      return [...prevTabs]
+    })
+    setFullscreenTabKey(path)
+  }
+
+  const exitFullscreenTab = () => {
+    setTabs(prevTabs => {
+      const currentTabIndex = prevTabs.findIndex(item => item.key === currentFullscreenTab.key)
+      if (currentTabIndex >= 0) {
+        prevTabs[currentTabIndex].hideInFullscreen = false
+      }
+      return [...prevTabs]
+    })
+    setFullscreenTabKey(null)
+  }
+
   useEffect(() => {
-    if (!currentRouteMeta) return
-    const existed = tabsRef.current.find(item => item.key === currentRouteMeta.key)
+    if (!currentKeepAliveRoute) return
+    const existed = tabsRef.current.find(item => item.key === currentKeepAliveRoute.key)
     if (!existed) {
       setTabs(prev => [
         ...prev,
         {
-          ...currentRouteMeta,
-          children: currentRouteMeta.outlet,
+          ...currentKeepAliveRoute,
           timeStamp: getKey()
         }
       ])
     }
-    if (existed?.noCache) {
-      setTabs(prev => {
-        const index = prev.findIndex(item => item.key === currentRouteMeta.key)
-        if (index >= 0) {
-          prev[index].timeStamp = getKey()
-        }
-        return [...prev]
-      })
-    }
-  }, [currentRouteMeta])
+  }, [currentKeepAliveRoute])
 
   return {
     tabs,
-    activeTabKey,
     setTabs,
+    activeTabKey,
+    currentFullscreenTab,
     closeTab,
     closeOthersTab,
     refreshTab,
     closeAll,
     closeLeft,
-    closeRight
+    closeRight,
+    fullscreenTab,
+    exitFullscreenTab
   }
 }

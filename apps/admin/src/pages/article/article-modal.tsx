@@ -7,7 +7,7 @@ import { CreateArticleDto, UpdateArticleDto } from '@ying/dto'
 import { ArticleEntity } from '@ying/entity'
 import { useDialogOpen, useRemount } from '@ying/frontend/hooks'
 
-import { TagsEdit } from '@/components/tags'
+import { Tags } from '@/components/tags'
 import { ImageSelector } from '@/components/image'
 import { IntlInput } from '@/components/intl'
 import { articleApi } from '@/api'
@@ -135,7 +135,7 @@ export function ArticleModal({ open, formValue, onSuccess, onClose }: ArticleMod
           validateStatus={errors.keywords ? 'error' : ''}
           help={errors.keywords && errors.keywords.message}
         >
-          <Controller control={control} name="keywords" render={({ field }) => <TagsEdit {...field} />} />
+          <Controller control={control} name="keywords" render={({ field }) => <Tags {...field} />} />
         </Form.Item>
 
         <Form.Item label="排序" validateStatus={errors.sort ? 'error' : ''} help={errors.sort && errors.sort.message}>

@@ -6,7 +6,7 @@ import AntdConfig from '@/theme'
 
 import { MotionLazy } from './components/animate/motion-lazy'
 
-import { DevModal } from './layouts/dev/dev-modal'
+import { DevDrawer } from './layouts/dev/dev-drawer'
 import { RouteLoadingProgress } from './components/route-loading'
 
 const queryClient = new QueryClient()
@@ -18,7 +18,7 @@ export default function App() {
         <AntdApp>
           <MotionLazy>
             <RouteLoadingProgress />
-            <DevModal />
+            <DevDrawer />
             <Router />
           </MotionLazy>
         </AntdApp>

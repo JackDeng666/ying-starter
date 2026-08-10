@@ -12,14 +12,14 @@ export const useEvent = <T extends EventTarget = Window, K extends keyof TargetE
   targetRef?: RefObject<T>,
   options?: boolean | AddEventListenerOptions
 ) => {
+  const currentTarget = (targetRef?.current ?? window) as T
+
   useEffect(() => {
-    if (!handler) return
-    const currentTarget = (targetRef?.current ?? window) as T
-    if (!currentTarget) return
+    if (!handler || !currentTarget) return
     const listener = handler as EventListener
     currentTarget.addEventListener(event as string, listener, options)
     return () => {
       currentTarget.removeEventListener(event as string, listener, options)
     }
-  }, [event, handler, targetRef, options])
+  }, [event, handler, currentTarget, options])
 }

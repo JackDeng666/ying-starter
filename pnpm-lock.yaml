@@ -128,9 +128,6 @@ importers:
       react-router-dom:
         specifier: 6.22.3
         version: 6.22.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      screenfull:
-        specifier: ^6.0.2
-        version: 6.0.2
       simplebar-react:
         specifier: ^3.3.0
         version: 3.3.2(react@19.2.4)
@@ -9738,10 +9735,6 @@ packages:
   schema-utils@4.3.3:
     resolution: {integrity: sha512-eflK8wEtyOE6+hsaRVPxvUKYCpRgzLqDTb8krvAsRIwOGlHoSgYLgBXoubGgLd2fT41/OUYdb48v4k4WWHQurA==}
     engines: {node: '>= 10.13.0'}
-
-  screenfull@6.0.2:
-    resolution: {integrity: sha512-AQdy8s4WhNvUZ6P8F6PB21tSPIYKniic+Ogx0AacBMjKP1GUHN2E9URxQHtCusiwxudnCKkdy4GrHXPPJSkCCw==}
-    engines: {node: ^14.13.1 || >=16.0.0}
 
   scroll-into-view-if-needed@3.1.0:
     resolution: {integrity: sha512-49oNpRjWRvnU8NyGVmUaYG4jtTkNonFZI86MmGRDqBphEK2EXT9gdEUoQPZhuBM8yWHxCWbobltqYO5M4XrUvQ==}
@@ -21518,8 +21511,6 @@ snapshots:
       ajv: 8.17.1
       ajv-formats: 2.1.1(ajv@8.17.1)
       ajv-keywords: 5.1.0(ajv@8.17.1)
-
-  screenfull@6.0.2: {}
 
   scroll-into-view-if-needed@3.1.0:
     dependencies:

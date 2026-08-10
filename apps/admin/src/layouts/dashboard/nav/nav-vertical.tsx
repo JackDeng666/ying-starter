@@ -29,7 +29,7 @@ export function NavVertical({ show, onMenuClick }: NavProps) {
 
   return (
     <div
-      className="flex flex-col z-50 h-full border-r border-border/60 relative"
+      className="flex flex-col z-50 h-full border-r border-border relative"
       style={{
         width: (screenMap.md || show) && isVertical ? (navCollapsed ? NAV_COLLAPSED_WIDTH : NAV_WIDTH) : 0,
         transition: 'width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'

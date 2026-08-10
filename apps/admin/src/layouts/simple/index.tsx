@@ -1,9 +1,11 @@
 import { Outlet } from 'react-router-dom'
 import { useThemeToken } from '@/hooks'
-import HeaderSimple from '../_common/header-simple'
+import { Logo } from '@/components/logo'
+import { SettingButton } from '../_common/setting-button'
 
 export default function SimpleLayout() {
   const { colorBgElevated, colorTextBase } = useThemeToken()
+
   return (
     <div
       className="flex h-screen w-full flex-col"
@@ -12,7 +14,10 @@ export default function SimpleLayout() {
         background: colorBgElevated
       }}
     >
-      <HeaderSimple />
+      <header className="flex h-16 w-full items-center justify-between px-6">
+        <Logo />
+        <SettingButton />
+      </header>
       <Outlet />
     </div>
   )

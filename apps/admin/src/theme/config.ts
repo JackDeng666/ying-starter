@@ -3,19 +3,16 @@ import { ThemeConfig } from 'antd'
 import { ThemeColorPresets } from '@/types/enum'
 import { getColors } from './get-colors'
 
+const { success, warning, error, info } = getColors()
+
 /**
  * Antd theme editor: https://ant.design/theme-editor-cn
  */
-const initCustomThemeTokenConfig = () => {
-  const { success, warning, error, info, border } = getColors()
-  const customThemeTokenConfig: ThemeConfig['token'] = {
-    colorSuccess: success,
-    colorWarning: warning,
-    colorError: error,
-    colorInfo: info,
-    colorBorder: border
-  }
-  return customThemeTokenConfig
+const customThemeTokenConfig: ThemeConfig['token'] = {
+  colorSuccess: success,
+  colorWarning: warning,
+  colorError: error,
+  colorInfo: info
 }
 
 const customComponentConfig: ThemeConfig['components'] = {
@@ -39,4 +36,4 @@ const colorPresets: {
   red: '#FF3030'
 }
 
-export { initCustomThemeTokenConfig, customComponentConfig, colorPresets }
+export { customThemeTokenConfig, customComponentConfig, colorPresets }

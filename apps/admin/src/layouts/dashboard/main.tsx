@@ -1,17 +1,20 @@
 import { cn } from '@ying/frontend/ui'
 import { useSettings } from '@/store'
 import { useThemeToken } from '@/hooks'
+import { Ref } from 'react'
 
 type MainProps = {
+  ref?: Ref<HTMLDivElement>
   children: React.ReactNode
   className?: string
 }
-export function Main({ children, className }: MainProps) {
+export function Main({ ref, children, className }: MainProps) {
   const { themeStretch } = useSettings()
   const { padding } = useThemeToken()
 
   return (
     <div
+      ref={ref}
       className={cn(
         'mx-auto max-w-full w-full h-full overflow-x-hidden overflow-y-auto no-scrollbar',
         !themeStretch && 'xl:max-w-screen-xl',

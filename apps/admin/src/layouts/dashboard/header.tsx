@@ -1,15 +1,13 @@
-import Logo from '@/components/logo'
+import { Logo } from '@/components/logo'
 import { useSettings } from '@/store'
 import { ThemeNavLayout } from '@/types/enum'
-
-import AccountDropdown from '../_common/account-dropdown'
-import BreadCrumb from '../_common/bread-crumb'
-import SearchBar from '../_common/search-bar'
-import SettingButton from '../_common/setting-button'
-
+import { useResponsive } from '@/hooks'
+import { AccountDropdown } from '../_common/account-dropdown'
+import { BreadCrumb } from '../_common/bread-crumb'
+import { SearchBar } from '../_common/search-bar'
+import { SettingButton } from '../_common/setting-button'
 import { HEADER_HEIGHT, NAV_WIDTH, NAV_COLLAPSED_WIDTH } from './constant'
 import { NavDrawer } from './nav'
-import { useResponsive } from '@/hooks'
 
 export function Header() {
   const { themeLayout, breadCrumb, navCollapsed } = useSettings()
@@ -19,7 +17,7 @@ export function Header() {
 
   return (
     <header
-      className="z-20 shrink-0 w-full border-b border-border/60 flex items-center justify-between text-gray px-4"
+      className="z-20 shrink-0 w-full border-b border-border flex items-center justify-between text-gray px-4"
       style={{
         height: HEADER_HEIGHT
       }}

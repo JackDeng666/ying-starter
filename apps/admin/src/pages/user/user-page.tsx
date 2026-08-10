@@ -53,7 +53,7 @@ export default function UserPage() {
       render: (_, record) => {
         return (
           <div className="flex gap-x-2">
-            <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray/10 border border-border/60 shadow-xs">
+            <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray/10 border border-border shadow-xs">
               {record.avatar?.url && <img alt="avatar" src={record.avatar.url} className="object-cover" />}
             </div>
             <div className="flex flex-col">
@@ -81,7 +81,7 @@ export default function UserPage() {
           <div className="flex gap-2 overflow-x-auto">
             {record.oauthAccounts.map(el => (
               <div key={el.id} className="flex gap-x-2">
-                <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray/20 border border-border/60">
+                <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray/20 border border-border">
                   <img alt="avatar" src={el.avatar} className="object-cover" />
                 </div>
                 <div className="flex flex-col justify-between">

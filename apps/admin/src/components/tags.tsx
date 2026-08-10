@@ -12,9 +12,9 @@ const tagInputStyle: CSSProperties = {
   verticalAlign: 'top'
 }
 
-export const TagsEdit = ({ value, onChange }: ControllerRenderProps) => {
+export const Tags = ({ value, onChange }: ControllerRenderProps) => {
   const token = useThemeToken()
-  const [tags, setTags] = useState<string[]>(value)
+  const tags: string[] = value ?? []
   const [inputVisible, setInputVisible] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [editInputIndex, setEditInputIndex] = useState(-1)
@@ -31,10 +31,6 @@ export const TagsEdit = ({ value, onChange }: ControllerRenderProps) => {
   useEffect(() => {
     editInputRef.current?.focus()
   }, [editInputValue])
-
-  useEffect(() => {
-    setTags(value)
-  }, [value])
 
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter(tag => tag !== removedTag)
@@ -76,7 +72,7 @@ export const TagsEdit = ({ value, onChange }: ControllerRenderProps) => {
   }
 
   return (
-    <div className="flex flex-wrap gap-y-1">
+    <div className="flex flex-wrap gap-1">
       {tags?.map((tag, index) => {
         if (editInputIndex === index) {
           return (
@@ -93,20 +89,22 @@ export const TagsEdit = ({ value, onChange }: ControllerRenderProps) => {
         }
         const isLongTag = tag.length > 20
         const tagElem = (
-          <Tag key={tag} closable style={{ userSelect: 'none' }} onClose={() => handleClose(tag)}>
-            <span
-              onDoubleClick={e => {
-                setEditInputIndex(index)
-                setEditInputValue(tag)
-                e.preventDefault()
-              }}
-            >
-              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-            </span>
+          <Tag
+            key={index}
+            className="select-none"
+            closable
+            onClose={() => handleClose(tag)}
+            onDoubleClick={e => {
+              e.preventDefault()
+              setEditInputIndex(index)
+              setEditInputValue(tag)
+            }}
+          >
+            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
           </Tag>
         )
         return isLongTag ? (
-          <Tooltip title={tag} key={tag}>
+          <Tooltip key={index} title={tag}>
             {tagElem}
           </Tooltip>
         ) : (
@@ -124,7 +122,7 @@ export const TagsEdit = ({ value, onChange }: ControllerRenderProps) => {
           onPressEnter={handleInputConfirm}
         />
       ) : (
-        <Tag style={tagPlusStyle} icon={<PlusOutlined />} onClick={showInput}>
+        <Tag className="cursor-pointer" style={tagPlusStyle} icon={<PlusOutlined />} onClick={showInput}>
           添加
         </Tag>
       )}

@@ -90,21 +90,21 @@ export const MenuBar = () => {
 
       <div className="flex flex-wrap gap-2">
         <MenuButton
-          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          onClick={() => editor.chain().focus().toggleTextAlign('left').run()}
           disabled={!state.canTextAlign}
           active={state.isAlignLeft}
         >
           <LuAlignLeft />
         </MenuButton>
         <MenuButton
-          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          onClick={() => editor.chain().focus().toggleTextAlign('center').run()}
           disabled={!state.canTextAlign}
           active={state.isAlignCenter}
         >
           <LuAlignCenter />
         </MenuButton>
         <MenuButton
-          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          onClick={() => editor.chain().focus().toggleTextAlign('right').run()}
           disabled={!state.canTextAlign}
           active={state.isAlignRight}
         >

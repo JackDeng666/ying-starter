@@ -8,19 +8,19 @@ import { Iconify } from '@/components/icon'
 import { useRouter } from '@/router/hooks'
 import { useThemeToken } from '@/hooks'
 import { MultiTabOperation } from '@/types/enum'
-import { KeepAliveTab } from './use-keepalive'
 import { useKeepaliveContext } from './use-keepalive-context'
+import { KeepAliveRoute } from './type'
 
 const menuItems: MenuProps['items'] = [
-  // {
-  //   label: '内容全屏',
-  //   key: MultiTabOperation.FULLSCREEN,
-  //   icon: <Iconify icon="material-symbols:fullscreen" size={18} />
-  // },
   {
     label: '刷新',
     key: MultiTabOperation.REFRESH,
     icon: <Iconify icon="mdi:reload" size={18} />
+  },
+  {
+    label: '内容全屏',
+    key: MultiTabOperation.FULLSCREEN,
+    icon: <Iconify icon="material-symbols:fullscreen" size={18} />
   },
   {
     label: '关闭标签页',
@@ -57,11 +57,11 @@ const menuItems: MenuProps['items'] = [
 
 const ItemTransition = 'color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, background 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
 
-type SortableTabProps = { tab: KeepAliveTab; index: number }
-export const SortableTab = ({ tab, index }: SortableTabProps) => {
+type SortableTabProps = { tab: KeepAliveRoute }
+export function SortableTab({ tab }: SortableTabProps) {
   const { push } = useRouter()
   const themeToken = useThemeToken()
-  const { tabs, activeTabKey, closeTab, refreshTab, closeOthersTab, closeAll, closeLeft, closeRight } =
+  const { tabs, activeTabKey, closeTab, refreshTab, closeOthersTab, closeAll, closeLeft, closeRight, fullscreenTab } =
     useKeepaliveContext()
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: tab.key })
   const [isHover, setIsHover] = useState(false)
@@ -89,6 +89,9 @@ export const SortableTab = ({ tab, index }: SortableTabProps) => {
       case MultiTabOperation.REFRESH:
         refreshTab(tab.key)
         break
+      case MultiTabOperation.FULLSCREEN:
+        fullscreenTab(tab.key)
+        break
       case MultiTabOperation.CLOSE:
         closeTab(tab.key)
         break
@@ -104,9 +107,6 @@ export const SortableTab = ({ tab, index }: SortableTabProps) => {
       case MultiTabOperation.CLOSEALL:
         closeAll()
         break
-      // case MultiTabOperation.FULLSCREEN:
-      //   toggleFullScreen()
-      //   break
       default:
         break
     }
@@ -145,7 +145,7 @@ export const SortableTab = ({ tab, index }: SortableTabProps) => {
     >
       <div
         ref={setNodeRef}
-        id={`tab-${index}`}
+        id={`tab-${tab.key}`}
         className="shrink-0 px-2 py-1 cursor-grab select-none flex gap-x-0.5 items-center"
         style={style}
         onClick={() => push(tab.key)}

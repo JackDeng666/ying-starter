@@ -10,7 +10,7 @@ import { PropsWithClassName } from '@/types'
 /**
  * 动态面包屑解决方案：https://github.com/MinjieChang/myblog/issues/29
  */
-export default function BreadCrumb({ className }: PropsWithClassName) {
+export function BreadCrumb({ className }: PropsWithClassName) {
   const matches = useMatches()
   const [breadCrumbs, setBreadCrumbs] = useState<ItemType[]>([])
   const { push } = useRouter()

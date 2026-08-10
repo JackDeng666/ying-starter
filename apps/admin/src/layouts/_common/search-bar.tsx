@@ -10,7 +10,7 @@ import { Scrollbar } from '@/components/scrollbar'
 import { usePermissionRoutes, useRouter } from '@/router/hooks'
 import { useThemeToken } from '@/hooks'
 
-export default function SearchBar() {
+export function SearchBar() {
   const { replace } = useRouter()
   const panelRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<InputRef>(null)

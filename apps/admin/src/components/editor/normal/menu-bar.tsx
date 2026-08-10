@@ -50,27 +50,55 @@ export const MenuBar = () => {
       >
         <LuStrikethrough />
       </MenuButton>
-      <MenuButton onClick={() => editor.chain().focus().toggleBulletList().run()} active={state.isBulletList}>
+      <MenuButton
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        disabled={!state.canBulletList}
+        active={state.isBulletList}
+      >
         <LuList />
       </MenuButton>
-      <MenuButton onClick={() => editor.chain().focus().toggleOrderedList().run()} active={state.isOrderedList}>
+      <MenuButton
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        disabled={!state.canOrderedList}
+        active={state.isOrderedList}
+      >
         <LuListOrdered />
       </MenuButton>
-      <MenuButton onClick={() => editor.chain().focus().toggleCodeBlock().run()} active={state.isCodeBlock}>
+      <MenuButton
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        disabled={!state.canCodeBlock}
+        active={state.isCodeBlock}
+      >
         <LuCode />
       </MenuButton>
-      <MenuButton onClick={() => editor.chain().focus().toggleBlockquote().run()} active={state.isBlockquote}>
+      <MenuButton
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        disabled={!state.canBlockquote}
+        active={state.isBlockquote}
+      >
         <LuBrackets />
       </MenuButton>
       <MenuButton onClick={() => editor.chain().focus().setHorizontalRule().run()}>__</MenuButton>
 
-      <MenuButton onClick={() => editor.chain().focus().setTextAlign('left').run()} active={state.isAlignLeft}>
+      <MenuButton
+        onClick={() => editor.chain().focus().toggleTextAlign('left').run()}
+        disabled={!state.canTextAlign}
+        active={state.isAlignLeft}
+      >
         <LuAlignLeft />
       </MenuButton>
-      <MenuButton onClick={() => editor.chain().focus().setTextAlign('center').run()} active={state.isAlignCenter}>
+      <MenuButton
+        onClick={() => editor.chain().focus().toggleTextAlign('center').run()}
+        disabled={!state.canTextAlign}
+        active={state.isAlignCenter}
+      >
         <LuAlignCenter />
       </MenuButton>
-      <MenuButton onClick={() => editor.chain().focus().setTextAlign('right').run()} active={state.isAlignRight}>
+      <MenuButton
+        onClick={() => editor.chain().focus().toggleTextAlign('right').run()}
+        disabled={!state.canTextAlign}
+        active={state.isAlignRight}
+      >
         <LuAlignRight />
       </MenuButton>
 

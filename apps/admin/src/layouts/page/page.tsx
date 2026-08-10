@@ -68,7 +68,7 @@ export const Page = <T,>({
   return (
     <div className={cn('rounded-md shadow-xs', classNames?.wrapper)} style={{ backgroundColor: colorBgContainer }}>
       {header && (
-        <div ref={headerRef} className={cn('border-b border-border/60 p-3', classNames?.header)}>
+        <div ref={headerRef} className={cn('border-b border-border p-3', classNames?.header)}>
           {header}
         </div>
       )}
@@ -88,7 +88,7 @@ export const Page = <T,>({
         {typeof body === 'function' ? body(recommendedBodyHeight) : body}
       </div>
       {(footer || pagination) && (
-        <div ref={footerRef} className={cn('border-t border-border/60 p-3 flex justify-end', classNames?.footer)}>
+        <div ref={footerRef} className={cn('border-t border-border p-3 flex justify-end', classNames?.footer)}>
           {footer}
           {pagination && <Pagination size="small" {...pagination} />}
         </div>

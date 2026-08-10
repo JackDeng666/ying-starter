@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMatches, useOutlet, matchPath } from 'react-router-dom'
 import { deepCopy } from '@ying/utils'
-import { RouteMeta } from '@/types/router'
-import { usePermissionRoutes } from './use-permission-routes'
-import { useRouter } from './use-router'
+import { usePermissionRoutes, useRouter } from '@/router/hooks'
+import { KeepAliveRoute } from './type'
 
-export function useCurrentRouteMeta() {
-  const [currentRouteMeta, setCurrentRouteMeta] = useState<RouteMeta | undefined>()
+export function useCurrentKeepAliveRoute() {
+  const [currentKeepAliveRoute, setCurrentKeepAliveRoute] = useState<KeepAliveRoute>()
   const outlet = useOutlet()
   const outletRef = useRef(outlet)
   outletRef.current = outlet
@@ -19,30 +18,30 @@ export function useCurrentRouteMeta() {
   useEffect(() => {
     const lastRoute = matchs.at(-1)
 
-    let matchedRouteMeta: RouteMeta | undefined = undefined
-    let realKey: string | undefined = undefined
+    let matchedRoute: KeepAliveRoute | undefined = undefined
+    let realTabKey: string | undefined = undefined
 
     routeMetas.find(item => {
       const matchedPath = matchPath(item.key, lastRoute?.pathname)
       if (matchedPath) {
-        matchedRouteMeta = deepCopy(item)
+        matchedRoute = deepCopy(item)
         // 如果匹配成功，且实际路径与配置的路径模式不一致, 如 `/user/:id` 匹配到了 `/user/123`, 则将当前真实的路径 `/user/123` 赋值给变量 realKey
         if (matchedPath.pathname !== matchedPath.pattern.path) {
-          realKey = matchedPath.pathname
+          realTabKey = matchedPath.pathname
         }
       }
     })
 
-    if (matchedRouteMeta) {
-      if (!matchedRouteMeta.hideTab) {
-        if (realKey) matchedRouteMeta.key = realKey
-        matchedRouteMeta.outlet = outletRef.current
-        setCurrentRouteMeta(matchedRouteMeta)
+    if (matchedRoute) {
+      if (!matchedRoute.hideTab) {
+        if (realTabKey) matchedRoute.key = realTabKey
+        matchedRoute.outlet = outletRef.current
+        setCurrentKeepAliveRoute(matchedRoute)
       }
     } else {
       push(import.meta.env.APP_HOMEPAGE)
     }
   }, [matchs, routeMetas, push])
 
-  return currentRouteMeta
+  return currentKeepAliveRoute
 }

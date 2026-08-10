@@ -1,12 +1,11 @@
+import { CSSProperties, useState, cloneElement, ReactElement } from 'react'
 import { Divider, MenuProps, Dropdown, DropdownProps } from 'antd'
-import React, { HTMLAttributes, useState } from 'react'
 
-import { IconButton } from '@/components/icon'
 import { useUserInfo, logout } from '@/store/userStore'
 import { useThemeToken } from '@/hooks'
 import { UserInfoModal, UserInfoModalProps } from './user-info-modal'
 
-export default function AccountDropdown() {
+export function AccountDropdown() {
   const { name, email, account, avatar } = useUserInfo() ?? {}
 
   const [userInfoModalProps, setUserInfoModalProps] = useState<UserInfoModalProps>({
@@ -31,7 +30,7 @@ export default function AccountDropdown() {
 
   const { colorBgElevated, borderRadius, boxShadowSecondary } = useThemeToken()
 
-  const contentStyle: React.CSSProperties = {
+  const contentStyle: CSSProperties = {
     width: 150,
     backgroundColor: colorBgElevated,
     borderRadius: borderRadius,
@@ -46,9 +45,9 @@ export default function AccountDropdown() {
         <span className="w-full text-md text-ellipsis overflow-hidden whitespace-nowrap">{email}</span>
       </div>
       <Divider style={{ margin: 0 }} />
-      {React.cloneElement(
-        menu as React.ReactElement<{
-          style: React.CSSProperties
+      {cloneElement(
+        menu as ReactElement<{
+          style: CSSProperties
         }>,
         { style: { boxShadow: 'none' } }
       )}

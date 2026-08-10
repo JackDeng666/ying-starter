@@ -9,13 +9,11 @@
   --error: #ff5630;
   --info: #1677ff;
 
-  --border: #d9d9d9;
   --hover: #63738115;
   --scrollbar: rgba(0, 0, 0, 0.25);
 }
 
 .dark {
-  --border: #424242;
   --hover: #f4f4f420;
   --scrollbar: rgba(255, 255, 255, 0.25);
 }

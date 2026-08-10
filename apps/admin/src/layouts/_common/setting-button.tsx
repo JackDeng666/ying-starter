@@ -3,18 +3,16 @@ import { Button, Card, Drawer, Switch, Tooltip } from 'antd'
 import Color from 'color'
 import { CSSProperties, useState } from 'react'
 import { MdCircle } from 'react-icons/md'
-import screenfull from 'screenfull'
-
+import { useFullscreen } from '@ying/frontend/hooks'
 import CyanBlur from '@/assets/images/background/cyan-blur.png'
 import RedBlur from '@/assets/images/background/red-blur.png'
 import { IconButton, Iconify } from '@/components/icon'
 import { useSettings, setSettings } from '@/store'
 import { colorPresets } from '@/theme/config'
 import { useThemeToken } from '@/hooks'
-
 import { ThemeColorPresets, ThemeNavLayout, ThemeMode } from '@/types/enum'
 
-export default function SettingButton() {
+export function SettingButton() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { colorPrimary, colorBgBase, colorTextSecondary, colorTextTertiary, colorBgContainer } = useThemeToken()
 
@@ -72,16 +70,10 @@ export default function SettingButton() {
     backgroundSize: '50, 50%'
   }
 
-  const [isFullscreen, setIsFullscreen] = useState(screenfull.isFullscreen)
-  const toggleFullScreen = () => {
-    if (screenfull.isEnabled) {
-      screenfull.toggle()
-      setIsFullscreen(!isFullscreen)
-    }
-  }
-
   const layoutBackground = (layout: ThemeNavLayout) =>
     themeLayout === layout ? `linear-gradient(135deg, ${colorBgBase} 0%, ${colorPrimary} 100%)` : '#919eab'
+
+  const { isFullscreen, toggleFullscreen } = useFullscreen()
 
   return (
     <>
@@ -103,7 +95,7 @@ export default function SettingButton() {
           </IconButton>
         }
         footer={
-          <Button type="dashed" block size="large" onClick={toggleFullScreen}>
+          <Button type="dashed" block size="large" onClick={toggleFullscreen}>
             <div className="flex items-center justify-center">
               {isFullscreen ? (
                 <>

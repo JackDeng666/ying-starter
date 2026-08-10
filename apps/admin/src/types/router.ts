@@ -29,21 +29,9 @@ export type RouteMeta = {
    */
   disabled?: boolean
   /**
-   * react router outlet
-   */
-  outlet?: any
-  /**
-   * use to refresh tab
-   */
-  timeStamp?: string
-  /**
    * external link and iframe need
    */
   frameSrc?: string
-  /**
-   * do not cache in multi tab
-   */
-  noCache?: boolean
   /**
    * the permission object
    */

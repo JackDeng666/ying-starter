@@ -17,7 +17,7 @@ const initComponents = () => {
 }
 initComponents()
 
-export const DevModal = () => {
+export function DevDrawer() {
   const [open, setOpen] = useState(false)
 
   const pressedKeys = useRef(new Set())
