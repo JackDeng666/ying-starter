@@ -51,7 +51,7 @@ export function ArticleModal({ open, formValue, onSuccess, onClose }: ArticleMod
       await articleApi.create(value)
     }
     message.success(`${title}成功`)
-    onSuccess && onSuccess()
+    onSuccess?.()
     onClose()
   }
 

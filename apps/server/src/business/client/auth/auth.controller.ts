@@ -1,5 +1,5 @@
-import { Controller, Post, Get, Res, Inject, Body, UseFilters, Query } from '@nestjs/common'
-import { Response } from 'express'
+import { Controller, Post, Get, Res, Inject, Body, UseFilters, Query, Req } from '@nestjs/common'
+import { Request, Response } from 'express'
 import { ConfigType } from '@nestjs/config'
 import { I18nContext } from 'nestjs-i18n'
 
@@ -16,6 +16,7 @@ import { authConfig } from '@/config'
 import { AuthService } from './auth.service'
 import { OAuthService } from './oauth.service'
 import { OAuthLoginExceptionFilter } from './oauth.login.filter'
+import { getRefreshTokenFromRequest } from '@/common/utils'
 
 @Controller('client/auth')
 export class AuthController {
@@ -32,8 +33,8 @@ export class AuthController {
   }
 
   @Get('refresh')
-  refresh(@Token() token: string) {
-    return this.authService.refreshToken(token)
+  refresh(@Req() req: Request) {
+    return this.authService.refreshToken(getRefreshTokenFromRequest(req) ?? '')
   }
 
   @Post('register')

@@ -63,7 +63,7 @@ export function RoleDrawer({ open, formValue, onSuccess, onClose }: RoleDrawerPr
     }
     onClose()
     message.success(`${title}成功`)
-    onSuccess && onSuccess()
+    onSuccess?.()
   }
 
   return (

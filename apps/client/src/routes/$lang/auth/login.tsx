@@ -44,7 +44,7 @@ function RouteComponent() {
       setAuthTokens({ accessToken, refreshToken })
       navigate({ to: '/$lang', params, replace: true })
     }
-  }, [accessToken, refreshToken, params])
+  }, [accessToken, refreshToken, navigate, params])
 
   const [error, setError] = useState<string>()
   const [success, setSuccess] = useState<string>()

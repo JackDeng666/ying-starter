@@ -1,14 +1,10 @@
 import path from 'node:path'
 import { defineConfig, loadEnv } from 'vite'
-import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
-import babel from '@rolldown/plugin-babel'
 import { customLogger } from './vite.logger'
-
-// import { dependencies } from './package.json'
-// const dependenciesNotIncluded = ['@ying/frontend', 'autosuggest-highlight']
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'APP_')
@@ -30,34 +26,12 @@ export default defineConfig(({ mode }) => {
     customLogger,
     plugins: [
       babel({ presets: [reactCompilerPreset()] }),
-      viteReact(),
+      react(),
       tailwindcss(),
       createSvgIconsPlugin({
         iconDirs: [path.resolve(__dirname, 'src/assets/icons')], // 指定需要缓存的图标文件夹
         symbolId: 'ic-[dir]-[name]' // 指定symbolId格式
-      }),
-      nodePolyfills()
+      })
     ]
-    // optimizeDeps: {
-    //   rolldownOptions: {
-    //     commonjs: {
-    //       transformMixedExports: true
-    //     },
-    //     output: {
-    //       codeSplitting: {
-    //         groups: [
-    //           {
-    //             name(moduleId) {
-    //               if (moduleId.includes('node_modules')) {
-    //                 return 'vendor'
-    //               }
-    //               return null
-    //             }
-    //           }
-    //         ]
-    //       }
-    //     }
-    //   }
-    // }
   }
 })

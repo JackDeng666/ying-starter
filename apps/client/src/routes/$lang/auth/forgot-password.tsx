@@ -45,7 +45,7 @@ function RouteComponent() {
   const emailHasTrigger = useRef(false)
   useEffect(() => {
     if (emailHasTrigger.current) trigger('email')
-  }, [email])
+  }, [email, trigger])
 
   const onSubmit = async (values: ResetPasswordWithCodeDto) => {
     try {
@@ -74,7 +74,7 @@ function RouteComponent() {
       toast.success(t('success.email_verification_code_sent_successfully'))
     },
     onError: httpError => {
-      httpError instanceof HttpError && setError(t(httpError.message))
+      if (httpError instanceof HttpError) setError(t(httpError.message))
     }
   })
 

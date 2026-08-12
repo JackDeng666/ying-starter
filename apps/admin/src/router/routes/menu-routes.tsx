@@ -1,4 +1,4 @@
-import { JSX, Suspense, lazy } from 'react'
+import { JSX, Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { pms } from '@ying/permission'
@@ -6,18 +6,19 @@ import { pms } from '@ying/permission'
 import { AppRouteObject } from '@/types/router'
 import { CircleLoading } from '@/components/loading'
 
-const Dashboard = lazy(() => import('@/pages/dashboard/dashboard-page'))
-const User = lazy(() => import('@/pages/user/user-page'))
-const Feedback = lazy(() => import('@/pages/feedback/feedback-page'))
-const Article = lazy(() => import('@/pages/article/article-page'))
-const PushTemplate = lazy(() => import('@/pages/notification/push-template/push-template-page'))
-const PushTask = lazy(() => import('@/pages/notification/push-task/push-task-page'))
-const PushRecord = lazy(() => import('@/pages/notification/push-record/push-record-page'))
-const Visitor = lazy(() => import('@/pages/notification/visitor/visitor-page'))
-
-const SysRole = lazy(() => import('@/pages/sys/role/role-page'))
-const SysUser = lazy(() => import('@/pages/sys/user/user-page'))
-const SysSetting = lazy(() => import('@/pages/sys/setting/setting-page'))
+import {
+  Dashboard,
+  User,
+  Feedback,
+  Article,
+  PushTemplate,
+  PushTask,
+  PushRecord,
+  Visitor,
+  SysRole,
+  SysUser,
+  SysSetting
+} from './lazy-pages'
 
 function withLoadingFallback(component: JSX.Element) {
   return <Suspense fallback={<CircleLoading />}>{component}</Suspense>

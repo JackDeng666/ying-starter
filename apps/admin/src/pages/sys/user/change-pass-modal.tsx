@@ -35,7 +35,7 @@ export function ChangePassModal({ open, formValue, onSuccess, onClose }: ChangeP
     await sysUserApi.updatePassword(value)
     onClose()
     message.success('修改密码成功')
-    onSuccess && onSuccess()
+    onSuccess?.()
   }
 
   return (

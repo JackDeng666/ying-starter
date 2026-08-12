@@ -32,7 +32,7 @@ function parsePushData(pushData: PushMessageData) {
   try {
     const data = pushData.json() as TPushData
     return data
-  } catch (error) {
+  } catch {
     return pushData.text()
   }
 }

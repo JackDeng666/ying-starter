@@ -60,7 +60,7 @@ export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerPr
     }
     onClose()
     message.success(`${title}成功`)
-    onSuccess && onSuccess()
+    onSuccess?.()
   }
 
   return (

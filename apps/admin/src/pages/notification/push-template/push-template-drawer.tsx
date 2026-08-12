@@ -59,7 +59,7 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
       await notificationApi.createPushTemplate(value)
     }
     message.success(`${title}成功`)
-    onSuccess && onSuccess()
+    onSuccess?.()
     onClose()
   }
 

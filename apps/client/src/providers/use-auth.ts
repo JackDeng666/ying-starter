@@ -15,7 +15,7 @@ export const useAuth = () => {
       }
     })
     return unsubscribe
-  }, [])
+  }, [router])
 
   useEffect(() => {
     if (refreshToken) {

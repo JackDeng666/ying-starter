@@ -15,7 +15,7 @@ export const CropImageModal = ({ open, onClose, formValue: file, aspectRatio, on
     if (!ref.current) return
     const res = await ref.current.save()
     if (res) {
-      onCrop && onCrop(res)
+      onCrop?.(res)
     }
     onClose()
   }

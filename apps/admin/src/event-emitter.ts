@@ -1,9 +1,7 @@
-import { EventEmitter } from 'events'
+import mitt from 'mitt'
 
-type TGlobalEvent = {
-  API_ERROR_MSG: [string | string[]]
+export type Events = {
+  API_ERROR_MSG: string
 }
 
-const globalEvent = new EventEmitter<TGlobalEvent>()
-
-export { globalEvent }
+export const globalEvent = mitt<Events>()

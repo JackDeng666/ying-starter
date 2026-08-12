@@ -2,8 +2,8 @@ export enum StorageEnum {}
 
 export enum CookieEnum {
   Language = 'lang',
-  AccessToken = 'access_token',
-  RefreshToken = 'refresh_token'
+  AccessToken = 'accessToken',
+  RefreshToken = 'refreshToken'
 }
 
 export const AppKey = {

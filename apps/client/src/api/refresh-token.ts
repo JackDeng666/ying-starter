@@ -1,20 +1,24 @@
-import { BeforeRequestHookOptions, HttpRequest } from '@ying/http'
-import { setAccessToken } from '@/store'
+import { HttpRequest, type BeforeRequestHookOptions } from '@ying/http'
+import { useAuthStore, updateAccessToken } from '@/store/auth-store'
 
-let refreshTokenPromise: Promise<void> | undefined
+let refreshTokenPromise: Promise<string> | undefined
 
 export function refreshToken(http: HttpRequest) {
   if (refreshTokenPromise) return refreshTokenPromise
   refreshTokenPromise = new Promise((resolve, reject) => {
+    const state = useAuthStore.getState()
     http
-      .get<string>('/sys/auth/refresh', {
+      .get<string>('/auth/refresh', {
+        headers: {
+          authorization: `Bearer ${state.refreshToken}`
+        },
         additional: {
           __isRefreshToken: true
         }
       })
       .then(accessToken => {
-        setAccessToken(accessToken)
-        resolve()
+        updateAccessToken(accessToken)
+        resolve(accessToken)
       })
       .catch(error => {
         console.error(error)

@@ -46,5 +46,5 @@ export const useVisitor = () => {
     if (userInfo && visitorId && isUserNewDevice(userInfo, visitorId)) {
       bindUser(visitorId)
     }
-  }, [hasHydrated, visitorId])
+  }, [hasHydrated, visitorId, userInfo])
 }

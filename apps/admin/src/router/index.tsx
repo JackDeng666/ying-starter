@@ -21,7 +21,7 @@ export default function Router() {
 
   useEffect(() => {
     let currentShowMsg = ''
-    function onApiErrorMsg(msg: string | string[]) {
+    function onApiErrorMsg(msg: string) {
       if (currentShowMsg) return
       if (Array.isArray(msg)) {
         currentShowMsg = msg[0]

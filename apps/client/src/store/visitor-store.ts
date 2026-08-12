@@ -15,7 +15,7 @@ export const useVisitorStore = create<VisitorStore>()(
     {
       name: 'visitor_store',
       onRehydrateStorage: _ => state => {
-        state && (state.hasHydrated = true)
+        if (state) state.hasHydrated = true
       }
     }
   )
