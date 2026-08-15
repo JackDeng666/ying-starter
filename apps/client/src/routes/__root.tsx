@@ -34,6 +34,11 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
         {
           rel: 'stylesheet',
           href: appCss
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          href: '/logo.png'
         }
       ]
     }

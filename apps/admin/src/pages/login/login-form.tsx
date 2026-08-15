@@ -1,4 +1,4 @@
-import { App, Button, Form, Input } from 'antd'
+import { App, Button, Card, Form, Input } from 'antd'
 import { useCallback, useState } from 'react'
 import type { AdminLoginDto } from '@ying/dto'
 
@@ -50,8 +50,7 @@ export function LoginForm() {
   }
 
   return (
-    <>
-      <div className="mb-8 text-xl font-bold xl:text-2xl text-center">登录</div>
+    <Card title="登录" className="w-full max-w-xs">
       <Form name="login" layout="vertical" onFinish={handleFinish}>
         <Form.Item label="账号" name="username" rules={[{ required: true, message: '请输入账号' }]}>
           <Input placeholder="账号" />
@@ -59,12 +58,10 @@ export function LoginForm() {
         <Form.Item label="密码" name="password" rules={[{ required: true, message: '请输入密码' }]}>
           <Input.Password type="password" placeholder="密码" />
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className="w-full mt-4" loading={loading}>
-            登录
-          </Button>
-        </Form.Item>
+        <Button type="primary" htmlType="submit" className="w-full mt-4" loading={loading}>
+          登录
+        </Button>
       </Form>
-    </>
+    </Card>
   )
 }

@@ -2,7 +2,7 @@
 
 ## 简介
 
-这是一个使用 pnpm 的 monorepo 架构的全栈项目，基于 React 和 NestJS 实现了基本的后台管理系统的角色权限控制逻辑，包含一个 TanStack Start 的客户端，集成了基本的注册登录逻辑和谷歌、github 的 oauth 登录。
+这是一个使用 pnpm + turborepo 的 monorepo 架构的全栈项目，基于 React 和 NestJS 实现了基本的后台管理系统的角色权限控制逻辑，包含一个 TanStack Start 的客户端，集成了基本的注册登录逻辑和谷歌、github 的 oauth 登录。
 
 后台管理端
 

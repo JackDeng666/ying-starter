@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { CSSProperties, Ref, MouseEventHandler, MouseEvent, ReactNode } from 'react'
 import type { IconProps } from '@iconify/react'
 import { cn } from '@ying/frontend/ui'
-import Iconify from './iconify-icon'
+import { Iconify } from './iconify-icon'
 
 type Props = {
   ref?: Ref<HTMLButtonElement>
@@ -13,7 +13,7 @@ type Props = {
   disabled?: boolean
   iconSize?: IconProps['width']
 }
-export default function IconButton({ ref, children, className, style, onClick, disabled, iconSize }: Props) {
+export function IconButton({ ref, children, className, style, onClick, disabled, iconSize }: Props) {
   const [loading, setLoading] = useState(false)
   const handleClick: MouseEventHandler<HTMLButtonElement> = async e => {
     if (!onClick) return

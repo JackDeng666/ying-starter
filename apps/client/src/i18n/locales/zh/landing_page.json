@@ -1,15 +1,15 @@
 {
   "welcomeToUse": "欢迎使用",
-  "desc": "想使用一套技术栈开发全栈web项目？或许你可以试试 NextJS ，但我认为 NextJS 只适合用来写需要 ssr 的客户端，使用其写 api 接口缺少很多开箱即用的功能，不如NestJS，同时如果后台管理系统也写在ssr框架里也没有直接写单页面项目那么丝滑。既然如此，那我们全都要！这是一套web全栈项目的开发模板，包含客户端（NextJS），后台管理端（React + Vite）和服务端（NestJS）代码，三端均使用 Typescript 进行开发，并用 nx 进行了 monorepo 化的同构开发，这样前后端均可以使用一些公用逻辑，具体可以点击下方查看 Github 仓库。",
+  "desc": "本项目整体采用 PNPM + Turborepo 驱动的 monorepo 架构作为工程底座，为上层多应用提供高效的构建与协作基础；在此之上，前端按场景拆分为双端——面向终端用户的客户端采用 Vite + React + TanStack Start 构建，借助文件路由、SSR 与服务端函数实现高性能且对 SEO 友好的全栈应用，而面向内部运营的后台管理端则采用 Vite + React + Ant Design 搭建专业中后台单页应用，以企业级组件库快速支撑复杂表单、表格与权限场景；两端共享同一套 Vite + React 技术主线，便于在 Monorepo 内复用类型、配置与通用逻辑，并通过统一的 NestJS 服务端承载业务接口，该后端基于 TypeScript 模块化与依赖注入架构，可扩展支持 Express/Fastify、WebSocket、GraphQL 及微服务，从而形成一个前后端同构、构建高效、场景化前端与可扩展后端深度协同的现代化全栈技术体系。",
   "github": "Github 仓库",
-  "projectManager": "项目管理器",
-  "projectManagerDesc": "使用nx去管理整个项目代码，让前后端的代码可以进行同构，并且可以通过它去一键启动整个项目。",
+  "projectManager": "项目管理",
+  "projectManagerDesc": "pnpm 通过硬链接和全局存储节省磁盘、加速安装，并用 workspace 协议管理本地依赖；Turborepo 则根据依赖图并行执行任务，并利用缓存跳过未变更代码的重复构建。两者互补，解决了 monorepo 架构的依赖冗余和构建慢问题，是目前全栈工程化的主流高效方案。",
   "client": "客户端",
-  "clientDesc": "客户端可能需要 seo 的功能，所以默认直接使用 nextjs 去构建。",
+  "clientDesc": "Vite + React + TanStack Start 是一套现代全栈方案，Vite 提供极速构建，React 负责组件化 UI，TanStack Start 则在此基础上提供文件路由、SSR 和服务端函数等全栈能力，适合构建需要 SEO 的高性能的 React 应用。",
   "managementEnd": "后台管理端",
-  "managementEndDesc": "后台管理系统大部分页面不需要做 seo，直接使用 React + Vite 去构建的单页面应用。",
+  "managementEndDesc": "Vite + React + Ant Design 是一套现代化的前端技术栈，Vite 提供极速的开发构建体验，React 负责灵活的组件化界面开发，Ant Design 则提供开箱即用的企业级 UI 组件，三者结合非常适合快速搭建专业的中后台单页应用。",
   "server": "服务端",
-  "serverEnd": "服务端使用 nestjs 构建，使用它构建 api 比用 nextjs 能够提供更加多开箱即用的功能。",
+  "serverEnd": "NestJS 是一个基于 Node.js 的渐进式框架，用于构建高效、可扩展的服务器端应用程序。它使用 TypeScript 开发，采用模块化架构和依赖注入设计模式，深受 Angular 启发。NestJS 支持 Express 和 Fastify 等底层平台，并内置对 WebSocket、GraphQL 和微服务的企业级支持。",
   "quickStart": "快速开始",
   "mode1": "方式一",
   "goDirectlyTo": "直接前往",
@@ -20,8 +20,5 @@
   "projectName": "项目名称",
   "toolsDesc2": "使用默认用户名，随后选择 ying-starter 项目即可。",
   "toolsDesc3": "请输入 Github 用户名 JackDeng666",
-  "toolsDesc4": "请选择仓库 ying-starter",
-  "frequentlyAskedQuestion": "常见问题",
-  "question1": "1.修改了代码移动了文件的时候会经常报错（比如xxx project graph等报错）？",
-  "answer1": "删除根目录下的.nx、tmp文件夹，随后重启即可。"
+  "toolsDesc4": "请选择仓库 ying-starter"
 }

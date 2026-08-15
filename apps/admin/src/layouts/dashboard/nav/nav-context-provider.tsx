@@ -3,7 +3,7 @@ import { MenuProps } from 'antd'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import { useLocation, useMatches } from 'react-router-dom'
 
-import { Iconify, SvgIcon } from '@/components/icon'
+import { Iconify } from '@/components/icon'
 import { usePermissionRoutes, useRouter } from '@/router/hooks'
 import { AppRouteObject } from '@/types/router'
 
@@ -25,11 +25,7 @@ const routeToMenu = (items: AppRouteObject[]) => {
         menuItem.label = label
         if (icon) {
           if (typeof icon === 'string') {
-            if (icon.startsWith('ic')) {
-              menuItem.icon = <SvgIcon prefix={null} icon={icon} />
-            } else {
-              menuItem.icon = <Iconify icon={icon} />
-            }
+            menuItem.icon = <Iconify icon={icon} />
           } else {
             menuItem.icon = icon
           }

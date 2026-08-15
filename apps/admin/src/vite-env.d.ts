@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="vite-plugin-svgr/client" />
 
 interface ImportMetaEnv {
   readonly APP_API_BASE: string
@@ -9,9 +10,4 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv
-}
-
-declare module 'virtual:svg-icons-register' {
-  const content: string
-  export default content
 }

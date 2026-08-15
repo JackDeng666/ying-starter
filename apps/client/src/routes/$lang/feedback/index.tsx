@@ -9,7 +9,7 @@ import { Card, CardContent, Input, Textarea, Button } from '@ying/frontend/ui'
 
 import { MaxWidthWrapper } from '@/layouts/max-width-wrapper'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/form'
-import { FeedbackSvg } from '@/components/svg'
+import FeedbackSVG from '@/svgs/feedback.svg?react'
 
 import { commonAPI, HttpError } from '@/api'
 
@@ -50,7 +50,7 @@ function RouteComponent() {
   return (
     <MaxWidthWrapper className="my-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-6 items-center">
-        <FeedbackSvg className="w-full h-full" />
+        <FeedbackSVG className="text-primary w-full h-full" />
         <Card>
           <CardContent>
             <Form className="space-y-2" onSubmit={handleSubmit(submit)} {...form}>

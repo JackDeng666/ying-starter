@@ -6,7 +6,7 @@ import { AccountDropdown } from '../_common/account-dropdown'
 import { BreadCrumb } from '../_common/bread-crumb'
 import { SearchBar } from '../_common/search-bar'
 import { Settings } from '../_common/settings'
-import { HEADER_HEIGHT, NAV_WIDTH, NAV_COLLAPSED_WIDTH } from './constant'
+import { HEADER_HEIGHT, NAV_WIDTH } from './constant'
 import { NavDrawer } from './nav'
 
 export function Header() {
@@ -25,10 +25,11 @@ export function Header() {
       <div className="flex items-center">
         {isVertical && <NavDrawer />}
         <Logo
-          className="text-xl justify-center"
+          className="text-2xl justify-center"
           style={{
-            transition: 'width 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-            width: isLogoFull ? `calc(${NAV_WIDTH}px - var(--spacing) * 4 * 2)` : NAV_COLLAPSED_WIDTH,
+            transition:
+              'width 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, margin-right 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+            width: isLogoFull ? `calc(${NAV_WIDTH}px - var(--spacing) * 4 * 2)` : 110,
             marginRight: isLogoFull ? 'calc(var(--spacing) * 8)' : 'calc(var(--spacing) * 4)'
           }}
         />

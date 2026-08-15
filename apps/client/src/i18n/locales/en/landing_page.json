@@ -1,15 +1,15 @@
 {
   "welcomeToUse": "Welcome to use",
-  "desc": "Do you want to use a technology stack to develop a full stack web project? Perhaps you can try NextJS, but I think NextJS is only suitable for writing clients that require SSR. Using it to write API interfaces lacks many out of the box features, unlike NestJS. Additionally, if the backend management system is also written in the SSR framework, it is not as smooth as directly writing single page projects. If that's the case, then we all want it! This is a set of development templates for web full stack projects, including client (NextJS), backend management (React + Vite), and server (NestJS) code. All three sides are developed using Typescript, and monorepo isomorphic development is carried out using NX. This way, both the frontend and backend can use some common logic. For details, you can click below to view the GitHub repository.",
+  "desc": "This project adopts a monorepo architecture driven by PNPM + Turborepo as its engineering foundation, providing an efficient foundation for building and collaborating multiple applications at the upper layer. On top of this, the front-end is split into two parts based on scenarios: the client-side for end users is built using Vite + React + TanStack Start, leveraging file routing, SSR, and server-side functions to achieve a high-performance and SEO-friendly full-stack application; while the back-end management side for internal operations uses Vite + React + Ant Design to build a professional mid-to-back-end single-page application, quickly supporting complex forms, tables, and permission scenarios with an enterprise-level component library. Both sides share the same Vite + React technology backbone, facilitating the reuse of types, configurations, and common logic within Monorepo, and using a unified NestJS server to host business interfaces. This back-end is based on a TypeScript modular and dependency injection architecture, and can be extended to support Express/Fastify, WebSocket, GraphQL, and microservices, thus forming a modern full-stack technology system with isomorphic front-end and back-end, efficient construction, and deep collaboration between scenario-based front-end and scalable back-end.",
   "github": "Github repository",
   "projectManager": "Project Manager",
-  "projectManagerDesc": "Use NX to manage the entire project code, allowing the front-end and back-end code to be isomorphic and enabling one click launch of the entire project.",
+  "projectManagerDesc": "pnpm saves disk space and speeds up installation through hard links and global storage, and manages local dependencies using the workspace protocol; Turborepo executes tasks in parallel based on the dependency graph and uses caching to skip repeated builds of unchanged code. The two complement each other, solving the dependency redundancy and slow build problems of the monorepo architecture, and are currently the mainstream high-efficiency solution for full-stack engineering.",
   "client": "Client",
-  "clientDesc": "The client may require SEO functionality, so the default is to use NextJS to build it directly.",
+  "clientDesc": "Vite + React + TanStack Start is a modern full-stack solution. Vite provides rapid build speeds, React handles component-based UI, and TanStack Start builds upon this foundation to provide full-stack capabilities such as file routing, SSR, and server-side functions. It is suitable for building high-performance React applications that require SEO optimization.",
   "managementEnd": "Management End",
-  "managementEndDesc": "Most of the pages in the backend management system do not require SEO and can be directly built using React+Vite as a single page application.",
+  "managementEndDesc": "Vite + React + Ant Design is a modern front-end technology stack. Vite provides a fast development and build experience, React is responsible for flexible component-based interface development, and Ant Design provides out-of-the-box enterprise-grade UI components. The combination of the three is very suitable for quickly building professional mid-to-back-end single-page applications.",
   "server": "Server",
-  "serverEnd": "The server is built using NestJS, which provides more out of the box functionality for building APIs than NextJS.",
+  "serverEnd": "NestJS is a progressive framework based on Node.js for building high-performance, scalable server-side applications. It is developed using TypeScript, employs a modular architecture and dependency injection design pattern, and is heavily inspired by Angular. NestJS supports underlying platforms such as Express and Fastify, and has built-in enterprise-grade support for WebSocket, GraphQL, and microservices.",
   "quickStart": "Quick Start",
   "mode1": "Mode One",
   "goDirectlyTo": "Go directly to",
@@ -19,9 +19,6 @@
   "toolsDesc1": "After installation, use ying to execute the crt command, followed by the project name.",
   "projectName": "project name",
   "toolsDesc2": "Use the default username and then select the ying-starter project.",
-  "toolsDesc3": "请输入 Github 用户名 JackDeng666",
-  "toolsDesc4": "请选择仓库 ying-starter",
-  "frequentlyAskedQuestion": "Frequently asked question",
-  "question1": "1. When modifying code and moving files, do errors often occur (such as xxx project graph errors)?",
-  "answer1": "Delete the .nx and tmp folders in the root directory, and then restart."
+  "toolsDesc3": "Please enter your Github username: JackDeng666",
+  "toolsDesc4": "Please select the warehouse ying-starter"
 }

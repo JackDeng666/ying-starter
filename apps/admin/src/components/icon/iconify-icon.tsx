@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react'
 import type { IconProps } from '@iconify/react'
 
-interface Props extends IconProps {
+type IconifyProps = IconProps & {
   size?: IconProps['width']
 }
-export default function Iconify({ icon, size = '1em', className = '', ...other }: Props) {
+export function Iconify({ icon, size = '1em', className = '', ...other }: IconifyProps) {
   return <Icon icon={icon} width={size} height={size} className={className} {...other} />
 }

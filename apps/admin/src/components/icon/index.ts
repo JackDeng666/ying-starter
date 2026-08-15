@@ -1,5 +1,3 @@
-import IconButton from './icon-button'
-import Iconify from './iconify-icon'
-import SvgIcon from './svg-icon'
-
-export { Iconify, SvgIcon, IconButton }
+export * from './icon-button'
+export * from './iconify-icon'
+export * from './svg-icon'

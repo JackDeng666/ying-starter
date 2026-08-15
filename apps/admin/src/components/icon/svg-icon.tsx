@@ -1,8 +1,25 @@
 import { CSSProperties } from 'react'
-import { cn } from '@ying/frontend/ui'
 
-interface SvgIconProps {
-  prefix?: string
+type SVGComponent = React.FunctionComponent<
+  React.SVGProps<SVGSVGElement> & {
+    title?: string
+    titleId?: string
+    desc?: string
+    descId?: string
+  }
+>
+const SvgIcons: Record<string, SVGComponent> = {}
+const initSVGIcons = () => {
+  const modules = import.meta.glob('../../assets/icons/**/*.svg', { eager: true, query: '?react' })
+  Object.keys(modules).forEach(moduleKey => {
+    const SVGCom = (modules[moduleKey] as any).default as SVGComponent
+    const key = moduleKey.split('icons/').at(-1).split('.').at(0).split('/').join('-')
+    SvgIcons[key] = SVGCom
+  })
+}
+initSVGIcons()
+
+type SvgIconProps = {
   icon: string
   color?: string
   size?: string | number
@@ -10,29 +27,13 @@ interface SvgIconProps {
   style?: CSSProperties
 }
 
-export default function SvgIcon({
-  icon,
-  prefix = 'ic',
-  color = 'currentColor',
-  size = '1em',
-  className = '',
-  style = {}
-}: SvgIconProps) {
-  const symbolId = `#${prefix ? `${prefix}-` : ''}${icon}`
+export function SvgIcon({ icon, color = 'currentColor', size = '1em', className = '', style = {} }: SvgIconProps) {
   const svgStyle: CSSProperties = {
     width: size,
     height: size,
     color,
     ...style
   }
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 100 100"
-      className={cn('fill-current overflow-hidden outline-none', className)}
-      style={svgStyle}
-    >
-      <use xlinkHref={symbolId} fill="currentColor" />
-    </svg>
-  )
+  const SVG = SvgIcons[icon]
+  return <SVG className={className} style={svgStyle} />
 }

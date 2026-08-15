@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import 'virtual:svg-icons-register'
 import 'dayjs/locale/zh-cn'
 
 import './styles.css'

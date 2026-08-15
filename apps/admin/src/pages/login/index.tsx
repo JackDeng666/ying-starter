@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom'
 import { useThemeToken } from '@/hooks'
-import PlaceholderImg from '@/assets/images/background/placeholder.svg'
+import { Logo } from '@/components/logo'
+import PlaceholderSVG from '@/assets/images/background/placeholder.svg?react'
 import { useUserInfo, useAccessToken } from '@/store'
 import { LoginForm } from './login-form'
 import { LoginStateProvider } from './provider'
@@ -8,7 +9,7 @@ import { LoginStateProvider } from './provider'
 const { APP_HOMEPAGE: HOMEPAGE } = import.meta.env
 
 function Login() {
-  const token = useThemeToken()
+  const { colorBgLayout } = useThemeToken()
   const accessToken = useAccessToken()
   const userInfo = useUserInfo()
 
@@ -17,28 +18,19 @@ function Login() {
   }
 
   return (
-    <div className="relative grid min-h-svh lg:grid-cols-2" style={{ backgroundColor: token.colorBgContainer }}>
-      <div className="relative hidden lg:block">
-        <img
-          src={PlaceholderImg}
-          alt="placeholder img"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.5] dark:grayscale"
-        />
-      </div>
+    <div className="h-svh flex" style={{ backgroundColor: colorBgLayout }}>
+      <PlaceholderSVG
+        viewBox="0 0 1200 1200"
+        preserveAspectRatio="xMidYMid slice"
+        className="flex-1 h-full w-full hidden lg:block dark:brightness-[0.3]"
+      />
 
-      <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex justify-center gap-2 md:justify-start">
-          <div className="flex items-center gap-2 font-medium cursor-pointer">
-            {/* <img className="w-[30px]" src={LogoImg} alt="logo" /> */}
-            <span>Ying</span>
-          </div>
-        </div>
-        <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">
-            <LoginStateProvider>
-              <LoginForm />
-            </LoginStateProvider>
-          </div>
+      <div className="flex-1 flex flex-col gap-4 p-6 md:p-10 object-cover">
+        <Logo className="text-3xl" />
+        <div className="flex-1 fc">
+          <LoginStateProvider>
+            <LoginForm />
+          </LoginStateProvider>
         </div>
       </div>
     </div>
