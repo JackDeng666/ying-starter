@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { PushSubscription } from 'web-push'
-
-import { useVisitorStore } from '@/store/visitor-store'
+import { storage } from '@ying/frontend/utils'
 import { commonAPI } from '@/api'
+import { StorageEnum } from '@/enum'
 
 const vapidPublicKey = import.meta.env.APP_VAPID_PUBLIC_KEY
 
@@ -20,13 +20,13 @@ const registerSw = async (onReady: (registration: ServiceWorkerRegistration) => 
       serviceWorker = registration.active
     }
 
-    console.log('Current service worker: ', serviceWorker)
+    // console.log('Current service worker: ', serviceWorker)
     if (!serviceWorker) return
     if (serviceWorker.state === 'activated') {
       onReady(registration)
     } else {
       serviceWorker.addEventListener('statechange', () => {
-        console.log('Service worker statechange: ', serviceWorker.state)
+        // console.log('Service worker statechange: ', serviceWorker.state)
         if (serviceWorker.state === 'activated') {
           onReady(registration)
         }
@@ -37,87 +37,79 @@ const registerSw = async (onReady: (registration: ServiceWorkerRegistration) => 
   }
 }
 
-type RegistrationOptions = {
-  registration: ServiceWorkerRegistration
-  applicationServerKey: string
-  visitorId: string
-}
-
-const subscribe = async ({ registration, applicationServerKey, visitorId }: RegistrationOptions) => {
-  console.log('start subscribe.')
+const startSubscribe = async (registration: ServiceWorkerRegistration, visitorId: string) => {
+  if (!vapidPublicKey) return
+  // console.log('startSubscribe...')
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey
+    applicationServerKey: vapidPublicKey
   })
-
   const pushSubscription = subscription.toJSON() as PushSubscription
-  console.log('subscription:', pushSubscription)
-
+  // console.log('PushSubscription:', pushSubscription)
   await commonAPI.subscribe({
     visitorId,
     pushSubscription
   })
-  console.log('subscribe end.')
+  // console.log('subscribe end.')
 }
 
-const checkSubscribe = async (options: RegistrationOptions) => {
-  try {
-    const { registration } = options
-    console.log('start check subscribe')
-    const permission = await Notification.requestPermission()
-    console.log('permission:', permission)
-    if (permission === 'granted') {
-      const existSubscription = await registration.pushManager.getSubscription()
-      if (existSubscription) {
-        const applicationServerKey = existSubscription.options.applicationServerKey
-        if (applicationServerKey) {
-          const currentKey = btoa(
-            String.fromCharCode.apply(null, new Uint8Array(applicationServerKey) as unknown as number[])
-          )
-            .replaceAll('+', '-')
-            .replaceAll('/', '_')
-            .replaceAll('=', '')
+const checkNotificationPermission = async () => {
+  // console.log('checkNotificationPermission...')
+  const permission = await Notification.requestPermission()
+  // console.log('NotificationPermission:', permission)
+  if (permission !== 'granted') {
+    // console.log('The user refused to receive notifications.')
+    return false
+  }
+  return true
+}
 
-          if (currentKey !== options.applicationServerKey) {
-            console.log('New public key update.')
-            await existSubscription.unsubscribe()
-            subscribe(options)
-          }
-        }
-      } else {
-        subscribe(options)
-      }
-    } else {
-      console.log('The user refused to receive notifications.')
-    }
+const checkSubscribeState = async (registration: ServiceWorkerRegistration) => {
+  try {
+    if (!vapidPublicKey) return 'no-pubkey'
+    const existingSubscription = await registration.pushManager.getSubscription()
+    if (!existingSubscription) return 'no-sub'
+    const existingApplicationServerKey = existingSubscription.options.applicationServerKey
+    if (!existingApplicationServerKey) return 'no-sub'
+    const currentKey = btoa(
+      String.fromCharCode.apply(null, new Uint8Array(existingApplicationServerKey) as unknown as number[])
+    )
+      .replaceAll('+', '-')
+      .replaceAll('/', '_')
+      .replaceAll('=', '')
+    if (currentKey === vapidPublicKey) return 'has-sub'
+    console.log('new vapid publicKey update.')
+    await existingSubscription.unsubscribe()
+    return 'no-sub'
   } catch (error) {
-    console.log('Subscribe error:', error)
+    console.error('checkCanSubscribe error:', error)
+    return 'error'
   }
 }
 
 export const useNotificationSw = () => {
-  const visitorId = useVisitorStore(store => store.visitorId)
-  const initedRef = useRef(false)
+  const [subscribeState, setSubscribeState] = useState<Awaited<ReturnType<typeof checkSubscribeState>>>('no-pubkey')
   const registrationRef = useRef<ServiceWorkerRegistration>(null)
-
   useEffect(() => {
-    registerSw(registration => {
+    registerSw(async registration => {
       registrationRef.current = registration
+      // console.log('checkSubscribeState...')
+      const state = await checkSubscribeState(registration)
+      // console.log('subscribeState', state)
+      setSubscribeState(state)
     })
   }, [])
 
-  const startSubscribe = useCallback(() => {
-    if (initedRef.current || !registrationRef.current || !vapidPublicKey || !visitorId) return
-    initedRef.current = true
-
-    checkSubscribe({
-      registration: registrationRef.current,
-      applicationServerKey: vapidPublicKey,
-      visitorId
-    })
-  }, [visitorId])
+  const subscribe = async () => {
+    const visitorId = storage.getStringItem(StorageEnum.VisitorId)
+    if (!registrationRef.current || !visitorId || subscribeState !== 'no-sub') return
+    const hasPermission = await checkNotificationPermission()
+    if (!hasPermission) return
+    await startSubscribe(registrationRef.current, visitorId)
+  }
 
   return {
-    startSubscribe
+    subscribeState,
+    subscribe
   }
 }

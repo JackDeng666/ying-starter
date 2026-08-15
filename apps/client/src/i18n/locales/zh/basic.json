@@ -21,6 +21,8 @@
   "prev": "上一页",
   "next": "下一页",
   "items_per_page": "条/页",
+  "enable_subscription": "开启订阅",
+  "subscribed": "已订阅",
   "text": {
     "first_name": "名称",
     "please_enter_first_name": "请输入您的名称",

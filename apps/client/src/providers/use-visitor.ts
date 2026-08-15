@@ -3,9 +3,10 @@ import { load } from '@fingerprintjs/fingerprintjs'
 import UAParser from 'ua-parser-js'
 
 import type { UserEntity } from '@ying/entity'
+import { storage } from '@ying/frontend/utils'
 
+import { StorageEnum } from '@/enum'
 import { commonAPI } from '@/api'
-import { useVisitorStore } from '@/store/visitor-store'
 import { useAuthStore } from '@/store/auth-store'
 
 const DeviceTypes = ['windows', 'android', 'ios', 'mac os']
@@ -13,9 +14,7 @@ const DeviceTypes = ['windows', 'android', 'ios', 'mac os']
 async function initVisitor() {
   const fp = await load()
   const visitorId = (await fp.get()).visitorId
-
-  useVisitorStore.setState({ visitorId })
-
+  storage.setStringItem(StorageEnum.VisitorId, visitorId)
   const parser = new UAParser()
   const deviceType = parser.getOS().name?.toLowerCase() || 'others'
   await commonAPI.createVisitor({
@@ -24,6 +23,7 @@ async function initVisitor() {
     userAgent: navigator.userAgent,
     deviceType: DeviceTypes.includes(deviceType) ? deviceType : 'others'
   })
+  return visitorId
 }
 
 async function bindUser(visitorId: string) {
@@ -35,16 +35,17 @@ function isUserNewDevice(user: UserEntity, visitorId: string) {
 }
 
 export const useVisitor = () => {
-  const { hasHydrated, visitorId } = useVisitorStore()
   const userInfo = useAuthStore(state => state.userInfo)
 
   useEffect(() => {
-    if (hasHydrated && !visitorId) {
-      initVisitor()
-    }
-
-    if (userInfo && visitorId && isUserNewDevice(userInfo, visitorId)) {
-      bindUser(visitorId)
-    }
-  }, [hasHydrated, visitorId, userInfo])
+    ;(async () => {
+      let visitorId = storage.getStringItem(StorageEnum.VisitorId)
+      if (!visitorId) {
+        visitorId = await initVisitor()
+      }
+      if (userInfo && isUserNewDevice(userInfo, visitorId)) {
+        bindUser(visitorId)
+      }
+    })()
+  }, [userInfo])
 }

@@ -21,6 +21,8 @@
   "prev": "Prev",
   "next": "Next",
   "items_per_page": "/ page",
+  "enable_subscription": "Enable subscription",
+  "subscribed": "Subscribed",
   "text": {
     "first_name": "FirstName",
     "please_enter_first_name": "Please enter your first name",

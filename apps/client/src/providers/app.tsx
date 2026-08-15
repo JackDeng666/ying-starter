@@ -9,7 +9,6 @@ import { Footer } from '@/layouts/footer'
 // import { initVconsole } from '@/init-vconsole'
 import { useAuth } from './use-auth'
 import { useVisitor } from './use-visitor'
-import { useNotificationSw } from './use-notification-sw'
 import { RouteLoading } from './route-loading'
 
 const queryClient = new QueryClient()
@@ -17,14 +16,14 @@ const queryClient = new QueryClient()
 export const AppProvider = ({ children }: PropsWithChildren) => {
   useAuth()
   useVisitor()
-  const { startSubscribe } = useNotificationSw()
+
   // useEffect(() => {
   //   initVconsole()
   // }, [])
 
   return (
     <QueryClientProvider client={queryClient}>
-      <main className="min-h-screen flex flex-col bg-accent" vaul-drawer-wrapper="" onClick={startSubscribe}>
+      <main className="min-h-screen flex flex-col bg-accent" vaul-drawer-wrapper="">
         <RouteLoading />
         <Toaster position="top-center" richColors />
         <Navbar />
