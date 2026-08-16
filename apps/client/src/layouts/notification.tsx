@@ -1,3 +1,4 @@
+import { useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNotificationSw } from '@/providers/use-notification-sw'
 import { Button } from '@ying/frontend/ui'
@@ -5,9 +6,17 @@ import { Button } from '@ying/frontend/ui'
 export const Notification = () => {
   const { t } = useTranslation()
   const { subscribeState, subscribe } = useNotificationSw()
+  const [loading, startTransition] = useTransition()
+
   if (subscribeState === 'no-sub') {
     return (
-      <Button variant="default" size="xs" onClick={subscribe}>
+      <Button
+        variant="default"
+        size="xs"
+        onClick={() => startTransition(subscribe)}
+        disabled={loading}
+        loading={loading}
+      >
         {t('enable_subscription')}
       </Button>
     )

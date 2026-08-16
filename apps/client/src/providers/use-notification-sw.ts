@@ -95,8 +95,8 @@ export const useNotificationSw = () => {
       registrationRef.current = registration
       // console.log('checkSubscribeState...')
       const state = await checkSubscribeState(registration)
-      // console.log('subscribeState', state)
       setSubscribeState(state)
+      // console.log('subscribeState', state)
     })
   }, [])
 
@@ -106,6 +106,8 @@ export const useNotificationSw = () => {
     const hasPermission = await checkNotificationPermission()
     if (!hasPermission) return
     await startSubscribe(registrationRef.current, visitorId)
+    const state = await checkSubscribeState(registrationRef.current)
+    setSubscribeState(state)
   }
 
   return {

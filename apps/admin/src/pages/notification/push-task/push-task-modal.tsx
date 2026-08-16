@@ -21,7 +21,6 @@ export type PushTaskModalProps = ReturnType<typeof useDialogOpen<PushTaskEntity>
 
 export function PushTaskModal({ open, formValue, onSuccess, onClose }: PushTaskModalProps) {
   const title = `${formValue ? '编辑' : '新增'}推送任务`
-  const [form] = Form.useForm()
   const { message } = App.useApp()
   const {
     control,
@@ -53,7 +52,7 @@ export function PushTaskModal({ open, formValue, onSuccess, onClose }: PushTaskM
     updateForm()
   }, [updateForm])
 
-  const handlePost = async (value: CreatePushTaskDto & UpdatePushTaskDto) => {
+  const submit = handleSubmit(async value => {
     if (value.id) {
       await notificationApi.updatePushTask(value)
     } else {
@@ -62,11 +61,11 @@ export function PushTaskModal({ open, formValue, onSuccess, onClose }: PushTaskM
     message.success(`${title}成功`)
     onSuccess()
     onClose()
-  }
+  })
 
   return (
-    <Modal title={title} width={660} open={open} onOk={form.submit} onCancel={onClose} confirmLoading={isSubmitting}>
-      <Form layout="vertical" form={form} onFinish={handleSubmit(handlePost)}>
+    <Modal title={title} width={660} open={open} onCancel={onClose} confirmLoading={isSubmitting} onOk={submit}>
+      <Form layout="vertical">
         <Form.Item
           label="任务名称"
           required

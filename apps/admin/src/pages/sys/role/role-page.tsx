@@ -1,4 +1,4 @@
-import { Button, Input, Select, Space, Tag, Typography, message } from 'antd'
+import { App, Button, Input, Select, Space, Tag, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
@@ -16,6 +16,7 @@ import { BasicStatusOptions, BasicStatusOption } from '@/constant'
 import { RoleDrawer } from './role-drawer'
 
 export default function RolePage() {
+  const { message } = App.useApp()
   const { control, resetParams, list, listLoading, pagination, reload } = useTable<ListRoleDto, SysRoleEntity>({
     key: 'role',
     getList: sysRoleApi.list,

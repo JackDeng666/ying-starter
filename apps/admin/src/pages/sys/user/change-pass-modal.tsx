@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Form, Modal, Input, message } from 'antd'
+import { App, Form, Modal, Input } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
@@ -13,7 +13,7 @@ type ChangePassModalProps = ReturnType<typeof useDialogOpen<UpdateSysUserPasswor
 }
 
 export function ChangePassModal({ open, formValue, onSuccess, onClose }: ChangePassModalProps) {
-  const [form] = Form.useForm()
+  const { message } = App.useApp()
 
   const {
     control,
@@ -31,22 +31,17 @@ export function ChangePassModal({ open, formValue, onSuccess, onClose }: ChangeP
     }
   }, [formValue, reset])
 
-  const handlePost = async (value: UpdateSysUserPasswordDto) => {
+  const submit = handleSubmit(async value => {
     await sysUserApi.updatePassword(value)
     onClose()
     message.success('修改密码成功')
     onSuccess?.()
-  }
+  })
 
   return (
-    <Modal title="修改密码" open={open} onOk={form.submit} onCancel={onClose} confirmLoading={isSubmitting}>
-      <Form form={form} labelCol={{ span: 2 }} onFinish={handleSubmit(handlePost)}>
-        <Form.Item<UpdateSysUserPasswordDto>
-          name="password"
-          required
-          validateStatus={errors.password ? 'error' : ''}
-          help={errors.password && errors.password.message}
-        >
+    <Modal title="修改密码" open={open} onOk={submit} onCancel={onClose} confirmLoading={isSubmitting}>
+      <Form layout="vertical">
+        <Form.Item validateStatus={errors.password ? 'error' : ''} help={errors.password && errors.password.message}>
           <Controller
             name="password"
             control={control}

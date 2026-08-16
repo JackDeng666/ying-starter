@@ -23,7 +23,6 @@ export type UserDrawerProps = ReturnType<typeof useDialogOpen<UpdateSysUserDto>>
 export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerProps) {
   const title = formValue ? '编辑系统用户' : '新增系统用户'
   const { message } = App.useApp()
-  const [form] = Form.useForm()
 
   const { data: roles, debounceSetParams } = useQueryWithParams<ListRoleDto, SysRoleEntity[]>({
     key: 'role-select-list-drawer',
@@ -52,7 +51,7 @@ export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerPr
     }
   }, [formValue, reset])
 
-  const handlePost = async (value: CreateSysUserDto & UpdateSysUserDto) => {
+  const submit = handleSubmit(async value => {
     if (value.id) {
       await sysUserApi.update(value)
     } else {
@@ -61,7 +60,7 @@ export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerPr
     onClose()
     message.success(`${title}成功`)
     onSuccess?.()
-  }
+  })
 
   return (
     <Drawer
@@ -70,12 +69,12 @@ export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerPr
       onClose={onClose}
       size={660}
       extra={
-        <Button type="primary" onClick={form.submit} loading={isSubmitting}>
+        <Button type="primary" onClick={submit} loading={isSubmitting}>
           提交
         </Button>
       }
     >
-      <Form onFinish={handleSubmit(handlePost)} form={form} layout="vertical">
+      <Form layout="vertical">
         <Form.Item
           label="昵称"
           required

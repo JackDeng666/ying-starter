@@ -1,4 +1,4 @@
-import { Button, Input, Select, Space, Tag, Typography, message } from 'antd'
+import { App, Button, Input, Select, Space, Tag, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
@@ -19,6 +19,7 @@ import { UserDrawer } from './user-drawer'
 import { ChangePassModal } from './change-pass-modal'
 
 export default function UserPage() {
+  const { message } = App.useApp()
   const { data: roles, debounceSetParams } = useQueryWithParams({
     key: 'role-select-list',
     queryFn: sysRoleApi.list,

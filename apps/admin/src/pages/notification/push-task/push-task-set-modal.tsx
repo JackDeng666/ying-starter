@@ -16,7 +16,6 @@ export type PushTaskSetProps = ReturnType<typeof useDialogOpen<PushTaskEntity>> 
 
 export function PushTaskSetModal({ open, formValue, onSuccess, onClose }: PushTaskSetProps) {
   const title = '设置任务'
-  const [form] = Form.useForm()
   const { message } = App.useApp()
   const {
     control,
@@ -39,23 +38,23 @@ export function PushTaskSetModal({ open, formValue, onSuccess, onClose }: PushTa
     updateForm()
   }, [updateForm])
 
-  const handlePost = async (value: SetPushTaskDto) => {
+  const submit = handleSubmit(async value => {
     await notificationApi.setPushTask(value)
     message.success(`${title}成功`)
     onSuccess()
     onClose()
-  }
+  })
 
   return (
     <Modal
       title={title}
       open={open}
       okText={timeField.value ? '定时推送' : '立即推送'}
-      onOk={form.submit}
+      onOk={submit}
       onCancel={onClose}
       confirmLoading={isSubmitting}
     >
-      <Form layout="vertical" form={form} onFinish={handleSubmit(handlePost)}>
+      <Form layout="vertical">
         <Form.Item
           label="推送时间"
           validateStatus={errors.time ? 'error' : ''}

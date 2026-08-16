@@ -23,7 +23,6 @@ type ArticleModalProps = ReturnType<typeof useDialogOpen<ArticleEntity>> & {
 
 export function ArticleModal({ open, formValue, onSuccess, onClose }: ArticleModalProps) {
   const title = `${formValue ? '编辑' : '新增'}文章`
-  const [form] = Form.useForm()
   const { message } = App.useApp()
   const {
     control,
@@ -44,7 +43,7 @@ export function ArticleModal({ open, formValue, onSuccess, onClose }: ArticleMod
     }
   }, [formValue, reset])
 
-  const handlePost = async (value: CreateArticleDto & UpdateArticleDto) => {
+  const submit = handleSubmit(async value => {
     if (value.id) {
       await articleApi.update(value)
     } else {
@@ -53,7 +52,7 @@ export function ArticleModal({ open, formValue, onSuccess, onClose }: ArticleMod
     message.success(`${title}成功`)
     onSuccess?.()
     onClose()
-  }
+  })
 
   const { renderKey } = useRemount(open)
 
@@ -64,9 +63,9 @@ export function ArticleModal({ open, formValue, onSuccess, onClose }: ArticleMod
       open={open}
       onCancel={onClose}
       okButtonProps={{ disabled: !isDirty, loading: isSubmitting }}
-      onOk={form.submit}
+      onOk={submit}
     >
-      <Form layout="vertical" form={form} onFinish={handleSubmit(handlePost)}>
+      <Form layout="vertical">
         <Form.Item
           label="名称"
           required

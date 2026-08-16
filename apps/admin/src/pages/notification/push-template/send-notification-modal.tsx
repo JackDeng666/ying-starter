@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Form, Modal, Input, message } from 'antd'
+import { App, Form, Modal, Input } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
@@ -14,7 +14,7 @@ const resolver = classValidatorResolver(SendPushTemplateDto)
 export type SendNotificationProps = ReturnType<typeof useDialogOpen<PushTemplateEntity>>
 
 export function SendNotificationModal({ open, formValue, onClose }: SendNotificationProps) {
-  const [form] = Form.useForm()
+  const { message } = App.useApp()
 
   const {
     control,
@@ -31,14 +31,14 @@ export function SendNotificationModal({ open, formValue, onClose }: SendNotifica
     }
   }, [formValue, setValue])
 
-  const handlePost = async (value: SendPushTemplateDto) => {
+  const submit = handleSubmit(async value => {
     await notificationApi.sendPushTemplate(value)
     message.success('发送通知成功')
-  }
+  })
 
   return (
-    <Modal title="发送通知" open={open} onOk={form.submit} onCancel={onClose} confirmLoading={isSubmitting}>
-      <Form layout="vertical" form={form} onFinish={handleSubmit(handlePost)}>
+    <Modal title="发送通知" open={open} onOk={submit} onCancel={onClose} confirmLoading={isSubmitting}>
+      <Form layout="vertical">
         <Form.Item<SendPushTemplateDto>
           name="visitorId"
           label="浏览用户ID"

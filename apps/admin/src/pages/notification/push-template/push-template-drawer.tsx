@@ -31,7 +31,6 @@ const defaultValue: FormValueType = {
 
 export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: PushTemplateDrawerProps) {
   const title = `${formValue?.id ? '编辑' : '新增'}推送模板`
-  const [form] = Form.useForm()
   const { message } = App.useApp()
   const {
     control,
@@ -52,7 +51,7 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
     }
   }, [formValue, reset])
 
-  const handlePost = async (value: CreatePushTemplateDto & UpdatePushTemplateDto) => {
+  const submit = handleSubmit(async value => {
     if (value.id) {
       await notificationApi.updatePushTemplate(value)
     } else {
@@ -61,7 +60,7 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
     message.success(`${title}成功`)
     onSuccess?.()
     onClose()
-  }
+  })
 
   const { renderKey } = useRemount(open)
 
@@ -72,12 +71,12 @@ export function PushTemplateDrawer({ open, formValue, onSuccess, onClose }: Push
       onClose={onClose}
       size={660}
       extra={
-        <Button type="primary" disabled={!isDirty} loading={isSubmitting} onClick={form.submit}>
+        <Button type="primary" disabled={!isDirty} loading={isSubmitting} onClick={submit}>
           提交
         </Button>
       }
     >
-      <Form onFinish={handleSubmit(handlePost)} form={form} layout="vertical">
+      <Form layout="vertical">
         <Form.Item
           label="模板名称"
           required

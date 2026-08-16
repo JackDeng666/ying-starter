@@ -21,7 +21,6 @@ export type RoleDrawerProps = ReturnType<typeof useDialogOpen<UpdateRoleDto>> & 
 
 export function RoleDrawer({ open, formValue, onSuccess, onClose }: RoleDrawerProps) {
   const title = formValue ? '编辑系统角色' : '新增系统角色'
-  const [form] = Form.useForm()
 
   const { data: permissionList } = useQuery({
     queryKey: ['permission'],
@@ -55,7 +54,7 @@ export function RoleDrawer({ open, formValue, onSuccess, onClose }: RoleDrawerPr
     }
   }, [formValue, reset])
 
-  const handlePost = async (value: CreateRoleDto & UpdateRoleDto) => {
+  const submit = handleSubmit(async value => {
     if (value.id) {
       await sysRoleApi.update(value)
     } else {
@@ -64,7 +63,7 @@ export function RoleDrawer({ open, formValue, onSuccess, onClose }: RoleDrawerPr
     onClose()
     message.success(`${title}成功`)
     onSuccess?.()
-  }
+  })
 
   return (
     <Drawer
@@ -73,12 +72,12 @@ export function RoleDrawer({ open, formValue, onSuccess, onClose }: RoleDrawerPr
       onClose={onClose}
       size={660}
       extra={
-        <Button type="primary" onClick={form.submit} loading={isSubmitting}>
+        <Button type="primary" onClick={submit} loading={isSubmitting}>
           提交
         </Button>
       }
     >
-      <Form onFinish={handleSubmit(handlePost)} form={form} layout="vertical">
+      <Form layout="vertical">
         <Form.Item
           label="名称"
           required
