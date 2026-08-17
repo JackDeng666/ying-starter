@@ -12,16 +12,12 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "verbatimModuleSyntax": true,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true,
     "sourceMap": true,
-    "rootDir": "src",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "rootDir": "src"
   },
   "include": ["src"],
   "exclude": ["node_modules"]

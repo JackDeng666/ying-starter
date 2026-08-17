@@ -5,7 +5,7 @@ import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
 import { useDialogOpen } from '@ying/frontend/hooks'
 import { SendPushTemplateDto } from '@ying/dto'
-import { PushTemplateEntity } from '@ying/entity'
+import type { PushTemplateEntity } from '@ying/entity'
 
 import { notificationApi } from '@/api'
 

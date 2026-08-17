@@ -1,29 +1,31 @@
-import { App, Button, Input, Select, Space, Tag, Typography } from 'antd'
-import { ColumnsType } from 'antd/es/table'
+import { App, Button, Input, Select, Space, Tag, Typography, type SelectProps } from 'antd'
+import type { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
 import { getOption } from '@ying/utils'
-import type { ListSysUserDto, UpdateSysUserDto, UpdateSysUserPasswordDto } from '@ying/dto'
+import type { ListRoleDto, ListSysUserDto, UpdateSysUserDto, UpdateSysUserPasswordDto } from '@ying/dto'
 import type { SysUserEntity } from '@ying/entity'
 import { useDialogOpen } from '@ying/frontend/hooks'
 
 import { useThemeToken } from '@/hooks'
-import { useQueryWithParams, useTable } from '@/hooks'
+import { useQueryWithRequery, useTable } from '@/hooks'
 import { sysRoleApi, sysUserApi } from '@/api'
 import { Page, PageQuery, PageOperations } from '@/layouts/page'
 import { IconButton, Iconify } from '@/components/icon'
-import { BasicStatusOptions, BasicStatusOption } from '@/constant'
+import { BasicStatusOptions, type BasicStatusOption } from '@/constant'
 
 import { UserDrawer } from './user-drawer'
 import { ChangePassModal } from './change-pass-modal'
 
 export default function UserPage() {
   const { message } = App.useApp()
-  const { data: roles, debounceSetParams } = useQueryWithParams({
+  const { data: roles, requery } = useQueryWithRequery({
     key: 'role-select-list',
-    queryFn: sysRoleApi.list,
-    initialParams: { size: 100 }
+    queryFn: async (params?: ListRoleDto) => {
+      const list = await sysRoleApi.list({ size: 100, ...params })
+      return list.map(el => ({ label: el.name, value: el.id })) as SelectProps['options']
+    }
   })
 
   const { control, resetParams, list, listLoading, pagination, reload } = useTable<ListSysUserDto, SysUserEntity>({
@@ -61,8 +63,8 @@ export default function UserPage() {
       align: 'center',
       width: 100,
       render: status => {
-        const option = getOption<BasicStatusOption>(BasicStatusOptions, status)
-        return <Tag color={option.color}>{option.label}</Tag>
+        const { color, label } = getOption<BasicStatusOption>(BasicStatusOptions, status) ?? {}
+        return <Tag color={color}>{label}</Tag>
       }
     },
     {
@@ -159,13 +161,16 @@ export default function UserPage() {
             render={({ field }) => (
               <Space.Compact>
                 <Space.Addon className="whitespace-nowrap">状态</Space.Addon>
-                <Select style={{ width: 120 }} placeholder="选择状态" allowClear {...field}>
-                  {BasicStatusOptions.map(el => (
-                    <Select.Option value={el.value} key={el.value}>
-                      <Typography.Text type={el.color}>{el.label}</Typography.Text>
-                    </Select.Option>
-                  ))}
-                </Select>
+                <Select
+                  style={{ width: 120 }}
+                  placeholder="选择状态"
+                  allowClear
+                  options={BasicStatusOptions.map(el => ({
+                    ...el,
+                    label: <Typography.Text type={el.color}>{el.label}</Typography.Text>
+                  }))}
+                  {...field}
+                />
               </Space.Compact>
             )}
           />
@@ -177,16 +182,14 @@ export default function UserPage() {
                 <Space.Addon className="whitespace-nowrap">角色</Space.Addon>
                 <Select
                   style={{ width: 280 }}
-                  fieldNames={{
-                    value: 'id',
-                    label: 'name'
-                  }}
-                  filterOption={false}
                   mode="multiple"
                   placeholder="请选择角色"
-                  options={roles}
-                  onSearch={name => debounceSetParams({ name, size: 100 })}
                   allowClear
+                  showSearch={{
+                    filterOption: false,
+                    onSearch: name => requery({ name })
+                  }}
+                  options={roles}
                   {...field}
                 />
               </Space.Compact>

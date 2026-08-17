@@ -1,4 +1,4 @@
-import { ThemeConfig } from 'antd'
+import type { ThemeConfig } from 'antd'
 
 import { ThemeColorPresets } from '@/types/enum'
 import { getColors } from './get-colors'

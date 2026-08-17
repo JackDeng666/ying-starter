@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from 'react'
-import { Navigate, RouteObject, RouterProvider, createHashRouter } from 'react-router-dom'
+import { type RouteObject, Navigate, RouterProvider, createHashRouter } from 'react-router-dom'
 import { App } from 'antd'
 
 import DashboardLayout from '@/layouts/dashboard'
@@ -7,7 +7,7 @@ import Login from '@/pages/login'
 import { CircleLoading } from '@/components/loading'
 import { usePermissionRoutes } from '@/router/hooks'
 import { ErrorRoutes } from '@/router/routes/error-routes'
-import { AppRouteObject } from '@/types/router'
+import type { AppRouteObject } from '@/types/router'
 import { globalEvent } from '@/event-emitter'
 import AuthGuard from './auth-guard'
 

@@ -4,7 +4,7 @@ import { SortableContext, horizontalListSortingStrategy, arrayMove } from '@dnd-
 import { restrictToHorizontalAxis, restrictToParentElement } from '@dnd-kit/modifiers'
 import { cn } from '@ying/frontend/ui'
 import { useThemeToken } from '@/hooks'
-import { PropsWithClassName } from '@/types'
+import type { PropsWithClassName } from '@/types'
 import { MULTI_TABS_HEIGHT } from '../constant'
 import { Main } from '../main'
 import { useKeepaliveContext } from './use-keepalive-context'
@@ -28,7 +28,7 @@ export function SortableTabs({ className }: PropsWithClassName) {
   const onDragEnd = ({ active, over }: DragEndEvent) => {
     if (active.id !== over?.id) {
       const oldIndex = tabs.findIndex(el => el.key === active.id)
-      const newIndex = tabs.findIndex(el => el.key === over.id)
+      const newIndex = tabs.findIndex(el => el.key === over?.id)
       const newTabs = arrayMove(tabs, oldIndex, newIndex)
       setTabs(newTabs)
     }
@@ -56,6 +56,7 @@ export function SortableTabs({ className }: PropsWithClassName) {
     if (!scrollContainer) return
 
     function handleMouseWheel(event: WheelEvent) {
+      if (!scrollContainer) return
       scrollContainer.scrollLeft += event.deltaY
     }
     scrollContainer.addEventListener('wheel', handleMouseWheel)

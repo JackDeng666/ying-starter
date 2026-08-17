@@ -1,6 +1,7 @@
-import { Dropdown, MenuProps } from 'antd'
+import { Dropdown, type MenuProps } from 'antd'
+import type { ItemType } from 'antd/es/menu/interface'
 import { CloseOutlined } from '@ant-design/icons'
-import { CSSProperties, useState } from 'react'
+import { type CSSProperties, useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { cn } from '@ying/frontend/ui'
@@ -9,9 +10,9 @@ import { useRouter } from '@/router/hooks'
 import { useThemeToken } from '@/hooks'
 import { MultiTabOperation } from '@/types/enum'
 import { useKeepaliveContext } from './use-keepalive-context'
-import { KeepAliveRoute } from './type'
+import type { KeepAliveRoute } from './type'
 
-const menuItems: MenuProps['items'] = [
+const menuItems: NonNullable<ItemType>[] = [
   {
     label: '刷新',
     key: MultiTabOperation.REFRESH,
@@ -113,7 +114,7 @@ export function SortableTab({ tab }: SortableTabProps) {
   }
 
   const style: CSSProperties = {
-    transform: CSS.Transform.toString({ ...transform, scaleX: 1, scaleY: 1 }),
+    transform: transform ? CSS.Transform.toString({ ...transform, scaleX: 1, scaleY: 1 }) : undefined,
     transition: `${ItemTransition},${transition ?? ''}`,
     borderRadius: '8px 8px 0 0',
     borderWidth: '1px',

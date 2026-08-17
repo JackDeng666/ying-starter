@@ -1,7 +1,7 @@
 import { type ReactNode, type Ref, useEffect, useRef, useState } from 'react'
-import { LoadingIconV1 } from '@/icons'
-import { useInView } from '@/hooks'
-import { cn } from '@/ui'
+import { LoadingIconV1 } from '../icons'
+import { useInView } from '../hooks'
+import { cn } from '../ui'
 
 type LazyImageProps = {
   ref?: Ref<HTMLImageElement>

@@ -1,5 +1,5 @@
 import { App, Button, Input, Space, Tag } from 'antd'
-import { ColumnsType } from 'antd/es/table'
+import type { ColumnsType } from 'antd/es/table'
 import { Controller, type UseFormGetValues } from 'react-hook-form'
 import { useState } from 'react'
 import dayjs from 'dayjs'

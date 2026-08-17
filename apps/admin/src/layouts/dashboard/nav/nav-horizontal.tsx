@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Menu, MenuProps } from 'antd'
+import { Menu, type MenuProps } from 'antd'
 import { useThemeToken } from '@/hooks'
 import { useSettings } from '@/store'
 import { ThemeNavLayout } from '@/types/enum'

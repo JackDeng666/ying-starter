@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { clientLanguagesConfig, type LngKeys, type TIntlText } from '@ying/shared'
-import { EditorHandle, EditorProps, NormalEditor } from '@/components/editor'
+import { type EditorHandle, type EditorProps, NormalEditor } from '@/components/editor'
 
 import { IntlSwitch } from './intl-switch'
 

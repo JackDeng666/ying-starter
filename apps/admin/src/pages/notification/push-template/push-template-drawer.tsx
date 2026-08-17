@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
 import { CreatePushTemplateDto, UpdatePushTemplateDto } from '@ying/dto'
-import { PushTemplateEntity } from '@ying/entity'
+import type { PushTemplateEntity } from '@ying/entity'
 import { useDialogOpen, useRemount } from '@ying/frontend/hooks'
 
 import { notificationApi } from '@/api'

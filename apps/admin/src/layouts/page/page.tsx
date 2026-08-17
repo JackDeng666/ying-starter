@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { TableProps, Table, PaginationProps, Pagination } from 'antd'
+import { type TableProps, Table, type PaginationProps, Pagination } from 'antd'
 import { cn } from '@ying/frontend/ui'
 import { useThemeToken } from '@/hooks'
 import { ScrollbarThickness } from '@/constant'

@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
 import { CreateArticleDto, UpdateArticleDto } from '@ying/dto'
-import { ArticleEntity } from '@ying/entity'
+import type { ArticleEntity } from '@ying/entity'
 import { useDialogOpen, useRemount } from '@ying/frontend/hooks'
 
 import { Tags } from '@/components/tags'

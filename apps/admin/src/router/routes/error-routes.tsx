@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { Navigate } from 'react-router-dom'
-import { AppRouteObject } from '@/types/router'
+import type { AppRouteObject } from '@/types/router'
 import { CircleLoading } from '@/components/loading'
 import SimpleLayout from '@/layouts/simple'
 

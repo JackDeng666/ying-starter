@@ -1,5 +1,5 @@
 import { App, Button, Input, Space } from 'antd'
-import { ColumnsType } from 'antd/es/table'
+import type { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import { useEffect } from 'react'
 import dayjs from 'dayjs'
@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom'
 
 import { useDialogOpen } from '@ying/frontend/hooks'
 import { ListPushTemplateDto } from '@ying/dto'
-import { ArticleEntity, PushTemplateEntity } from '@ying/entity'
+import type { ArticleEntity, PushTemplateEntity } from '@ying/entity'
 
 import { useTable } from '@/hooks'
 import { notificationApi } from '@/api'

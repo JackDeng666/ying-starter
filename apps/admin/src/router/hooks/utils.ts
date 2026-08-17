@@ -1,4 +1,4 @@
-import { AppRouteObject, RouteMeta } from '@/types/router'
+import type { AppRouteObject, RouteMeta } from '@/types/router'
 
 export function transformRoutesByPermission(routes: AppRouteObject[], codes: string[]): AppRouteObject[] {
   return routes.map(item => {
@@ -27,7 +27,7 @@ export function flattenRoutesToRouteMetas(routes: AppRouteObject[]) {
   }, [])
 }
 
-export function routerFilter(routes: AppRouteObject[]) {
+export function routerFilter(routes: AppRouteObject[]): AppRouteObject[] {
   return routes
     .filter(item => !item.meta?.disabled)
     .map(item => {
@@ -38,7 +38,7 @@ export function routerFilter(routes: AppRouteObject[]) {
     })
 }
 
-export function navMenuFilter(routes: AppRouteObject[]) {
+export function navMenuFilter(routes: AppRouteObject[]): AppRouteObject[] {
   return routes
     .filter(item => !!item.meta?.key)
     .map(item => {
@@ -47,5 +47,5 @@ export function navMenuFilter(routes: AppRouteObject[]) {
       }
       return item
     })
-    .sort((a, b) => b.sort - a.sort)
+    .sort((a, b) => (b.sort ?? 0) - (a.sort ?? 0))
 }

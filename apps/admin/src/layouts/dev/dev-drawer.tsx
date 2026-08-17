@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Drawer, Tabs, TabsProps } from 'antd'
+import { Drawer, Tabs, type TabsProps } from 'antd'
 import { useEvent } from '@ying/frontend/hooks'
 
 const tabs: TabsProps['items'] = []
@@ -8,6 +8,7 @@ const initComponents = () => {
   Object.keys(modules).forEach(moduleKey => {
     const Component = (modules[moduleKey] as any).default as React.FC
     const key = moduleKey.split('/').at(-1)
+    if (!key) return
     tabs.push({
       label: key,
       key,

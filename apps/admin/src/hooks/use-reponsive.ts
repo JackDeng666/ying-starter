@@ -1,5 +1,5 @@
 import { Grid, theme } from 'antd'
-import { Breakpoint, ScreenMap, ScreenSizeMap } from 'antd/es/_util/responsiveObserver'
+import type { Breakpoint, ScreenMap, ScreenSizeMap } from 'antd/es/_util/responsiveObserver'
 
 const { useBreakpoint } = Grid
 

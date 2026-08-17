@@ -1,4 +1,4 @@
-import { RcFile } from 'antd/es/upload'
+import type { RcFile } from 'antd/es/upload'
 
 const FORMAT_PDF = ['pdf']
 const FORMAT_TEXT = ['txt']

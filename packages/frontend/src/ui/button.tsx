@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Slot } from 'radix-ui'
 
-import { LoadingIconV1 } from '@/icons'
+import { LoadingIconV1 } from '../icons'
 import { cn, cva, type VariantProps } from './utils'
 
 const buttonVariants = cva(

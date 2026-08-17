@@ -10,6 +10,7 @@
     "build": "nest build",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+    "check": "tsc --noEmit -p tsconfig.json",
     "lint": "oxlint",
     "test": "jest",
     "test:watch": "jest --watch",

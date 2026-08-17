@@ -1,5 +1,5 @@
 import { HttpRequest } from '@ying/http'
-import { PushRecordEntity, PushTaskEntity, PushTemplateEntity, VisitorEntity } from '@ying/entity'
+import type { PushRecordEntity, PushTaskEntity, PushTemplateEntity, VisitorEntity } from '@ying/entity'
 import {
   CreatePushTemplateDto,
   UpdatePushTemplateDto,

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
 import type { InputRef } from 'antd'
 import { Input, Tag, Tooltip } from 'antd'
-import { ControllerRenderProps } from 'react-hook-form'
+import type { ControllerRenderProps } from 'react-hook-form'
 import { useThemeToken } from '@/hooks'
 
 const tagInputStyle: CSSProperties = {

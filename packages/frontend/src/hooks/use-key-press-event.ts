@@ -1,4 +1,4 @@
-import { RefObject } from 'react'
+import type { RefObject } from 'react'
 import { useEvent } from './use-event'
 
 export type KeyFilter = null | undefined | string | ((event: KeyboardEvent) => boolean)

@@ -1,5 +1,5 @@
-import { HTMLMotionProps, MotionValue, m, useSpring } from 'framer-motion'
-import { CSSProperties } from 'react'
+import { type HTMLMotionProps, MotionValue, m, useSpring } from 'framer-motion'
+import type { CSSProperties } from 'react'
 
 import { useThemeToken } from '@/hooks'
 

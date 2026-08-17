@@ -1,7 +1,7 @@
 import { cn } from '@ying/frontend/ui'
 import { useSettings } from '@/store'
 import { useThemeToken } from '@/hooks'
-import { Ref } from 'react'
+import type { Ref } from 'react'
 
 type MainProps = {
   ref?: Ref<HTMLDivElement>

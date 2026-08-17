@@ -1,5 +1,5 @@
-import { Input, Select, Space, Tag, Typography } from 'antd'
-import { ColumnsType } from 'antd/es/table'
+import { Input, Select, Space, Tag, Typography, type SelectProps } from 'antd'
+import type { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
@@ -8,12 +8,12 @@ import { useDialogOpen } from '@ying/frontend/hooks'
 import { ListPushRecordDto, ListPushTaskDto } from '@ying/dto'
 import type { PushRecordEntity } from '@ying/entity'
 
-import { useQueryWithParams, useTable } from '@/hooks'
+import { useQueryWithRequery, useTable } from '@/hooks'
 import { notificationApi } from '@/api'
 import { Page, PageQuery } from '@/layouts/page'
 import { JsonViewModal } from '@/components/json-view-modal'
 
-import { PushRecordStatusOption, PushRecordStatusOptions } from './constant'
+import { type PushRecordStatusOption, PushRecordStatusOptions } from './constant'
 
 export default function PushRecordPage() {
   const { control, resetParams, list, listLoading, pagination } = useTable<ListPushRecordDto, PushRecordEntity>({
@@ -22,11 +22,11 @@ export default function PushRecordPage() {
     getListCount: notificationApi.listPushRecordCount
   })
 
-  const { data: pushTasks, debounceSetParams } = useQueryWithParams({
+  const { data: pushTasks, requery } = useQueryWithRequery({
     key: 'push-task-select-list',
-    queryFn: async (params: ListPushTaskDto) => {
-      const data = await notificationApi.listPushTask(params)
-      return data.map(el => ({ label: el.name, value: el.id }))
+    queryFn: async (params?: ListPushTaskDto) => {
+      const data = await notificationApi.listPushTask({ size: 100, ...params })
+      return data.map(el => ({ label: el.name, value: el.id })) as SelectProps['options']
     }
   })
 
@@ -62,8 +62,8 @@ export default function PushRecordPage() {
       align: 'center',
       dataIndex: 'status',
       render: _ => {
-        const option = getOption<PushRecordStatusOption>(PushRecordStatusOptions, _)
-        return <Tag color={option.color}>{option.label}</Tag>
+        const { color, label } = getOption<PushRecordStatusOption>(PushRecordStatusOptions, _) ?? {}
+        return <Tag color={color}>{label}</Tag>
       }
     },
     {
@@ -122,11 +122,12 @@ export default function PushRecordPage() {
                 <Space.Addon>推送任务</Space.Addon>
                 <Select
                   style={{ width: 160 }}
-                  allowClear
                   placeholder="请选择推送任务"
-                  filterOption={false}
-                  showSearch
-                  onSearch={name => debounceSetParams({ name, size: 100 })}
+                  allowClear
+                  showSearch={{
+                    filterOption: false,
+                    onSearch: name => requery({ name })
+                  }}
                   options={pushTasks}
                   {...field}
                 />

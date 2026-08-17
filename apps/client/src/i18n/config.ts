@@ -6,7 +6,7 @@ export const defaultNS = 'basic'
 
 export const languagesWithSlashes = languages.map(l => `/${l}`)
 
-export function getOptions(lng = fallbackLng, ns = defaultNS) {
+export function getOptions(lng: string = fallbackLng, ns = defaultNS) {
   return {
     // debug: true,
     supportedLngs: languages,

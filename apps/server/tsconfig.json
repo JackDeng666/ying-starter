@@ -9,7 +9,7 @@
     "allowSyntheticDefaultImports": true,
     "target": "esnext",
     "skipLibCheck": true,
-    "strictNullChecks": true,
+    "strict": true,
     "strictPropertyInitialization": false,
     "noErrorTruncation": true,
     "maxNodeModuleJsDepth": 2,

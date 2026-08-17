@@ -1,9 +1,9 @@
-import { JSX, Suspense } from 'react'
+import { type JSX, Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { pms } from '@ying/permission'
 
-import { AppRouteObject } from '@/types/router'
+import type { AppRouteObject } from '@/types/router'
 import { CircleLoading } from '@/components/loading'
 
 import {

@@ -1,7 +1,8 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Button, Form } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import { ArrayPath, Control, FieldArray, FieldValues, useFieldArray } from 'react-hook-form'
+import type { ArrayPath, Control, FieldArray, FieldValues } from 'react-hook-form'
+import { useFieldArray } from 'react-hook-form'
 
 type FormListProps<T extends FieldValues, TField extends ArrayPath<T>> = {
   control: Control<T>

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { CloseIcon } from '@/icons'
+import { CloseIcon } from '../icons'
 import { cn } from './utils'
 
 function Input({

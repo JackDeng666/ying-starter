@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 type UseDialogOpenProps = {
   defaultOpen?: boolean
@@ -10,7 +10,11 @@ export const useDialogOpen = <TFormValue>(props: UseDialogOpenProps = {}) => {
   const [formValue, setFormValue] = useState<TFormValue | undefined>()
 
   const onOpen = useCallback((value?: TFormValue) => {
-    value ? setFormValue(value) : setFormValue(undefined)
+    if (value) {
+      setFormValue(value)
+    } else {
+      setFormValue(undefined)
+    }
     setOpen(true)
   }, [])
 

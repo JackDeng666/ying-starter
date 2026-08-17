@@ -1,4 +1,4 @@
-import { RouteMeta } from '@/types/router'
+import type { RouteMeta } from '@/types/router'
 
 export type KeepAliveRoute = RouteMeta & {
   /**

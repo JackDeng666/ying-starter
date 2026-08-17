@@ -1,5 +1,5 @@
 import { App, Button, Input, Popconfirm, Space, Typography } from 'antd'
-import { ColumnsType } from 'antd/es/table'
+import type { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
@@ -8,14 +8,14 @@ import { useDialogOpen } from '@ying/frontend/hooks'
 
 import { PushTaskStatus } from '@ying/shared'
 import { ListPushTaskDto } from '@ying/dto'
-import { PushTaskEntity } from '@ying/entity'
+import type { PushTaskEntity } from '@ying/entity'
 
 import { useTable } from '@/hooks'
 import { notificationApi } from '@/api'
 import { Page, PageQuery, PageOperations } from '@/layouts/page'
 import { IconButton, Iconify } from '@/components/icon'
 
-import { DeviceTypeOption, DeviceTypeOptions, PushTaskStatusOption, PushTaskStatusOptions } from './constant'
+import { type DeviceTypeOption, DeviceTypeOptions, type PushTaskStatusOption, PushTaskStatusOptions } from './constant'
 import { PushTaskModal } from './push-task-modal'
 import { PushTaskSetModal } from './push-task-set-modal'
 

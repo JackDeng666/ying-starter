@@ -4,7 +4,7 @@ import { Modal } from 'antd'
 
 import type { FileEntity } from '@ying/entity'
 import { useDialogOpen, useRemount } from '@ying/frontend/hooks'
-import { useEditorContext, MenuButton, Events } from '@ying/frontend/editor'
+import { useEditorContext, MenuButton, type Events } from '@ying/frontend/editor'
 
 import { ImageSelector } from '@/components/image'
 

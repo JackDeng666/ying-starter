@@ -22,13 +22,15 @@ export const CropImageModal = ({ open, onClose, formValue: file, aspectRatio, on
 
   return (
     <Modal title="裁剪图片" open={open} onCancel={onClose} onOk={onOk}>
-      <CropImage
-        ref={ref}
-        url={file ? URL.createObjectURL(file) : ''}
-        type={file?.type}
-        name={file?.name}
-        aspectRatio={aspectRatio}
-      />
+      {file && (
+        <CropImage
+          ref={ref}
+          url={URL.createObjectURL(file)}
+          type={file.type}
+          name={file.name}
+          aspectRatio={aspectRatio}
+        />
+      )}
     </Modal>
   )
 }

@@ -12,9 +12,11 @@ export default function BannerCard() {
 
   const { name } = useUserInfo() ?? {}
 
-  const bg = `linear-gradient(135deg, ${Color(themeToken.colorPrimaryHover).alpha(0.2)}, ${Color(
+  const bg = `linear-gradient(135deg, ${Color(themeToken.colorPrimaryHover).alpha(0.2).toString()}, ${Color(
     themeToken.colorPrimary
-  ).alpha(0.2)}) rgb(255, 255, 255)`
+  )
+    .alpha(0.2)
+    .toString()}) rgb(255, 255, 255)`
 
   return (
     <Row className="mx-0! rounded-2xl p-6 h-full" gutter={[16, 16]} justify="space-between" style={{ background: bg }}>

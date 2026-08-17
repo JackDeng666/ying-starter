@@ -1,10 +1,10 @@
 import { App, Input, Space } from 'antd'
-import { ColumnsType } from 'antd/es/table'
+import type { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
 import { ListFeedbackDto } from '@ying/dto'
-import { FeedbackEntity } from '@ying/entity'
+import type { FeedbackEntity } from '@ying/entity'
 
 import { commonApi } from '@/api'
 import { useTable } from '@/hooks'

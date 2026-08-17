@@ -1,5 +1,5 @@
 export * from './use-theme-token'
 export * from './use-reponsive'
-export * from './use-query-with-params'
+export * from './use-query-with-requery'
 export * from './use-table'
 export * from './prompt/use-prompt'

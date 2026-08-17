@@ -1,5 +1,5 @@
 import { Button, Space, Tabs } from 'antd'
-import { JSX, useState } from 'react'
+import { type JSX, useState } from 'react'
 
 type TestTab = {
   label: string
@@ -47,6 +47,7 @@ export default function Test() {
       <div className="">
         {cachedTabs.map(key => {
           const currentTab = tabs.find(el => el.key === key)
+          if (!currentTab) return
           return (
             <div key={key} style={{ display: activeKey === key ? 'block' : 'none' }}>
               {currentTab.com}

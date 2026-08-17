@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react'
+import type { CSSProperties } from 'react'
 
 type SVGComponent = React.FunctionComponent<
   React.SVGProps<SVGSVGElement> & {
@@ -13,7 +13,8 @@ const initSVGIcons = () => {
   const modules = import.meta.glob('../../assets/icons/**/*.svg', { eager: true, query: '?react' })
   Object.keys(modules).forEach(moduleKey => {
     const SVGCom = (modules[moduleKey] as any).default as SVGComponent
-    const key = moduleKey.split('icons/').at(-1).split('.').at(0).split('/').join('-')
+    const key = moduleKey.split('icons/').at(-1)?.split('.').at(0)?.split('/').join('-')
+    if (!key) return
     SvgIcons[key] = SVGCom
   })
 }

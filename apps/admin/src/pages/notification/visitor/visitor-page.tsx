@@ -1,11 +1,11 @@
 import { App, Input, Select, Space, Tooltip, Typography } from 'antd'
-import { ColumnsType } from 'antd/es/table'
+import type { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
 import { useDialogOpen } from '@ying/frontend/hooks'
 import { ListVisitorDto } from '@ying/dto'
-import { VisitorEntity } from '@ying/entity'
+import type { VisitorEntity } from '@ying/entity'
 
 import { useTable } from '@/hooks'
 import { notificationApi } from '@/api'
@@ -36,7 +36,7 @@ export default function VisitorPage() {
       width: 120,
       ellipsis: true,
       dataIndex: 'languages',
-      render: (_, record) => record.languages.join(',')
+      render: (_, record) => record.languages?.join(',')
     },
     {
       title: '关联用户',

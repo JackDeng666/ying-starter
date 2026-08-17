@@ -1,7 +1,7 @@
 import { CloseOutlined, LeftOutlined, QuestionCircleOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Card, Drawer, Switch, Tooltip } from 'antd'
 import Color from 'color'
-import { CSSProperties, useState } from 'react'
+import { type CSSProperties, useState } from 'react'
 import { MdCircle } from 'react-icons/md'
 import { useFullscreen } from '@ying/frontend/hooks'
 import CyanBlur from '@/assets/images/background/cyan-blur.png'

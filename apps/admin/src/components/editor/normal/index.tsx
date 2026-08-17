@@ -5,7 +5,7 @@ import { cn } from '@ying/frontend/ui'
 
 import { useThemeToken } from '@/hooks'
 
-import { EditorProps } from '../type'
+import type { EditorProps } from '../type'
 import { MenuBar } from './menu-bar'
 
 export const NormalEditor = ({

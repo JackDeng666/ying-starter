@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from '@/router/hooks'
 import { useCurrentKeepAliveRoute } from './use-current-route-meta'
-import { KeepAliveRoute } from './type'
+import type { KeepAliveRoute } from './type'
 
 function getKey() {
   return new Date().getTime().toString()
@@ -80,13 +80,13 @@ export function useKeepAlive() {
 
   const exitFullscreenTab = () => {
     setTabs(prevTabs => {
-      const currentTabIndex = prevTabs.findIndex(item => item.key === currentFullscreenTab.key)
+      const currentTabIndex = prevTabs.findIndex(item => item.key === currentFullscreenTab?.key)
       if (currentTabIndex >= 0) {
         prevTabs[currentTabIndex].hideInFullscreen = false
       }
       return [...prevTabs]
     })
-    setFullscreenTabKey(null)
+    setFullscreenTabKey(undefined)
   }
 
   useEffect(() => {

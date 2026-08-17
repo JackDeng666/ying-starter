@@ -1,40 +1,42 @@
-import { PropsWithChildren, useEffect, useRef, useState } from 'react'
-import { MenuProps } from 'antd'
-import { ItemType, MenuItemType } from 'antd/es/menu/interface'
+import { type PropsWithChildren, type ReactNode, useEffect, useRef, useState } from 'react'
+import type { ItemType } from 'antd/es/menu/interface'
 import { useLocation, useMatches } from 'react-router-dom'
 
 import { Iconify } from '@/components/icon'
 import { usePermissionRoutes, useRouter } from '@/router/hooks'
-import { AppRouteObject } from '@/types/router'
+import type { AppRouteObject } from '@/types/router'
 
-import { NavContext } from './nav-context'
+import { NavContext, type NavContextValue } from './nav-context'
+
+type MenuItem = {
+  key?: string
+  label?: string
+  disabled?: boolean
+  icon?: ReactNode
+  children?: ItemType[]
+}
 
 const routeToMenu = (items: AppRouteObject[]) => {
   return items
     .filter(item => !item.meta?.hideMenu)
     .map(item => {
-      const menuItem: ItemType<MenuItemType> = {
-        key: undefined,
-        children: undefined
-      }
+      const menuItem: MenuItem = {}
       const { meta, children } = item
       if (meta) {
         const { key, label, icon, disabled } = meta
         menuItem.key = key
-        menuItem.disabled = disabled
         menuItem.label = label
-        if (icon) {
-          if (typeof icon === 'string') {
-            menuItem.icon = <Iconify icon={icon} />
-          } else {
-            menuItem.icon = icon
-          }
+        menuItem.disabled = disabled
+        if (typeof icon === 'string') {
+          menuItem.icon = <Iconify icon={icon} />
+        } else {
+          menuItem.icon = icon
         }
       }
       if (children) {
         menuItem.children = routeToMenu(children)
       }
-      return menuItem
+      return menuItem as ItemType
     })
 }
 
@@ -67,7 +69,7 @@ export const NavContextProvider = ({ children }: PropsWithChildren) => {
     setMenuList(menus)
   }, [navMenuRoutes])
 
-  const onOpenChange: MenuProps['onOpenChange'] = keys => {
+  const onOpenChange: NavContextValue['onOpenChange'] = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1)
     if (latestOpenKey) {
       setOpenKeys(keys)
@@ -75,7 +77,7 @@ export const NavContextProvider = ({ children }: PropsWithChildren) => {
       setOpenKeys([])
     }
   }
-  const onClick: MenuProps['onClick'] = ({ key }) => {
+  const onClick: NavContextValue['onClick'] = ({ key }) => {
     const currentRoute = routeMetas.find(el => el.key === key)
     if (currentRoute?.frameSrc) {
       window.open(currentRoute.frameSrc, '_black')

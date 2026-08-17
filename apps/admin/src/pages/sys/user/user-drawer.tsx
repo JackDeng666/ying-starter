@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Form, Drawer, Input, Button, Radio, Select, App } from 'antd'
+import { Form, Drawer, Input, Button, Radio, Select, App, type SelectProps } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
@@ -7,11 +7,10 @@ import { BasicStatus } from '@ying/shared'
 import { CreateSysUserDto, UpdateSysUserDto, type ListRoleDto } from '@ying/dto'
 import { useDialogOpen } from '@ying/frontend/hooks'
 
-import { useQueryWithParams } from '@/hooks/use-query-with-params'
+import { useQueryWithRequery } from '@/hooks'
 import { sysRoleApi, sysUserApi } from '@/api'
 
 import { defaultUserValues } from './constant'
-import { SysRoleEntity } from '@ying/entity'
 
 const createResolver = classValidatorResolver(CreateSysUserDto)
 const updateResolver = classValidatorResolver(UpdateSysUserDto)
@@ -24,13 +23,12 @@ export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerPr
   const title = formValue ? '编辑系统用户' : '新增系统用户'
   const { message } = App.useApp()
 
-  const { data: roles, debounceSetParams } = useQueryWithParams<ListRoleDto, SysRoleEntity[]>({
-    key: 'role-select-list-drawer',
-    queryFn: async params => {
-      const list = await sysRoleApi.list(params)
-      return list.map(el => ({ ...el, disabled: el.systemic }))
-    },
-    initialParams: { size: 100 }
+  const { data: roles, requery } = useQueryWithRequery({
+    key: 'role-select-list',
+    queryFn: async (params?: ListRoleDto) => {
+      const list = await sysRoleApi.list({ size: 100, ...params })
+      return list.map(el => ({ label: el.name, value: el.id, disabled: el.systemic })) as SelectProps['options']
+    }
   })
 
   const {
@@ -153,16 +151,14 @@ export function UserDrawer({ open, formValue, onSuccess, onClose }: UserDrawerPr
             control={control}
             render={({ field }) => (
               <Select
-                fieldNames={{
-                  value: 'id',
-                  label: 'name'
-                }}
-                filterOption={false}
                 mode="multiple"
                 placeholder="请选择角色"
-                options={roles}
-                onSearch={name => debounceSetParams({ name, size: 100 })}
                 allowClear
+                showSearch={{
+                  filterOption: false,
+                  onSearch: name => requery({ name })
+                }}
+                options={roles}
                 {...field}
               />
             )}

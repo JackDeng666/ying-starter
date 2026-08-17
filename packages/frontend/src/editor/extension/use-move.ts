@@ -1,4 +1,4 @@
-import { ReactNodeViewProps } from '@tiptap/react'
+import type { ReactNodeViewProps } from '@tiptap/react'
 
 export const useMove = (props: ReactNodeViewProps) => {
   const { editor, getPos } = props

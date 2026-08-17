@@ -5,7 +5,7 @@ import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 import dayjs from 'dayjs'
 
 import { SetPushTaskDto } from '@ying/dto'
-import { PushTaskEntity } from '@ying/entity'
+import type { PushTaskEntity } from '@ying/entity'
 import { useDialogOpen } from '@ying/frontend/hooks'
 
 import { notificationApi } from '@/api'

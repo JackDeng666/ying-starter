@@ -1,5 +1,5 @@
-import { PresetColorType, PresetStatusColorType } from 'antd/es/_util/colors'
-import { LiteralUnion } from 'antd/es/_util/type'
+import type { PresetColorType, PresetStatusColorType } from 'antd/es/_util/colors'
+import type { LiteralUnion } from 'antd/es/_util/type'
 import { PushRecordStatus } from '@ying/shared'
 
 export type PushRecordStatusOption = {

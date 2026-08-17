@@ -1,5 +1,5 @@
 import { App, Button, Input, Select, Space, Tag, Typography } from 'antd'
-import { ColumnsType } from 'antd/es/table'
+import type { ColumnsType } from 'antd/es/table'
 import { Controller } from 'react-hook-form'
 import dayjs from 'dayjs'
 
@@ -11,7 +11,7 @@ import { useDialogOpen } from '@ying/frontend/hooks'
 import { useTable } from '@/hooks'
 import { sysRoleApi } from '@/api'
 import { Page, PageQuery, PageOperations } from '@/layouts/page'
-import { BasicStatusOptions, BasicStatusOption } from '@/constant'
+import { BasicStatusOptions, type BasicStatusOption } from '@/constant'
 
 import { RoleDrawer } from './role-drawer'
 
@@ -39,8 +39,8 @@ export default function RolePage() {
       align: 'center',
       width: 100,
       render: status => {
-        const option = getOption<BasicStatusOption>(BasicStatusOptions, status)
-        return <Tag color={option.color}>{option.label}</Tag>
+        const { color, label } = getOption<BasicStatusOption>(BasicStatusOptions, status) ?? {}
+        return <Tag color={color}>{label}</Tag>
       }
     },
     { title: '排序', dataIndex: 'sort', align: 'center', width: 80 },

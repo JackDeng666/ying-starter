@@ -1,4 +1,4 @@
-import { BackgroundType } from '../types'
+import type { BackgroundType } from '../types'
 
 export const varBgColor = (props?: BackgroundType) => {
   const colors = props?.colors || ['#19dcea', '#b22cff']
@@ -64,7 +64,7 @@ export const varBgPan = (props?: BackgroundType) => {
   const duration = props?.duration || 5
   const ease = props?.ease || 'linear'
 
-  const gradient = (deg: number) => `linear-gradient(${deg}deg, ${colors})`
+  const gradient = (deg: number) => `linear-gradient(${deg}deg, ${colors.join(',')})`
 
   return {
     top: {

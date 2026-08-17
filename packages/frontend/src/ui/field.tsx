@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
-import { Label } from '@/ui/label'
-import { Separator } from '@/ui/separator'
+import { Label } from './label'
+import { Separator } from './separator'
 
 import { cn, cva, type VariantProps } from './utils'
 

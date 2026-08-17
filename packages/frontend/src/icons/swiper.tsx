@@ -1,4 +1,4 @@
-import { IconSvgProps } from './type'
+import type { IconSvgProps } from './type'
 
 export const SwiperIcon = (props: IconSvgProps) => {
   return (

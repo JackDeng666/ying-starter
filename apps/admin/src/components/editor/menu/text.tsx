@@ -1,7 +1,7 @@
 import { Select } from 'antd'
 
 import { useEditorContext, useEditorState } from '@ying/frontend/editor'
-import { PropsWithClassName } from '@/types'
+import type { PropsWithClassName } from '@/types'
 
 const TextOptions = [
   { label: 'H1', value: 'h1' },

@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
-import { RouteObject } from 'react-router-dom'
+import type { ReactNode } from 'react'
+import type { RouteObject } from 'react-router-dom'
 
 import type { TPermission } from '@ying/permission'
 
@@ -15,7 +15,7 @@ export type RouteMeta = {
   /**
    * menu prefix icon
    */
-  icon?: ReactNode
+  icon?: ReactNode | string
   /**
    * hide in menu
    */

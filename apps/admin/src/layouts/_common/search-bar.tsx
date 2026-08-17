@@ -1,5 +1,5 @@
-import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
-import { Empty, GlobalToken, Input, InputRef, Modal } from 'antd'
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
+import { Empty, type GlobalToken, Input, type InputRef, Modal } from 'antd'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
 import Color from 'color'
@@ -12,9 +12,9 @@ import { useThemeToken } from '@/hooks'
 
 export function SearchBar() {
   const { replace } = useRouter()
-  const panelRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<InputRef>(null)
-  const listRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null as any)
+  const inputRef = useRef<InputRef>(null as any)
+  const listRef = useRef<HTMLDivElement>(null as any)
 
   const [open, setOpen] = useState(false)
   const themeToken = useThemeToken()

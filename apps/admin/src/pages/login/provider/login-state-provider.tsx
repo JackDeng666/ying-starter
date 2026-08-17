@@ -1,4 +1,4 @@
-import { PropsWithChildren, useMemo, useState } from 'react'
+import { type PropsWithChildren, useMemo, useState } from 'react'
 import { LoginStateEnum, LoginStateContext, type LoginStateContextValue } from './login-state-context'
 
 export function LoginStateProvider({ children }: PropsWithChildren) {

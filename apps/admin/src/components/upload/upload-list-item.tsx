@@ -1,5 +1,5 @@
 import { Card, Tooltip, Typography, Image } from 'antd'
-import { ItemRender } from 'antd/es/upload/interface'
+import type { ItemRender } from 'antd/es/upload/interface'
 import { m } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { formatNumber } from '@ying/utils'
@@ -21,6 +21,7 @@ export default function UploadListItem({ file, actions, thumbnail = false }: Pro
 
   useEffect(() => {
     // TODO: mock upload sucess, you should delete 'error' in the production environment
+    if (!file.status || !file.originFileObj) return
     if (['done', 'error'].includes(file.status) && format === 'img') {
       setImgThumbUrl(getBlobUrl(file.originFileObj))
     }

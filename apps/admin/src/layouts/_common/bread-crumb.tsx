@@ -1,11 +1,11 @@
 import { Breadcrumb } from 'antd'
-import { ItemType } from 'antd/es/breadcrumb/Breadcrumb'
+import type { ItemType } from 'antd/es/breadcrumb/Breadcrumb'
 import { useEffect, useState } from 'react'
 import { useMatches } from 'react-router-dom'
 
 import { usePermissionRoutes, useRouter } from '@/router/hooks'
 
-import { PropsWithClassName } from '@/types'
+import type { PropsWithClassName } from '@/types'
 
 /**
  * 动态面包屑解决方案：https://github.com/MinjieChang/myblog/issues/29
@@ -43,7 +43,7 @@ export function BreadCrumb({ className }: PropsWithClassName) {
                   push(item.meta?.key || '')
                 }}
               >
-                {item.meta.label}
+                {item.meta?.label}
               </span>
             )
           }))

@@ -1,4 +1,4 @@
-import { ReactNodeViewProps } from '@tiptap/react'
+import type { ReactNodeViewProps } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 
 export const useSelected = (props: ReactNodeViewProps) => {

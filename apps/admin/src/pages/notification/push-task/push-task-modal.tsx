@@ -1,13 +1,13 @@
 import { useCallback, useEffect } from 'react'
-import { Form, Modal, Input, App, Select } from 'antd'
+import { Form, Modal, Input, App, Select, type SelectProps } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { classValidatorResolver } from '@hookform/resolvers/class-validator'
 
 import { CreatePushTaskDto, ListPushTemplateDto, UpdatePushTaskDto } from '@ying/dto'
-import { PushTaskEntity } from '@ying/entity'
+import type { PushTaskEntity } from '@ying/entity'
 import { useDialogOpen } from '@ying/frontend/hooks'
 
-import { useQueryWithParams } from '@/hooks/use-query-with-params'
+import { useQueryWithRequery } from '@/hooks'
 import { notificationApi } from '@/api'
 
 import { defaultValues, DeviceTypeOptions } from './constant'
@@ -22,6 +22,15 @@ export type PushTaskModalProps = ReturnType<typeof useDialogOpen<PushTaskEntity>
 export function PushTaskModal({ open, formValue, onSuccess, onClose }: PushTaskModalProps) {
   const title = `${formValue ? '编辑' : '新增'}推送任务`
   const { message } = App.useApp()
+
+  const { data: pushTemplates, requery } = useQueryWithRequery({
+    key: 'push-template-select-list',
+    queryFn: async (params?: ListPushTemplateDto) => {
+      const list = await notificationApi.listPushTemplate({ size: 100, ...params })
+      return list.map(el => ({ label: el.name, value: el.id })) as SelectProps['options']
+    }
+  })
+
   const {
     control,
     handleSubmit,
@@ -30,14 +39,6 @@ export function PushTaskModal({ open, formValue, onSuccess, onClose }: PushTaskM
   } = useForm<CreatePushTaskDto & UpdatePushTaskDto>({
     resolver: formValue ? updateResolver : createResolver,
     defaultValues
-  })
-
-  const { data: pushTemplates, debounceSetParams } = useQueryWithParams({
-    key: 'push-template-select-list',
-    queryFn: async (params: ListPushTemplateDto) => {
-      const list = await notificationApi.listPushTemplate(params)
-      return list.map(el => ({ label: el.name, value: el.id }))
-    }
   })
 
   const updateForm = useCallback(() => {
@@ -96,11 +97,12 @@ export function PushTaskModal({ open, formValue, onSuccess, onClose }: PushTaskM
             control={control}
             render={({ field }) => (
               <Select
-                filterOption={false}
-                showSearch
-                onSearch={name => debounceSetParams({ name, size: 100 })}
-                options={pushTemplates}
                 placeholder="请选择推送模板"
+                showSearch={{
+                  filterOption: false,
+                  onSearch: name => requery({ name })
+                }}
+                options={pushTemplates}
                 {...field}
               />
             )}

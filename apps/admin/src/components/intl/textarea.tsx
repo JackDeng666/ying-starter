@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { Input } from 'antd'
 import type { TextAreaProps } from 'antd/lib/input'
 
-import { clientLanguagesConfig, LngKeys, type TIntlText } from '@ying/shared'
+import { clientLanguagesConfig, type LngKeys, type TIntlText } from '@ying/shared'
 
 import { IntlSwitch } from './intl-switch'
 

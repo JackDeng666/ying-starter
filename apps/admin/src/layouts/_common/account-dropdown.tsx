@@ -1,5 +1,5 @@
-import { CSSProperties, cloneElement, ReactElement } from 'react'
-import { Divider, MenuProps, Dropdown, DropdownProps } from 'antd'
+import { cloneElement, type CSSProperties, type ReactElement } from 'react'
+import { Divider, type MenuProps, Dropdown, type DropdownProps } from 'antd'
 import { useDialogOpen } from '@ying/frontend/hooks'
 import { useUserInfo, logout } from '@/store/userStore'
 import { useThemeToken } from '@/hooks'

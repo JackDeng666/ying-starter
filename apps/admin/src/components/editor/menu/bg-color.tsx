@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ColorPicker } from 'antd'
-import { Color } from 'antd/es/color-picker'
+import type { Color } from 'antd/es/color-picker'
 import { FaFillDrip } from 'react-icons/fa'
 import { LuCircleX, LuPipette } from 'react-icons/lu'
 import { useEditorContext, useEditorState, MenuButton } from '@ying/frontend/editor'

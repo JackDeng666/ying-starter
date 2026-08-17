@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Card, DatePicker, Spin, Select, Space } from 'antd'
-import type { DatePickerProps, TimeRangePickerProps } from 'antd'
+
 import dayjs from 'dayjs'
 import { useQuery } from '@tanstack/react-query'
 
@@ -8,38 +8,29 @@ import { userApi } from '@/api'
 import Chart from '@/components/chart/chart'
 import useChart from '@/components/chart/useChart'
 
-import { FORMAT_STR, getPreset } from './constant'
+import { FORMAT_STR, RangePresets } from './constant'
 
 const { RangePicker } = DatePicker
 
 export function UserTrend() {
   const [type, setType] = useState<'hour' | 'day'>('day')
-  const onTypeChange = (value: 'hour' | 'day') => {
-    setType(value)
-  }
 
   const [date, setDate] = useState(dayjs())
-  const onDateChange: DatePickerProps['onChange'] = date => {
-    setDate(date as dayjs.Dayjs)
-  }
 
-  const rangePresets = getPreset()
-
-  const [dateRange, setDateRange] = useState(rangePresets[2].value)
-  const onRangeDateChange: TimeRangePickerProps['onChange'] = dates => {
-    setDateRange(dates)
-  }
+  const [dateRange, setDateRange] = useState(RangePresets[2].value)
 
   const { data, isFetching: loading } = useQuery({
     queryKey: ['user-growth-trend', type, date, dateRange],
-    queryFn: () =>
-      userApi.getUserGrowthTrend({
+    queryFn: () => {
+      if (!dateRange[0] || !dateRange[1]) return
+      return userApi.getUserGrowthTrend({
         type,
         date:
           type === 'hour'
             ? [date.startOf('D').format(FORMAT_STR), date.endOf('D').format(FORMAT_STR)]
             : [dateRange[0].format(FORMAT_STR), dateRange[1].format(FORMAT_STR)]
-      }),
+      })
+    },
     staleTime: 10 * 1000
   })
 
@@ -60,9 +51,24 @@ export function UserTrend() {
       extra={
         <Space>
           {type === 'hour' ? (
-            <DatePicker allowClear={false} value={date} onChange={onDateChange} />
+            <DatePicker
+              allowClear={false}
+              value={date}
+              onChange={date => {
+                if (!date) return
+                setDate(date)
+              }}
+            />
           ) : (
-            <RangePicker allowClear={false} presets={rangePresets} value={dateRange} onChange={onRangeDateChange} />
+            <RangePicker
+              allowClear={false}
+              presets={RangePresets}
+              value={dateRange}
+              onChange={dates => {
+                if (!dates) return
+                setDateRange(dates)
+              }}
+            />
           )}
           <Select
             style={{ width: 100 }}
@@ -71,7 +77,9 @@ export function UserTrend() {
               { value: 'day', label: '每天' }
             ]}
             value={type}
-            onChange={onTypeChange}
+            onChange={value => {
+              setType(value)
+            }}
           />
         </Space>
       }

@@ -1,4 +1,4 @@
-import { PropsWithClassName } from '@/types'
+import type { PropsWithClassName } from '@/types'
 import { KeepaliveProvider } from './keepalive-provider'
 import { SortableTabs } from './sortable-tabs'
 

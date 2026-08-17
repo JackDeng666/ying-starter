@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { type Dispatch, type SetStateAction, useState } from 'react'
 import { Pagination, Spin, Image, Popconfirm, Space, Select, Button, App } from 'antd'
 import { EyeFilled, CheckCircleFilled, DeleteOutlined, CloseOutlined } from '@ant-design/icons'
 import { Controller } from 'react-hook-form'

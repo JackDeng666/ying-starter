@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { KeepaliveContext } from './keepalive-context'
 import { useKeepAlive } from './use-keepalive'
 
